@@ -1,0 +1,29 @@
+# ── Jupyter Book ─────────────────────────────
+_build/
+
+# ── Jupyter / Python ─────────────────────────
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# ── Datos ────────────────────────────────────
+# Descomenta si NO quieres subir el dataset (19 MB):
+# data/raw/*.csv
+# diabetic_data.csv
+
+# ── Resultados pesados / modelos ─────────────
+*.pkl
+*.joblib
+mlruns/
+optuna_*.db
+catboost_info/
+
+# ── Sistema operativo y editores ─────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
