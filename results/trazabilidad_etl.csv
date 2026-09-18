@@ -1,0 +1,6 @@
+etapa,filas,columnas,pacientes
+0. Dataset crudo,101766,50,71518
+1. Sin fallecimiento ni hospicio,99343,50,69990
+2. Sin género inválido,99340,50,69987
+4. Columnas descartadas y target derivado,99340,38,69987
+5. Características derivadas y categorías agrupadas,99340,40,69987

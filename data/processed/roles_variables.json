@@ -1,0 +1,79 @@
+{
+  "objetivo": "readmitted_30",
+  "identificador": "patient_nbr",
+  "numericas": [
+    "time_in_hospital",
+    "num_lab_procedures",
+    "num_procedures",
+    "num_medications",
+    "number_outpatient",
+    "number_emergency",
+    "number_inpatient",
+    "number_diagnoses",
+    "n_farmacos_activos"
+  ],
+  "ordinales": [
+    "age_ord"
+  ],
+  "binarias": [
+    "hospitalizacion_previa"
+  ],
+  "categoricas": [
+    "A1Cresult",
+    "acarbose",
+    "admission_source_id",
+    "admission_type_id",
+    "change",
+    "chlorpropamide",
+    "diabetesMed",
+    "diag_1_grupo",
+    "diag_2_grupo",
+    "diag_3_grupo",
+    "discharge_disposition_id",
+    "especialidad",
+    "gender",
+    "glimepiride",
+    "glipizide",
+    "glyburide",
+    "glyburide-metformin",
+    "insulin",
+    "max_glu_serum",
+    "metformin",
+    "miglitol",
+    "nateglinide",
+    "pioglitazone",
+    "race",
+    "repaglinide",
+    "rosiglitazone",
+    "tolazamide"
+  ],
+  "farmacos": [
+    "metformin",
+    "repaglinide",
+    "nateglinide",
+    "chlorpropamide",
+    "glimepiride",
+    "glipizide",
+    "glyburide",
+    "pioglitazone",
+    "rosiglitazone",
+    "acarbose",
+    "miglitol",
+    "tolazamide",
+    "insulin",
+    "glyburide-metformin"
+  ],
+  "etiquetas_edad": {
+    "0": "[0-10)",
+    "1": "[10-20)",
+    "2": "[20-30)",
+    "3": "[30-40)",
+    "4": "[40-50)",
+    "5": "[50-60)",
+    "6": "[60-70)",
+    "7": "[70-80)",
+    "8": "[80-90)",
+    "9": "[90-100)"
+  },
+  "random_state": 42
+}

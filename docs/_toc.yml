@@ -4,4 +4,8 @@
 format: jb-book
 root: intro
 chapters:
-- file: 01_EDA
+- file: 01_Datos
+- file: 02_ETL
+- file: 03_Univariado
+- file: 04_Bivariado
+- file: 05_Sintesis
