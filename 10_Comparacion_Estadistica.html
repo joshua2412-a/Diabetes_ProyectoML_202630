@@ -1,0 +1,1035 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>10. Comparación estadística de los modelos &#8212; Machine Learning - Diabetes</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '10_Comparacion_Estadistica';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo1.png" class="logo__image only-light" alt="Machine Learning - Diabetes - Home"/>
+    <script>document.write(`<img src="_static/logo1.png" class="logo__image only-dark" alt="Machine Learning - Diabetes - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Predicción de Readmisión Hospitalaria en Pacientes Diabéticos
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Datos.html">1. Dataset y Estructura</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_ETL.html">2. Depuración, ingeniería de características y partición</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_Univariado.html">3. Análisis univariado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_Bivariado.html">4. Análisis bivariado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_Sintesis.html">5. Redundancia, fuga de información y síntesis del EDA</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/joshua2412-a/Diabetes_ProyectoML_202630" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/joshua2412-a/Diabetes_ProyectoML_202630/issues/new?title=Issue%20on%20page%20%2F10_Comparacion_Estadistica.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/10_Comparacion_Estadistica.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>10. Comparación estadística de los modelos</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-problema-de-escala">10.1. El problema de escala</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapa-1-prueba-omnibus-de-friedman">10.2. Etapa 1: prueba ómnibus de Friedman</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapa-2-post-hoc-de-nemenyi-y-diagrama-de-diferencia-critica">10.3. Etapa 2: post-hoc de Nemenyi y diagrama de diferencia crítica</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparaciones-dirigidas-prueba-de-delong">10.4. Comparaciones dirigidas: prueba de DeLong</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-del-efecto">10.5. Tamaño del efecto</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervalos-de-confianza-por-bootstrap-bca">10.6. Intervalos de confianza por bootstrap BCa</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">10.7. Síntesis del capítulo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#como-redactar-la-conclusion">10.7.1. Cómo redactar la conclusión</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="comparacion-estadistica-de-los-modelos">
+<h1>10. Comparación estadística de los modelos<a class="headerlink" href="#comparacion-estadistica-de-los-modelos" title="Link to this heading">#</a></h1>
+<section id="el-problema-de-escala">
+<h2>10.1. El problema de escala<a class="headerlink" href="#el-problema-de-escala" title="Link to this heading">#</a></h2>
+<p>El experimento produce 112 combinaciones. El número de comparaciones por pares posibles entre ellas es 112 × 111 / 2 = 6,216. Ejecutar esa cantidad de pruebas con un nivel de significancia de 0.05 y sin ningún control produciría alrededor de 311 resultados significativos solo por azar.</p>
+<p>Por eso la comparación no puede reducirse a aplicar pruebas por pares. Se sigue la secuencia jerárquica que exige la guía:</p>
+<ol class="arabic simple">
+<li><p><strong>Prueba ómnibus (Friedman)</strong> sobre los rangos de los modelos en los folds del bucle externo. Si no rechaza, no hay evidencia de que ningún modelo supere a los demás y el análisis se detiene.</p></li>
+<li><p><strong>Post-hoc (Nemenyi) y diagrama de diferencia crítica</strong>, que compara todos contra todos controlando el error familiar de forma conjunta.</p></li>
+<li><p><strong>Comparaciones dirigidas (DeLong)</strong> entre un subconjunto reducido y justificado de modelos, con corrección de Holm-Bonferroni.</p></li>
+<li><p><strong>Tamaño del efecto (delta de Cliff)</strong> en todos los casos, favorables o no.</p></li>
+<li><p><strong>Intervalos de confianza por bootstrap BCa</strong> para las métricas principales.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">maestra</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"tabla_maestra_clasificacion.csv"</span><span class="p">)</span>
+<span class="n">completadas</span> <span class="o">=</span> <span class="n">maestra</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"estado == 'completada'"</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">completadas</span><span class="p">[</span><span class="s2">"configuracion"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">completadas</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]</span> <span class="o">+</span> <span class="s2">" | "</span>
+                                <span class="o">+</span> <span class="n">completadas</span><span class="p">[</span><span class="s2">"balanceo"</span><span class="p">]</span> <span class="o">+</span> <span class="s2">" | "</span>
+                                <span class="o">+</span> <span class="n">completadas</span><span class="p">[</span><span class="s2">"optimizador"</span><span class="p">])</span>
+
+<span class="c1"># Matriz de métricas por fold: filas = folds externos, columnas = modelos.</span>
+<span class="c1"># Es la estructura que requieren Friedman y Nemenyi, que tratan los folds</span>
+<span class="c1"># como bloques de medidas repetidas.</span>
+<span class="n">por_fold</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="n">fila</span><span class="p">[</span><span class="s2">"configuracion"</span><span class="p">]:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">"auc_pr_por_fold"</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">fila</span> <span class="ow">in</span> <span class="n">completadas</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+<span class="p">})</span>
+<span class="n">por_fold</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"fold </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">por_fold</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Configuraciones comparadas: </span><span class="si">{</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Bloques (folds externos)  : </span><span class="si">{</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Comparaciones por pares posibles: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="mi">2</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="etapa-1-prueba-omnibus-de-friedman">
+<h2>10.2. Etapa 1: prueba ómnibus de Friedman<a class="headerlink" href="#etapa-1-prueba-omnibus-de-friedman" title="Link to this heading">#</a></h2>
+<p>La prueba de Friedman es el análogo no paramétrico del ANOVA de medidas repetidas. Convierte las métricas en rangos dentro de cada fold y contrasta la hipótesis nula de que los rangos promedio son iguales entre modelos. Es la prueba apropiada aquí por dos razones: no supone normalidad de las métricas, y trata cada fold como un bloque, lo que reconoce que las mediciones de todos los modelos en un mismo fold están correlacionadas por compartir los mismos datos.</p>
+<p>Se aplica en dos niveles. Primero sobre los siete modelos base, usando su mejor configuración, que es la comparación de interés principal. Después sobre las 112 configuraciones completas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mejores_por_modelo</span> <span class="o">=</span> <span class="p">(</span><span class="n">completadas</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+    <span class="n">completadas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)[</span><span class="s2">"auc_pr_media"</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()])</span>
+
+<span class="n">por_fold_modelos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="n">fila</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">"auc_pr_por_fold"</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">fila</span> <span class="ow">in</span> <span class="n">mejores_por_modelo</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+<span class="p">})</span>
+
+<span class="n">estadistico</span><span class="p">,</span> <span class="n">p_valor</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">friedmanchisquare</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">[</span><span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">columns</span><span class="p">])</span>
+
+<span class="n">friedman</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span>
+    <span class="s2">"comparación"</span><span class="p">:</span> <span class="s2">"7 modelos base (mejor configuración de cada uno)"</span><span class="p">,</span>
+    <span class="s2">"k (modelos)"</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="s2">"n (folds)"</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="s2">"chi² de Friedman"</span><span class="p">:</span> <span class="n">estadistico</span><span class="p">,</span>
+    <span class="s2">"grados de libertad"</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">"p-valor"</span><span class="p">:</span> <span class="n">p_valor</span><span class="p">,</span>
+    <span class="s2">"conclusión"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Se rechaza H0: hay diferencias"</span> <span class="k">if</span> <span class="n">p_valor</span> <span class="o">&lt;</span> <span class="mf">0.05</span>
+                   <span class="k">else</span> <span class="s2">"No se rechaza H0"</span><span class="p">),</span>
+<span class="p">}])</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">friedman</span><span class="p">,</span> <span class="s2">"friedman_modelos"</span><span class="p">)</span>
+<span class="n">friedman</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rangos promedio: 1 es el mejor. Es el estadístico que ordena el diagrama</span>
+<span class="c1"># de diferencia crítica.</span>
+<span class="n">rangos</span> <span class="o">=</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">rangos_promedio</span> <span class="o">=</span> <span class="n">rangos</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">rangos_promedio</span><span class="o">.</span><span class="n">index</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">rangos_promedio</span><span class="o">.</span><span class="n">values</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Rango promedio en AUC-PR (menor es mejor)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Rangos promedio de los modelos entre folds externos"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">rangos_promedio</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">"rango promedio"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Si la prueba de Friedman <strong>no</strong> rechaza la hipótesis nula, el análisis debe detenerse aquí y así hay que reportarlo: no existe evidencia estadística de que algún modelo supere a los demás, independientemente de las diferencias observadas en las métricas puntuales. Con cinco folds y siete modelos, el poder de la prueba es limitado, de modo que un resultado no significativo es perfectamente posible y es una conclusión legítima, no un fracaso del experimento.</p>
+<p>Conviene además reportar el número de bloques: la prueba de Friedman con cinco bloques tiene poco poder, y una forma de aumentarlo sin sesgar nada es repetir la validación externa con varias semillas y tratar cada repetición como bloque adicional.</p>
+</section>
+<section id="etapa-2-post-hoc-de-nemenyi-y-diagrama-de-diferencia-critica">
+<h2>10.3. Etapa 2: post-hoc de Nemenyi y diagrama de diferencia crítica<a class="headerlink" href="#etapa-2-post-hoc-de-nemenyi-y-diagrama-de-diferencia-critica" title="Link to this heading">#</a></h2>
+<p>Si Friedman rechaza, la prueba de Nemenyi compara todos los pares controlando el error familiar. Su resultado se resume en la <strong>diferencia crítica</strong>: dos modelos cuya distancia en rango promedio sea menor que ese valor son estadísticamente indistinguibles.</p>
+<div class="math notranslate nohighlight">
+\[
+CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
+\]</div>
+<p>donde <em>k</em> es el número de modelos, <em>n</em> el número de bloques y <em>q</em> el valor crítico de la distribución del rango studentizado dividido por la raíz de dos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scikit_posthocs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+
+<span class="n">nemenyi</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">posthoc_nemenyi_friedman</span><span class="p">(</span><span class="n">por_fold_modelos</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">nemenyi</span><span class="p">,</span> <span class="s2">"nemenyi_modelos"</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">))</span>
+<span class="n">mascara</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">nemenyi</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">nemenyi</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mascara</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">".3f"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"RdYlGn_r"</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">"label"</span><span class="p">:</span> <span class="s2">"p-valor de Nemenyi"</span><span class="p">},</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Prueba post-hoc de Nemenyi (p-valores por pares)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">diferencia_critica</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">alfa</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Diferencia crítica de Nemenyi para k modelos y n bloques.</span>
+
+<span class="sd">    Usa la aproximación habitual con el valor crítico del rango</span>
+<span class="sd">    studentizado dividido por la raíz de dos.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">    """</span>
+    <span class="n">q_alfa</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">studentized_range</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alfa</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">q_alfa</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">n</span><span class="p">)))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">diagrama_cd</span><span class="p">(</span><span class="n">rangos_promedio</span><span class="p">,</span> <span class="n">cd</span><span class="p">,</span> <span class="n">titulo</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Dibuja un diagrama de diferencia crítica.</span>
+
+<span class="sd">    Ubica cada modelo según su rango promedio y conecta con una línea</span>
+<span class="sd">    horizontal los grupos cuya diferencia no alcanza la diferencia crítica.</span>
+<span class="sd">    """</span>
+    <span class="n">ordenados</span> <span class="o">=</span> <span class="n">rangos_promedio</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+    <span class="n">nombres</span><span class="p">,</span> <span class="n">valores</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ordenados</span><span class="o">.</span><span class="n">index</span><span class="p">),</span> <span class="n">ordenados</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mf">2.2</span> <span class="o">+</span> <span class="mf">0.32</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">nombres</span><span class="p">)))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">valores</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">valores</span><span class="p">),</span> <span class="s2">"o"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">nombre</span><span class="p">,</span> <span class="n">valor</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">nombres</span><span class="p">,</span> <span class="n">valores</span><span class="p">)):</span>
+        <span class="n">altura</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.12</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">valor</span><span class="p">,</span> <span class="n">valor</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">altura</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">valor</span><span class="p">,</span> <span class="n">altura</span> <span class="o">-</span> <span class="mf">0.03</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">valor</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
+                <span class="n">ha</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">"top"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+
+    <span class="c1"># Grupos de modelos no distinguibles entre sí.</span>
+    <span class="n">nivel</span> <span class="o">=</span> <span class="mf">0.10</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">valores</span><span class="p">)):</span>
+        <span class="n">compatibles</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">valores</span><span class="p">))</span>
+                       <span class="k">if</span> <span class="n">valores</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">valores</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">cd</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">compatibles</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">fin</span> <span class="o">=</span> <span class="n">compatibles</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">valores</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">valores</span><span class="p">[</span><span class="n">fin</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.02</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">nivel</span><span class="p">,</span> <span class="n">nivel</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                    <span class="n">solid_capstyle</span><span class="o">=</span><span class="s2">"butt"</span><span class="p">)</span>
+            <span class="n">nivel</span> <span class="o">+=</span> <span class="mf">0.08</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">valores</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">nivel</span> <span class="o">+</span> <span class="mf">0.08</span><span class="p">),</span>
+                <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="n">valores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="n">cd</span><span class="p">,</span> <span class="n">nivel</span> <span class="o">+</span> <span class="mf">0.08</span><span class="p">),</span>
+                <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s2">"arrowstyle"</span><span class="p">:</span> <span class="s2">"|-|"</span><span class="p">,</span> <span class="s2">"lw"</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">})</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">valores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="n">cd</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nivel</span> <span class="o">+</span> <span class="mf">0.12</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"CD = </span><span class="si">{</span><span class="n">cd</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">ha</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Rango promedio (menor es mejor)"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.12</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nombres</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="n">nivel</span> <span class="o">+</span> <span class="mf">0.22</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titulo</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">lado</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"left"</span><span class="p">,</span> <span class="s2">"right"</span><span class="p">,</span> <span class="s2">"top"</span><span class="p">]:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">lado</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="n">cd</span> <span class="o">=</span> <span class="n">diferencia_critica</span><span class="p">(</span><span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Diferencia crítica (alfa = 0.05, k = </span><span class="si">{</span><span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"n = </span><span class="si">{</span><span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">cd</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">diagrama_cd</span><span class="p">(</span><span class="n">rangos_promedio</span><span class="p">,</span> <span class="n">cd</span><span class="p">,</span>
+            <span class="s2">"Diagrama de diferencia crítica — modelos base (AUC-PR)"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>El diagrama sustituye a una tabla de miles de comparaciones: los modelos unidos por una barra horizontal no se distinguen estadísticamente entre sí.</p>
+<p>Con solo cinco folds, la diferencia crítica es grande, y es muy posible que todos los modelos queden conectados. Esa conclusión es informativa y hay que presentarla como tal: el experimento no tiene poder suficiente para separar los modelos con este número de bloques, lo que refuerza lo que el capítulo 4 anticipaba sobre la dificultad intrínseca del problema.</p>
+</section>
+<section id="comparaciones-dirigidas-prueba-de-delong">
+<h2>10.4. Comparaciones dirigidas: prueba de DeLong<a class="headerlink" href="#comparaciones-dirigidas-prueba-de-delong" title="Link to this heading">#</a></h2>
+<p>DeLong contrasta la igualdad de dos AUC calculadas sobre las <strong>mismas observaciones</strong>, lo que la hace apropiada aquí: los tres finalistas se evaluaron sobre el mismo conjunto de prueba, así que sus errores están correlacionados y una prueba que ignore esa correlación sería demasiado conservadora.</p>
+<p>Se reserva para el subconjunto reducido de los tres finalistas del capítulo 9, tal como exige la guía, y sus valores p se ajustan por comparaciones múltiples.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">predicciones</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"predicciones_prueba.csv"</span><span class="p">)</span>
+<span class="n">y_real</span> <span class="o">=</span> <span class="n">predicciones</span><span class="p">[</span><span class="s2">"y_real"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">columnas_modelos</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">predicciones</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"p_"</span><span class="p">)]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_estructura_delong</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Componentes de la varianza del AUC según DeLong.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        AUC y las dos series de pseudovalores (V10 sobre positivos y V01</span>
+<span class="sd">        sobre negativos) que definen su varianza.</span>
+<span class="sd">    """</span>
+    <span class="n">positivos</span> <span class="o">=</span> <span class="n">probabilidades</span><span class="p">[</span><span class="n">y_real</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">negativos</span> <span class="o">=</span> <span class="n">probabilidades</span><span class="p">[</span><span class="n">y_real</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">positivos</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">negativos</span><span class="p">)</span>
+
+    <span class="c1"># Kernel de comparación con empates ponderados a la mitad.</span>
+    <span class="n">comparaciones</span> <span class="o">=</span> <span class="p">(</span><span class="n">positivos</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">negativos</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">comparaciones</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">positivos</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">==</span> <span class="n">negativos</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
+
+    <span class="n">auc</span> <span class="o">=</span> <span class="n">comparaciones</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">v10</span> <span class="o">=</span> <span class="n">comparaciones</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># un valor por positivo</span>
+    <span class="n">v01</span> <span class="o">=</span> <span class="n">comparaciones</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>   <span class="c1"># un valor por negativo</span>
+    <span class="k">return</span> <span class="n">auc</span><span class="p">,</span> <span class="n">v10</span><span class="p">,</span> <span class="n">v01</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">prueba_delong</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades_a</span><span class="p">,</span> <span class="n">probabilidades_b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Prueba de DeLong para dos AUC correlacionados.</span>
+
+<span class="sd">    Contrasta H0: AUC_A = AUC_B sobre las mismas observaciones, usando la</span>
+<span class="sd">    representación del AUC como estadístico U y su matriz de covarianzas</span>
+<span class="sd">    estimada a partir de los pseudovalores.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        AUC de cada modelo, su diferencia, el estadístico z y el p-valor</span>
+<span class="sd">        bilateral.</span>
+<span class="sd">    """</span>
+    <span class="n">auc_a</span><span class="p">,</span> <span class="n">v10_a</span><span class="p">,</span> <span class="n">v01_a</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">_estructura_delong</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades_a</span><span class="p">)</span>
+    <span class="n">auc_b</span><span class="p">,</span> <span class="n">v10_b</span><span class="p">,</span> <span class="n">v01_b</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_estructura_delong</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades_b</span><span class="p">)</span>
+
+    <span class="n">s10</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">v10_a</span><span class="p">,</span> <span class="n">v10_b</span><span class="p">]))</span>
+    <span class="n">s01</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">v01_a</span><span class="p">,</span> <span class="n">v01_b</span><span class="p">]))</span>
+    <span class="n">covarianza</span> <span class="o">=</span> <span class="n">s10</span> <span class="o">/</span> <span class="n">m</span> <span class="o">+</span> <span class="n">s01</span> <span class="o">/</span> <span class="n">n</span>
+
+    <span class="n">diferencia</span> <span class="o">=</span> <span class="n">auc_a</span> <span class="o">-</span> <span class="n">auc_b</span>
+    <span class="n">varianza</span> <span class="o">=</span> <span class="n">covarianza</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">covarianza</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">covarianza</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">diferencia</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">varianza</span><span class="p">)</span> <span class="k">if</span> <span class="n">varianza</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"auc_a"</span><span class="p">:</span> <span class="n">auc_a</span><span class="p">,</span> <span class="s2">"auc_b"</span><span class="p">:</span> <span class="n">auc_b</span><span class="p">,</span> <span class="s2">"diferencia"</span><span class="p">:</span> <span class="n">diferencia</span><span class="p">,</span>
+            <span class="s2">"z"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s2">"p"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">z</span><span class="p">)))}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">correccion_holm</span><span class="p">(</span><span class="n">valores_p</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Corrección de Holm-Bonferroni para comparaciones múltiples."""</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">valores_p</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">orden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">ajustados</span><span class="p">,</span> <span class="n">maximo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">indice</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">orden</span><span class="p">):</span>
+        <span class="n">maximo</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">maximo</span><span class="p">,</span> <span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="n">indice</span><span class="p">])</span>
+        <span class="n">ajustados</span><span class="p">[</span><span class="n">indice</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">maximo</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ajustados</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">combinations</span>
+
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">columna_a</span><span class="p">,</span> <span class="n">columna_b</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">columnas_modelos</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">resultado</span> <span class="o">=</span> <span class="n">prueba_delong</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span>
+                              <span class="n">predicciones</span><span class="p">[</span><span class="n">columna_a</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+                              <span class="n">predicciones</span><span class="p">[</span><span class="n">columna_b</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">"modelo A"</span><span class="p">:</span> <span class="n">columna_a</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="s2">"modelo B"</span><span class="p">:</span> <span class="n">columna_b</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
+        <span class="s2">"AUC A"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"auc_a"</span><span class="p">],</span> <span class="s2">"AUC B"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"auc_b"</span><span class="p">],</span>
+        <span class="s2">"diferencia"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"diferencia"</span><span class="p">],</span>
+        <span class="s2">"z"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"z"</span><span class="p">],</span> <span class="s2">"p crudo"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"p"</span><span class="p">],</span>
+    <span class="p">})</span>
+
+<span class="n">delong</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span>
+<span class="n">delong</span><span class="p">[</span><span class="s2">"p (Holm)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">correccion_holm</span><span class="p">(</span><span class="n">delong</span><span class="p">[</span><span class="s2">"p crudo"</span><span class="p">])</span>
+<span class="n">delong</span><span class="p">[</span><span class="s2">"p (Benjamini-Hochberg)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">false_discovery_control</span><span class="p">(</span>
+    <span class="n">delong</span><span class="p">[</span><span class="s2">"p crudo"</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">"bh"</span><span class="p">)</span>
+<span class="n">delong</span><span class="p">[</span><span class="s2">"significativa (Holm)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">delong</span><span class="p">[</span><span class="s2">"p (Holm)"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">,</span>
+                                          <span class="s2">"Sí"</span><span class="p">,</span> <span class="s2">"No"</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">delong</span><span class="p">,</span> <span class="s2">"delong_finalistas"</span><span class="p">)</span>
+<span class="n">delong</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Se reportan el valor p crudo y los dos ajustados, como pide la guía. La diferencia entre Holm y Benjamini-Hochberg es el criterio que controlan: Holm controla la probabilidad de cometer <strong>al menos un</strong> falso positivo en la familia de comparaciones, más estricto; Benjamini-Hochberg controla la <strong>proporción esperada</strong> de falsos positivos entre los rechazos, más permisivo y preferible cuando el objetivo es explorar y no confirmar.</p>
+</section>
+<section id="tamano-del-efecto">
+<h2>10.5. Tamaño del efecto<a class="headerlink" href="#tamano-del-efecto" title="Link to this heading">#</a></h2>
+<p>La significancia estadística no implica relevancia práctica, y con múltiples folds el poder puede ser suficiente para detectar diferencias irrelevantes. Se reporta el tamaño del efecto en todos los casos.</p>
+<p>La <strong>delta de Cliff</strong> es la medida recomendada junto a Friedman-Nemenyi por ser consistente con el uso de rangos: mide la probabilidad de que la métrica de un modelo supere a la del otro, menos la probabilidad inversa. Sus umbrales convencionales son 0.147 (pequeño), 0.330 (mediano) y 0.474 (grande).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">delta_cliff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Delta de Cliff entre dos muestras a partir del estadístico U."""</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">mannwhitneyu</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">statistic</span>
+    <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">u</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">magnitud_cliff</span><span class="p">(</span><span class="n">delta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Clasifica la delta de Cliff según los umbrales convencionales."""</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mf">0.147</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Insignificante"</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mf">0.330</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Pequeño"</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mf">0.474</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Mediano"</span>
+    <span class="k">return</span> <span class="s2">"Grande"</span>
+
+
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">modelo_a</span><span class="p">,</span> <span class="n">modelo_b</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">delta_cliff</span><span class="p">(</span><span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">modelo_a</span><span class="p">],</span>
+                        <span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">modelo_b</span><span class="p">])</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">"modelo A"</span><span class="p">:</span> <span class="n">modelo_a</span><span class="p">,</span> <span class="s2">"modelo B"</span><span class="p">:</span> <span class="n">modelo_b</span><span class="p">,</span>
+        <span class="s2">"AUC-PR medio A"</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">modelo_a</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">"AUC-PR medio B"</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">modelo_b</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">"delta de Cliff"</span><span class="p">:</span> <span class="n">delta</span><span class="p">,</span>
+        <span class="s2">"magnitud"</span><span class="p">:</span> <span class="n">magnitud_cliff</span><span class="p">(</span><span class="n">delta</span><span class="p">),</span>
+    <span class="p">})</span>
+
+<span class="n">efectos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+    <span class="s2">"delta de Cliff"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">abs</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">efectos</span><span class="p">,</span> <span class="s2">"tamanos_efecto_modelos"</span><span class="p">)</span>
+<span class="n">tabla</span><span class="p">(</span><span class="n">efectos</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">filas</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="intervalos-de-confianza-por-bootstrap-bca">
+<h2>10.6. Intervalos de confianza por bootstrap BCa<a class="headerlink" href="#intervalos-de-confianza-por-bootstrap-bca" title="Link to this heading">#</a></h2>
+<p>Reportar una métrica como un número puntual oculta su incertidumbre. Se construyen intervalos por bootstrap con corrección de sesgo y aceleración (BCa), que es el método apropiado cuando la distribución de la métrica es asimétrica, como suele ocurrir con el AUC-PR en problemas desbalanceados.</p>
+<p>El remuestreo se hace <strong>por paciente</strong> y no por fila, coherente con la estructura de los datos: remuestrear filas trataría los encuentros de un mismo paciente como observaciones independientes y produciría intervalos demasiado estrechos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">average_precision_score</span><span class="p">,</span> <span class="n">roc_auc_score</span>
+
+<span class="n">prueba</span> <span class="o">=</span> <span class="n">leer_tabla</span><span class="p">(</span><span class="s2">"diabetes_test"</span><span class="p">)</span>
+<span class="n">identificadores</span> <span class="o">=</span> <span class="n">prueba</span><span class="p">[</span><span class="n">roles_variables</span><span class="p">()[</span><span class="s2">"identificador"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> \
+    <span class="k">if</span> <span class="s2">"roles_variables"</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+
+<span class="n">roles</span> <span class="o">=</span> <span class="n">roles_variables</span><span class="p">()</span>
+<span class="n">identificadores</span> <span class="o">=</span> <span class="n">prueba</span><span class="p">[</span><span class="n">roles</span><span class="p">[</span><span class="s2">"identificador"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">bootstrap_bca</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">funcion_metrica</span><span class="p">,</span>
+                  <span class="n">n_repeticiones</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span> <span class="n">confianza</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">semilla</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Intervalo de confianza BCa remuestreando grupos completos.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y_real, probabilidades : array-like</span>
+<span class="sd">    grupos : array-like</span>
+<span class="sd">        Identificador de paciente; el remuestreo toma pacientes completos.</span>
+<span class="sd">    funcion_metrica : callable</span>
+<span class="sd">        Recibe (y_real, probabilidades) y devuelve un escalar.</span>
+<span class="sd">    n_repeticiones : int</span>
+<span class="sd">    confianza : float</span>
+<span class="sd">    semilla : int</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Estimación puntual y límites del intervalo.</span>
+<span class="sd">    """</span>
+    <span class="n">aleatorio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">semilla</span><span class="p">)</span>
+    <span class="n">y_real</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_real</span><span class="p">)</span>
+    <span class="n">probabilidades</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">probabilidades</span><span class="p">)</span>
+    <span class="n">unicos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">grupos</span><span class="p">)</span>
+    <span class="n">indices_por_grupo</span> <span class="o">=</span> <span class="p">{</span><span class="n">g</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grupos</span> <span class="o">==</span> <span class="n">g</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">unicos</span><span class="p">}</span>
+
+    <span class="n">estimacion</span> <span class="o">=</span> <span class="n">funcion_metrica</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades</span><span class="p">)</span>
+
+    <span class="n">replicas</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_repeticiones</span><span class="p">):</span>
+        <span class="n">muestra</span> <span class="o">=</span> <span class="n">aleatorio</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">unicos</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">unicos</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">indices_por_grupo</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">muestra</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_real</span><span class="p">[</span><span class="n">indices</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">replicas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">funcion_metrica</span><span class="p">(</span><span class="n">y_real</span><span class="p">[</span><span class="n">indices</span><span class="p">],</span>
+                                        <span class="n">probabilidades</span><span class="p">[</span><span class="n">indices</span><span class="p">]))</span>
+    <span class="n">replicas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">replicas</span><span class="p">)</span>
+
+    <span class="c1"># Corrección de sesgo: proporción de réplicas por debajo de la</span>
+    <span class="c1"># estimación original, transformada a la escala normal.</span>
+    <span class="n">proporcion</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">replicas</span> <span class="o">&lt;</span> <span class="n">estimacion</span><span class="p">)</span>
+    <span class="n">proporcion</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">proporcion</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">1e-6</span><span class="p">)</span>
+    <span class="n">z0</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">proporcion</span><span class="p">)</span>
+
+    <span class="c1"># Aceleración por jackknife sobre los grupos.</span>
+    <span class="n">jackknife</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">unicos</span><span class="p">:</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">idx</span> <span class="k">for</span> <span class="n">gg</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">indices_por_grupo</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                                  <span class="k">if</span> <span class="n">gg</span> <span class="o">!=</span> <span class="n">g</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_real</span><span class="p">[</span><span class="n">indices</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">jackknife</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">funcion_metrica</span><span class="p">(</span><span class="n">y_real</span><span class="p">[</span><span class="n">indices</span><span class="p">],</span>
+                                         <span class="n">probabilidades</span><span class="p">[</span><span class="n">indices</span><span class="p">]))</span>
+    <span class="n">jackknife</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">jackknife</span><span class="p">)</span>
+    <span class="n">desviaciones</span> <span class="o">=</span> <span class="n">jackknife</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">jackknife</span>
+    <span class="n">denominador</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">desviaciones</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">aceleracion</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">desviaciones</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="n">denominador</span>
+                   <span class="k">if</span> <span class="n">denominador</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="n">alfa</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">confianza</span>
+    <span class="n">inferior</span><span class="p">,</span> <span class="n">superior</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">z_alfa</span> <span class="ow">in</span> <span class="p">[</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">alfa</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alfa</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]:</span>
+        <span class="n">ajustado</span> <span class="o">=</span> <span class="n">z0</span> <span class="o">+</span> <span class="p">(</span><span class="n">z0</span> <span class="o">+</span> <span class="n">z_alfa</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">aceleracion</span> <span class="o">*</span> <span class="p">(</span><span class="n">z0</span> <span class="o">+</span> <span class="n">z_alfa</span><span class="p">))</span>
+        <span class="n">percentil</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">ajustado</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">inferior</span> <span class="k">if</span> <span class="n">z_alfa</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">superior</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">replicas</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">percentil</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"estimación"</span><span class="p">:</span> <span class="n">estimacion</span><span class="p">,</span> <span class="s2">"IC inferior"</span><span class="p">:</span> <span class="n">inferior</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s2">"IC superior"</span><span class="p">:</span> <span class="n">superior</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"réplicas válidas"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">replicas</span><span class="p">)}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">columna</span> <span class="ow">in</span> <span class="n">columnas_modelos</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">predicciones</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">nombre_metrica</span><span class="p">,</span> <span class="n">funcion</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"AUC-ROC"</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">),</span>
+                                    <span class="p">(</span><span class="s2">"AUC-PR"</span><span class="p">,</span> <span class="n">average_precision_score</span><span class="p">)]:</span>
+        <span class="n">resultado</span> <span class="o">=</span> <span class="n">bootstrap_bca</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">identificadores</span><span class="p">,</span> <span class="n">funcion</span><span class="p">,</span>
+                                  <span class="n">n_repeticiones</span><span class="o">=</span><span class="mi">1_000</span><span class="p">)</span>
+        <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"modelo"</span><span class="p">:</span> <span class="n">columna</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="s2">"métrica"</span><span class="p">:</span> <span class="n">nombre_metrica</span><span class="p">,</span>
+                      <span class="o">**</span><span class="n">resultado</span><span class="p">})</span>
+
+<span class="n">intervalos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">intervalos</span><span class="p">,</span> <span class="s2">"intervalos_bca"</span><span class="p">)</span>
+<span class="n">intervalos</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">))</span>
+<span class="n">subconjunto</span> <span class="o">=</span> <span class="n">intervalos</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"métrica == 'AUC-PR'"</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">posiciones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">subconjunto</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">subconjunto</span><span class="p">[</span><span class="s2">"estimación"</span><span class="p">],</span> <span class="n">posiciones</span><span class="p">,</span>
+            <span class="n">xerr</span><span class="o">=</span><span class="p">[</span><span class="n">subconjunto</span><span class="p">[</span><span class="s2">"estimación"</span><span class="p">]</span> <span class="o">-</span> <span class="n">subconjunto</span><span class="p">[</span><span class="s2">"IC inferior"</span><span class="p">],</span>
+                  <span class="n">subconjunto</span><span class="p">[</span><span class="s2">"IC superior"</span><span class="p">]</span> <span class="o">-</span> <span class="n">subconjunto</span><span class="p">[</span><span class="s2">"estimación"</span><span class="p">]],</span>
+            <span class="n">fmt</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">posiciones</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">subconjunto</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">y_real</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Prevalencia"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"AUC-PR en el conjunto de prueba (IC 95 % BCa)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Intervalos de confianza de los finalistas"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>El solapamiento de intervalos es la lectura decisiva: si los intervalos de dos modelos se solapan, la diferencia entre ellos no es distinguible del ruido de muestreo, con independencia de cuál tenga la media más alta.</p>
+</section>
+<section id="sintesis-del-capitulo">
+<h2>10.7. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Etapa</p></th>
+<th class="head"><p>Resultado a registrar</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Friedman sobre los 7 modelos base</p></td>
+<td><p>Estadístico, grados de libertad, p-valor y si se rechaza la hipótesis nula</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rangos promedio</p></td>
+<td><p>Orden de los modelos y distancia entre ellos</p></td>
+</tr>
+<tr class="row-even"><td><p>Nemenyi y diagrama CD</p></td>
+<td><p>Diferencia crítica y qué grupos de modelos quedan conectados, es decir, son indistinguibles</p></td>
+</tr>
+<tr class="row-odd"><td><p>DeLong entre finalistas</p></td>
+<td><p>Diferencias de AUC con p crudo, p de Holm y p de Benjamini-Hochberg</p></td>
+</tr>
+<tr class="row-even"><td><p>Delta de Cliff</p></td>
+<td><p>Magnitud de cada comparación, reportada también cuando es insignificante</p></td>
+</tr>
+<tr class="row-odd"><td><p>Intervalos BCa</p></td>
+<td><p>IC del 95 % de AUC-ROC y AUC-PR de los finalistas, con el remuestreo hecho por paciente</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="como-redactar-la-conclusion">
+<h3>10.7.1. Cómo redactar la conclusión<a class="headerlink" href="#como-redactar-la-conclusion" title="Link to this heading">#</a></h3>
+<p>La conclusión honesta depende de lo que muestren las pruebas, y conviene tener preparadas las dos redacciones:</p>
+<ul class="simple">
+<li><p><strong>Si Friedman rechaza y el diagrama CD separa grupos</strong>, se puede afirmar que un subconjunto de modelos supera a otro, y la delta de Cliff dice si esa superioridad es además relevante en magnitud.</p></li>
+<li><p><strong>Si Friedman no rechaza, o el diagrama conecta a todos los modelos</strong>, la conclusión es que con cinco folds el experimento no distingue entre modelos. Eso no invalida el trabajo: significa que en este problema la elección del modelo importa menos que la calidad de los datos disponibles, lo cual es coherente con los tamaños de efecto insignificantes que el capítulo 4 encontró en todos los predictores. Presentar esa conclusión con sus pruebas es más valioso que forzar una diferencia con pruebas sin corrección.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-problema-de-escala">10.1. El problema de escala</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapa-1-prueba-omnibus-de-friedman">10.2. Etapa 1: prueba ómnibus de Friedman</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapa-2-post-hoc-de-nemenyi-y-diagrama-de-diferencia-critica">10.3. Etapa 2: post-hoc de Nemenyi y diagrama de diferencia crítica</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparaciones-dirigidas-prueba-de-delong">10.4. Comparaciones dirigidas: prueba de DeLong</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-del-efecto">10.5. Tamaño del efecto</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervalos-de-confianza-por-bootstrap-bca">10.6. Intervalos de confianza por bootstrap BCa</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">10.7. Síntesis del capítulo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#como-redactar-la-conclusion">10.7.1. Cómo redactar la conclusión</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
