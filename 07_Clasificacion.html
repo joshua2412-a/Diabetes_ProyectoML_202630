@@ -30,9 +30,9 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -50,7 +50,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -470,13 +470,13 @@ document.write(`
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">experimento</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ex</span>
 
-<span class="n">train</span> <span class="o">=</span> <span class="n">leer_tabla</span><span class="p">(</span><span class="s2">&quot;diabetes_train&quot;</span><span class="p">)</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">leer_tabla</span><span class="p">(</span><span class="s2">"diabetes_train"</span><span class="p">)</span>
 <span class="n">roles</span> <span class="o">=</span> <span class="n">roles_variables</span><span class="p">()</span>
 
-<span class="n">OBJETIVO</span> <span class="o">=</span> <span class="n">roles</span><span class="p">[</span><span class="s2">&quot;objetivo&quot;</span><span class="p">]</span>
-<span class="n">IDENTIFICADOR</span> <span class="o">=</span> <span class="n">roles</span><span class="p">[</span><span class="s2">&quot;identificador&quot;</span><span class="p">]</span>
-<span class="n">PREDICTORES</span> <span class="o">=</span> <span class="p">(</span><span class="n">roles</span><span class="p">[</span><span class="s2">&quot;numericas&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">&quot;ordinales&quot;</span><span class="p">]</span>
-               <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">&quot;binarias&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">&quot;categoricas&quot;</span><span class="p">])</span>
+<span class="n">OBJETIVO</span> <span class="o">=</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"objetivo"</span><span class="p">]</span>
+<span class="n">IDENTIFICADOR</span> <span class="o">=</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"identificador"</span><span class="p">]</span>
+<span class="n">PREDICTORES</span> <span class="o">=</span> <span class="p">(</span><span class="n">roles</span><span class="p">[</span><span class="s2">"numericas"</span><span class="p">]</span> <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"ordinales"</span><span class="p">]</span>
+               <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"binarias"</span><span class="p">]</span> <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"categoricas"</span><span class="p">])</span>
 
 <span class="n">X</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">PREDICTORES</span><span class="p">]</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span>
@@ -485,12 +485,12 @@ document.write(`
 <span class="c1"># Razón entre clases, necesaria para el scale_pos_weight de XGBoost.</span>
 <span class="n">RAZON_DESBALANCE</span> <span class="o">=</span> <span class="nb">float</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entrenamiento    : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> encuentros de </span><span class="si">{</span><span class="n">grupos</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> pacientes&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Clase positiva   : </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Razón desbalance : </span><span class="si">{</span><span class="n">RAZON_DESBALANCE</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> a 1&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Modelos          : </span><span class="si">{</span><span class="n">ex</span><span class="o">.</span><span class="n">MODELOS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Balanceos        : </span><span class="si">{</span><span class="n">ex</span><span class="o">.</span><span class="n">BALANCEOS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Optimizadores    : </span><span class="si">{</span><span class="n">ex</span><span class="o">.</span><span class="n">OPTIMIZADORES</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Entrenamiento    : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> encuentros de </span><span class="si">{</span><span class="n">grupos</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> pacientes"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Clase positiva   : </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Razón desbalance : </span><span class="si">{</span><span class="n">RAZON_DESBALANCE</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> a 1"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Modelos          : </span><span class="si">{</span><span class="n">ex</span><span class="o">.</span><span class="n">MODELOS</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Balanceos        : </span><span class="si">{</span><span class="n">ex</span><span class="o">.</span><span class="n">BALANCEOS</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Optimizadores    : </span><span class="si">{</span><span class="n">ex</span><span class="o">.</span><span class="n">OPTIMIZADORES</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -507,14 +507,14 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modelos cuyo costo por ajuste justifica reducir presupuesto y fidelidad</span>
 <span class="c1"># (medición en el capítulo 6, sección 6.5).</span>
-<span class="n">COSTOSOS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;random_forest&quot;</span><span class="p">,</span> <span class="s2">&quot;xgboost&quot;</span><span class="p">,</span> <span class="s2">&quot;knn&quot;</span><span class="p">}</span>
+<span class="n">COSTOSOS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"random_forest"</span><span class="p">,</span> <span class="s2">"xgboost"</span><span class="p">,</span> <span class="s2">"knn"</span><span class="p">}</span>
 
 <span class="n">PRESUPUESTO_ECONOMICO</span><span class="p">,</span> <span class="n">PRESUPUESTO_COSTOSO</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">8</span>
 <span class="n">FIDELIDAD_ECONOMICA</span><span class="p">,</span> <span class="n">FIDELIDAD_COSTOSA</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.25</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">construir_corridas</span><span class="p">(</span><span class="n">modelos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">balanceos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">optimizadores</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Genera las combinaciones del diseño con su presupuesto asignado.</span>
+<span class="w">    </span><span class="sd">"""Genera las combinaciones del diseño con su presupuesto asignado.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -525,7 +525,7 @@ document.write(`
 <span class="sd">    -------</span>
 <span class="sd">    list of tuple</span>
 <span class="sd">        Pares (Corrida, fracción de búsqueda).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">modelos</span> <span class="o">=</span> <span class="n">modelos</span> <span class="ow">or</span> <span class="n">ex</span><span class="o">.</span><span class="n">MODELOS</span>
     <span class="n">balanceos</span> <span class="o">=</span> <span class="n">balanceos</span> <span class="ow">or</span> <span class="n">ex</span><span class="o">.</span><span class="n">BALANCEOS</span>
     <span class="n">optimizadores</span> <span class="o">=</span> <span class="n">optimizadores</span> <span class="ow">or</span> <span class="n">ex</span><span class="o">.</span><span class="n">OPTIMIZADORES</span>
@@ -550,16 +550,16 @@ document.write(`
 
 <span class="n">diseno</span> <span class="o">=</span> <span class="n">construir_corridas</span><span class="p">()</span>
 <span class="n">resumen_diseno</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
-    <span class="p">{</span><span class="s2">&quot;modelo&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">modelo</span><span class="p">,</span> <span class="s2">&quot;balanceo&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">balanceo</span><span class="p">,</span>
-     <span class="s2">&quot;optimizador&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">optimizador</span><span class="p">,</span> <span class="s2">&quot;presupuesto&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">presupuesto</span><span class="p">,</span>
-     <span class="s2">&quot;fidelidad&quot;</span><span class="p">:</span> <span class="n">f</span><span class="p">}</span>
+    <span class="p">{</span><span class="s2">"modelo"</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">modelo</span><span class="p">,</span> <span class="s2">"balanceo"</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">balanceo</span><span class="p">,</span>
+     <span class="s2">"optimizador"</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">optimizador</span><span class="p">,</span> <span class="s2">"presupuesto"</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">presupuesto</span><span class="p">,</span>
+     <span class="s2">"fidelidad"</span><span class="p">:</span> <span class="n">f</span><span class="p">}</span>
     <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">diseno</span>
 <span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corridas del diseño: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">resumen_diseno</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">resumen_diseno</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;modelo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
-    <span class="n">corridas</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;modelo&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">),</span>
-    <span class="n">presupuesto</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;presupuesto&quot;</span><span class="p">,</span> <span class="s2">&quot;first&quot;</span><span class="p">),</span>
-    <span class="n">fidelidad</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;fidelidad&quot;</span><span class="p">,</span> <span class="s2">&quot;first&quot;</span><span class="p">),</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Corridas del diseño: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">resumen_diseno</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">resumen_diseno</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+    <span class="n">corridas</span><span class="o">=</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">,</span> <span class="s2">"size"</span><span class="p">),</span>
+    <span class="n">presupuesto</span><span class="o">=</span><span class="p">(</span><span class="s2">"presupuesto"</span><span class="p">,</span> <span class="s2">"first"</span><span class="p">),</span>
+    <span class="n">fidelidad</span><span class="o">=</span><span class="p">(</span><span class="s2">"fidelidad"</span><span class="p">,</span> <span class="s2">"first"</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -572,16 +572,16 @@ document.write(`
 <p>Se ejecuta por bloques, de los modelos económicos a los costosos, para tener resultados parciales interpretables desde el principio. Cambia <code class="docutils literal notranslate"><span class="pre">BLOQUES_A_EJECUTAR</span></code> para lanzar solo una parte.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RUTA_TABLA</span> <span class="o">=</span> <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">&quot;tabla_maestra_clasificacion.csv&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RUTA_TABLA</span> <span class="o">=</span> <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"tabla_maestra_clasificacion.csv"</span>
 
 <span class="n">BLOQUES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;economicos&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bayes&quot;</span><span class="p">,</span> <span class="s2">&quot;logistica&quot;</span><span class="p">,</span> <span class="s2">&quot;arbol&quot;</span><span class="p">,</span> <span class="s2">&quot;svm&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;costosos&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">,</span> <span class="s2">&quot;xgboost&quot;</span><span class="p">],</span>
+    <span class="s2">"economicos"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"bayes"</span><span class="p">,</span> <span class="s2">"logistica"</span><span class="p">,</span> <span class="s2">"arbol"</span><span class="p">,</span> <span class="s2">"svm"</span><span class="p">],</span>
+    <span class="s2">"costosos"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"knn"</span><span class="p">,</span> <span class="s2">"random_forest"</span><span class="p">,</span> <span class="s2">"xgboost"</span><span class="p">],</span>
 <span class="p">}</span>
 
 <span class="c1"># Ajusta esta lista para ejecutar por partes. Con [] no se ejecuta nada y solo</span>
 <span class="c1"># se analiza lo que ya esté en la tabla maestra.</span>
-<span class="n">BLOQUES_A_EJECUTAR</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;economicos&quot;</span><span class="p">,</span> <span class="s2">&quot;costosos&quot;</span><span class="p">]</span>
+<span class="n">BLOQUES_A_EJECUTAR</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"economicos"</span><span class="p">,</span> <span class="s2">"costosos"</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -592,8 +592,8 @@ document.write(`
 
 <span class="k">for</span> <span class="n">nombre_bloque</span> <span class="ow">in</span> <span class="n">BLOQUES_A_EJECUTAR</span><span class="p">:</span>
     <span class="n">modelos</span> <span class="o">=</span> <span class="n">BLOQUES</span><span class="p">[</span><span class="n">nombre_bloque</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">70</span><span class="si">}</span><span class="se">\n</span><span class="s2">Bloque: </span><span class="si">{</span><span class="n">nombre_bloque</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">modelos</span><span class="p">)</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span>
-          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">70</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="s1">'='</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">70</span><span class="si">}</span><span class="se">\n</span><span class="s2">Bloque: </span><span class="si">{</span><span class="n">nombre_bloque</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">modelos</span><span class="p">)</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">"</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'='</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">70</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">inicio</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">corrida</span><span class="p">,</span> <span class="n">fidelidad</span> <span class="ow">in</span> <span class="n">construir_corridas</span><span class="p">(</span><span class="n">modelos</span><span class="o">=</span><span class="n">modelos</span><span class="p">):</span>
@@ -601,12 +601,12 @@ document.write(`
             <span class="p">[</span><span class="n">corrida</span><span class="p">],</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span>
             <span class="n">ruta_tabla</span><span class="o">=</span><span class="n">RUTA_TABLA</span><span class="p">,</span>
             <span class="n">folds_externos</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">folds_internos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-            <span class="n">metrica</span><span class="o">=</span><span class="s2">&quot;average_precision&quot;</span><span class="p">,</span>
+            <span class="n">metrica</span><span class="o">=</span><span class="s2">"average_precision"</span><span class="p">,</span>
             <span class="n">fraccion_busqueda</span><span class="o">=</span><span class="n">fidelidad</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Bloque </span><span class="si">{</span><span class="n">nombre_bloque</span><span class="si">}</span><span class="s2"> terminado en &quot;</span>
-          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">inicio</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">60</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> min&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Bloque </span><span class="si">{</span><span class="n">nombre_bloque</span><span class="si">}</span><span class="s2"> terminado en "</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">inicio</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">60</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> min"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -618,16 +618,16 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">maestra</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RUTA_TABLA</span><span class="p">)</span>
-<span class="n">completadas</span> <span class="o">=</span> <span class="n">maestra</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;estado == &#39;completada&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">completadas</span> <span class="o">=</span> <span class="n">maestra</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"estado == 'completada'"</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corridas registradas : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">maestra</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  completadas        : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">completadas</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  no aplicables      : </span><span class="si">{</span><span class="p">(</span><span class="n">maestra</span><span class="p">[</span><span class="s1">&#39;estado&#39;</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;no aplicable&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tiempo total acumulado: &quot;</span>
-      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">maestra</span><span class="p">[</span><span class="s1">&#39;tiempo_total_s&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">3600</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> h&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Corridas registradas : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">maestra</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  completadas        : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">completadas</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  no aplicables      : </span><span class="si">{</span><span class="p">(</span><span class="n">maestra</span><span class="p">[</span><span class="s1">'estado'</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'no aplicable'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tiempo total acumulado: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">maestra</span><span class="p">[</span><span class="s1">'tiempo_total_s'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">3600</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> h"</span><span class="p">)</span>
 
-<span class="n">maestra</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;estado == &#39;no aplicable&#39;&quot;</span><span class="p">)[</span>
-    <span class="p">[</span><span class="s2">&quot;modelo&quot;</span><span class="p">,</span> <span class="s2">&quot;balanceo&quot;</span><span class="p">,</span> <span class="s2">&quot;optimizador&quot;</span><span class="p">,</span> <span class="s2">&quot;detalle&quot;</span><span class="p">]]</span>
+<span class="n">maestra</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"estado == 'no aplicable'"</span><span class="p">)[</span>
+    <span class="p">[</span><span class="s2">"modelo"</span><span class="p">,</span> <span class="s2">"balanceo"</span><span class="p">,</span> <span class="s2">"optimizador"</span><span class="p">,</span> <span class="s2">"detalle"</span><span class="p">]]</span>
 </pre></div>
 </div>
 </div>
@@ -635,14 +635,14 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">COLUMNAS_RESUMEN</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;modelo&quot;</span><span class="p">,</span> <span class="s2">&quot;balanceo&quot;</span><span class="p">,</span> <span class="s2">&quot;optimizador&quot;</span><span class="p">,</span> <span class="s2">&quot;presupuesto&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;auc_pr_media&quot;</span><span class="p">,</span> <span class="s2">&quot;auc_pr_sd&quot;</span><span class="p">,</span> <span class="s2">&quot;auc_roc_media&quot;</span><span class="p">,</span> <span class="s2">&quot;auc_roc_sd&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;recall_media&quot;</span><span class="p">,</span> <span class="s2">&quot;precision_media&quot;</span><span class="p">,</span> <span class="s2">&quot;f1_media&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;exactitud_balanceada_media&quot;</span><span class="p">,</span> <span class="s2">&quot;brier_media&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;tiempo_busqueda_s&quot;</span><span class="p">,</span> <span class="s2">&quot;tiempo_ajuste_s&quot;</span><span class="p">,</span> <span class="s2">&quot;tiempo_inferencia_s&quot;</span><span class="p">,</span>
+    <span class="s2">"modelo"</span><span class="p">,</span> <span class="s2">"balanceo"</span><span class="p">,</span> <span class="s2">"optimizador"</span><span class="p">,</span> <span class="s2">"presupuesto"</span><span class="p">,</span>
+    <span class="s2">"auc_pr_media"</span><span class="p">,</span> <span class="s2">"auc_pr_sd"</span><span class="p">,</span> <span class="s2">"auc_roc_media"</span><span class="p">,</span> <span class="s2">"auc_roc_sd"</span><span class="p">,</span>
+    <span class="s2">"recall_media"</span><span class="p">,</span> <span class="s2">"precision_media"</span><span class="p">,</span> <span class="s2">"f1_media"</span><span class="p">,</span>
+    <span class="s2">"exactitud_balanceada_media"</span><span class="p">,</span> <span class="s2">"brier_media"</span><span class="p">,</span>
+    <span class="s2">"tiempo_busqueda_s"</span><span class="p">,</span> <span class="s2">"tiempo_ajuste_s"</span><span class="p">,</span> <span class="s2">"tiempo_inferencia_s"</span><span class="p">,</span>
 <span class="p">]</span>
 
-<span class="n">ranking</span> <span class="o">=</span> <span class="n">completadas</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;auc_pr_media&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ranking</span> <span class="o">=</span> <span class="n">completadas</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"auc_pr_media"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">tabla</span><span class="p">(</span><span class="n">ranking</span><span class="p">[</span><span class="n">COLUMNAS_RESUMEN</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">filas</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -651,30 +651,30 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mejor configuración de cada modelo, con su desviación estándar entre folds.</span>
-<span class="n">mejores</span> <span class="o">=</span> <span class="p">(</span><span class="n">completadas</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">completadas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;modelo&quot;</span><span class="p">)[</span><span class="s2">&quot;auc_pr_media&quot;</span><span class="p">]</span>
+<span class="n">mejores</span> <span class="o">=</span> <span class="p">(</span><span class="n">completadas</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">completadas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)[</span><span class="s2">"auc_pr_media"</span><span class="p">]</span>
                                      <span class="o">.</span><span class="n">idxmax</span><span class="p">()]</span>
-                      <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;auc_pr_media&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+                      <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"auc_pr_media"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">))</span>
 <span class="n">posiciones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mejores</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">posiciones</span><span class="p">,</span> <span class="n">mejores</span><span class="p">[</span><span class="s2">&quot;auc_pr_media&quot;</span><span class="p">],</span> <span class="n">xerr</span><span class="o">=</span><span class="n">mejores</span><span class="p">[</span><span class="s2">&quot;auc_pr_sd&quot;</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">error_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;ecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;capsize&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-                                   <span class="s2">&quot;elinewidth&quot;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">posiciones</span><span class="p">,</span> <span class="n">mejores</span><span class="p">[</span><span class="s2">"auc_pr_media"</span><span class="p">],</span> <span class="n">xerr</span><span class="o">=</span><span class="n">mejores</span><span class="p">[</span><span class="s2">"auc_pr_sd"</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">error_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">"ecolor"</span><span class="p">:</span> <span class="s2">"black"</span><span class="p">,</span> <span class="s2">"capsize"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                                   <span class="s2">"elinewidth"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">})</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">posiciones</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">mejores</span><span class="p">[</span><span class="s2">&quot;modelo&quot;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">mejores</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">])</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-           <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Prevalencia (</span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;AUC-PR (media ± desviación estándar entre folds externos)&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Mejor configuración por modelo&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Prevalencia (</span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"AUC-PR (media ± desviación estándar entre folds externos)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Mejor configuración por modelo"</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">mejores</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;modelo&quot;</span><span class="p">)[</span><span class="n">COLUMNAS_RESUMEN</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span>
-                  <span class="s2">&quot;mejores_por_modelo&quot;</span><span class="p">)</span>
-<span class="n">mejores</span><span class="p">[[</span><span class="s2">&quot;modelo&quot;</span><span class="p">,</span> <span class="s2">&quot;balanceo&quot;</span><span class="p">,</span> <span class="s2">&quot;optimizador&quot;</span><span class="p">,</span> <span class="s2">&quot;auc_pr_media&quot;</span><span class="p">,</span> <span class="s2">&quot;auc_pr_sd&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;auc_roc_media&quot;</span><span class="p">,</span> <span class="s2">&quot;tiempo_ajuste_s&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">mejores</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)[</span><span class="n">COLUMNAS_RESUMEN</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span>
+                  <span class="s2">"mejores_por_modelo"</span><span class="p">)</span>
+<span class="n">mejores</span><span class="p">[[</span><span class="s2">"modelo"</span><span class="p">,</span> <span class="s2">"balanceo"</span><span class="p">,</span> <span class="s2">"optimizador"</span><span class="p">,</span> <span class="s2">"auc_pr_media"</span><span class="p">,</span> <span class="s2">"auc_pr_sd"</span><span class="p">,</span>
+         <span class="s2">"auc_roc_media"</span><span class="p">,</span> <span class="s2">"tiempo_ajuste_s"</span><span class="p">]]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -686,17 +686,17 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">comparacion_balanceo</span> <span class="o">=</span> <span class="p">(</span><span class="n">completadas</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
-    <span class="n">index</span><span class="o">=</span><span class="s2">&quot;modelo&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;balanceo&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;auc_pr_media&quot;</span><span class="p">,</span>
-    <span class="n">aggfunc</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">))</span>
+    <span class="n">index</span><span class="o">=</span><span class="s2">"modelo"</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">"balanceo"</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">"auc_pr_media"</span><span class="p">,</span>
+    <span class="n">aggfunc</span><span class="o">=</span><span class="s2">"max"</span><span class="p">))</span>
 <span class="n">orden_balanceo</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">ex</span><span class="o">.</span><span class="n">BALANCEOS</span> <span class="k">if</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">comparacion_balanceo</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
 <span class="n">comparacion_balanceo</span> <span class="o">=</span> <span class="n">comparacion_balanceo</span><span class="p">[</span><span class="n">orden_balanceo</span><span class="p">]</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">comparacion_balanceo</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;.4f&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdYlGn&quot;</span><span class="p">,</span>
-            <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;AUC-PR&quot;</span><span class="p">},</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;AUC-PR de la mejor configuración por modelo y balanceo&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">comparacion_balanceo</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">".4f"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"RdYlGn"</span><span class="p">,</span>
+            <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">"label"</span><span class="p">:</span> <span class="s2">"AUC-PR"</span><span class="p">},</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"AUC-PR de la mejor configuración por modelo y balanceo"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
@@ -708,14 +708,14 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ganancia de cada estrategia frente a la ausencia de balanceo, por modelo.</span>
-<span class="k">if</span> <span class="s2">&quot;ninguno&quot;</span> <span class="ow">in</span> <span class="n">comparacion_balanceo</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-    <span class="n">ganancia</span> <span class="o">=</span> <span class="n">comparacion_balanceo</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">comparacion_balanceo</span><span class="p">[</span><span class="s2">&quot;ninguno&quot;</span><span class="p">],</span>
-                                        <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;ninguno&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="s2">"ninguno"</span> <span class="ow">in</span> <span class="n">comparacion_balanceo</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">ganancia</span> <span class="o">=</span> <span class="n">comparacion_balanceo</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">comparacion_balanceo</span><span class="p">[</span><span class="s2">"ninguno"</span><span class="p">],</span>
+                                        <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">"ninguno"</span><span class="p">)</span>
     <span class="n">resumen_ganancia</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-        <span class="s2">&quot;ganancia media en AUC-PR&quot;</span><span class="p">:</span> <span class="n">ganancia</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
-        <span class="s2">&quot;ganancia mínima&quot;</span><span class="p">:</span> <span class="n">ganancia</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
-        <span class="s2">&quot;ganancia máxima&quot;</span><span class="p">:</span> <span class="n">ganancia</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
-        <span class="s2">&quot;modelos donde mejora&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ganancia</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+        <span class="s2">"ganancia media en AUC-PR"</span><span class="p">:</span> <span class="n">ganancia</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">"ganancia mínima"</span><span class="p">:</span> <span class="n">ganancia</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+        <span class="s2">"ganancia máxima"</span><span class="p">:</span> <span class="n">ganancia</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+        <span class="s2">"modelos donde mejora"</span><span class="p">:</span> <span class="p">(</span><span class="n">ganancia</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
     <span class="p">})</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
     <span class="n">display</span><span class="p">(</span><span class="n">resumen_ganancia</span><span class="p">)</span>
     <span class="n">display</span><span class="p">(</span><span class="n">ganancia</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
@@ -728,9 +728,9 @@ document.write(`
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># El balanceo actúa sobre el umbral implícito, así que su efecto es mucho</span>
 <span class="c1"># mayor en métricas dependientes del umbral que en las de ordenamiento.</span>
 <span class="n">efecto_umbral</span> <span class="o">=</span> <span class="n">completadas</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
-    <span class="n">index</span><span class="o">=</span><span class="s2">&quot;balanceo&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auc_pr_media&quot;</span><span class="p">,</span> <span class="s2">&quot;auc_roc_media&quot;</span><span class="p">,</span> <span class="s2">&quot;recall_media&quot;</span><span class="p">,</span>
-                              <span class="s2">&quot;precision_media&quot;</span><span class="p">,</span> <span class="s2">&quot;f1_media&quot;</span><span class="p">],</span>
-    <span class="n">aggfunc</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">orden_balanceo</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">index</span><span class="o">=</span><span class="s2">"balanceo"</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">"auc_pr_media"</span><span class="p">,</span> <span class="s2">"auc_roc_media"</span><span class="p">,</span> <span class="s2">"recall_media"</span><span class="p">,</span>
+                              <span class="s2">"precision_media"</span><span class="p">,</span> <span class="s2">"f1_media"</span><span class="p">],</span>
+    <span class="n">aggfunc</span><span class="o">=</span><span class="s2">"mean"</span><span class="p">)</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">orden_balanceo</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">efecto_umbral</span>
 </pre></div>
 </div>
@@ -746,15 +746,15 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">modelo</span><span class="p">,</span> <span class="n">grupo</span> <span class="ow">in</span> <span class="n">completadas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;modelo&quot;</span><span class="p">):</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grupo</span><span class="p">[</span><span class="s2">&quot;tiempo_ajuste_s&quot;</span><span class="p">],</span> <span class="n">grupo</span><span class="p">[</span><span class="s2">&quot;auc_pr_media&quot;</span><span class="p">],</span>
+<span class="k">for</span> <span class="n">modelo</span><span class="p">,</span> <span class="n">grupo</span> <span class="ow">in</span> <span class="n">completadas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">grupo</span><span class="p">[</span><span class="s2">"tiempo_ajuste_s"</span><span class="p">],</span> <span class="n">grupo</span><span class="p">[</span><span class="s2">"auc_pr_media"</span><span class="p">],</span>
                <span class="n">label</span><span class="o">=</span><span class="n">modelo</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Tiempo de ajuste acumulado en los 5 folds (s, escala log)&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;AUC-PR medio&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Desempeño frente a costo computacional&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Modelo&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Tiempo de ajuste acumulado en los 5 folds (s, escala log)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"AUC-PR medio"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Desempeño frente a costo computacional"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Modelo"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -774,24 +774,24 @@ document.write(`
 <span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">semilla</span> <span class="ow">in</span> <span class="n">SEMILLAS</span><span class="p">:</span>
     <span class="n">corrida</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span>
-        <span class="n">modelo</span><span class="o">=</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">&quot;modelo&quot;</span><span class="p">],</span> <span class="n">balanceo</span><span class="o">=</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">&quot;balanceo&quot;</span><span class="p">],</span>
-        <span class="n">optimizador</span><span class="o">=</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">&quot;optimizador&quot;</span><span class="p">],</span>
-        <span class="n">presupuesto</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">&quot;presupuesto&quot;</span><span class="p">]),</span>
+        <span class="n">modelo</span><span class="o">=</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">],</span> <span class="n">balanceo</span><span class="o">=</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">"balanceo"</span><span class="p">],</span>
+        <span class="n">optimizador</span><span class="o">=</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">"optimizador"</span><span class="p">],</span>
+        <span class="n">presupuesto</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">"presupuesto"</span><span class="p">]),</span>
         <span class="n">razon_desbalance</span><span class="o">=</span><span class="n">RAZON_DESBALANCE</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">resultado</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">ejecutar_corrida</span><span class="p">(</span>
         <span class="n">corrida</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span> <span class="n">folds_externos</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">folds_internos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">fraccion_busqueda</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">mejor_global</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fraccion_busqueda&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)),</span>
+        <span class="n">fraccion_busqueda</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">mejor_global</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fraccion_busqueda"</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)),</span>
         <span class="n">semilla</span><span class="o">=</span><span class="n">semilla</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;semilla&quot;</span><span class="p">:</span> <span class="n">semilla</span><span class="p">,</span>
-                  <span class="s2">&quot;auc_pr_media&quot;</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;auc_pr_media&quot;</span><span class="p">],</span>
-                  <span class="s2">&quot;auc_pr_sd&quot;</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;auc_pr_sd&quot;</span><span class="p">],</span>
-                  <span class="s2">&quot;auc_roc_media&quot;</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;auc_roc_media&quot;</span><span class="p">]})</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"semilla"</span><span class="p">:</span> <span class="n">semilla</span><span class="p">,</span>
+                  <span class="s2">"auc_pr_media"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"auc_pr_media"</span><span class="p">],</span>
+                  <span class="s2">"auc_pr_sd"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"auc_pr_sd"</span><span class="p">],</span>
+                  <span class="s2">"auc_roc_media"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"auc_roc_media"</span><span class="p">]})</span>
 
-<span class="n">sensibilidad</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;semilla&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">sensibilidad</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;rango&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sensibilidad</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">sensibilidad</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
-<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">sensibilidad</span><span class="p">,</span> <span class="s2">&quot;sensibilidad_semillas&quot;</span><span class="p">)</span>
+<span class="n">sensibilidad</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"semilla"</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">sensibilidad</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"rango"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sensibilidad</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">sensibilidad</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">sensibilidad</span><span class="p">,</span> <span class="s2">"sensibilidad_semillas"</span><span class="p">)</span>
 <span class="n">sensibilidad</span>
 </pre></div>
 </div>
