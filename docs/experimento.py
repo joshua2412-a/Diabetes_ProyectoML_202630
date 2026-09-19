@@ -40,6 +40,16 @@ from sklearn.preprocessing import OneHotEncoder, RobustScaler
 SEMILLA = 42
 
 
+class CombinacionNoAplicable(ValueError):
+    """Combinación metodológicamente imposible, no un error de ejecución.
+
+    Se distingue de ``ValueError`` para que el ejecutor registre como
+    "no aplicable" solo las combinaciones que lo son por diseño (k-NN con
+    class_weight), y deje propagarse cualquier error real de programación
+    o de datos en lugar de ocultarlo en la tabla maestra.
+    """
+
+
 # ==========================================================================
 # Preprocesamiento
 # ==========================================================================
@@ -58,6 +68,8 @@ def construir_preprocesador(roles, min_frecuencia=0.01, salida_densa=False):
     * Categóricas: imputación por moda y codificación one-hot. Las categorías
       con frecuencia inferior al umbral se agrupan, lo que evita columnas casi
       vacías cuando un nivel poco frecuente falta en el fold de validación.
+      ``race`` se codifica aparte y sin agrupar, para conservar desagregado
+      el grupo minoritario que exige el análisis de equidad.
 
     Todos los estimadores del preprocesador (mediana, IQR, moda, niveles
     observados) se ajustan con los datos del fold de entrenamiento
@@ -82,7 +94,10 @@ def construir_preprocesador(roles, min_frecuencia=0.01, salida_densa=False):
     """
     numericas = roles["numericas"] + roles["ordinales"]
     binarias = roles["binarias"]
-    categoricas = roles["categoricas"]
+    # race va en un bloque sin agrupación por frecuencia: el capítulo 2 la
+    # exime del umbral del 1 % para conservar desagregado el grupo Asian,
+    # y min_frequency la volvería a agrupar dentro de cada fold.
+    categoricas = [c for c in roles["categoricas"] if c != "race"]
 
     bloque_numerico = Pipeline([
         ("imputacion", SimpleImputer(strategy="median")),
@@ -100,6 +115,8 @@ def construir_preprocesador(roles, min_frecuencia=0.01, salida_densa=False):
     return ColumnTransformer([
         ("num", bloque_numerico, numericas),
         ("bin", "passthrough", binarias),
+        ("race", OneHotEncoder(handle_unknown="ignore",
+                               sparse_output=not salida_densa), ["race"]),
         ("cat", bloque_categorico, categoricas),
     ], verbose_feature_names_out=False)
 
@@ -139,7 +156,7 @@ def crear_modelo(nombre, semilla=SEMILLA):
     -----------------------
     ``logistica`` usa el solver SAGA, que tiene complejidad lineal en n y p
     por iteración, admite ambas penalizaciones y opera sobre matrices
-    dispersas: la combinación adecuada para 79,473 filas y 129 columnas
+    dispersas: la combinación adecuada para 79,473 filas y 152 columnas
     codificadas.
 
     ``svm`` usa ``LinearSVC`` envuelto en calibración en lugar de ``SVC`` con
@@ -342,10 +359,9 @@ def construir_pipeline(modelo, balanceo, roles, semilla=SEMILLA,
                 )
             estimador.set_params(scale_pos_weight=razon_desbalance)
         else:
-            raise ValueError(
+            raise CombinacionNoAplicable(
                 f"'{modelo}' no tiene equivalente de class_weight: su "
-                "predicción es un voto de vecinos sin ponderación de clase. "
-                "La combinación se registra como no aplicable."
+                "predicción es un voto de vecinos sin ponderación de clase."
             )
 
     if balanceo in {"smote", "adasyn"}:
@@ -611,7 +627,7 @@ class Corrida:
 
 def ejecutar_corrida(corrida, X, y, grupos, roles, folds_externos=5,
                      folds_internos=3, metrica="average_precision",
-                     fraccion_busqueda=1.0, semilla=SEMILLA):
+                     fraccion_busqueda=1.0, semilla=SEMILLA, verbose=False):
     """Valida una combinación con validación cruzada anidada y agrupada.
 
     El bucle externo estima el desempeño y el interno selecciona
@@ -626,6 +642,9 @@ def ejecutar_corrida(corrida, X, y, grupos, roles, folds_externos=5,
     paciente y no por fila mantiene la integridad de los grupos también en la
     búsqueda. El supuesto implícito es que el orden relativo de las
     configuraciones se conserva al reducir el tamaño de la muestra.
+
+    Con ``verbose=True`` imprime una línea por fold externo con su duración
+    y su AUC-PR. No altera ningún resultado: solo informa del progreso.
 
     Returns
     -------
@@ -644,7 +663,15 @@ def ejecutar_corrida(corrida, X, y, grupos, roles, folds_externos=5,
     por_fold, elegidos, historiales, diversidades = [], [], [], []
     t_busqueda = t_ajuste = t_inferencia = 0.0
 
-    for indices_train, indices_val in externo.split(X, y, groups=grupos):
+    for i, (indices_train, indices_val) in enumerate(
+            externo.split(X, y, groups=grupos), 1):
+        # Monitoreo opcional: una línea por fold externo, útil en máquinas
+        # lentas para distinguir una corrida que avanza de una colgada.
+        if verbose:
+            print(f"  fold externo {i}/{folds_externos}...", end=" ",
+                  flush=True)
+        t_fold = time.perf_counter()
+
         X_train, X_val = X.iloc[indices_train], X.iloc[indices_val]
         y_train, y_val = y.iloc[indices_train], y.iloc[indices_val]
         grupos_train = grupos.iloc[indices_train]
@@ -687,7 +714,12 @@ def ejecutar_corrida(corrida, X, y, grupos, roles, folds_externos=5,
         probabilidades = pipeline.predict_proba(X_val)[:, 1]
         t_inferencia += time.perf_counter() - inicio
 
-        por_fold.append(calcular_metricas(y_val, probabilidades))
+        metricas_fold = calcular_metricas(y_val, probabilidades)
+        if verbose:
+            print(f"listo en {time.perf_counter() - t_fold:.1f} s "
+                  f"(AUC-PR {metricas_fold['auc_pr']:.4f})", flush=True)
+
+        por_fold.append(metricas_fold)
         elegidos.append(resultado["mejores_parametros"])
         historiales.append(resultado["historial"])
         diversidades.append(resultado["diversidad"])
@@ -756,10 +788,14 @@ def ejecutar_experimento(corridas, X, y, grupos, roles, ruta_tabla,
             continue
         try:
             inicio = time.perf_counter()
-            fila = ejecutar_corrida(corrida, X, y, grupos, roles, **kwargs)
+            fila = ejecutar_corrida(corrida, X, y, grupos, roles,
+                                    verbose=verbose, **kwargs)
             fila["tiempo_total_s"] = time.perf_counter() - inicio
             fila["estado"] = "completada"
-        except (ValueError, ImportError) as exc:
+        # Solo las combinaciones imposibles por diseño se registran como no
+        # aplicables; cualquier otro error (un modelo mal escrito, una
+        # dependencia sin instalar) detiene la ejecución para que se corrija.
+        except CombinacionNoAplicable as exc:
             fila = {
                 "modelo": corrida.modelo, "balanceo": corrida.balanceo,
                 "optimizador": corrida.optimizador,
