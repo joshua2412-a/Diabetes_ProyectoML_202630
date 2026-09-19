@@ -16,6 +16,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from scipy import stats
+from IPython.display import HTML
 
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
@@ -48,22 +49,99 @@ pd.set_option("display.max_columns", 200)
 pd.set_option("display.width", 250)
 
 
-def tabla(datos, filas=15):
-    """Muestra un DataFrame como tabla interactiva si itables está instalado.
+def tabla(datos, filas=15, titulo=None, indice=True):
+    """
+    Muestra un DataFrame con formato visual uniforme.
 
-    Parameters
+    Parámetros
     ----------
     datos : pandas.DataFrame
-        Tabla a mostrar.
-    filas : int, default 15
-        Filas visibles por página.
+        DataFrame que se desea mostrar.
+
+    filas : int, default=15
+        Número de filas mostradas por página.
+
+    titulo : str, optional
+        Título que aparecerá encima de la tabla.
+
+    indice : bool, default=True
+        Indica si se muestra el índice del DataFrame.
     """
+
+    from IPython.display import display, HTML, Markdown
+
+    # Mostrar título opcional
+    if titulo is not None:
+        display(Markdown(f"### {titulo}"))
+
+    # Copia para evitar modificar el DataFrame original
+    datos_mostrar = datos.copy()
+
+    if not indice:
+        datos_mostrar = datos_mostrar.reset_index(drop=True)
+
     try:
+        # Intentar utilizar itables para tablas interactivas
         from itables import show
-        show(datos, pageLength=filas, scrollX=True, classes="display compact")
+
+        show(
+            datos_mostrar,
+            pageLength=filas,
+            scrollX=True,
+            classes="display compact",
+            showIndex=indice
+        )
+
     except ImportError:
-        from IPython.display import display
-        display(datos.head(filas))
+        # Alternativa usando pandas Styler
+        tabla_estilizada = (
+            datos_mostrar.head(filas)
+            .style
+            .set_properties(**{
+                "text-align": "center",
+                "white-space": "nowrap",
+                "font-size": "11pt",
+                "padding": "8px"
+            })
+            .set_table_styles([
+                {
+                    "selector": "th",
+                    "props": [
+                        ("background-color", PALETA[0]),
+                        ("color", "white"),
+                        ("font-weight", "bold"),
+                        ("text-align", "center")
+                    ]
+                },
+                {
+                    "selector": "td",
+                    "props": [
+                        ("padding", "8px")
+                    ]
+                },
+                {
+                    "selector": "table",
+                    "props": [
+                        ("width", "100%"),
+                        ("table-layout", "auto"),
+                        ("border-collapse", "collapse")
+                    ]
+                }
+            ])
+        )
+
+        display(HTML(f"""
+        <div style="
+            max-height: 400px;
+            max-width: 100%;
+            overflow: auto;
+            border: 1px solid {GRIS};
+            border-radius: 8px;
+            margin: 10px 0;
+        ">
+            {tabla_estilizada.to_html()}
+        </div>
+        """))
 
 
 def columnas_texto(datos):
