@@ -417,16 +417,24 @@ document.write(`
 <h1>6. Preprocesamiento, validación y línea base<a class="headerlink" href="#preprocesamiento-validacion-y-linea-base" title="Link to this heading">#</a></h1>
 <section id="objetivo-del-capitulo">
 <h2>6.1. Objetivo del capítulo<a class="headerlink" href="#objetivo-del-capitulo" title="Link to this heading">#</a></h2>
-<p>Este capítulo construye la infraestructura sobre la que corren las 140 combinaciones del experimento y establece el punto de referencia contra el que se medirán. Tres productos concretos:</p>
+<p>Este capítulo construye la infraestructura sobre la que corren las 112 combinaciones del experimento (siete modelos, cuatro estrategias de balanceo y cuatro optimizadores) y establece el punto de referencia contra el que se medirán. Tres productos concretos:</p>
 <ol class="arabic simple">
 <li><p>Un <strong>preprocesador encapsulado</strong> que se ajusta dentro de cada fold, de modo que ninguna estimación (medianas, modas, niveles de categorías) use información del conjunto de evaluación.</p></li>
 <li><p>Un <strong>esquema de validación cruzada anidada y agrupada por paciente</strong>, con el bucle interno para seleccionar hiperparámetros y el externo para estimar desempeño.</p></li>
 <li><p>Una <strong>línea base</strong> con regresión logística, que fija la expectativa realista de desempeño y sirve de referencia para juzgar si la complejidad añadida de los modelos posteriores se traduce en mejora.</p></li>
 </ol>
 <p>Además se mide el costo computacional real de cada familia de modelos y se dimensiona el experimento completo, porque el resultado de esa medición obliga a tomar decisiones de diseño que conviene justificar antes y no improvisar a mitad de camino.</p>
+<p>El código de este motor —preprocesador, fábricas de modelos, optimizadores
+y el ejecutor con validación anidada— vive en <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> y no en este
+notebook. La razón es la misma que llevó las utilidades del capítulo 1 a
+<code class="docutils literal notranslate"><span class="pre">config.py</span></code>: los capítulos 6 a 9 comparten esta infraestructura, y
+duplicarla en cada uno arriesgaría que una corrección se aplique en un
+notebook y se olvide en otro. Lo que cambia entre capítulos son las
+decisiones que se documentan en el texto —qué se mide, qué se compara,
+qué se concluye—, no la implementación, que es la misma en los cuatro.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">experimento</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ex</span>
 
@@ -445,6 +453,13 @@ document.write(`
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Entrenamiento : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> encuentros de </span><span class="si">{</span><span class="n">grupos</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> pacientes"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Predictores   : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">PREDICTORES</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Clase positiva: </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entrenamiento : 79,473 encuentros de 56,036 pacientes
+Predictores   : 38
+Clase positiva: 11.39%
 </pre></div>
 </div>
 </div>
@@ -476,8 +491,8 @@ document.write(`
 <td><p>Ya están en <code class="docutils literal notranslate"><span class="pre">{0,</span> <span class="pre">1}</span></code>; escalarlas no aporta y dificulta interpretar los coeficientes</p></td>
 </tr>
 <tr class="row-even"><td><p>Categóricas</p></td>
-<td><p>Imputación por moda y codificación one-hot con agrupación de niveles poco frecuentes</p></td>
-<td><p>La codificación one-hot no impone orden entre categorías nominales. El umbral de frecuencia evita que un nivel presente en el fold de entrenamiento y ausente en el de validación genere una columna constante, que desestabiliza los coeficientes de los modelos lineales entre folds</p></td>
+<td><p>Imputación por moda y codificación one-hot con agrupación de niveles poco frecuentes, salvo <code class="docutils literal notranslate"><span class="pre">race</span></code>, que se codifica sin agrupar</p></td>
+<td><p>La codificación one-hot no impone orden entre categorías nominales. El umbral de frecuencia evita que un nivel presente en el fold de entrenamiento y ausente en el de validación genere una columna constante, que desestabiliza los coeficientes de los modelos lineales entre folds. <code class="docutils literal notranslate"><span class="pre">race</span></code> queda fuera del umbral por la misma razón que en el capítulo 2: el grupo <code class="docutils literal notranslate"><span class="pre">Asian</span></code> debe conservarse desagregado para el análisis de equidad</p></td>
 </tr>
 </tbody>
 </table>
@@ -485,15 +500,1772 @@ document.write(`
 <p>El escalado es indispensable para los modelos basados en distancias o en márgenes (k-NN, SVM) y para los lineales regularizados, donde la penalización es sensible a la escala de cada coeficiente. Los ensambles de árboles son invariantes a transformaciones monótonas, así que para ellos es inocuo: se aplica de todas formas para que todas las combinaciones compartan el mismo preprocesador y las diferencias observadas se atribuyan al modelo y no al preprocesamiento.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">preprocesador</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">construir_preprocesador</span><span class="p">(</span><span class="n">roles</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocesador</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">construir_preprocesador</span><span class="p">(</span><span class="n">roles</span><span class="p">)</span>
 <span class="n">preprocesador</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>.sk-global {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: #000;
+  --sklearn-color-text-muted: #666;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+}
+
+.sk-global.light {
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: black;
+  --sklearn-color-background: white;
+  --sklearn-color-border-box: black;
+  --sklearn-color-icon: #696969;
+}
+
+.sk-global.dark {
+  --sklearn-color-text-on-default-background: white;
+  --sklearn-color-background: #111;
+  --sklearn-color-border-box: white;
+  --sklearn-color-icon: #878787;
+}
+
+.sk-global {
+  color: var(--sklearn-color-text);
+}
+
+.sk-global pre {
+  padding: 0;
+}
+
+.sk-global input.sk-hidden--visually {
+  border: 0;
+  clip-path: inset(100%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.sk-global div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+.sk-global div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+.sk-global div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+.sk-global div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+.sk-global div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+.sk-global div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.sk-global div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+.sk-global div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+.sk-global div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+.sk-global div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+.sk-global div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+.sk-global label.sk-toggleable__label {
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.sk-global label.sk-toggleable__label .caption {
+  font-size: 0.6rem;
+  font-weight: lighter;
+  color: var(--sklearn-color-text-muted);
+}
+
+.sk-global label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+.sk-global label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+.sk-global div.sk-toggleable__content {
+  display: none;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+.sk-global div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+.sk-global div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+.sk-global div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+.sk-global input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.sk-global input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+.sk-global div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+.sk-global div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+.sk-global div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+.sk-global div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+.sk-global div.sk-label label.sk-toggleable__label,
+.sk-global div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+.sk-global div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+.sk-global div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+.sk-global div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  line-height: 1.2em;
+}
+
+.sk-global div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+.sk-global div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+.sk-global div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+.sk-global div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+.sk-global div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-unfitted-level-0);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 0.5em;
+  text-align: center;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-3) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3) 1pt solid;
+  color: var(--sklearn-color-fitted-level-3);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  border: var(--sklearn-color-fitted-level-0) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-0);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  border: var(--sklearn-color-fitted-level-0) 1pt solid;
+  color: var(--sklearn-color-fitted-level-0);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+.sk-global a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-unfitted-level-0);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+.sk-global a.estimator_doc_link.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+.sk-global a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+.sk-global a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-top-container.sk-global {
+  /* pydata-sphinx-theme hides overflow, so scrolling is disabled.
+   We need to set it to !important and add tabindex="0" in the HTML
+   to allow keyboard-only users to navigate the display. */
+  overflow-x: scroll !important;
+  max-width: 100%;
+}
+
+.estimator-table {
+    font-family: monospace;
+}
+
+.estimator-table summary {
+    padding: .5rem;
+    cursor: pointer;
+}
+
+.estimator-table summary::marker {
+    font-size: 0.7rem;
+}
+
+.estimator-table details[open] {
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+    padding-bottom: 0.3rem;
+}
+
+.estimator-table .parameters-table {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 0;
+}
+
+.estimator-table .parameters-table tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.estimator-table .parameters-table tr:nth-child(even) {
+    background-color: #f6f6f6;
+}
+
+.estimator-table .parameters-table tr:hover td {
+    background-color: #e0e0e0;
+}
+
+.estimator-table table :is(td, th) {
+    border: 1px solid rgba(106, 105, 104, 0.232);
+}
+
+/*
+    `table td`is set in notebook with right text-align.
+    We need to overwrite it.
+*/
+.estimator-table table td.param {
+    text-align: left;
+    position: relative;
+    padding: 0;
+}
+
+.user-set td {
+    color:rgb(255, 94, 0);
+    text-align: left !important;
+}
+
+.user-set td.value {
+    color:rgb(255, 94, 0);
+    background-color: transparent;
+}
+
+.default td, .estimator-table th {
+    color: black;
+    text-align: left !important;
+}
+
+.user-set td i,
+.default td i {
+    color: black;
+}
+
+td.fitted-att-type {
+    white-space: preserve nowrap;
+}
+
+/*
+    Styles for parameter documentation links
+    We need styling for visited so jupyter doesn't overwrite it
+*/
+a.param-doc-link,
+a.param-doc-link:link,
+a.param-doc-link:visited {
+    text-decoration: underline dashed;
+    text-underline-offset: .3em;
+    color: inherit;
+    display: block;
+    padding: .5em;
+}
+
+@supports(anchor-name: --doc-link) {
+    a.param-doc-link,
+    a.param-doc-link:link,
+    a.param-doc-link:visited {
+    anchor-name: --doc-link;
+    }
+}
+
+/* "hack" to make the entire area of the cell containing the link clickable */
+a.param-doc-link::before {
+    position: absolute;
+    content: "";
+    inset: 0;
+}
+
+.param-doc-description {
+    display: none;
+    position: absolute;
+    z-index: 9999;
+    left: 0;
+    padding: .5ex;
+    margin-left: 1.5em;
+    color: var(--sklearn-color-text);
+    box-shadow: .3em .3em .4em #999;
+    width: max-content;
+    text-align: left;
+    max-height: 10em;
+    overflow-y: auto;
+
+    /* unfitted */
+    background: var(--sklearn-color-unfitted-level-0);
+    border: thin solid var(--sklearn-color-unfitted-level-3);
+}
+
+@supports(position-area: center right) {
+    .param-doc-description {
+    position-area: center right;
+    position: fixed;
+    margin-left: 0;
+    }
+}
+
+/* Fitted state for parameter tooltips */
+.fitted .param-doc-description {
+    /* fitted */
+    background: var(--sklearn-color-fitted-level-0);
+    border: thin solid var(--sklearn-color-fitted-level-3);
+}
+
+.param-doc-link:hover .param-doc-description {
+    display: block;
+}
+
+.copy-paste-icon {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNy4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjUgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZD0iTTIwOCAwTDMzMi4xIDBjMTIuNyAwIDI0LjkgNS4xIDMzLjkgMTQuMWw2Ny45IDY3LjljOSA5IDE0LjEgMjEuMiAxNC4xIDMzLjlMNDQ4IDMzNmMwIDI2LjUtMjEuNSA0OC00OCA0OGwtMTkyIDBjLTI2LjUgMC00OC0yMS41LTQ4LTQ4bDAtMjg4YzAtMjYuNSAyMS41LTQ4IDQ4LTQ4ek00OCAxMjhsODAgMCAwIDY0LTY0IDAgMCAyNTYgMTkyIDAgMC0zMiA2NCAwIDAgNDhjMCAyNi41LTIxLjUgNDgtNDggNDhMNDggNTEyYy0yNi41IDAtNDgtMjEuNS00OC00OEwwIDE3NmMwLTI2LjUgMjEuNS00OCA0OC00OHoiLz48L3N2Zz4=);
+    background-repeat: no-repeat;
+    background-size: 14px 14px;
+    background-position: 0;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+}
+
+.copy-paste-icon:focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 1px;
+}
+
+.features {
+  font-family: monospace;
+  cursor: pointer;
+  background-color: var(--sklearn-color-unfitted-level-0);
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: .20em;
+  margin-bottom: 0.5em;
+  font-size: inherit; /* Needed for jupyter */
+}
+
+.features.fitted {
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+.features summary {
+  cursor: pointer;
+  display: flex;
+  margin-bottom: 0;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  padding: .25em;
+}
+
+.features details[open] > summary {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+  border-radius: .20em 0 0 0;
+}
+
+.features.fitted details[open] > summary {
+  background-color: var(--sklearn-color-fitted-level-2);
+  border-radius: .20em 0 0 0;
+}
+
+.features details > summary .arrow::before {
+  content: "▸";
+  color: grey;
+}
+
+.features details[open] > summary .arrow::before {
+  content: "▾";
+}
+
+.features details:hover > summary {
+  margin: 0;
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+.features.fitted details:hover > summary {
+  margin: 0;
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+.features .features-container {
+  max-height: 10em;
+  overflow: auto;
+  scrollbar-width: thin;
+  padding: .25em 0.1rem;
+  background-color: var(--sklearn-color-unfitted-level-0);
+  border-radius: 0 0 .5em .5em;
+}
+
+.features.fitted .features-container {
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+.features .image-container {
+  block-size: 1em;
+  inline-size: 1em;
+  padding: 0;
+  margin: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.features .copy-paste-icon {
+  background-size: 1em 1em;
+  width: 1em;
+  height: 1em;
+  filter: grayscale(100%) opacity(60%);
+}
+
+.features .features-container table {
+  width: 100%;
+  margin: 0.01em;
+}
+
+.features .features-container table tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.features .features-container table tr:nth-child(even) {
+  background-color: #f6f6f6;
+}
+
+.features .features-container table tr:hover {
+  background-color: #e0e0e0;
+}
+
+.features .features-container table {
+  table-layout: inherit;
+}
+
+.features .features-container table td {
+  text-align: left;
+  padding: 0 0.5em;
+  border: 1px solid rgba(106, 105, 104, 0.232);
+  white-space: nowrap;
+  color: var(--sklearn-color-text);
+}
+
+.total_features {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5em;
+}
+</style><body><div id="sk-container-id-1" tabindex="0" class="sk-top-container sk-global"><div class="sk-text-repr-fallback"><pre>ColumnTransformer(transformers=[(&#x27;num&#x27;,
+                                 Pipeline(steps=[(&#x27;imputacion&#x27;,
+                                                  SimpleImputer(strategy=&#x27;median&#x27;)),
+                                                 (&#x27;escalado&#x27;, RobustScaler())]),
+                                 [&#x27;time_in_hospital&#x27;, &#x27;num_lab_procedures&#x27;,
+                                  &#x27;num_procedures&#x27;, &#x27;num_medications&#x27;,
+                                  &#x27;number_outpatient&#x27;, &#x27;number_emergency&#x27;,
+                                  &#x27;number_inpatient&#x27;, &#x27;number_diagnoses&#x27;,
+                                  &#x27;n_farmacos_activos&#x27;, &#x27;age_ord&#x27;]),
+                                (&#x27;bin&#x27;, &#x27;passthrough&#x27;,
+                                 [&#x27;hospital...
+                                  &#x27;change&#x27;, &#x27;chlorpropamide&#x27;, &#x27;diabetesMed&#x27;,
+                                  &#x27;diag_1_grupo&#x27;, &#x27;diag_2_grupo&#x27;,
+                                  &#x27;diag_3_grupo&#x27;, &#x27;discharge_disposition_id&#x27;,
+                                  &#x27;especialidad&#x27;, &#x27;gender&#x27;, &#x27;glimepiride&#x27;,
+                                  &#x27;glipizide&#x27;, &#x27;glyburide&#x27;,
+                                  &#x27;glyburide-metformin&#x27;, &#x27;insulin&#x27;,
+                                  &#x27;max_glu_serum&#x27;, &#x27;metformin&#x27;, &#x27;miglitol&#x27;,
+                                  &#x27;nateglinide&#x27;, &#x27;pioglitazone&#x27;, &#x27;repaglinide&#x27;,
+                                  &#x27;rosiglitazone&#x27;, &#x27;tolazamide&#x27;])],
+                  verbose_feature_names_out=False)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-1" type="checkbox" ><label for="sk-estimator-id-1" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>ColumnTransformer</div></div><div><a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for ColumnTransformer</span></a><span class="sk-estimator-doc-link ">i<span>Not fitted</span></span></div></label><div class="sk-toggleable__content " data-param-prefix="">
+        <div class="estimator-table">
+            <details>
+                <summary>Parameters</summary>
+                <table class="parameters-table">
+                  <tbody>
+                    
+        <tr class="user-set">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy transformers to clipboard"
+                 onclick="copyToClipboard('transformers',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-transformers;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.compose.ColumnTransformer.html#:~:text=transformers,-list%20of%20tuples">
+            transformers
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-transformers;">
+            transformers: list of tuples<br><br>List of (name, transformer, columns) tuples specifying the<br>transformer objects to be applied to subsets of the data.<br><br>name : str<br>    Like in Pipeline and FeatureUnion, this allows the transformer and<br>    its parameters to be set using ``set_params`` and searched in grid<br>    search.<br>transformer : {&#x27;drop&#x27;, &#x27;passthrough&#x27;} or estimator<br>    Estimator must support :term:`fit` and :term:`transform`.<br>    Special-cased strings &#x27;drop&#x27; and &#x27;passthrough&#x27; are accepted as<br>    well, to indicate to drop the columns or to pass them through<br>    untransformed, respectively.<br>columns :  str, array-like of str, int, array-like of int,                 array-like of bool, slice or callable<br>    Indexes the data on its second axis. Integers are interpreted as<br>    positional columns, while strings can reference DataFrame columns<br>    by name.  A scalar string or int should be used where<br>    ``transformer`` expects X to be a 1d array-like (vector),<br>    otherwise a 2d array will be passed to the transformer.<br>    A callable is passed the input data `X` and can return any of the<br>    above. To select multiple columns by name or dtype, you can use<br>    :obj:`make_column_selector`.</span>
+        </a>
+    </td>
+            <td class="value">[(&#x27;num&#x27;, ...), (&#x27;bin&#x27;, ...), ...]</td>
+        </tr>
+    
+
+        <tr class="user-set">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy verbose_feature_names_out to clipboard"
+                 onclick="copyToClipboard('verbose_feature_names_out',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-verbose_feature_names_out;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.compose.ColumnTransformer.html#:~:text=verbose_feature_names_out,-bool%2C%20str%20or%20Callable%5B%5Bstr%2C%20str%5D%2C%20str%5D%2C%20default%3DTrue">
+            verbose_feature_names_out
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-verbose_feature_names_out;">
+            verbose_feature_names_out: bool, str or Callable[[str, str], str], default=True<br><br>- If True, :meth:`ColumnTransformer.get_feature_names_out` will prefix<br>  all feature names with the name of the transformer that generated that<br>  feature. It is equivalent to setting<br>  `verbose_feature_names_out=&quot;{transformer_name}__{feature_name}&quot;`.<br>- If False, :meth:`ColumnTransformer.get_feature_names_out` will not<br>  prefix any feature names and will error if feature names are not<br>  unique.<br>- If ``Callable[[str, str], str]``,<br>  :meth:`ColumnTransformer.get_feature_names_out` will rename all the features<br>  using the name of the transformer. The first argument of the callable is the<br>  transformer name and the second argument is the feature name. The returned<br>  string will be the new feature name.<br>- If ``str``, it must be a string ready for formatting. The given string will<br>  be formatted using two field names: ``transformer_name`` and ``feature_name``.<br>  e.g. ``&quot;{feature_name}__{transformer_name}&quot;``. See :meth:`str.format` method<br>  from the standard library for more info.<br><br>.. versionadded:: 1.0<br><br>.. versionchanged:: 1.6<br>    `verbose_feature_names_out` can be a callable or a string to be formatted.</span>
+        </a>
+    </td>
+            <td class="value">False</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy remainder to clipboard"
+                 onclick="copyToClipboard('remainder',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-remainder;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.compose.ColumnTransformer.html#:~:text=remainder,-%7B%27drop%27%2C%20%27passthrough%27%7D%20or%20estimator%2C%20default%3D%27drop%27">
+            remainder
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-remainder;">
+            remainder: {&#x27;drop&#x27;, &#x27;passthrough&#x27;} or estimator, default=&#x27;drop&#x27;<br><br>By default, only the specified columns in `transformers` are<br>transformed and combined in the output, and the non-specified<br>columns are dropped. (default of ``&#x27;drop&#x27;``).<br>By specifying ``remainder=&#x27;passthrough&#x27;``, all remaining columns that<br>were not specified in `transformers`, but present in the data passed<br>to `fit` will be automatically passed through. This subset of columns<br>is concatenated with the output of the transformers. For dataframes,<br>extra columns not seen during `fit` will be excluded from the output<br>of `transform`.<br>By setting ``remainder`` to be an estimator, the remaining<br>non-specified columns will use the ``remainder`` estimator. The<br>estimator must support :term:`fit` and :term:`transform`.<br>Note that using this feature requires that the DataFrame columns<br>input at :term:`fit` and :term:`transform` have identical order.</span>
+        </a>
+    </td>
+            <td class="value">&#x27;drop&#x27;</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy sparse_threshold to clipboard"
+                 onclick="copyToClipboard('sparse_threshold',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-sparse_threshold;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.compose.ColumnTransformer.html#:~:text=sparse_threshold,-float%2C%20default%3D0.3">
+            sparse_threshold
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-sparse_threshold;">
+            sparse_threshold: float, default=0.3<br><br>If the output of the different transformers contains sparse matrices,<br>these will be stacked as a sparse matrix if the overall density is<br>lower than this value. Use ``sparse_threshold=0`` to always return<br>dense.  When the transformed output consists of all dense data, the<br>stacked result will be dense, and this keyword will be ignored.</span>
+        </a>
+    </td>
+            <td class="value">0.3</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy n_jobs to clipboard"
+                 onclick="copyToClipboard('n_jobs',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-n_jobs;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.compose.ColumnTransformer.html#:~:text=n_jobs,-int%2C%20default%3DNone">
+            n_jobs
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-n_jobs;">
+            n_jobs: int, default=None<br><br>Number of jobs to run in parallel.<br>``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.<br>``-1`` means using all processors. See :term:`Glossary &lt;n_jobs&gt;`<br>for more details.</span>
+        </a>
+    </td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy transformer_weights to clipboard"
+                 onclick="copyToClipboard('transformer_weights',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-transformer_weights;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.compose.ColumnTransformer.html#:~:text=transformer_weights,-dict%2C%20default%3DNone">
+            transformer_weights
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-transformer_weights;">
+            transformer_weights: dict, default=None<br><br>Multiplicative weights for features per transformer. The output of the<br>transformer is multiplied by these weights. Keys are transformer names,<br>values the weights.</span>
+        </a>
+    </td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy verbose to clipboard"
+                 onclick="copyToClipboard('verbose',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-verbose;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.compose.ColumnTransformer.html#:~:text=verbose,-bool%2C%20default%3DFalse">
+            verbose
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-verbose;">
+            verbose: bool, default=False<br><br>If True, the time elapsed while fitting each transformer will be<br>printed as it is completed.</span>
+        </a>
+    </td>
+            <td class="value">False</td>
+        </tr>
+    
+                  </tbody>
+                </table>
+            </details>
+        </div>
+    </div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-2" type="checkbox" ><label for="sk-estimator-id-2" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>num</div></div></label><div class="sk-toggleable__content " data-param-prefix="num__"><pre>[&#x27;time_in_hospital&#x27;, &#x27;num_lab_procedures&#x27;, &#x27;num_procedures&#x27;, &#x27;num_medications&#x27;, &#x27;number_outpatient&#x27;, &#x27;number_emergency&#x27;, &#x27;number_inpatient&#x27;, &#x27;number_diagnoses&#x27;, &#x27;n_farmacos_activos&#x27;, &#x27;age_ord&#x27;]</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-3" type="checkbox" ><label for="sk-estimator-id-3" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>SimpleImputer</div></div><div><a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html">?<span>Documentation for SimpleImputer</span></a></div></label><div class="sk-toggleable__content " data-param-prefix="num__imputacion__">
+        <div class="estimator-table">
+            <details>
+                <summary>Parameters</summary>
+                <table class="parameters-table">
+                  <tbody>
+                    
+        <tr class="user-set">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy strategy to clipboard"
+                 onclick="copyToClipboard('strategy',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-strategy;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=strategy,-str%20or%20Callable%2C%20default%3D%27mean%27">
+            strategy
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-strategy;">
+            strategy: str or Callable, default=&#x27;mean&#x27;<br><br>The imputation strategy.<br><br>- If &quot;mean&quot;, then replace missing values using the mean along<br>  each column. Can only be used with numeric data.<br>- If &quot;median&quot;, then replace missing values using the median along<br>  each column. Can only be used with numeric data.<br>- If &quot;most_frequent&quot;, then replace missing using the most frequent<br>  value along each column. Can be used with strings or numeric data.<br>  If there is more than one such value, only the smallest is returned.<br>- If &quot;constant&quot;, then replace missing values with fill_value. Can be<br>  used with strings or numeric data.<br>- If an instance of Callable, then replace missing values using the<br>  scalar statistic returned by running the callable over a dense 1d<br>  array containing non-missing values of each column.<br><br>.. versionadded:: 0.20<br>   strategy=&quot;constant&quot; for fixed value imputation.<br><br>.. versionadded:: 1.5<br>   strategy=callable for custom value imputation.</span>
+        </a>
+    </td>
+            <td class="value">&#x27;median&#x27;</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy missing_values to clipboard"
+                 onclick="copyToClipboard('missing_values',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-missing_values;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=missing_values,-int%2C%20float%2C%20str%2C%20np.nan%2C%20None%20or%20pandas.NA%2C%20default%3Dnp.nan">
+            missing_values
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-missing_values;">
+            missing_values: int, float, str, np.nan, None or pandas.NA, default=np.nan<br><br>The placeholder for the missing values. All occurrences of<br>`missing_values` will be imputed. For pandas&#x27; dataframes with<br>nullable integer dtypes with missing values, `missing_values`<br>can be set to either `np.nan` or `pd.NA`.</span>
+        </a>
+    </td>
+            <td class="value">nan</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy fill_value to clipboard"
+                 onclick="copyToClipboard('fill_value',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-fill_value;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=fill_value,-str%20or%20numerical%20value%2C%20default%3DNone">
+            fill_value
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-fill_value;">
+            fill_value: str or numerical value, default=None<br><br>When strategy == &quot;constant&quot;, `fill_value` is used to replace all<br>occurrences of missing_values. For string or object data types,<br>`fill_value` must be a string.<br>If `None`, `fill_value` will be 0 when imputing numerical<br>data and &quot;missing_value&quot; for strings or object data types.</span>
+        </a>
+    </td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy copy to clipboard"
+                 onclick="copyToClipboard('copy',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-copy;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=copy,-bool%2C%20default%3DTrue">
+            copy
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-copy;">
+            copy: bool, default=True<br><br>If True, a copy of X will be created. If False, imputation will<br>be done in-place whenever possible. Note that, in the following cases,<br>a new copy will always be made, even if `copy=False`:<br><br>- If `X` is not an array of floating values;<br>- If `X` is encoded as a CSR matrix;<br>- If `add_indicator=True`.</span>
+        </a>
+    </td>
+            <td class="value">True</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy add_indicator to clipboard"
+                 onclick="copyToClipboard('add_indicator',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-add_indicator;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=add_indicator,-bool%2C%20default%3DFalse">
+            add_indicator
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-add_indicator;">
+            add_indicator: bool, default=False<br><br>If True, a :class:`MissingIndicator` transform will stack onto output<br>of the imputer&#x27;s transform. This allows a predictive estimator<br>to account for missingness despite imputation. If a feature has no<br>missing values at fit/train time, the feature won&#x27;t appear on<br>the missing indicator even if there are missing values at<br>transform/test time.</span>
+        </a>
+    </td>
+            <td class="value">False</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy keep_empty_features to clipboard"
+                 onclick="copyToClipboard('keep_empty_features',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-keep_empty_features;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=keep_empty_features,-bool%2C%20default%3DFalse">
+            keep_empty_features
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-keep_empty_features;">
+            keep_empty_features: bool, default=False<br><br>If True, features that consist exclusively of missing values when<br>`fit` is called are returned in results when `transform` is called.<br>The imputed value is always `0` except when `strategy=&quot;constant&quot;`<br>in which case `fill_value` will be used instead.<br><br>.. versionadded:: 1.2</span>
+        </a>
+    </td>
+            <td class="value">False</td>
+        </tr>
+    
+                  </tbody>
+                </table>
+            </details>
+        </div>
+    </div></div></div><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-4" type="checkbox" ><label for="sk-estimator-id-4" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>RobustScaler</div></div><div><a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.RobustScaler.html">?<span>Documentation for RobustScaler</span></a></div></label><div class="sk-toggleable__content " data-param-prefix="num__escalado__">
+        <div class="estimator-table">
+            <details>
+                <summary>Parameters</summary>
+                <table class="parameters-table">
+                  <tbody>
+                    
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy with_centering to clipboard"
+                 onclick="copyToClipboard('with_centering',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-with_centering;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.RobustScaler.html#:~:text=with_centering,-bool%2C%20default%3DTrue">
+            with_centering
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-with_centering;">
+            with_centering: bool, default=True<br><br>If `True`, center the data before scaling.<br>This will cause :meth:`transform` to raise an exception when attempted<br>on sparse matrices, because centering them entails building a dense<br>matrix which in common use cases is likely to be too large to fit in<br>memory.</span>
+        </a>
+    </td>
+            <td class="value">True</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy with_scaling to clipboard"
+                 onclick="copyToClipboard('with_scaling',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-with_scaling;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.RobustScaler.html#:~:text=with_scaling,-bool%2C%20default%3DTrue">
+            with_scaling
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-with_scaling;">
+            with_scaling: bool, default=True<br><br>If `True`, scale the data to interquartile range.</span>
+        </a>
+    </td>
+            <td class="value">True</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy quantile_range to clipboard"
+                 onclick="copyToClipboard('quantile_range',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-quantile_range;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.RobustScaler.html#:~:text=quantile_range,-tuple%20%28q_min%2C%20q_max%29%2C%200.0%20%3C%20q_min%20%3C%20q_max%20%3C%20100.0%2C%20%20%20%20%20%20%20%20%20default%3D%2825.0%2C%2075.0%29">
+            quantile_range
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-quantile_range;">
+            quantile_range: tuple (q_min, q_max), 0.0 &lt; q_min &lt; q_max &lt; 100.0,         default=(25.0, 75.0)<br><br>Quantile range used to calculate `scale_`. By default this is equal to<br>the IQR, i.e., `q_min` is the first quantile and `q_max` is the third<br>quantile.<br><br>.. versionadded:: 0.18</span>
+        </a>
+    </td>
+            <td class="value">(25.0, ...)</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy copy to clipboard"
+                 onclick="copyToClipboard('copy',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-copy;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.RobustScaler.html#:~:text=copy,-bool%2C%20default%3DTrue">
+            copy
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-copy;">
+            copy: bool, default=True<br><br>If `False`, try to avoid a copy and do inplace scaling instead.<br>This is not guaranteed to always work inplace; e.g. if the data is<br>not a NumPy array or scipy.sparse CSR matrix, a copy may still be<br>returned.</span>
+        </a>
+    </td>
+            <td class="value">True</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy unit_variance to clipboard"
+                 onclick="copyToClipboard('unit_variance',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-unit_variance;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.RobustScaler.html#:~:text=unit_variance,-bool%2C%20default%3DFalse">
+            unit_variance
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-unit_variance;">
+            unit_variance: bool, default=False<br><br>If `True`, scale data so that normally distributed features have a<br>variance of 1. In general, if the difference between the x-values of<br>`q_max` and `q_min` for a standard normal distribution is greater<br>than 1, the dataset will be scaled down. If less than 1, the dataset<br>will be scaled up.<br><br>.. versionadded:: 0.24</span>
+        </a>
+    </td>
+            <td class="value">False</td>
+        </tr>
+    
+                  </tbody>
+                </table>
+            </details>
+        </div>
+    </div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-5" type="checkbox" ><label for="sk-estimator-id-5" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>bin</div></div></label><div class="sk-toggleable__content " data-param-prefix="bin__"><pre>[&#x27;hospitalizacion_previa&#x27;]</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-6" type="checkbox" ><label for="sk-estimator-id-6" class="sk-toggleable__label  "><div><div>passthrough</div></div></label><div class="sk-toggleable__content " data-param-prefix="bin__"><pre></pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-7" type="checkbox" ><label for="sk-estimator-id-7" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>race</div></div></label><div class="sk-toggleable__content " data-param-prefix="race__"><pre>[&#x27;race&#x27;]</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-8" type="checkbox" ><label for="sk-estimator-id-8" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>OneHotEncoder</div></div><div><a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></div></label><div class="sk-toggleable__content " data-param-prefix="race__">
+        <div class="estimator-table">
+            <details>
+                <summary>Parameters</summary>
+                <table class="parameters-table">
+                  <tbody>
+                    
+        <tr class="user-set">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy handle_unknown to clipboard"
+                 onclick="copyToClipboard('handle_unknown',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-handle_unknown;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=handle_unknown,-%7B%27error%27%2C%20%27ignore%27%2C%20%27infrequent_if_exist%27%2C%20%27warn%27%7D%2C%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20default%3D%27error%27">
+            handle_unknown
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-handle_unknown;">
+            handle_unknown: {&#x27;error&#x27;, &#x27;ignore&#x27;, &#x27;infrequent_if_exist&#x27;, &#x27;warn&#x27;},                      default=&#x27;error&#x27;<br><br>Specifies the way unknown categories are handled during :meth:`transform`.<br><br>- &#x27;error&#x27; : Raise an error if an unknown category is present during transform.<br>- &#x27;ignore&#x27; : When an unknown category is encountered during<br>  transform, the resulting one-hot encoded columns for this feature<br>  will be all zeros. In the inverse transform, an unknown category<br>  will be denoted as None.<br>- &#x27;infrequent_if_exist&#x27; : When an unknown category is encountered<br>  during transform, the resulting one-hot encoded columns for this<br>  feature will map to the infrequent category if it exists. The<br>  infrequent category will be mapped to the last position in the<br>  encoding. During inverse transform, an unknown category will be<br>  mapped to the category denoted `&#x27;infrequent&#x27;` if it exists. If the<br>  `&#x27;infrequent&#x27;` category does not exist, then :meth:`transform` and<br>  :meth:`inverse_transform` will handle an unknown category as with<br>  `handle_unknown=&#x27;ignore&#x27;`. Infrequent categories exist based on<br>  `min_frequency` and `max_categories`. Read more in the<br>  :ref:`User Guide &lt;encoder_infrequent_categories&gt;`.<br>- &#x27;warn&#x27; : When an unknown category is encountered during transform<br>  a warning is issued, and the encoding then proceeds as described for<br>  `handle_unknown=&quot;infrequent_if_exist&quot;`.<br><br>.. versionchanged:: 1.1<br>    `&#x27;infrequent_if_exist&#x27;` was added to automatically handle unknown<br>    categories and infrequent categories.<br><br>.. versionadded:: 1.6<br>   The option `&quot;warn&quot;` was added in 1.6.</span>
+        </a>
+    </td>
+            <td class="value">&#x27;ignore&#x27;</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy categories to clipboard"
+                 onclick="copyToClipboard('categories',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-categories;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=categories,-%27auto%27%20or%20a%20list%20of%20array-like%2C%20default%3D%27auto%27">
+            categories
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-categories;">
+            categories: &#x27;auto&#x27; or a list of array-like, default=&#x27;auto&#x27;<br><br>Categories (unique values) per feature:<br><br>- &#x27;auto&#x27; : Determine categories automatically from the training data.<br>- list : ``categories[i]`` holds the categories expected in the ith<br>  column. The passed categories should not mix strings and numeric<br>  values within a single feature, and should be sorted in case of<br>  numeric values.<br><br>The used categories can be found in the ``categories_`` attribute.<br><br>.. versionadded:: 0.20</span>
+        </a>
+    </td>
+            <td class="value">&#x27;auto&#x27;</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy drop to clipboard"
+                 onclick="copyToClipboard('drop',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-drop;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=drop,-%7B%27first%27%2C%20%27if_binary%27%7D%20or%20an%20array-like%20of%20shape%20%28n_features%2C%29%2C%20%20%20%20%20%20%20%20%20%20%20%20%20default%3DNone">
+            drop
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-drop;">
+            drop: {&#x27;first&#x27;, &#x27;if_binary&#x27;} or an array-like of shape (n_features,),             default=None<br><br>Specifies a methodology to use to drop one of the categories per<br>feature. This is useful in situations where perfectly collinear<br>features cause problems, such as when feeding the resulting data<br>into an unregularized linear regression model.<br><br>However, dropping one category breaks the symmetry of the original<br>representation and can therefore induce a bias in downstream models,<br>for instance for penalized linear classification or regression models.<br><br>- None : retain all features (the default).<br>- &#x27;first&#x27; : drop the first category in each feature. If only one<br>  category is present, the feature will be dropped entirely.<br>- &#x27;if_binary&#x27; : drop the first category in each feature with two<br>  categories. Features with 1 or more than 2 categories are<br>  left intact.<br>- array : ``drop[i]`` is the category in feature ``X[:, i]`` that<br>  should be dropped.<br><br>When `max_categories` or `min_frequency` is configured to group<br>infrequent categories, the dropping behavior is handled after the<br>grouping.<br><br>.. versionadded:: 0.21<br>   The parameter `drop` was added in 0.21.<br><br>.. versionchanged:: 0.23<br>   The option `drop=&#x27;if_binary&#x27;` was added in 0.23.<br><br>.. versionchanged:: 1.1<br>    Support for dropping infrequent categories.</span>
+        </a>
+    </td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy sparse_output to clipboard"
+                 onclick="copyToClipboard('sparse_output',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-sparse_output;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=sparse_output,-bool%2C%20default%3DTrue">
+            sparse_output
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-sparse_output;">
+            sparse_output: bool, default=True<br><br>When ``True``, it returns a SciPy sparse matrix/array<br>in &quot;Compressed Sparse Row&quot; (CSR) format.<br><br>.. versionadded:: 1.2<br>   `sparse` was renamed to `sparse_output`</span>
+        </a>
+    </td>
+            <td class="value">True</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy dtype to clipboard"
+                 onclick="copyToClipboard('dtype',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-dtype;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=dtype,-number%20type%2C%20default%3Dnp.float64">
+            dtype
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-dtype;">
+            dtype: number type, default=np.float64<br><br>Desired dtype of output.</span>
+        </a>
+    </td>
+            <td class="value">&lt;class &#x27;numpy.float64&#x27;&gt;</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy min_frequency to clipboard"
+                 onclick="copyToClipboard('min_frequency',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-min_frequency;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=min_frequency,-int%20or%20float%2C%20default%3DNone">
+            min_frequency
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-min_frequency;">
+            min_frequency: int or float, default=None<br><br>Specifies the minimum frequency below which a category will be<br>considered infrequent.<br><br>- If `int`, categories with a smaller cardinality will be considered<br>  infrequent.<br><br>- If `float`, categories with a smaller cardinality than<br>  `min_frequency * n_samples`  will be considered infrequent.<br><br>.. versionadded:: 1.1<br>    Read more in the :ref:`User Guide &lt;encoder_infrequent_categories&gt;`.</span>
+        </a>
+    </td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy max_categories to clipboard"
+                 onclick="copyToClipboard('max_categories',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-max_categories;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=max_categories,-int%2C%20default%3DNone">
+            max_categories
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-max_categories;">
+            max_categories: int, default=None<br><br>Specifies an upper limit to the number of output features for each input<br>feature when considering infrequent categories. If there are infrequent<br>categories, `max_categories` includes the category representing the<br>infrequent categories along with the frequent categories. If `None`,<br>there is no limit to the number of output features.<br><br>.. versionadded:: 1.1<br>    Read more in the :ref:`User Guide &lt;encoder_infrequent_categories&gt;`.</span>
+        </a>
+    </td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy feature_name_combiner to clipboard"
+                 onclick="copyToClipboard('feature_name_combiner',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-feature_name_combiner;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=feature_name_combiner,-%22concat%22%20or%20callable%2C%20default%3D%22concat%22">
+            feature_name_combiner
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-feature_name_combiner;">
+            feature_name_combiner: &quot;concat&quot; or callable, default=&quot;concat&quot;<br><br>Callable with signature `def callable(input_feature, category)` that returns a<br>string. This is used to create feature names to be returned by<br>:meth:`get_feature_names_out`.<br><br>`&quot;concat&quot;` concatenates encoded feature name and category with<br>`feature + &quot;_&quot; + str(category)`.E.g. feature X with values 1, 6, 7 create<br>feature names `X_1, X_6, X_7`.<br><br>.. versionadded:: 1.3</span>
+        </a>
+    </td>
+            <td class="value">&#x27;concat&#x27;</td>
+        </tr>
+    
+                  </tbody>
+                </table>
+            </details>
+        </div>
+    </div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-9" type="checkbox" ><label for="sk-estimator-id-9" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>cat</div></div></label><div class="sk-toggleable__content " data-param-prefix="cat__"><pre>[&#x27;A1Cresult&#x27;, &#x27;acarbose&#x27;, &#x27;admission_source_id&#x27;, &#x27;admission_type_id&#x27;, &#x27;change&#x27;, &#x27;chlorpropamide&#x27;, &#x27;diabetesMed&#x27;, &#x27;diag_1_grupo&#x27;, &#x27;diag_2_grupo&#x27;, &#x27;diag_3_grupo&#x27;, &#x27;discharge_disposition_id&#x27;, &#x27;especialidad&#x27;, &#x27;gender&#x27;, &#x27;glimepiride&#x27;, &#x27;glipizide&#x27;, &#x27;glyburide&#x27;, &#x27;glyburide-metformin&#x27;, &#x27;insulin&#x27;, &#x27;max_glu_serum&#x27;, &#x27;metformin&#x27;, &#x27;miglitol&#x27;, &#x27;nateglinide&#x27;, &#x27;pioglitazone&#x27;, &#x27;repaglinide&#x27;, &#x27;rosiglitazone&#x27;, &#x27;tolazamide&#x27;]</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-10" type="checkbox" ><label for="sk-estimator-id-10" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>SimpleImputer</div></div><div><a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html">?<span>Documentation for SimpleImputer</span></a></div></label><div class="sk-toggleable__content " data-param-prefix="cat__imputacion__">
+        <div class="estimator-table">
+            <details>
+                <summary>Parameters</summary>
+                <table class="parameters-table">
+                  <tbody>
+                    
+        <tr class="user-set">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy strategy to clipboard"
+                 onclick="copyToClipboard('strategy',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-strategy;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=strategy,-str%20or%20Callable%2C%20default%3D%27mean%27">
+            strategy
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-strategy;">
+            strategy: str or Callable, default=&#x27;mean&#x27;<br><br>The imputation strategy.<br><br>- If &quot;mean&quot;, then replace missing values using the mean along<br>  each column. Can only be used with numeric data.<br>- If &quot;median&quot;, then replace missing values using the median along<br>  each column. Can only be used with numeric data.<br>- If &quot;most_frequent&quot;, then replace missing using the most frequent<br>  value along each column. Can be used with strings or numeric data.<br>  If there is more than one such value, only the smallest is returned.<br>- If &quot;constant&quot;, then replace missing values with fill_value. Can be<br>  used with strings or numeric data.<br>- If an instance of Callable, then replace missing values using the<br>  scalar statistic returned by running the callable over a dense 1d<br>  array containing non-missing values of each column.<br><br>.. versionadded:: 0.20<br>   strategy=&quot;constant&quot; for fixed value imputation.<br><br>.. versionadded:: 1.5<br>   strategy=callable for custom value imputation.</span>
+        </a>
+    </td>
+            <td class="value">&#x27;most_frequent&#x27;</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy missing_values to clipboard"
+                 onclick="copyToClipboard('missing_values',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-missing_values;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=missing_values,-int%2C%20float%2C%20str%2C%20np.nan%2C%20None%20or%20pandas.NA%2C%20default%3Dnp.nan">
+            missing_values
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-missing_values;">
+            missing_values: int, float, str, np.nan, None or pandas.NA, default=np.nan<br><br>The placeholder for the missing values. All occurrences of<br>`missing_values` will be imputed. For pandas&#x27; dataframes with<br>nullable integer dtypes with missing values, `missing_values`<br>can be set to either `np.nan` or `pd.NA`.</span>
+        </a>
+    </td>
+            <td class="value">nan</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy fill_value to clipboard"
+                 onclick="copyToClipboard('fill_value',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-fill_value;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=fill_value,-str%20or%20numerical%20value%2C%20default%3DNone">
+            fill_value
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-fill_value;">
+            fill_value: str or numerical value, default=None<br><br>When strategy == &quot;constant&quot;, `fill_value` is used to replace all<br>occurrences of missing_values. For string or object data types,<br>`fill_value` must be a string.<br>If `None`, `fill_value` will be 0 when imputing numerical<br>data and &quot;missing_value&quot; for strings or object data types.</span>
+        </a>
+    </td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy copy to clipboard"
+                 onclick="copyToClipboard('copy',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-copy;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=copy,-bool%2C%20default%3DTrue">
+            copy
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-copy;">
+            copy: bool, default=True<br><br>If True, a copy of X will be created. If False, imputation will<br>be done in-place whenever possible. Note that, in the following cases,<br>a new copy will always be made, even if `copy=False`:<br><br>- If `X` is not an array of floating values;<br>- If `X` is encoded as a CSR matrix;<br>- If `add_indicator=True`.</span>
+        </a>
+    </td>
+            <td class="value">True</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy add_indicator to clipboard"
+                 onclick="copyToClipboard('add_indicator',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-add_indicator;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=add_indicator,-bool%2C%20default%3DFalse">
+            add_indicator
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-add_indicator;">
+            add_indicator: bool, default=False<br><br>If True, a :class:`MissingIndicator` transform will stack onto output<br>of the imputer&#x27;s transform. This allows a predictive estimator<br>to account for missingness despite imputation. If a feature has no<br>missing values at fit/train time, the feature won&#x27;t appear on<br>the missing indicator even if there are missing values at<br>transform/test time.</span>
+        </a>
+    </td>
+            <td class="value">False</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy keep_empty_features to clipboard"
+                 onclick="copyToClipboard('keep_empty_features',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-keep_empty_features;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.impute.SimpleImputer.html#:~:text=keep_empty_features,-bool%2C%20default%3DFalse">
+            keep_empty_features
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-keep_empty_features;">
+            keep_empty_features: bool, default=False<br><br>If True, features that consist exclusively of missing values when<br>`fit` is called are returned in results when `transform` is called.<br>The imputed value is always `0` except when `strategy=&quot;constant&quot;`<br>in which case `fill_value` will be used instead.<br><br>.. versionadded:: 1.2</span>
+        </a>
+    </td>
+            <td class="value">False</td>
+        </tr>
+    
+                  </tbody>
+                </table>
+            </details>
+        </div>
+    </div></div></div><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually sk-global" id="sk-estimator-id-11" type="checkbox" ><label for="sk-estimator-id-11" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>OneHotEncoder</div></div><div><a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></div></label><div class="sk-toggleable__content " data-param-prefix="cat__codificacion__">
+        <div class="estimator-table">
+            <details>
+                <summary>Parameters</summary>
+                <table class="parameters-table">
+                  <tbody>
+                    
+        <tr class="user-set">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy handle_unknown to clipboard"
+                 onclick="copyToClipboard('handle_unknown',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-handle_unknown;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=handle_unknown,-%7B%27error%27%2C%20%27ignore%27%2C%20%27infrequent_if_exist%27%2C%20%27warn%27%7D%2C%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20default%3D%27error%27">
+            handle_unknown
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-handle_unknown;">
+            handle_unknown: {&#x27;error&#x27;, &#x27;ignore&#x27;, &#x27;infrequent_if_exist&#x27;, &#x27;warn&#x27;},                      default=&#x27;error&#x27;<br><br>Specifies the way unknown categories are handled during :meth:`transform`.<br><br>- &#x27;error&#x27; : Raise an error if an unknown category is present during transform.<br>- &#x27;ignore&#x27; : When an unknown category is encountered during<br>  transform, the resulting one-hot encoded columns for this feature<br>  will be all zeros. In the inverse transform, an unknown category<br>  will be denoted as None.<br>- &#x27;infrequent_if_exist&#x27; : When an unknown category is encountered<br>  during transform, the resulting one-hot encoded columns for this<br>  feature will map to the infrequent category if it exists. The<br>  infrequent category will be mapped to the last position in the<br>  encoding. During inverse transform, an unknown category will be<br>  mapped to the category denoted `&#x27;infrequent&#x27;` if it exists. If the<br>  `&#x27;infrequent&#x27;` category does not exist, then :meth:`transform` and<br>  :meth:`inverse_transform` will handle an unknown category as with<br>  `handle_unknown=&#x27;ignore&#x27;`. Infrequent categories exist based on<br>  `min_frequency` and `max_categories`. Read more in the<br>  :ref:`User Guide &lt;encoder_infrequent_categories&gt;`.<br>- &#x27;warn&#x27; : When an unknown category is encountered during transform<br>  a warning is issued, and the encoding then proceeds as described for<br>  `handle_unknown=&quot;infrequent_if_exist&quot;`.<br><br>.. versionchanged:: 1.1<br>    `&#x27;infrequent_if_exist&#x27;` was added to automatically handle unknown<br>    categories and infrequent categories.<br><br>.. versionadded:: 1.6<br>   The option `&quot;warn&quot;` was added in 1.6.</span>
+        </a>
+    </td>
+            <td class="value">&#x27;infrequent_if_exist&#x27;</td>
+        </tr>
+    
+
+        <tr class="user-set">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy min_frequency to clipboard"
+                 onclick="copyToClipboard('min_frequency',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-min_frequency;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=min_frequency,-int%20or%20float%2C%20default%3DNone">
+            min_frequency
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-min_frequency;">
+            min_frequency: int or float, default=None<br><br>Specifies the minimum frequency below which a category will be<br>considered infrequent.<br><br>- If `int`, categories with a smaller cardinality will be considered<br>  infrequent.<br><br>- If `float`, categories with a smaller cardinality than<br>  `min_frequency * n_samples`  will be considered infrequent.<br><br>.. versionadded:: 1.1<br>    Read more in the :ref:`User Guide &lt;encoder_infrequent_categories&gt;`.</span>
+        </a>
+    </td>
+            <td class="value">0.01</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy categories to clipboard"
+                 onclick="copyToClipboard('categories',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-categories;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=categories,-%27auto%27%20or%20a%20list%20of%20array-like%2C%20default%3D%27auto%27">
+            categories
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-categories;">
+            categories: &#x27;auto&#x27; or a list of array-like, default=&#x27;auto&#x27;<br><br>Categories (unique values) per feature:<br><br>- &#x27;auto&#x27; : Determine categories automatically from the training data.<br>- list : ``categories[i]`` holds the categories expected in the ith<br>  column. The passed categories should not mix strings and numeric<br>  values within a single feature, and should be sorted in case of<br>  numeric values.<br><br>The used categories can be found in the ``categories_`` attribute.<br><br>.. versionadded:: 0.20</span>
+        </a>
+    </td>
+            <td class="value">&#x27;auto&#x27;</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy drop to clipboard"
+                 onclick="copyToClipboard('drop',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-drop;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=drop,-%7B%27first%27%2C%20%27if_binary%27%7D%20or%20an%20array-like%20of%20shape%20%28n_features%2C%29%2C%20%20%20%20%20%20%20%20%20%20%20%20%20default%3DNone">
+            drop
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-drop;">
+            drop: {&#x27;first&#x27;, &#x27;if_binary&#x27;} or an array-like of shape (n_features,),             default=None<br><br>Specifies a methodology to use to drop one of the categories per<br>feature. This is useful in situations where perfectly collinear<br>features cause problems, such as when feeding the resulting data<br>into an unregularized linear regression model.<br><br>However, dropping one category breaks the symmetry of the original<br>representation and can therefore induce a bias in downstream models,<br>for instance for penalized linear classification or regression models.<br><br>- None : retain all features (the default).<br>- &#x27;first&#x27; : drop the first category in each feature. If only one<br>  category is present, the feature will be dropped entirely.<br>- &#x27;if_binary&#x27; : drop the first category in each feature with two<br>  categories. Features with 1 or more than 2 categories are<br>  left intact.<br>- array : ``drop[i]`` is the category in feature ``X[:, i]`` that<br>  should be dropped.<br><br>When `max_categories` or `min_frequency` is configured to group<br>infrequent categories, the dropping behavior is handled after the<br>grouping.<br><br>.. versionadded:: 0.21<br>   The parameter `drop` was added in 0.21.<br><br>.. versionchanged:: 0.23<br>   The option `drop=&#x27;if_binary&#x27;` was added in 0.23.<br><br>.. versionchanged:: 1.1<br>    Support for dropping infrequent categories.</span>
+        </a>
+    </td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy sparse_output to clipboard"
+                 onclick="copyToClipboard('sparse_output',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-sparse_output;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=sparse_output,-bool%2C%20default%3DTrue">
+            sparse_output
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-sparse_output;">
+            sparse_output: bool, default=True<br><br>When ``True``, it returns a SciPy sparse matrix/array<br>in &quot;Compressed Sparse Row&quot; (CSR) format.<br><br>.. versionadded:: 1.2<br>   `sparse` was renamed to `sparse_output`</span>
+        </a>
+    </td>
+            <td class="value">True</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy dtype to clipboard"
+                 onclick="copyToClipboard('dtype',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-dtype;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=dtype,-number%20type%2C%20default%3Dnp.float64">
+            dtype
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-dtype;">
+            dtype: number type, default=np.float64<br><br>Desired dtype of output.</span>
+        </a>
+    </td>
+            <td class="value">&lt;class &#x27;numpy.float64&#x27;&gt;</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy max_categories to clipboard"
+                 onclick="copyToClipboard('max_categories',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-max_categories;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=max_categories,-int%2C%20default%3DNone">
+            max_categories
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-max_categories;">
+            max_categories: int, default=None<br><br>Specifies an upper limit to the number of output features for each input<br>feature when considering infrequent categories. If there are infrequent<br>categories, `max_categories` includes the category representing the<br>infrequent categories along with the frequent categories. If `None`,<br>there is no limit to the number of output features.<br><br>.. versionadded:: 1.1<br>    Read more in the :ref:`User Guide &lt;encoder_infrequent_categories&gt;`.</span>
+        </a>
+    </td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><button type="button" class="copy-paste-icon"
+                 aria-label="Copy feature_name_combiner to clipboard"
+                 onclick="copyToClipboard('feature_name_combiner',
+                          this.parentElement.nextElementSibling)"
+            ></button></td>
+            <td class="param">
+        <a class="param-doc-link"
+            style="anchor-name: --doc-link-feature_name_combiner;"
+            rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.OneHotEncoder.html#:~:text=feature_name_combiner,-%22concat%22%20or%20callable%2C%20default%3D%22concat%22">
+            feature_name_combiner
+            <span class="param-doc-description"
+            style="position-anchor: --doc-link-feature_name_combiner;">
+            feature_name_combiner: &quot;concat&quot; or callable, default=&quot;concat&quot;<br><br>Callable with signature `def callable(input_feature, category)` that returns a<br>string. This is used to create feature names to be returned by<br>:meth:`get_feature_names_out`.<br><br>`&quot;concat&quot;` concatenates encoded feature name and category with<br>`feature + &quot;_&quot; + str(category)`.E.g. feature X with values 1, 6, 7 create<br>feature names `X_1, X_6, X_7`.<br><br>.. versionadded:: 1.3</span>
+        </a>
+    </td>
+            <td class="value">&#x27;concat&#x27;</td>
+        </tr>
+    
+                  </tbody>
+                </table>
+            </details>
+        </div>
+    </div></div></div></div></div></div></div></div></div></div></div></div><script>/*  Authors: The scikit-learn developers
+ SPDX-License-Identifier: BSD-3-Clause
+*/
+
+function copyToClipboard(text, element) {
+    // Get the parameter prefix from the closest toggleable content
+    const toggleableContent = element.closest('.sk-toggleable__content');
+    const paramPrefix = toggleableContent ? toggleableContent.dataset.paramPrefix : '';
+    const fullParamName = paramPrefix ? `${paramPrefix}${text}` : text;
+
+    const originalStyle = element.style;
+    const computedStyle = window.getComputedStyle(element);
+    const originalWidth = computedStyle.width;
+    const originalHTML = element.innerHTML.replace('Copied!', '');
+
+    navigator.clipboard.writeText(fullParamName)
+        .then(() => {
+            element.style.width = originalWidth;
+            element.style.color = 'green';
+            element.innerHTML = "Copied!";
+
+            setTimeout(() => {
+                element.innerHTML = originalHTML;
+                element.style = originalStyle;
+            }, 2000);
+        })
+        .catch(err => {
+            console.error('Failed to copy:', err);
+            element.style.color = 'red';
+            element.innerHTML = "Failed!";
+            setTimeout(() => {
+                element.innerHTML = originalHTML;
+                element.style = originalStyle;
+            }, 2000);
+        });
+    return false;
+}
+
+document.querySelectorAll('.copy-paste-icon').forEach(function(element) {
+    const toggleableContent = element.closest('.sk-toggleable__content');
+    const paramPrefix = toggleableContent ? toggleableContent.dataset.paramPrefix : '';
+
+    const parent = element.parentElement;
+    if (!parent || !parent.nextElementSibling) {
+        console.warn('Expected copy-paste icon is missing from the DOM structure');
+        return;
+    }
+
+    const paramName = element.parentElement.nextElementSibling
+        .textContent.trim().split(' ')[0];
+    const fullParamName = paramPrefix ? `${paramPrefix}${paramName}` : paramName;
+
+    element.setAttribute('title', fullParamName);
+});
+
+/**
+ * Copy the list of feature names formatted as a Python list.
+ *
+ * @param {HTMLElement} element - The copy button inside a `.features` block; its siblings
+ *   contain a `details` element and a table containing feature named.
+ * @returns {boolean} Always returns `false` so callers can prevent the default click behavior.
+ */
+function copyFeatureNamesToClipboard(element) {
+    var detailsElem = element.closest('.features').querySelector('details');
+    var wasOpen = detailsElem.open;
+    detailsElem.open = true;
+    var content = element.closest('.features').querySelector('tbody')
+                  .innerText.trim();
+    if (!wasOpen) detailsElem.open = false;
+    const rows = content.split('\n').map(row => `    "${row}"`);
+    const formattedText = `[\n${rows.join(',\n')},\n]`;
+    const originalHTML = element.innerHTML.replace('✔', '');
+    const originalStyle = element.style;
+    const copyMark = document.createElement('span');
+    copyMark.innerHTML = '✔';
+    copyMark.style.color = 'blue';
+    copyMark.style.fontSize = '1em';
+
+    navigator.clipboard.writeText(formattedText)
+        .then(() => {
+            element.style.display = 'none';
+            element.parentElement.appendChild(copyMark);
+
+            setTimeout(() => {
+                copyMark.remove();
+                element.innerHTML = originalHTML;
+                element.style = originalStyle;
+            }, 1000);
+        })
+        .catch(err => {
+            console.error('Failed to copy:', err);
+            element.style.color = 'orange';
+            element.innerHTML = "Failed!";
+            setTimeout(() => {
+                element.innerHTML = originalHTML;
+                element.style = originalStyle;
+            }, 1000);
+        });
+    return false;
+}
+/**
+ * Adapted from Skrub
+ * https://github.com/skrub-data/skrub/blob/403466d1d5d4dc76a7ef569b3f8228db59a31dc3/skrub/_reporting/_data/templates/report.js#L789
+ * @returns "light" or "dark"
+ */
+function detectTheme(element) {
+    const body = document.querySelector('body');
+
+    // Check VSCode theme
+    const themeKindAttr = body.getAttribute('data-vscode-theme-kind');
+    const themeNameAttr = body.getAttribute('data-vscode-theme-name');
+
+    if (themeKindAttr && themeNameAttr) {
+        const themeKind = themeKindAttr.toLowerCase();
+        const themeName = themeNameAttr.toLowerCase();
+
+        if (themeKind.includes("dark") || themeName.includes("dark")) {
+            return "dark";
+        }
+        if (themeKind.includes("light") || themeName.includes("light")) {
+            return "light";
+        }
+    }
+
+    // Check Jupyter theme
+    if (body.getAttribute('data-jp-theme-light') === 'false') {
+        return 'dark';
+    } else if (body.getAttribute('data-jp-theme-light') === 'true') {
+        return 'light';
+    }
+
+    // Guess based on a parent element's color
+    const color = window.getComputedStyle(element.parentNode, null).getPropertyValue('color');
+    const match = color.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\s*$/i);
+    if (match) {
+        const [r, g, b] = [
+            parseFloat(match[1]),
+            parseFloat(match[2]),
+            parseFloat(match[3])
+        ];
+
+        // https://en.wikipedia.org/wiki/HSL_and_HSV#Lightness
+        const luma = 0.299 * r + 0.587 * g + 0.114 * b;
+
+        if (luma > 180) {
+            // If the text is very bright we have a dark theme
+            return 'dark';
+        }
+        if (luma < 75) {
+            // If the text is very dark we have a light theme
+            return 'light';
+        }
+        // Otherwise fall back to the next heuristic.
+    }
+
+    // Fallback to system preference
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+
+function forceTheme(elementId) {
+    const estimatorElement = document.querySelector(`#${elementId}`);
+    if (estimatorElement === null) {
+        console.error(`Element with id ${elementId} not found.`);
+    } else {
+        const theme = detectTheme(estimatorElement);
+        estimatorElement.classList.add(theme);
+    }
+}
+
+forceTheme('sk-container-id-1');</script></body></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ajuste ilustrativo sobre el conjunto completo de entrenamiento, únicamente</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ajuste ilustrativo sobre el conjunto completo de entrenamiento, únicamente</span>
 <span class="c1"># para inspeccionar la dimensión resultante. En el experimento este ajuste</span>
 <span class="c1"># ocurre dentro de cada fold.</span>
 <span class="n">matriz</span> <span class="o">=</span> <span class="n">preprocesador</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -506,8 +2278,18 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dimensión de la matriz: 79,473 x 152
+Tipo de matriz        : csr_matrix
+Densidad              : 22.2%
+
+Primeras 12 variables: ['time_in_hospital', 'num_lab_procedures', 'num_procedures', 'num_medications', 'number_outpatient', 'number_emergency', 'number_inpatient', 'number_diagnoses', 'n_farmacos_activos', 'age_ord', 'hospitalizacion_previa', 'race_AfricanAmerican']
+</pre></div>
 </div>
-<p>Los 38 predictores originales se convierten en 129 columnas. La matriz resultante es dispersa, con alrededor del 20 % de entradas no nulas, consecuencia de la codificación one-hot: cada variable categórica aporta tantas columnas como niveles, de las cuales solo una vale 1 en cada fila.</p>
+</div>
+</div>
+<p>Los 38 predictores originales se convierten en 152 columnas. La matriz resultante es dispersa, con alrededor del 22 % de entradas no nulas, consecuencia de la codificación one-hot: cada variable categórica aporta tantas columnas como niveles, de las cuales solo una vale 1 en cada fila.</p>
+<p>Parte de esas columnas llevan el sufijo <code class="docutils literal notranslate"><span class="pre">infrequent_sklearn</span></code>. Son los niveles que, pese a la agrupación del capítulo 2, quedan por debajo del 1 % dentro del conjunto de entrenamiento, como la categoría <code class="docutils literal notranslate"><span class="pre">&quot;Otro&quot;</span></code> del tipo de admisión. El codificador los reúne en una columna por variable, de modo que ninguna columna queda casi vacía.</p>
 <p>Conservar la representación dispersa ahorra memoria y acelera los modelos lineales. Una excepción: <code class="docutils literal notranslate"><span class="pre">GaussianNB</span></code> no admite matrices dispersas, así que para ese modelo el motor cambia la codificación a densa de forma automática. Es el tipo de detalle que conviene resolver en la infraestructura y no en cada capítulo.</p>
 </section>
 </section>
@@ -515,11 +2297,11 @@ document.write(`
 <h2>6.3. El esquema de validación<a class="headerlink" href="#el-esquema-de-validacion" title="Link to this heading">#</a></h2>
 <section id="por-que-agrupada">
 <h3>6.3.1. Por qué agrupada<a class="headerlink" href="#por-que-agrupada" title="Link to this heading">#</a></h3>
-<p>El capítulo 2 adoptó la cohorte completa de encuentros, de modo que un paciente puede aportar varias filas. Una partición por filas reparte esas filas entre entrenamiento y validación, y el modelo puede reconocer al paciente en lugar de aprender el mecanismo clínico.</p>
+<p>El capítulo 2 adoptó como población de estudio todos los encuentros, de modo que un paciente puede aportar varias filas. Una partición por filas reparte esas filas entre entrenamiento y validación, y el modelo puede reconocer al paciente en lugar de aprender el mecanismo clínico.</p>
 <p>La magnitud del problema se puede medir, y conviene hacerlo en lugar de asumirla.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">StratifiedGroupKFold</span><span class="p">,</span> <span class="n">StratifiedKFold</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">StratifiedGroupKFold</span><span class="p">,</span> <span class="n">StratifiedKFold</span>
 
 <span class="n">por_filas</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
@@ -535,11 +2317,18 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Con partición por filas (StratifiedKFold):
+  pacientes en validación          : 14,359
+  de ellos, presentes en entrenamiento: 5,467 (38.1 %)
+</pre></div>
+</div>
+</div>
 </div>
 <p>El 38 % de los pacientes del fold de validación también aparece en el de entrenamiento. Queda por ver cuánto infla eso las métricas, que es la pregunta que realmente importa.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_validate</span>
 
 <span class="n">pipeline_base</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">construir_pipeline</span><span class="p">(</span><span class="s2">"logistica"</span><span class="p">,</span> <span class="s2">"class_weight"</span><span class="p">,</span> <span class="n">roles</span><span class="p">)</span>
 
@@ -555,10 +2344,12 @@ document.write(`
 
 <span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">nombre</span><span class="p">,</span> <span class="p">(</span><span class="n">cv</span><span class="p">,</span> <span class="n">agrupacion</span><span class="p">)</span> <span class="ow">in</span> <span class="n">esquemas</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">auc</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">pipeline_base</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">agrupacion</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
-                          <span class="n">scoring</span><span class="o">=</span><span class="s2">"roc_auc"</span><span class="p">)</span>
-    <span class="n">ap</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">pipeline_base</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">agrupacion</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
-                         <span class="n">scoring</span><span class="o">=</span><span class="s2">"average_precision"</span><span class="p">)</span>
+    <span class="c1"># cross_validate calcula las dos métricas con los mismos ajustes, en lugar</span>
+    <span class="c1"># de repetir la validación cruzada una vez por métrica.</span>
+    <span class="n">puntajes</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">pipeline_base</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">agrupacion</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+                              <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s2">"roc_auc"</span><span class="p">,</span> <span class="s2">"average_precision"</span><span class="p">],</span>
+                              <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">auc</span><span class="p">,</span> <span class="n">ap</span> <span class="o">=</span> <span class="n">puntajes</span><span class="p">[</span><span class="s2">"test_roc_auc"</span><span class="p">],</span> <span class="n">puntajes</span><span class="p">[</span><span class="s2">"test_average_precision"</span><span class="p">]</span>
     <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
         <span class="s2">"esquema"</span><span class="p">:</span> <span class="n">nombre</span><span class="p">,</span>
         <span class="s2">"AUC-ROC media"</span><span class="p">:</span> <span class="n">auc</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s2">"AUC-ROC sd"</span><span class="p">:</span> <span class="n">auc</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
@@ -570,13 +2361,64 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AUC-ROC media</th>
+      <th>AUC-ROC sd</th>
+      <th>AUC-PR media</th>
+      <th>AUC-PR sd</th>
+    </tr>
+    <tr>
+      <th>esquema</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Por filas (StratifiedKFold)</th>
+      <td>0.6616</td>
+      <td>0.0072</td>
+      <td>0.2103</td>
+      <td>0.0015</td>
+    </tr>
+    <tr>
+      <th>Por paciente (StratifiedGroupKFold)</th>
+      <td>0.6622</td>
+      <td>0.0069</td>
+      <td>0.2095</td>
+      <td>0.0112</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
-<p>El resultado es instructivo y merece registrarse con precisión: <strong>para la regresión logística el efecto es nulo</strong>. Las dos estimaciones coinciden hasta la tercera cifra decimal, pese a que el 38 % de los pacientes de validación aparecía también en entrenamiento.</p>
-<p>La explicación es la capacidad del modelo. Una regresión logística con 129 coeficientes no puede memorizar pacientes individuales: ajusta una superficie de decisión global, y ver dos veces a la misma persona apenas la desplaza. El riesgo de la partición por filas no está en los modelos lineales, sino en los de alta capacidad, que sí pueden aprender identidades.</p>
+<p>El resultado es instructivo y merece registrarse con precisión: <strong>para la regresión logística el efecto es prácticamente nulo</strong>. Las dos estimaciones difieren en menos de 0.001 tanto en AUC-ROC como en AUC-PR, pese a que el 38 % de los pacientes de validación aparecía también en entrenamiento.</p>
+<p>La explicación es la capacidad del modelo. Una regresión logística con 152 coeficientes no puede memorizar pacientes individuales: ajusta una superficie de decisión global, y ver dos veces a la misma persona apenas la desplaza. El riesgo de la partición por filas no está en los modelos lineales, sino en los de alta capacidad, que sí pueden aprender identidades.</p>
+<p>Hay una segunda diferencia, menos visible y también relevante. La desviación estándar del AUC-PR entre folds es varias veces mayor con la partición agrupada. Al repartir los encuentros de un mismo paciente entre folds, la partición por filas hace que los folds se parezcan artificialmente entre sí y subestima la incertidumbre de la estimación.</p>
 <p>Eso se comprueba con dos modelos de mayor capacidad sobre una submuestra, para que el cálculo sea viable.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Submuestra de pacientes: k-NN y Random Forest son costosos y aquí solo se</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Submuestra de pacientes: k-NN y Random Forest son costosos y aquí solo se</span>
 <span class="c1"># necesita contrastar los dos esquemas de validación entre sí.</span>
 <span class="n">pacientes_muestra</span> <span class="o">=</span> <span class="p">(</span><span class="n">grupos</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
                            <span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">12_000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">))</span>
@@ -598,12 +2440,12 @@ document.write(`
         <span class="p">(</span><span class="s2">"paciente"</span><span class="p">,</span> <span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                           <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">),</span> <span class="n">g_sub</span><span class="p">),</span>
     <span class="p">]:</span>
-        <span class="n">auc</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">X_sub</span><span class="p">,</span> <span class="n">y_sub</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">agrupacion</span><span class="p">,</span>
-                              <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">"roc_auc"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="n">ap</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">X_sub</span><span class="p">,</span> <span class="n">y_sub</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">agrupacion</span><span class="p">,</span>
-                             <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">"average_precision"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="n">resultado</span><span class="p">[</span><span class="sa">f</span><span class="s2">"AUC-ROC (</span><span class="si">{</span><span class="n">etiqueta</span><span class="si">}</span><span class="s2">)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">auc</span>
-        <span class="n">resultado</span><span class="p">[</span><span class="sa">f</span><span class="s2">"AUC-PR (</span><span class="si">{</span><span class="n">etiqueta</span><span class="si">}</span><span class="s2">)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ap</span>
+        <span class="n">puntajes</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">X_sub</span><span class="p">,</span> <span class="n">y_sub</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">agrupacion</span><span class="p">,</span>
+                                  <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+                                  <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s2">"roc_auc"</span><span class="p">,</span> <span class="s2">"average_precision"</span><span class="p">])</span>
+        <span class="n">resultado</span><span class="p">[</span><span class="sa">f</span><span class="s2">"AUC-ROC (</span><span class="si">{</span><span class="n">etiqueta</span><span class="si">}</span><span class="s2">)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">puntajes</span><span class="p">[</span><span class="s2">"test_roc_auc"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">resultado</span><span class="p">[</span><span class="sa">f</span><span class="s2">"AUC-PR (</span><span class="si">{</span><span class="n">etiqueta</span><span class="si">}</span><span class="s2">)"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">puntajes</span><span class="p">[</span><span class="s2">"test_average_precision"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
     <span class="n">resultado</span><span class="p">[</span><span class="s2">"sesgo AUC-ROC"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">resultado</span><span class="p">[</span><span class="s2">"AUC-ROC (filas)"</span><span class="p">]</span>
                                   <span class="o">-</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"AUC-ROC (paciente)"</span><span class="p">])</span>
     <span class="n">resultado</span><span class="p">[</span><span class="s2">"sesgo AUC-PR"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">resultado</span><span class="p">[</span><span class="s2">"AUC-PR (filas)"</span><span class="p">]</span>
@@ -616,10 +2458,68 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AUC-ROC (filas)</th>
+      <th>AUC-PR (filas)</th>
+      <th>AUC-ROC (paciente)</th>
+      <th>AUC-PR (paciente)</th>
+      <th>sesgo AUC-ROC</th>
+      <th>sesgo AUC-PR</th>
+    </tr>
+    <tr>
+      <th>modelo</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>knn</th>
+      <td>0.5611</td>
+      <td>0.1428</td>
+      <td>0.5555</td>
+      <td>0.1398</td>
+      <td>0.0057</td>
+      <td>0.0030</td>
+    </tr>
+    <tr>
+      <th>random_forest</th>
+      <td>0.6278</td>
+      <td>0.1962</td>
+      <td>0.6261</td>
+      <td>0.1835</td>
+      <td>0.0017</td>
+      <td>0.0127</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
-<p>Ahora sí aparece el sesgo, y en la dirección esperada: la partición por filas sobrestima el desempeño de k-NN en unos 0.009 de AUC-ROC y el de Random Forest en unos 0.015 de AUC-PR. Son magnitudes modestas, no catastróficas, pero tienen dos consecuencias que justifican el agrupamiento.</p>
-<p>La primera es que el sesgo <strong>no es uniforme entre modelos</strong>: penaliza menos a los lineales y más a los de alta capacidad. En un experimento cuyo propósito es comparar familias de modelos entre sí, un sesgo diferencial de ese tipo distorsiona precisamente la comparación que se quiere hacer, aunque su valor absoluto sea pequeño.</p>
-<p>La segunda es que el orden de magnitud del sesgo es comparable al de las diferencias que se esperan entre modelos. Si dos modelos difieren en 0.01 de AUC-PR, un sesgo de 0.015 puede invertir el ranking.</p>
+<p>Ahora sí aparece el sesgo, y siempre en la dirección esperada: la partición por filas sobrestima el desempeño de los dos modelos en ambas métricas. En k-NN la sobrestimación es de unos 0.006 de AUC-ROC y 0.003 de AUC-PR; en Random Forest, de unos 0.004 de AUC-ROC y 0.011 de AUC-PR. Son magnitudes modestas, y proceden de una única submuestra con tres folds, de modo que deben leerse como orden de magnitud y no como valores exactos. Aun así, tienen dos consecuencias que justifican el agrupamiento.</p>
+<p>La primera es que el sesgo <strong>no es uniforme entre modelos</strong>: es prácticamente nulo en el lineal y aparece en los de alta capacidad, con mayor intensidad en el AUC-PR de Random Forest. En un experimento cuyo propósito es comparar familias de modelos entre sí, un sesgo diferencial de ese tipo distorsiona precisamente la comparación que se quiere hacer, aunque su valor absoluto sea pequeño.</p>
+<p>La segunda es que el orden de magnitud del sesgo es comparable al de las diferencias que se esperan entre modelos. Si dos modelos difieren en 0.01 de AUC-PR, un sesgo de 0.011 puede invertir el ranking.</p>
 </section>
 <section id="validacion-anidada">
 <h3>6.3.2. Validación anidada<a class="headerlink" href="#validacion-anidada" title="Link to this heading">#</a></h3>
@@ -631,7 +2531,7 @@ document.write(`
 <p>Ambos bucles usan <code class="docutils literal notranslate"><span class="pre">StratifiedGroupKFold</span></code>, así que el agrupamiento por paciente se respeta en los dos niveles. El costo es multiplicativo: con un presupuesto de 12 configuraciones, cada corrida requiere 5 × (12 × 3 + 1) = 185 ajustes del pipeline.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">externo</span> <span class="o">=</span> <span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">externo</span> <span class="o">=</span> <span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
 <span class="n">interno</span> <span class="o">=</span> <span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
@@ -657,21 +2557,139 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>encuentros entrenamiento</th>
+      <th>encuentros validación</th>
+      <th>pacientes validación</th>
+      <th>tasa positiva validación (%)</th>
+      <th>folds internos</th>
+      <th>pacientes compartidos</th>
+    </tr>
+    <tr>
+      <th>fold externo</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>63579</td>
+      <td>15894</td>
+      <td>11214</td>
+      <td>11.39</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>63577</td>
+      <td>15896</td>
+      <td>11172</td>
+      <td>11.39</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>63580</td>
+      <td>15893</td>
+      <td>11240</td>
+      <td>11.39</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>63578</td>
+      <td>15895</td>
+      <td>11199</td>
+      <td>11.39</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>63578</td>
+      <td>15895</td>
+      <td>11211</td>
+      <td>11.39</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <p>Los cinco folds son equilibrados en tamaño y prevalencia, y la columna de pacientes compartidos confirma en cero que el agrupamiento funciona en todos ellos.</p>
 </section>
 </section>
 <section id="linea-base-regresion-logistica">
 <h2>6.4. Línea base: regresión logística<a class="headerlink" href="#linea-base-regresion-logistica" title="Link to this heading">#</a></h2>
-<p>La línea base cumple dos funciones. Fija la expectativa realista de desempeño, coherente con lo que el capítulo 4 anticipó al no encontrar predictores individuales fuertes. Y sirve de referencia para juzgar los modelos posteriores: un ensamble con cientos de árboles que no supere claramente a una logística no justifica su costo computacional ni su opacidad.</p>
+<p>La línea base cumple dos funciones. Fija la expectativa realista de desempeño, coherente con lo que el capítulo 4 anticipó: solo el historial de hospitalización previa alcanza un tamaño de efecto pequeño, y el resto de predictores, por separado, apenas distingue las clases. Y sirve de referencia para juzgar los modelos posteriores: un ensamble con cientos de árboles que no supere claramente a una logística no justifica su costo computacional ni su opacidad.</p>
 <p>Se usa <code class="docutils literal notranslate"><span class="pre">class_weight=&quot;balanced&quot;</span></code>, que pondera cada clase por el inverso de su frecuencia. Es la forma más simple de atender el desbalance y no altera los datos.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">corrida_base</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">"logistica"</span><span class="p">,</span> <span class="s2">"class_weight"</span><span class="p">,</span> <span class="s2">"grid"</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prueba</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">ejecutar_corrida</span><span class="p">(</span>
+    <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">"logistica"</span><span class="p">,</span> <span class="s2">"class_weight"</span><span class="p">,</span> <span class="s2">"grid"</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span>
+    <span class="n">folds_externos</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">folds_internos</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">metrica</span><span class="o">=</span><span class="s2">"average_precision"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prueba</span><span class="p">[</span><span class="s2">"tiempo_busqueda_s"</span><span class="p">],</span> <span class="n">prueba</span><span class="p">[</span><span class="s2">"tiempo_ajuste_s"</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\Users\joshu\miniconda3\envs\ml_proyecto\Lib\site-packages\sklearn\linear_model\_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+c:\Users\joshu\miniconda3\envs\ml_proyecto\Lib\site-packages\sklearn\linear_model\_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+c:\Users\joshu\miniconda3\envs\ml_proyecto\Lib\site-packages\sklearn\linear_model\_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+c:\Users\joshu\miniconda3\envs\ml_proyecto\Lib\site-packages\sklearn\linear_model\_logistic.py:1407: UserWarning: Inconsistent values: penalty=l1 with l1_ratio=0.0. penalty is deprecated. Please use l1_ratio only.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>138.0545329999877 100.44505649997154
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+    <span class="s2">"ignore"</span><span class="p">,</span>
+    <span class="n">message</span><span class="o">=</span><span class="s2">"Inconsistent values: penalty=.* with l1_ratio"</span><span class="p">,</span>
+    <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">corrida_base</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">"logistica"</span><span class="p">,</span> <span class="s2">"class_weight"</span><span class="p">,</span> <span class="s2">"grid"</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="n">resultado_base</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">ejecutar_corrida</span><span class="p">(</span>
     <span class="n">corrida_base</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span>
     <span class="n">folds_externos</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">folds_internos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">metrica</span><span class="o">=</span><span class="s2">"average_precision"</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">resumen_base</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
@@ -686,28 +2704,235 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  fold externo 1/5... listo en 537.5 s (AUC-PR 0.2300)
+  fold externo 2/5... listo en 366.4 s (AUC-PR 0.2005)
+  fold externo 3/5... listo en 510.3 s (AUC-PR 0.2057)
+  fold externo 4/5... listo en 570.6 s (AUC-PR 0.2036)
+  fold externo 5/5... listo en 507.7 s (AUC-PR 0.2105)
+Tiempo de búsqueda   : 2268.5 s
+Tiempo de ajuste     : 221.3 s
+Tiempo de inferencia : 1.82 s
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>media</th>
+      <th>desviación estándar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>auc_roc</th>
+      <td>0.6634</td>
+      <td>0.0065</td>
+    </tr>
+    <tr>
+      <th>auc_pr</th>
+      <td>0.2101</td>
+      <td>0.0117</td>
+    </tr>
+    <tr>
+      <th>exactitud</th>
+      <td>0.6606</td>
+      <td>0.0051</td>
+    </tr>
+    <tr>
+      <th>precision</th>
+      <td>0.1799</td>
+      <td>0.0031</td>
+    </tr>
+    <tr>
+      <th>recall</th>
+      <td>0.5562</td>
+      <td>0.0124</td>
+    </tr>
+    <tr>
+      <th>f1</th>
+      <td>0.2718</td>
+      <td>0.0046</td>
+    </tr>
+    <tr>
+      <th>exactitud_balanceada</th>
+      <td>0.6151</td>
+      <td>0.0054</td>
+    </tr>
+    <tr>
+      <th>brier</th>
+      <td>0.2266</td>
+      <td>0.0007</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hiperparámetro seleccionado en cada fold externo: su estabilidad indica si</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hiperparámetro seleccionado en cada fold externo: su estabilidad indica si</span>
 <span class="c1"># la superficie de validación es plana o si la selección es sensible al ruido.</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resultado_base</span><span class="p">[</span><span class="s2">"hiperparametros_por_fold"</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>modelo__C</th>
+      <th>modelo__penalty</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.1</td>
+      <td>l1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.1</td>
+      <td>l1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.1</td>
+      <td>l1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.1</td>
+      <td>l1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.1</td>
+      <td>l1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lectura operativa de la línea base: precisión y cobertura al priorizar</span>
+<span class="c1"># una fracción fija de altas. Las probabilidades se obtienen fuera de muestra,</span>
+<span class="c1"># con la misma validación agrupada por paciente.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_predict</span>
+
+<span class="n">probabilidades</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span>
+    <span class="n">pipeline_base</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">grupos</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">),</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">"predict_proba"</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">orden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">probabilidades</span><span class="p">)</span>
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">fraccion</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">]:</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">fraccion</span><span class="p">)</span>
+    <span class="n">seleccion</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">orden</span><span class="p">[:</span><span class="n">k</span><span class="p">]]</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">"fracción priorizada"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fraccion</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"precisión (%)"</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">seleccion</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">"readmisiones capturadas (%)"</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">seleccion</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+    <span class="p">})</span>
+
+<span class="n">precision_top</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"fracción priorizada"</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">precision_top</span><span class="p">,</span> <span class="s2">"linea_base_precision_top"</span><span class="p">)</span>
+<span class="n">precision_top</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>precisión (%)</th>
+      <th>readmisiones capturadas (%)</th>
+    </tr>
+    <tr>
+      <th>fracción priorizada</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>5%</th>
+      <td>29.3</td>
+      <td>12.9</td>
+    </tr>
+    <tr>
+      <th>10%</th>
+      <td>25.3</td>
+      <td>22.2</td>
+    </tr>
+    <tr>
+      <th>20%</th>
+      <td>21.2</td>
+      <td>37.3</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <section id="interpretacion-de-la-linea-base">
 <h3>6.4.1. Interpretación de la línea base<a class="headerlink" href="#interpretacion-de-la-linea-base" title="Link to this heading">#</a></h3>
 <p>El AUC-ROC se sitúa en torno a 0.66 y el AUC-PR en torno a 0.21, con desviaciones estándar entre folds pequeñas. Tres lecturas:</p>
 <ul class="simple">
-<li><p><strong>Es un desempeño moderado y era previsible.</strong> El capítulo 4 mostró que ningún predictor individual alcanza un tamaño de efecto pequeño. Un AUC-ROC de 0.66 significa que, tomando un paciente readmitido y otro no readmitido al azar, el modelo asigna mayor riesgo al primero en dos de cada tres casos. Está lejos de un clasificador útil por sí solo, pero muy por encima del azar.</p></li>
-<li><p><strong>El AUC-PR contextualiza la utilidad clínica.</strong> Un valor de 0.21 frente a una prevalencia del 11.4 % implica que la precisión media casi duplica la que obtendría una selección aleatoria de pacientes. Traducido a la práctica: si el hospital puede dar seguimiento intensivo a un número limitado de pacientes, priorizarlos con este modelo acierta cerca del doble que hacerlo al azar.</p></li>
+<li><p><strong>Es un desempeño moderado y era previsible.</strong> El capítulo 4 mostró que solo el historial de hospitalización previa alcanza un tamaño de efecto pequeño y que ningún otro predictor lo hace de forma individual. Un AUC-ROC de 0.66 significa que, tomando al azar un encuentro seguido de readmisión y otro sin ella, el modelo asigna mayor riesgo al primero en dos de cada tres casos. Está lejos de un clasificador útil por sí solo, pero claramente por encima del azar.</p></li>
+<li><p><strong>El AUC-PR contextualiza la utilidad clínica.</strong> Un valor de 0.21 frente a una prevalencia del 11.4 % indica que, promediando sobre todos los umbrales, la precisión casi duplica la de una selección aleatoria. La lectura operativa es más concreta, y la da la tabla anterior: si el hospital solo puede dar seguimiento intensivo al 10 % de las altas con mayor riesgo estimado, una de cada cuatro será una readmisión real (precisión del 25 %, frente al 11.4 % de elegir al azar), y ese 10 % concentra algo más de una quinta parte de todas las readmisiones.</p></li>
 <li><p><strong>La estabilidad entre folds es buena.</strong> Desviaciones estándar de ese orden indican que la estimación no depende de la partición concreta, lo que da confianza a las comparaciones posteriores.</p></li>
 </ul>
 </section>
 <section id="calibracion-y-umbral">
 <h3>6.4.2. Calibración y umbral<a class="headerlink" href="#calibracion-y-umbral" title="Link to this heading">#</a></h3>
-<p>El coeficiente de Brier se reporta porque el AUC solo mide el ordenamiento de los pacientes, no si las probabilidades predichas son correctas en magnitud. Un modelo puede ordenar bien y estar mal calibrado, y para una decisión clínica al alta la magnitud importa: “este paciente tiene un 30 % de riesgo” es una afirmación que debe ser cierta, no solo mayor que la de otro paciente. El capítulo 8 desarrolla el análisis de calibración con curvas de fiabilidad y las correcciones de Platt e isotónica.</p>
+<p>El coeficiente de Brier se reporta porque el AUC solo mide el ordenamiento de los encuentros, no si las probabilidades predichas son correctas en magnitud. Un modelo puede ordenar bien y estar mal calibrado, y para una decisión clínica al alta la magnitud importa: “este paciente tiene un 30 % de riesgo” es una afirmación que debe ser cierta, no solo mayor que la de otro paciente. El capítulo 8 desarrolla el análisis de calibración con curvas de fiabilidad y las correcciones de Platt e isotónica.</p>
 <p>Sobre el umbral: las métricas F1 y exactitud balanceada de la tabla usan el umbral 0.5 por convención, pero con <code class="docutils literal notranslate"><span class="pre">class_weight=&quot;balanced&quot;</span></code> ese umbral no es el óptimo, y en un problema desbalanceado casi nunca lo es. La elección del umbral de decisión es una decisión clínica que depende del costo relativo de un falso negativo (un reingreso no anticipado) frente a un falso positivo (seguimiento innecesario), y se aborda en el capítulo 8. Las métricas independientes del umbral, AUC-ROC y AUC-PR, son las que gobiernan la comparación entre modelos.</p>
 </section>
 </section>
@@ -716,45 +2941,152 @@ document.write(`
 <p>El diseño pide 112 corridas de clasificación. Antes de lanzarlas conviene medir cuánto cuesta un solo ajuste de cada familia de modelos y extrapolar, porque el resultado condiciona el diseño.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="c1"># Presupuesto diferenciado declarado en la sección 6.5: 8 configuraciones</span>
+<span class="c1"># para los modelos cuyo ajuste o predicción es costoso, 12 para el resto.</span>
+<span class="n">PRESUPUESTO</span> <span class="o">=</span> <span class="p">{</span><span class="n">m</span><span class="p">:</span> <span class="mi">12</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ex</span><span class="o">.</span><span class="n">MODELOS</span><span class="p">}</span>
+<span class="n">PRESUPUESTO</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"random_forest"</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">"xgboost"</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">"knn"</span><span class="p">:</span> <span class="mi">8</span><span class="p">})</span>
+
+<span class="n">FOLDS_EXTERNOS</span><span class="p">,</span> <span class="n">FOLDS_INTERNOS</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span>
+<span class="n">MUESTRA_INFERENCIA</span> <span class="o">=</span> <span class="mi">5_000</span>
 
 <span class="n">perfil</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"logistica"</span><span class="p">,</span> <span class="s2">"ridge"</span><span class="p">,</span> <span class="s2">"lasso"</span><span class="p">,</span> <span class="s2">"bayes"</span><span class="p">,</span> <span class="s2">"svm"</span><span class="p">,</span> <span class="s2">"knn"</span><span class="p">,</span>
-               <span class="s2">"random_forest"</span><span class="p">]:</span>
+<span class="k">for</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="n">ex</span><span class="o">.</span><span class="n">MODELOS</span><span class="p">:</span>
     <span class="n">pipeline</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">construir_pipeline</span><span class="p">(</span><span class="n">modelo</span><span class="p">,</span> <span class="s2">"ninguno"</span><span class="p">,</span> <span class="n">roles</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">modelo</span> <span class="o">==</span> <span class="s2">"random_forest"</span><span class="p">:</span>
-        <span class="n">pipeline</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">modelo__n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"random_forest"</span><span class="p">,</span> <span class="s2">"xgboost"</span><span class="p">}:</span>
+        <span class="n">pipeline</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">modelo__n_estimators</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 
     <span class="n">inicio</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
     <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
     <span class="n">t_ajuste</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">inicio</span>
 
     <span class="n">inicio</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-    <span class="n">pipeline</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">5_000</span><span class="p">])</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">MUESTRA_INFERENCIA</span><span class="p">])</span>
     <span class="n">t_inferencia</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">inicio</span>
+
+    <span class="n">presupuesto</span> <span class="o">=</span> <span class="n">PRESUPUESTO</span><span class="p">[</span><span class="n">modelo</span><span class="p">]</span>
+    <span class="n">ajustes</span> <span class="o">=</span> <span class="n">FOLDS_EXTERNOS</span> <span class="o">*</span> <span class="p">(</span><span class="n">presupuesto</span> <span class="o">*</span> <span class="n">FOLDS_INTERNOS</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Cada configuración predice sus folds internos de validación, que en</span>
+    <span class="c1"># conjunto equivalen al fold externo de entrenamiento, y cada fold externo</span>
+    <span class="c1"># se predice una vez: en total, (presupuesto + 1) veces el entrenamiento</span>
+    <span class="c1"># a lo largo de la corrida, en orden de magnitud.</span>
+    <span class="n">filas_predichas</span> <span class="o">=</span> <span class="p">(</span><span class="n">presupuesto</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">proyeccion_s</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_ajuste</span> <span class="o">*</span> <span class="n">ajustes</span>
+                    <span class="o">+</span> <span class="n">t_inferencia</span> <span class="o">*</span> <span class="n">filas_predichas</span> <span class="o">/</span> <span class="n">MUESTRA_INFERENCIA</span><span class="p">)</span>
 
     <span class="n">perfil</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
         <span class="s2">"modelo"</span><span class="p">:</span> <span class="n">modelo</span><span class="p">,</span>
+        <span class="s2">"presupuesto"</span><span class="p">:</span> <span class="n">presupuesto</span><span class="p">,</span>
         <span class="s2">"ajuste (s)"</span><span class="p">:</span> <span class="n">t_ajuste</span><span class="p">,</span>
-        <span class="s2">"inferencia 5k filas (s)"</span><span class="p">:</span> <span class="n">t_inferencia</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"inferencia </span><span class="si">{</span><span class="n">MUESTRA_INFERENCIA</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> filas (s)"</span><span class="p">:</span> <span class="n">t_inferencia</span><span class="p">,</span>
+        <span class="s2">"proyección por corrida (h)"</span><span class="p">:</span> <span class="n">proyeccion_s</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">,</span>
+        <span class="s2">"proyección 16 corridas (h)"</span><span class="p">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="n">proyeccion_s</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">,</span>
     <span class="p">})</span>
 
 <span class="n">perfil</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">perfil</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)</span>
-<span class="c1"># 5 folds externos x (12 configuraciones x 3 folds internos + 1 ajuste final)</span>
-<span class="n">AJUSTES_POR_CORRIDA</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">perfil</span><span class="p">[</span><span class="s2">"proyección por corrida (h)"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">perfil</span><span class="p">[</span><span class="s2">"ajuste (s)"</span><span class="p">]</span> <span class="o">*</span> <span class="n">AJUSTES_POR_CORRIDA</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">)</span>
-<span class="n">perfil</span><span class="p">[</span><span class="s2">"proyección 16 corridas (h)"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">perfil</span><span class="p">[</span><span class="s2">"proyección por corrida (h)"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
-
 <span class="n">guardar_resultado</span><span class="p">(</span><span class="n">perfil</span><span class="p">,</span> <span class="s2">"perfil_computacional"</span><span class="p">)</span>
 <span class="n">perfil</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>presupuesto</th>
+      <th>ajuste (s)</th>
+      <th>inferencia 5,000 filas (s)</th>
+      <th>proyección por corrida (h)</th>
+      <th>proyección 16 corridas (h)</th>
+    </tr>
+    <tr>
+      <th>modelo</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>knn</th>
+      <td>8</td>
+      <td>6.77</td>
+      <td>23.70</td>
+      <td>1.18</td>
+      <td>18.82</td>
+    </tr>
+    <tr>
+      <th>bayes</th>
+      <td>12</td>
+      <td>6.89</td>
+      <td>0.16</td>
+      <td>0.36</td>
+      <td>5.81</td>
+    </tr>
+    <tr>
+      <th>logistica</th>
+      <td>12</td>
+      <td>87.15</td>
+      <td>0.13</td>
+      <td>4.49</td>
+      <td>71.78</td>
+    </tr>
+    <tr>
+      <th>arbol</th>
+      <td>12</td>
+      <td>49.45</td>
+      <td>0.15</td>
+      <td>2.55</td>
+      <td>40.79</td>
+    </tr>
+    <tr>
+      <th>random_forest</th>
+      <td>8</td>
+      <td>205.49</td>
+      <td>0.32</td>
+      <td>7.15</td>
+      <td>114.37</td>
+    </tr>
+    <tr>
+      <th>xgboost</th>
+      <td>8</td>
+      <td>8.65</td>
+      <td>0.19</td>
+      <td>0.31</td>
+      <td>4.92</td>
+    </tr>
+    <tr>
+      <th>svm</th>
+      <td>12</td>
+      <td>11.24</td>
+      <td>0.16</td>
+      <td>0.59</td>
+      <td>9.39</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
-<p>La medición cambia el diseño. Los modelos lineales y el bayesiano cuestan minutos por corrida, pero Random Forest requiere horas, y las 16 combinaciones de cada modelo (4 estrategias de balanceo × 4 optimizadores) multiplican ese costo. k-NN presenta el perfil inverso: se ajusta en un instante y es caro al predecir, porque calcula distancias contra todo el conjunto de entrenamiento en cada consulta.</p>
-<p>Ejecutar el diseño literal en un solo núcleo llevaría semanas. Se adoptan cuatro medidas, todas declaradas de antemano para que no parezcan ajustes oportunistas:</p>
+<p>La medición cambia el diseño. Según la tabla anterior, los modelos lineales y el bayesiano cuestan minutos por corrida, mientras que los ensambles de árboles requieren horas, y las 16 combinaciones de cada modelo (4 estrategias de balanceo × 4 optimizadores) multiplican ese costo. k-NN presenta el perfil inverso: se ajusta en un instante y es caro al predecir, porque calcula distancias contra todo el conjunto de entrenamiento en cada consulta. Por eso la proyección suma el costo de inferencia, que en k-NN domina el total.</p>
+<p>Ejecutar el diseño literal en un solo núcleo no es viable dentro del plazo del proyecto. Se adoptan cuatro medidas, todas declaradas de antemano para que no parezcan ajustes oportunistas:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Medida</p></th>
@@ -765,52 +3097,220 @@ document.write(`
 <tbody>
 <tr class="row-even"><td><p><strong>Paralelización</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n_jobs=-1</span></code> en el bucle interno de búsqueda y en los modelos que lo admiten</p></td>
-<td><p>Divide el tiempo por el número de núcleos disponibles</p></td>
+<td><p>Reduce el tiempo en proporción aproximada a los núcleos disponibles</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Multi-fidelidad</strong></p></td>
-<td><p>La búsqueda de hiperparámetros se ejecuta sobre una submuestra estratificada de pacientes; el ajuste final de cada fold externo usa el fold completo</p></td>
-<td><p>El costo de la búsqueda, que es el 97 % del total, baja proporcionalmente al tamaño de la submuestra</p></td>
+<td><p>La búsqueda de hiperparámetros se ejecuta sobre una submuestra aleatoria de pacientes; el ajuste final de cada fold externo usa el fold completo</p></td>
+<td><p>La búsqueda concentra 180 de los 185 ajustes de cada corrida, de modo que su costo baja en proporción al tamaño de la submuestra</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>Presupuesto diferenciado</strong></p></td>
-<td><p>12 configuraciones para los modelos económicos, 8 para los costosos</p></td>
+<td><p>12 configuraciones para los modelos económicos, 8 para Random Forest, XGBoost y k-NN</p></td>
 <td><p>Reduce el número de evaluaciones donde cada una es más cara</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Sustitución del SVM con kernel</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">LinearSVC</span></code> calibrado en lugar de <code class="docutils literal notranslate"><span class="pre">SVC</span></code> con kernel radial</p></td>
-<td><p>Pasa de complejidad cúbica a lineal en el número de observaciones</p></td>
+<td><p>Pasa de complejidad entre cuadrática y cúbica a lineal en el número de observaciones</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <p>La tercera medida introduce un sesgo conocido: un presupuesto menor explora menos el espacio, lo que podría penalizar a los modelos costosos. Por eso el presupuesto se registra como columna de la tabla maestra y se declara al comparar, en lugar de quedar implícito.</p>
-<p>La segunda merece una advertencia metodológica: la multi-fidelidad supone que el orden relativo de las configuraciones de hiperparámetros se conserva al cambiar el tamaño de la muestra. Es un supuesto razonable y de uso extendido, pero no es gratuito, y el capítulo 9 lo verifica comparando, para los modelos económicos, la configuración elegida con submuestra frente a la elegida con el fold completo.</p>
+<p>La segunda merece una advertencia metodológica: la multi-fidelidad supone que el orden relativo de las configuraciones de hiperparámetros se conserva al cambiar el tamaño de la muestra. Es un supuesto razonable y de uso extendido, pero no es gratuito, y el capítulo 9 lo verifica comparando, para los modelos económicos, la configuración elegida con submuestra frente a la elegida con el fold completo. La submuestra se toma por paciente y no por fila, de modo que la integridad de los grupos se mantiene también en la búsqueda.</p>
 </section>
 <section id="la-tabla-maestra">
 <h2>6.6. La tabla maestra<a class="headerlink" href="#la-tabla-maestra" title="Link to this heading">#</a></h2>
-<p>Las 140 corridas se registran en una única tabla, con una fila por combinación. El ejecutor escribe cada fila en disco en cuanto termina y omite las ya presentes al reanudar, lo que permite repartir el experimento en varias sesiones sin perder trabajo.</p>
+<p>Las 112 corridas se registran en una única tabla, con una fila por combinación. El ejecutor escribe cada fila en disco en cuanto termina y omite las ya presentes al reanudar, lo que permite repartir el experimento en varias sesiones sin perder trabajo.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">demostracion</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ruta_demo</span> <span class="o">=</span> <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"tabla_maestra_demo.csv"</span>
+<span class="c1"># La demostración siempre parte de cero: si quedara un CSV de una ejecución</span>
+<span class="c1"># anterior, el motor omitiría esas filas en lugar de recalcularlas.</span>
+<span class="n">ruta_demo</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">demostracion</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">"logistica"</span><span class="p">,</span> <span class="s2">"ninguno"</span><span class="p">,</span> <span class="s2">"grid"</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
-    <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">"bayes"</span><span class="p">,</span> <span class="s2">"class_weight"</span><span class="p">,</span> <span class="s2">"grid"</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
-    <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">"lasso"</span><span class="p">,</span> <span class="s2">"ninguno"</span><span class="p">,</span> <span class="s2">"random"</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+    <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">"knn"</span><span class="p">,</span> <span class="s2">"class_weight"</span><span class="p">,</span> <span class="s2">"grid"</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>  <span class="c1"># no aplicable</span>
+    <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">"logistica"</span><span class="p">,</span> <span class="s2">"class_weight"</span><span class="p">,</span> <span class="s2">"random"</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
 <span class="p">]</span>
 
 <span class="n">tabla_demo</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">ejecutar_experimento</span><span class="p">(</span>
     <span class="n">demostracion</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span>
-    <span class="n">ruta_tabla</span><span class="o">=</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"tabla_maestra_demo.csv"</span><span class="p">,</span>
+    <span class="n">ruta_tabla</span><span class="o">=</span><span class="n">ruta_demo</span><span class="p">,</span>
     <span class="n">folds_externos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">folds_internos</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">columnas</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"modelo"</span><span class="p">,</span> <span class="s2">"balanceo"</span><span class="p">,</span> <span class="s2">"optimizador"</span><span class="p">,</span> <span class="s2">"estado"</span><span class="p">,</span>
             <span class="s2">"auc_pr_media"</span><span class="p">,</span> <span class="s2">"auc_pr_sd"</span><span class="p">,</span> <span class="s2">"auc_roc_media"</span><span class="p">,</span>
             <span class="s2">"tiempo_busqueda_s"</span><span class="p">,</span> <span class="s2">"tiempo_total_s"</span><span class="p">]</span>
-<span class="n">tabla</span><span class="p">(</span><span class="n">tabla_demo</span><span class="p">[</span><span class="n">columnas</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="c1"># reindex en lugar de [columnas]: la fila no aplicable no tiene métricas y</span>
+<span class="c1"># sus celdas quedan vacías en vez de producir un KeyError.</span>
+<span class="n">tabla</span><span class="p">(</span><span class="n">tabla_demo</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">columnas</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  fold externo 1/3... listo en 403.2 s (AUC-PR 0.2175)
+  fold externo 2/3... 
+</pre></div>
 </div>
-<p>La segunda fila ilustra el registro de combinaciones inaplicables: <code class="docutils literal notranslate"><span class="pre">GaussianNB</span></code> no acepta el parámetro <code class="docutils literal notranslate"><span class="pre">class_weight</span></code>, y en lugar de omitir la celda en silencio, el motor la registra con estado <code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">aplicable&quot;</span></code> y el motivo. Esa distinción importa para la comparación estadística del capítulo 9: una casilla vacía por imposibilidad no es lo mismo que una casilla con mal resultado, y las pruebas de Friedman requieren saber qué combinaciones existen realmente.</p>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\Users\joshu\miniconda3\envs\ml_proyecto\Lib\site-packages\sklearn\linear_model\_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>listo en 475.1 s (AUC-PR 0.2148)
+  fold externo 3/3... listo en 491.1 s (AUC-PR 0.1990)
+[completada] logistica|ninguno|grid: AUC-PR 0.2104 ± 0.0100 en 1385.9 s
+  fold externo 1/3... [no aplicable] knn|class_weight|grid: 'knn' no tiene equivalente de class_weight: su predicción es un voto de vecinos sin ponderación de clase.
+  fold externo 1/3... listo en 261.7 s (AUC-PR 0.2159)
+  fold externo 2/3... listo en 291.4 s (AUC-PR 0.2150)
+  fold externo 3/3... listo en 234.3 s (AUC-PR 0.1985)
+[completada] logistica|class_weight|random: AUC-PR 0.2098 ± 0.0098 en 802.6 s
+</pre></div>
+</div>
+<div class="output text_html"><!--| quarto-html-table-processing: none -->
+<table id="itables_ac83317c_28fa_4ce7_9c11_5f8961a386b9" hidden="hidden">
+  <tbody>
+    <tr>
+      <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
+    <g style="fill:var(--itables-logo-paper,#d9d7fc)">
+        <path d="M100,400H500V357H100Z" />
+        <path d="M100,300H400V257H100Z" />
+        <path d="M0,200H400V157H0Z" />
+        <path d="M100,100H500V57H100Z" />
+        <path d="M100,350H500V307H100Z" />
+        <path d="M100,250H400V207H100Z" />
+        <path d="M0,150H400V107H0Z" />
+        <path d="M100,50H500V7H100Z" />
+    </g>
+    <g style="fill:var(--itables-logo-ink,#1a1366);stroke:var(--itables-logo-ink,#1a1366);">
+   <rect x="100" y="7" width="400" height="43">
+    <animate
+      attributeName="width"
+      values="0;400;0"
+      dur="5s"
+      repeatCount="indefinite" />
+      <animate
+      attributeName="x"
+      values="100;100;500"
+      dur="5s"
+      repeatCount="indefinite" />
+  </rect>
+        <rect x="0" y="107" width="400" height="43">
+    <animate
+      attributeName="width"
+      values="0;400;0"
+      dur="3.5s"
+      repeatCount="indefinite" />
+    <animate
+      attributeName="x"
+      values="0;0;400"
+      dur="3.5s"
+      repeatCount="indefinite" />
+  </rect>
+        <rect x="100" y="207" width="300" height="43">
+    <animate
+      attributeName="width"
+      values="0;300;0"
+      dur="3s"
+      repeatCount="indefinite" />
+    <animate
+      attributeName="x"
+      values="100;100;400"
+      dur="3s"
+      repeatCount="indefinite" />
+  </rect>
+        <rect x="100" y="307" width="400" height="43">
+    <animate
+      attributeName="width"
+      values="0;400;0"
+      dur="4s"
+      repeatCount="indefinite" />
+      <animate
+      attributeName="x"
+      values="100;100;500"
+      dur="4s"
+      repeatCount="indefinite" />
+  </rect>
+        <g style="fill:transparent;stroke-width:8; stroke-linejoin:round" rx="5">
+            <g transform="translate(45 50) rotate(-45)">
+                <circle r="33" cx="0" cy="0" />
+                <rect x="-8" y="32" width="16" height="30" />
+            </g>
+
+            <g transform="translate(450 152)">
+                <polyline points="-15,-20 -35,-20 -35,40 25,40 25,20" />
+                <rect x="-15" y="-40" width="60" height="60" />
+            </g>
+
+            <g transform="translate(50 352)">
+                <polygon points="-35,-5 0,-40 35,-5" />
+                <polygon points="-35,10 0,45 35,10" />
+            </g>
+
+            <g transform="translate(75 250)">
+                <polyline points="-30,30 -60,0 -30,-30" />
+                <polyline points="0,30 -30,0 0,-30" />
+            </g>
+
+            <g transform="translate(425 250) rotate(180)">
+                <polyline points="-30,30 -60,0 -30,-30" />
+                <polyline points="0,30 -30,0 0,-30" />
+            </g>
+        </g>
+    </g>
+</svg>
+</a>
+        Loading ITables v2.9.1 from the internet...
+        (need <a href=https://itables.org/troubleshooting.html>help</a>?)
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div id="itables_ac83317c_28fa_4ce7_9c11_5f8961a386b9_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+      <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
+      <th style="border:1px solid #ddd;padding:8px">modelo</th>
+      <th style="border:1px solid #ddd;padding:8px">balanceo</th>
+      <th style="border:1px solid #ddd;padding:8px">optimizador</th>
+      <th style="border:1px solid #ddd;padding:8px">estado</th>
+      <th style="border:1px solid #ddd;padding:8px">auc_pr_media</th>
+      <th style="border:1px solid #ddd;padding:8px">auc_pr_sd</th>
+      <th style="border:1px solid #ddd;padding:8px">auc_roc_media</th>
+      <th style="border:1px solid #ddd;padding:8px">tiempo_busqueda_s</th>
+      <th style="border:1px solid #ddd;padding:8px">tiempo_total_s</th>
+    </tr></thead><tbody>
+<tr><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">logistica</td><td style="border:1px solid #ddd;padding:8px">ninguno</td><td style="border:1px solid #ddd;padding:8px">grid</td><td style="border:1px solid #ddd;padding:8px">completada</td><td style="border:1px solid #ddd;padding:8px">0.2104</td><td style="border:1px solid #ddd;padding:8px">0.0100</td><td style="border:1px solid #ddd;padding:8px">0.6619</td><td style="border:1px solid #ddd;padding:8px">1135.3695</td><td style="border:1px solid #ddd;padding:8px">1385.9140</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">knn</td><td style="border:1px solid #ddd;padding:8px">class_weight</td><td style="border:1px solid #ddd;padding:8px">grid</td><td style="border:1px solid #ddd;padding:8px">no aplicable</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">NaN</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">logistica</td><td style="border:1px solid #ddd;padding:8px">class_weight</td><td style="border:1px solid #ddd;padding:8px">random</td><td style="border:1px solid #ddd;padding:8px">completada</td><td style="border:1px solid #ddd;padding:8px">0.2098</td><td style="border:1px solid #ddd;padding:8px">0.0098</td><td style="border:1px solid #ddd;padding:8px">0.6639</td><td style="border:1px solid #ddd;padding:8px">692.8283</td><td style="border:1px solid #ddd;padding:8px">802.6436</td></tr>
+</tbody></table></div><script>document.getElementById("itables_ac83317c_28fa_4ce7_9c11_5f8961a386b9")?.removeAttribute("hidden");document.getElementById("itables_ac83317c_28fa_4ce7_9c11_5f8961a386b9_fallback")?.setAttribute("hidden", "hidden");</script>
+<link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
+<script type="module">
+    import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
+
+    document.querySelectorAll("#itables_ac83317c_28fa_4ce7_9c11_5f8961a386b9:not(.dataTable)").forEach(table => {
+        if (!(table instanceof HTMLTableElement))
+            return;
+
+        let dt_args = {
+          "classes": ["display", "compact"],
+          "columnDefs": [{"render": "function (data, type, row, meta) { return type === 'sort' || type === 'type' ? data[1] : data[0]; }", "targets": [5, 6, 7, 8, 9]}],
+          "data_json": "[[0, \"logistica\", \"ninguno\", \"grid\", \"completada\", [\"0.2104\", 0.2104], [\"0.0100\", 0.01], [\"0.6619\", 0.6619], [\"1135.3695\", 1135.3695], [\"1385.9140\", 1385.914]], [1, \"knn\", \"class_weight\", \"grid\", \"no aplicable\", [\"NaN\", \"___NaN___\"], [\"NaN\", \"___NaN___\"], [\"NaN\", \"___NaN___\"], [\"NaN\", \"___NaN___\"], [\"NaN\", \"___NaN___\"]], [2, \"logistica\", \"class_weight\", \"random\", \"completada\", [\"0.2098\", 0.2098], [\"0.0098\", 0.0098], [\"0.6639\", 0.6639], [\"692.8283\", 692.8283], [\"802.6436\", 802.6436]]]",
+          "keys_to_be_evaluated": [["columnDefs", 0, "render"]],
+          "layout": {"bottomEnd": null, "bottomStart": null, "topEnd": null, "topStart": null},
+          "order": [],
+          "pageLength": 15,
+          "scrollX": true,
+          "style": {"caption-side": "bottom", "margin": "0", "table-layout": "auto", "width": "auto"},
+          "table_html": "<table><thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>modelo</th>\n      <th>balanceo</th>\n      <th>optimizador</th>\n      <th>estado</th>\n      <th>auc_pr_media</th>\n      <th>auc_pr_sd</th>\n      <th>auc_roc_media</th>\n      <th>tiempo_busqueda_s</th>\n      <th>tiempo_total_s</th>\n    </tr>\n  </thead></table>",
+          "text_in_header_can_be_selected": true
+        };
+        new ITable(table, dt_args);
+    });
+</script>
+</div></div>
+</div>
+<p>La segunda fila ilustra el registro de combinaciones inaplicables: k-NN no tiene equivalente de <code class="docutils literal notranslate"><span class="pre">class_weight</span></code>, porque su predicción es un voto de vecinos sin ponderación de clase, y en lugar de omitir la celda en silencio, el motor la registra con estado <code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">aplicable&quot;</span></code> y el motivo. Es la única combinación del diseño en esa situación: Naive Bayes y XGBoost no aceptan <code class="docutils literal notranslate"><span class="pre">class_weight</span></code> como tal, pero tienen equivalentes directos (probabilidades a priori uniformes y <code class="docutils literal notranslate"><span class="pre">scale_pos_weight</span></code>), y el motor los usa. Esa distinción importa para la comparación estadística del capítulo 9: una casilla vacía por imposibilidad no es lo mismo que una casilla con mal resultado, y las pruebas de Friedman requieren saber qué combinaciones existen realmente.</p>
+<p>El motor distingue además entre una combinación imposible por diseño y un error de ejecución: solo la primera se registra como <code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">aplicable&quot;</span></code>, mientras que cualquier error real detiene la ejecución, de modo que un fallo de programación no puede disfrazarse de decisión metodológica en la tabla maestra.</p>
 <p>Las columnas de la tabla maestra son:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -849,22 +3349,22 @@ document.write(`
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Preprocesador</p></td>
-<td><p>38 predictores a 129 columnas; escalado robusto, imputación de salvaguarda y one-hot con agrupación de niveles poco frecuentes, todo ajustado dentro de cada fold</p></td>
+<td><p>38 predictores a 152 columnas; escalado robusto, imputación de salvaguarda y one-hot con agrupación de niveles poco frecuentes (salvo <code class="docutils literal notranslate"><span class="pre">race</span></code>), todo ajustado dentro de cada fold</p></td>
 </tr>
 <tr class="row-odd"><td><p>Esquema de validación</p></td>
 <td><p>Anidado: 5 folds externos y 3 internos, ambos con <code class="docutils literal notranslate"><span class="pre">StratifiedGroupKFold</span></code> por <code class="docutils literal notranslate"><span class="pre">patient_nbr</span></code>; cero pacientes compartidos en los cinco folds</p></td>
 </tr>
 <tr class="row-even"><td><p>Sesgo de la partición por filas</p></td>
-<td><p>Nulo en regresión logística; aproximadamente +0.009 de AUC-ROC en k-NN y +0.015 de AUC-PR en Random Forest. El sesgo es diferencial por capacidad del modelo, lo que distorsionaría la comparación entre familias</p></td>
+<td><p>Prácticamente nulo en regresión logística; en torno a +0.006 de AUC-ROC en k-NN y +0.011 de AUC-PR en Random Forest. El sesgo es diferencial por capacidad del modelo, lo que distorsionaría la comparación entre familias, y la partición por filas subestima además la variabilidad entre folds</p></td>
 </tr>
 <tr class="row-odd"><td><p>Línea base</p></td>
-<td><p>Regresión logística con ponderación por clase: AUC-ROC ≈ 0.66, AUC-PR ≈ 0.21, con desviaciones estándar entre folds reducidas</p></td>
+<td><p>Regresión logística con ponderación por clase: AUC-ROC ≈ 0.66, AUC-PR ≈ 0.21, con desviaciones estándar entre folds reducidas. Priorizando el 10 % de mayor riesgo, la precisión es del 25 % frente a una prevalencia del 11.4 %</p></td>
 </tr>
 <tr class="row-even"><td><p>Costo computacional</p></td>
-<td><p>Los modelos lineales cuestan minutos por corrida; Random Forest, horas. Se adoptan paralelización, multi-fidelidad en la búsqueda, presupuesto diferenciado y sustitución del SVM con kernel</p></td>
+<td><p>Los modelos lineales cuestan minutos por corrida; los ensambles de árboles, horas; k-NN concentra su costo en la inferencia. Se adoptan paralelización, multi-fidelidad en la búsqueda, presupuesto diferenciado y sustitución del SVM con kernel</p></td>
 </tr>
 <tr class="row-odd"><td><p>Infraestructura</p></td>
-<td><p>Motor con puntos de control en disco, registro explícito de combinaciones no aplicables y métricas por fold para la comparación estadística posterior</p></td>
+<td><p>Motor con puntos de control en disco, registro explícito de combinaciones no aplicables separado de los errores de ejecución, y métricas por fold para la comparación estadística posterior</p></td>
 </tr>
 </tbody>
 </table>

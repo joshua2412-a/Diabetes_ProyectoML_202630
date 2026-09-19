@@ -437,154 +437,155 @@ document.write(`
 <tr class="row-odd"><th class="head"><p>Variable</p></th>
 <th class="head"><p>Descripción</p></th>
 <th class="head"><p>Bloque o naturaleza</p></th>
-<th class="head"><p>Función</p></th>
+<th class="head"><p>Disponible desde</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">encounter_id</span></code></p></td>
 <td><p>Identificador del encuentro hospitalario, asignado de forma secuencial</p></td>
 <td><p>Administrativa</p></td>
-<td><p>Predictora potencial</p></td>
+<td><p>No es predictor: se elimina</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">patient_nbr</span></code></p></td>
 <td><p>Identificador del paciente; se repite entre encuentros del mismo individuo</p></td>
 <td><p>Administrativa</p></td>
-<td><p>Predictora potencial</p></td>
+<td><p>No es predictor: agrupa la validación</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">race</span></code></p></td>
 <td><p>Raza autodeclarada</p></td>
 <td><p>Demográfica</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gender</span></code></p></td>
 <td><p>Sexo registrado</p></td>
 <td><p>Demográfica</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">age</span></code></p></td>
 <td><p>Edad agrupada en intervalos de diez años</p></td>
 <td><p>Demográfica</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">weight</span></code></p></td>
 <td><p>Peso en intervalos de libras</p></td>
 <td><p>Clínica</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">admission_type_id</span></code></p></td>
 <td><p>Tipo de admisión: urgencia, electiva, recién nacido, entre otros</p></td>
 <td><p>Administrativa</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">discharge_disposition_id</span></code></p></td>
 <td><p>Destino al alta: domicilio, traslado a otra institución, fallecimiento, hospicio</p></td>
 <td><p>Administrativa</p></td>
-<td><p>Predictora potencial</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">admission_source_id</span></code></p></td>
 <td><p>Vía de ingreso: urgencias, remisión médica, traslado desde otro centro</p></td>
 <td><p>Administrativa</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">time_in_hospital</span></code></p></td>
 <td><p>Días transcurridos entre el ingreso y el alta (1 a 14 por criterio de inclusión)</p></td>
 <td><p>Proceso hospitalario</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payer_code</span></code></p></td>
 <td><p>Código del asegurador responsable del pago</p></td>
 <td><p>Administrativa</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">medical_specialty</span></code></p></td>
 <td><p>Especialidad del médico que admite al paciente</p></td>
 <td><p>Administrativa</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">num_lab_procedures</span></code></p></td>
 <td><p>Pruebas de laboratorio realizadas durante el ingreso</p></td>
 <td><p>Proceso hospitalario</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">num_procedures</span></code></p></td>
 <td><p>Procedimientos distintos de laboratorio realizados durante el ingreso</p></td>
 <td><p>Proceso hospitalario</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">num_medications</span></code></p></td>
 <td><p>Medicamentos distintos administrados durante el ingreso</p></td>
 <td><p>Proceso hospitalario</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">number_outpatient</span></code></p></td>
 <td><p>Consultas externas del paciente en el año previo al encuentro</p></td>
 <td><p>Historial clínico</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">number_emergency</span></code></p></td>
 <td><p>Visitas a urgencias del paciente en el año previo al encuentro</p></td>
 <td><p>Historial clínico</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">number_inpatient</span></code></p></td>
 <td><p>Hospitalizaciones del paciente en el año previo al encuentro</p></td>
 <td><p>Historial clínico</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">diag_1</span></code></p></td>
 <td><p>Diagnóstico principal, codificado en ICD-9</p></td>
 <td><p>Clínica</p></td>
-<td><p>Predictora</p></td>
+<td><p>Ingreso</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">diag_2</span></code></p></td>
 <td><p>Diagnóstico secundario, codificado en ICD-9</p></td>
 <td><p>Clínica</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">diag_3</span></code></p></td>
 <td><p>Diagnóstico adicional, codificado en ICD-9</p></td>
 <td><p>Clínica</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">number_diagnoses</span></code></p></td>
 <td><p>Número de diagnósticos registrados en el episodio</p></td>
 <td><p>Clínica</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_glu_serum</span></code></p></td>
 <td><p>Glucosa sérica máxima: <code class="docutils literal notranslate"><span class="pre">&gt;200</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;300</span></code>, <code class="docutils literal notranslate"><span class="pre">Norm</span></code> o prueba no realizada</p></td>
 <td><p>Laboratorio</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">A1Cresult</span></code></p></td>
 <td><p>Hemoglobina glicosilada: <code class="docutils literal notranslate"><span class="pre">&gt;7</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;8</span></code>, <code class="docutils literal notranslate"><span class="pre">Norm</span></code> o prueba no realizada</p></td>
 <td><p>Laboratorio</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-even"><td><p>23 columnas de fármacos</p></td>
 <td><p>Estado de cada antidiabético durante el ingreso: <code class="docutils literal notranslate"><span class="pre">No</span></code> (no administrado), <code class="docutils literal notranslate"><span class="pre">Steady</span></code> (dosis mantenida), <code class="docutils literal notranslate"><span class="pre">Up</span></code> (aumentada) o <code class="docutils literal notranslate"><span class="pre">Down</span></code> (reducida)</p></td>
 <td><p>Tratamiento</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">change</span></code></p></td>
 <td><p>Indica si hubo algún cambio en la medicación antidiabética</p></td>
 <td><p>Tratamiento</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">diabetesMed</span></code></p></td>
 <td><p>Indica si se administró algún medicamento antidiabético</p></td>
 <td><p>Tratamiento</p></td>
-<td><p>Predictora</p></td>
+<td><p>Alta</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">readmitted</span></code></p></td>
 <td><p>Readmisión posterior al alta: <code class="docutils literal notranslate"><span class="pre">&lt;30</span></code> días, <code class="docutils literal notranslate"><span class="pre">&gt;30</span></code> días o ninguna</p></td>
 <td><p>Desenlace</p></td>
-<td><p><strong>Objetivo</strong></p></td>
+<td><p><strong>Posterior al alta</strong></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <p>Las 23 columnas de fármacos son <code class="docutils literal notranslate"><span class="pre">metformin</span></code>, <code class="docutils literal notranslate"><span class="pre">repaglinide</span></code>, <code class="docutils literal notranslate"><span class="pre">nateglinide</span></code>, <code class="docutils literal notranslate"><span class="pre">chlorpropamide</span></code>, <code class="docutils literal notranslate"><span class="pre">glimepiride</span></code>, <code class="docutils literal notranslate"><span class="pre">acetohexamide</span></code>, <code class="docutils literal notranslate"><span class="pre">glipizide</span></code>, <code class="docutils literal notranslate"><span class="pre">glyburide</span></code>, <code class="docutils literal notranslate"><span class="pre">tolbutamide</span></code>, <code class="docutils literal notranslate"><span class="pre">pioglitazone</span></code>, <code class="docutils literal notranslate"><span class="pre">rosiglitazone</span></code>, <code class="docutils literal notranslate"><span class="pre">acarbose</span></code>, <code class="docutils literal notranslate"><span class="pre">miglitol</span></code>, <code class="docutils literal notranslate"><span class="pre">troglitazone</span></code>, <code class="docutils literal notranslate"><span class="pre">tolazamide</span></code>, <code class="docutils literal notranslate"><span class="pre">examide</span></code>, <code class="docutils literal notranslate"><span class="pre">citoglipton</span></code>, <code class="docutils literal notranslate"><span class="pre">insulin</span></code>, <code class="docutils literal notranslate"><span class="pre">glyburide-metformin</span></code>, <code class="docutils literal notranslate"><span class="pre">glipizide-metformin</span></code>, <code class="docutils literal notranslate"><span class="pre">glimepiride-pioglitazone</span></code>, <code class="docutils literal notranslate"><span class="pre">metformin-rosiglitazone</span></code> y <code class="docutils literal notranslate"><span class="pre">metformin-pioglitazone</span></code>.</p>
+<p>La columna “disponible desde” indica el momento en que el dato existe, y es la que determina qué variables son admisibles como predictores. El modelo emite su predicción en el momento del alta, de modo que las variables de proceso hospitalario son legítimas pese a generarse durante la estancia. Solo <code class="docutils literal notranslate"><span class="pre">readmitted</span></code> es posterior al alta, y por eso es el desenlace y nunca una entrada.</p>
 </section>
 <section id="variable-objetivo">
 <h2>1.3. Variable objetivo<a class="headerlink" href="#variable-objetivo" title="Link to this heading">#</a></h2>
@@ -652,7 +653,7 @@ Pacientes únicos : 71,518
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_5dd39137_0734_430f_8788_b5ad7c46417e" hidden="hidden">
+<table id="itables_b52f4bc5_0dfc_4661_93f0_f8c41c383522" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -751,7 +752,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_5dd39137_0734_430f_8788_b5ad7c46417e_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_b52f4bc5_0dfc_4661_93f0_f8c41c383522_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">encounter_id</th>
       <th style="border:1px solid #ddd;padding:8px">patient_nbr</th>
@@ -809,12 +810,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">64410</td><td style="border:1px solid #ddd;padding:8px">86047875</td><td style="border:1px solid #ddd;padding:8px">AfricanAmerican</td><td style="border:1px solid #ddd;padding:8px">Female</td><td style="border:1px solid #ddd;padding:8px">[20-30)</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">11</td><td style="border:1px solid #ddd;padding:8px">5</td><td style="border:1px solid #ddd;padding:8px">13</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">648</td><td style="border:1px solid #ddd;padding:8px">250</td><td style="border:1px solid #ddd;padding:8px">V27</td><td style="border:1px solid #ddd;padding:8px">6</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Steady</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Yes</td><td style="border:1px solid #ddd;padding:8px">NO</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">500364</td><td style="border:1px solid #ddd;padding:8px">82442376</td><td style="border:1px solid #ddd;padding:8px">Caucasian</td><td style="border:1px solid #ddd;padding:8px">Male</td><td style="border:1px solid #ddd;padding:8px">[30-40)</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">44</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">16</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">8</td><td style="border:1px solid #ddd;padding:8px">250.43</td><td style="border:1px solid #ddd;padding:8px">403</td><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Up</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Ch</td><td style="border:1px solid #ddd;padding:8px">Yes</td><td style="border:1px solid #ddd;padding:8px">NO</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">4</td><td style="border:1px solid #ddd;padding:8px">16680</td><td style="border:1px solid #ddd;padding:8px">42519267</td><td style="border:1px solid #ddd;padding:8px">Caucasian</td><td style="border:1px solid #ddd;padding:8px">Male</td><td style="border:1px solid #ddd;padding:8px">[40-50)</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">51</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">8</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">197</td><td style="border:1px solid #ddd;padding:8px">157</td><td style="border:1px solid #ddd;padding:8px">250</td><td style="border:1px solid #ddd;padding:8px">5</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Steady</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Steady</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Ch</td><td style="border:1px solid #ddd;padding:8px">Yes</td><td style="border:1px solid #ddd;padding:8px">NO</td></tr>
-</tbody></table></div><script>document.getElementById("itables_5dd39137_0734_430f_8788_b5ad7c46417e")?.removeAttribute("hidden");document.getElementById("itables_5dd39137_0734_430f_8788_b5ad7c46417e_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_b52f4bc5_0dfc_4661_93f0_f8c41c383522")?.removeAttribute("hidden");document.getElementById("itables_b52f4bc5_0dfc_4661_93f0_f8c41c383522_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_5dd39137_0734_430f_8788_b5ad7c46417e:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_b52f4bc5_0dfc_4661_93f0_f8c41c383522:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -842,7 +843,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_b2dc1a9b_8526_4853_b55b_a32ec074e485" hidden="hidden">
+<table id="itables_7d9c11aa_eef4_48a1_82a1_b06796aa878b" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -941,7 +942,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_b2dc1a9b_8526_4853_b55b_a32ec074e485_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_7d9c11aa_eef4_48a1_82a1_b06796aa878b_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">encounter_id</th>
       <th style="border:1px solid #ddd;padding:8px">patient_nbr</th>
@@ -999,12 +1000,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">101763</td><td style="border:1px solid #ddd;padding:8px">443854148</td><td style="border:1px solid #ddd;padding:8px">41088789</td><td style="border:1px solid #ddd;padding:8px">Caucasian</td><td style="border:1px solid #ddd;padding:8px">Male</td><td style="border:1px solid #ddd;padding:8px">[70-80)</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">MC</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">53</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">9</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">38</td><td style="border:1px solid #ddd;padding:8px">590</td><td style="border:1px solid #ddd;padding:8px">296</td><td style="border:1px solid #ddd;padding:8px">13</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">Steady</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Down</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Ch</td><td style="border:1px solid #ddd;padding:8px">Yes</td><td style="border:1px solid #ddd;padding:8px">NO</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">101764</td><td style="border:1px solid #ddd;padding:8px">443857166</td><td style="border:1px solid #ddd;padding:8px">31693671</td><td style="border:1px solid #ddd;padding:8px">Caucasian</td><td style="border:1px solid #ddd;padding:8px">Female</td><td style="border:1px solid #ddd;padding:8px">[80-90)</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">10</td><td style="border:1px solid #ddd;padding:8px">MC</td><td style="border:1px solid #ddd;padding:8px">Surgery-General</td><td style="border:1px solid #ddd;padding:8px">45</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">21</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">996</td><td style="border:1px solid #ddd;padding:8px">285</td><td style="border:1px solid #ddd;padding:8px">998</td><td style="border:1px solid #ddd;padding:8px">9</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Steady</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Steady</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Up</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">Ch</td><td style="border:1px solid #ddd;padding:8px">Yes</td><td style="border:1px solid #ddd;padding:8px">NO</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">101765</td><td style="border:1px solid #ddd;padding:8px">443867222</td><td style="border:1px solid #ddd;padding:8px">175429310</td><td style="border:1px solid #ddd;padding:8px">Caucasian</td><td style="border:1px solid #ddd;padding:8px">Male</td><td style="border:1px solid #ddd;padding:8px">[70-80)</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">6</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">13</td><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">530</td><td style="border:1px solid #ddd;padding:8px">530</td><td style="border:1px solid #ddd;padding:8px">787</td><td style="border:1px solid #ddd;padding:8px">9</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">None</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">NO</td></tr>
-</tbody></table></div><script>document.getElementById("itables_b2dc1a9b_8526_4853_b55b_a32ec074e485")?.removeAttribute("hidden");document.getElementById("itables_b2dc1a9b_8526_4853_b55b_a32ec074e485_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_7d9c11aa_eef4_48a1_82a1_b06796aa878b")?.removeAttribute("hidden");document.getElementById("itables_7d9c11aa_eef4_48a1_82a1_b06796aa878b_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_b2dc1a9b_8526_4853_b55b_a32ec074e485:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_7d9c11aa_eef4_48a1_82a1_b06796aa878b:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1040,7 +1041,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_cd2dce02_861d_4ad0_b560_7c2022983473" hidden="hidden">
+<table id="itables_3b6d6b9f_8dce_4475_87d3_bf341373d3ce" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1139,7 +1140,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_cd2dce02_861d_4ad0_b560_7c2022983473_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_3b6d6b9f_8dce_4475_87d3_bf341373d3ce_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">Variable</th>
       <th style="border:1px solid #ddd;padding:8px">Tipo de dato</th>
@@ -1162,12 +1163,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">12</td><td style="border:1px solid #ddd;padding:8px">num_lab_procedures</td><td style="border:1px solid #ddd;padding:8px">int64</td><td style="border:1px solid #ddd;padding:8px">101766</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">118</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">13</td><td style="border:1px solid #ddd;padding:8px">num_procedures</td><td style="border:1px solid #ddd;padding:8px">int64</td><td style="border:1px solid #ddd;padding:8px">101766</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">7</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">14</td><td style="border:1px solid #ddd;padding:8px">num_medications</td><td style="border:1px solid #ddd;padding:8px">int64</td><td style="border:1px solid #ddd;padding:8px">101766</td><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">75</td></tr>
-</tbody><tfoot><tr><td colspan="6" style="border:none;padding:8px;text-align:center">(35 more rows not shown)</td></tr></tfoot></table></div><script>document.getElementById("itables_cd2dce02_861d_4ad0_b560_7c2022983473")?.removeAttribute("hidden");document.getElementById("itables_cd2dce02_861d_4ad0_b560_7c2022983473_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody><tfoot><tr><td colspan="6" style="border:none;padding:8px;text-align:center">(35 more rows not shown)</td></tr></tfoot></table></div><script>document.getElementById("itables_3b6d6b9f_8dce_4475_87d3_bf341373d3ce")?.removeAttribute("hidden");document.getElementById("itables_3b6d6b9f_8dce_4475_87d3_bf341373d3ce_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_cd2dce02_861d_4ad0_b560_7c2022983473:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_3b6d6b9f_8dce_4475_87d3_bf341373d3ce:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1209,7 +1210,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_f2bdd058_e40c_4823_a373_02bfedc5fe53" hidden="hidden">
+<table id="itables_e5602513_32d7_47ed_aeb0_e4f9f176276f" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1308,7 +1309,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_f2bdd058_e40c_4823_a373_02bfedc5fe53_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_e5602513_32d7_47ed_aeb0_e4f9f176276f_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">count</th>
       <th style="border:1px solid #ddd;padding:8px">mean</th>
@@ -1327,12 +1328,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">number_emergency</td><td style="border:1px solid #ddd;padding:8px">101766.0</td><td style="border:1px solid #ddd;padding:8px">0.20</td><td style="border:1px solid #ddd;padding:8px">0.93</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">76.0</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">number_inpatient</td><td style="border:1px solid #ddd;padding:8px">101766.0</td><td style="border:1px solid #ddd;padding:8px">0.64</td><td style="border:1px solid #ddd;padding:8px">1.26</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">1.0</td><td style="border:1px solid #ddd;padding:8px">21.0</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">number_diagnoses</td><td style="border:1px solid #ddd;padding:8px">101766.0</td><td style="border:1px solid #ddd;padding:8px">7.42</td><td style="border:1px solid #ddd;padding:8px">1.93</td><td style="border:1px solid #ddd;padding:8px">1.0</td><td style="border:1px solid #ddd;padding:8px">6.0</td><td style="border:1px solid #ddd;padding:8px">8.0</td><td style="border:1px solid #ddd;padding:8px">9.0</td><td style="border:1px solid #ddd;padding:8px">16.0</td></tr>
-</tbody></table></div><script>document.getElementById("itables_f2bdd058_e40c_4823_a373_02bfedc5fe53")?.removeAttribute("hidden");document.getElementById("itables_f2bdd058_e40c_4823_a373_02bfedc5fe53_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_e5602513_32d7_47ed_aeb0_e4f9f176276f")?.removeAttribute("hidden");document.getElementById("itables_e5602513_32d7_47ed_aeb0_e4f9f176276f_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_f2bdd058_e40c_4823_a373_02bfedc5fe53:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_e5602513_32d7_47ed_aeb0_e4f9f176276f:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1565,7 +1566,7 @@ admission_source_id: 25 códigos definidos, 0 sin descripción en los datos
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_05cd3dff_f932_471b_b553_cc6543810c61" hidden="hidden">
+<table id="itables_e56867b0_caf1_46dc_b3ac_150ab31e385a" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1664,7 +1665,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_05cd3dff_f932_471b_b553_cc6543810c61_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_e56867b0_caf1_46dc_b3ac_150ab31e385a_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">descripción</th>
       <th style="border:1px solid #ddd;padding:8px">encuentros</th>
@@ -1702,12 +1703,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">27</td><td style="border:1px solid #ddd;padding:8px">Discharged/transferred to a federal health care facility.</td><td style="border:1px solid #ddd;padding:8px">5</td><td style="border:1px solid #ddd;padding:8px">0.00</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">12</td><td style="border:1px solid #ddd;padding:8px">Still patient or expected to return for outpatient services</td><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">0.00</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">20</td><td style="border:1px solid #ddd;padding:8px">Expired in a medical facility. Medicaid only, hospice.</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">0.00</td></tr>
-</tbody></table></div><script>document.getElementById("itables_05cd3dff_f932_471b_b553_cc6543810c61")?.removeAttribute("hidden");document.getElementById("itables_05cd3dff_f932_471b_b553_cc6543810c61_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_e56867b0_caf1_46dc_b3ac_150ab31e385a")?.removeAttribute("hidden");document.getElementById("itables_e56867b0_caf1_46dc_b3ac_150ab31e385a_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_05cd3dff_f932_471b_b553_cc6543810c61:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_e56867b0_caf1_46dc_b3ac_150ab31e385a:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1738,7 +1739,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_a82b3928_a440_44b4_9d26_d07987750021" hidden="hidden">
+<table id="itables_afdf5d74_620d_44a4_9e82_ff7ae98d1242" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1837,7 +1838,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_a82b3928_a440_44b4_9d26_d07987750021_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_afdf5d74_620d_44a4_9e82_ff7ae98d1242_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">descripción</th>
       <th style="border:1px solid #ddd;padding:8px">encuentros</th>
@@ -1857,12 +1858,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">8</td><td style="border:1px solid #ddd;padding:8px">Not Mapped</td><td style="border:1px solid #ddd;padding:8px">320</td><td style="border:1px solid #ddd;padding:8px">0.31</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">Trauma Center</td><td style="border:1px solid #ddd;padding:8px">21</td><td style="border:1px solid #ddd;padding:8px">0.02</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">4</td><td style="border:1px solid #ddd;padding:8px">Newborn</td><td style="border:1px solid #ddd;padding:8px">10</td><td style="border:1px solid #ddd;padding:8px">0.01</td></tr>
-</tbody></table></div><script>document.getElementById("itables_a82b3928_a440_44b4_9d26_d07987750021")?.removeAttribute("hidden");document.getElementById("itables_a82b3928_a440_44b4_9d26_d07987750021_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_afdf5d74_620d_44a4_9e82_ff7ae98d1242")?.removeAttribute("hidden");document.getElementById("itables_afdf5d74_620d_44a4_9e82_ff7ae98d1242_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_a82b3928_a440_44b4_9d26_d07987750021:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_afdf5d74_620d_44a4_9e82_ff7ae98d1242:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1892,7 +1893,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_3efd3752_c012_42ac_8ed8_c5611c40568f" hidden="hidden">
+<table id="itables_a263cd3c_3c25_431a_9b51_ab13e6e418e7" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1991,7 +1992,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_3efd3752_c012_42ac_8ed8_c5611c40568f_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_a263cd3c_3c25_431a_9b51_ab13e6e418e7_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">descripción</th>
       <th style="border:1px solid #ddd;padding:8px">encuentros</th>
@@ -2020,12 +2021,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">11</td><td style="border:1px solid #ddd;padding:8px">Normal Delivery</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">0.00</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">25</td><td style="border:1px solid #ddd;padding:8px"> Transfer from Ambulatory Surgery Center</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">0.00</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">13</td><td style="border:1px solid #ddd;padding:8px"> Sick Baby</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">0.00</td></tr>
-</tbody></table></div><script>document.getElementById("itables_3efd3752_c012_42ac_8ed8_c5611c40568f")?.removeAttribute("hidden");document.getElementById("itables_3efd3752_c012_42ac_8ed8_c5611c40568f_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_a263cd3c_3c25_431a_9b51_ab13e6e418e7")?.removeAttribute("hidden");document.getElementById("itables_a263cd3c_3c25_431a_9b51_ab13e6e418e7_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_3efd3752_c012_42ac_8ed8_c5611c40568f:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_a263cd3c_3c25_431a_9b51_ab13e6e418e7:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -2083,9 +2084,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>encounter_id duplicados        : 0
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Filas íntegramente duplicadas : 0
+Filas íntegramente duplicadas : 0
 
 Pacientes únicos                    : 71,518
 Pacientes con más de un encuentro   : 16,773 (23.45 %)
@@ -2098,7 +2097,7 @@ Máximo de encuentros de un paciente : 40
 <p>No hay duplicación en sentido estricto: <code class="docutils literal notranslate"><span class="pre">encounter_id</span></code> es único y no existen filas repetidas. Pero casi uno de cada cuatro pacientes aparece más de una vez, y un paciente llega a registrar hasta 40 encuentros.</p>
 <p>Esto tiene una consecuencia directa sobre la validación. Si los encuentros de un mismo paciente se reparten entre entrenamiento y prueba, el modelo puede memorizar rasgos del paciente concreto en lugar de aprender el mecanismo clínico, y la métrica quedaría inflada. Es fuga de información por dependencia de grupo.</p>
 <p>Para comprobar que el riesgo es real se ordenan los encuentros de cada paciente y se calcula la tasa de readmisión según la posición del encuentro.</p>
-<p>El dataset no incluye fechas de ingreso. Se asume que <code class="docutils literal notranslate"><span class="pre">encounter_id</span></code> es creciente en el tiempo, supuesto habitual en la literatura sobre este conjunto porque el identificador se asigna de forma secuencial al registrar el episodio. El supuesto afecta únicamente a <em>cuál</em> encuentro se conserva por paciente, no a cuántos.</p>
+<p>El dataset no incluye fechas de ingreso. Se asume que <code class="docutils literal notranslate"><span class="pre">encounter_id</span></code> es creciente en el tiempo, supuesto habitual en la literatura sobre este conjunto porque el identificador se asigna de forma secuencial al registrar el episodio. El supuesto afecta únicamente al orden de los encuentros de cada paciente, y con él a la tabla por posición de la sección 4.1.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">posicion</span> <span class="o">=</span> <span class="n">crudo</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"encounter_id"</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"patient_nbr"</span><span class="p">)</span><span class="o">.</span><span class="n">cumcount</span><span class="p">()</span>
@@ -2181,7 +2180,7 @@ Máximo de encuentros de un paciente : 40
 </table>
 </div></div></div>
 </div>
-<p>La tasa de readmisión temprana crece de forma monótona con el número de encuentros previos: del 9.0 % en el primer encuentro al 23.9 % a partir del cuarto. Es decir, la posición del encuentro en el historial del paciente es por sí sola un predictor fuerte del desenlace.</p>
+<p>La tasa de readmisión temprana crece de forma monótona con el número de encuentros previos: del 8.80 % en el primer encuentro al 26.42 % a partir del quinto. Es decir, la posición del encuentro en el historial del paciente es por sí sola un predictor fuerte del desenlace.</p>
 <p>Un modelo entrenado con todos los encuentros y validado sin agrupar por paciente aprendería parcialmente a reconocer pacientes frecuentes ya vistos, en lugar del riesgo clínico de un paciente nuevo.</p>
 </section>
 <section id="valores-faltantes">
@@ -2402,7 +2401,7 @@ Máximo de encuentros de un paciente : 40
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_015b56c2_1cdc_41f7_b470_19705885c7b7" hidden="hidden">
+<table id="itables_898ff394_9178_4df3_91f5_4b6c6c854f9a" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -2501,7 +2500,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_015b56c2_1cdc_41f7_b470_19705885c7b7_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_898ff394_9178_4df3_91f5_4b6c6c854f9a_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">% faltante</th>
       <th style="border:1px solid #ddd;padding:8px">prueba</th>
@@ -2534,12 +2533,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">diag_3</td><td style="border:1px solid #ddd;padding:8px">1.3983</td><td style="border:1px solid #ddd;padding:8px">chi²</td><td style="border:1px solid #ddd;padding:8px">32.5644</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">158.8056</td><td style="border:1px solid #ddd;padding:8px">6.3949</td><td style="border:1px solid #ddd;padding:8px">11.2275</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">-4.8325</td><td style="border:1px solid #ddd;padding:8px">No</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">diag_2</td><td style="border:1px solid #ddd;padding:8px">0.3518</td><td style="border:1px solid #ddd;padding:8px">chi²</td><td style="border:1px solid #ddd;padding:8px">3.0890</td><td style="border:1px solid #ddd;padding:8px">0.0788</td><td style="border:1px solid #ddd;padding:8px">39.9525</td><td style="border:1px solid #ddd;padding:8px">8.1006</td><td style="border:1px solid #ddd;padding:8px">11.1707</td><td style="border:1px solid #ddd;padding:8px">0.2305</td><td style="border:1px solid #ddd;padding:8px">-3.0702</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">diag_1</td><td style="border:1px solid #ddd;padding:8px">0.0206</td><td style="border:1px solid #ddd;padding:8px">Fisher exacto</td><td style="border:1px solid #ddd;padding:8px">2.2339</td><td style="border:1px solid #ddd;padding:8px">0.0768</td><td style="border:1px solid #ddd;padding:8px">2.3436</td><td style="border:1px solid #ddd;padding:8px">23.8095</td><td style="border:1px solid #ddd;padding:8px">11.1573</td><td style="border:1px solid #ddd;padding:8px">0.2305</td><td style="border:1px solid #ddd;padding:8px">12.6522</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
-</tbody></table></div><script>document.getElementById("itables_015b56c2_1cdc_41f7_b470_19705885c7b7")?.removeAttribute("hidden");document.getElementById("itables_015b56c2_1cdc_41f7_b470_19705885c7b7_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_898ff394_9178_4df3_91f5_4b6c6c854f9a")?.removeAttribute("hidden");document.getElementById("itables_898ff394_9178_4df3_91f5_4b6c6c854f9a_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_015b56c2_1cdc_41f7_b470_19705885c7b7:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_898ff394_9178_4df3_91f5_4b6c6c854f9a:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -2615,7 +2614,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_9c34cbd7_9871_40a0_8c2d_7f5c5e6611c2" hidden="hidden">
+<table id="itables_dd610a8a_94d2_4256_b9c5_c310bd9c3b6f" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -2714,7 +2713,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_9c34cbd7_9871_40a0_8c2d_7f5c5e6611c2_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_dd610a8a_94d2_4256_b9c5_c310bd9c3b6f_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">categorías</th>
       <th style="border:1px solid #ddd;padding:8px">moda</th>
@@ -2737,12 +2736,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">glyburide-metformin</td><td style="border:1px solid #ddd;padding:8px">4</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">99.306</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">repaglinide</td><td style="border:1px solid #ddd;padding:8px">4</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">98.488</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">weight</td><td style="border:1px solid #ddd;padding:8px">9</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">96.858</td></tr>
-</tbody></table></div><script>document.getElementById("itables_9c34cbd7_9871_40a0_8c2d_7f5c5e6611c2")?.removeAttribute("hidden");document.getElementById("itables_9c34cbd7_9871_40a0_8c2d_7f5c5e6611c2_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_dd610a8a_94d2_4256_b9c5_c310bd9c3b6f")?.removeAttribute("hidden");document.getElementById("itables_dd610a8a_94d2_4256_b9c5_c310bd9c3b6f_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_9c34cbd7_9871_40a0_8c2d_7f5c5e6611c2:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_dd610a8a_94d2_4256_b9c5_c310bd9c3b6f:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -2764,7 +2763,9 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </script>
 </div></div>
 </div>
-<p>Nueve fármacos superan el 95 % de concentración en una sola categoría. Siete de ellos (<code class="docutils literal notranslate"><span class="pre">examide</span></code>, <code class="docutils literal notranslate"><span class="pre">citoglipton</span></code>, <code class="docutils literal notranslate"><span class="pre">acetohexamide</span></code>, <code class="docutils literal notranslate"><span class="pre">troglitazone</span></code>, <code class="docutils literal notranslate"><span class="pre">glimepiride-pioglitazone</span></code>, <code class="docutils literal notranslate"><span class="pre">metformin-rosiglitazone</span></code>, <code class="docutils literal notranslate"><span class="pre">metformin-pioglitazone</span></code>) son estrictamente constantes: todos los pacientes tienen el valor <code class="docutils literal notranslate"><span class="pre">No</span></code>. En <code class="docutils literal notranslate"><span class="pre">tolbutamide</span></code> y <code class="docutils literal notranslate"><span class="pre">glipizide-metformin</span></code> la variación se reduce a una decena de casos, insuficiente para estimar cualquier efecto. Todos se descartan.</p>
+<p>Diecisiete columnas superan el 95 % de concentración en una sola categoría: dieciséis fármacos y <code class="docutils literal notranslate"><span class="pre">weight</span></code>, cuyo caso se trata aparte por ser un problema de faltantes y no de varianza.</p>
+<p>La concentración relativa no sirve como criterio de eliminación: <code class="docutils literal notranslate"><span class="pre">repaglinide</span></code> tiene el 98.5 % de sus registros en <code class="docutils literal notranslate"><span class="pre">No</span></code> y aun así más de mil quinientos encuentros con variación, suficientes para estimar un efecto. El criterio adecuado es el <strong>número de encuentros con variación</strong>, y el capítulo 2 lo aplica con un umbral de veinticinco, justificado allí con una medición del costo computacional que introducen las columnas casi vacías.</p>
+<p>Conviene además precisar la varianza real de estas variables sobre el crudo: solo <code class="docutils literal notranslate"><span class="pre">examide</span></code> y <code class="docutils literal notranslate"><span class="pre">citoglipton</span></code> son estrictamente constantes. <code class="docutils literal notranslate"><span class="pre">acetohexamide</span></code>, <code class="docutils literal notranslate"><span class="pre">glimepiride-pioglitazone</span></code> y <code class="docutils literal notranslate"><span class="pre">metformin-pioglitazone</span></code> registran un caso, <code class="docutils literal notranslate"><span class="pre">metformin-rosiglitazone</span></code> dos y <code class="docutils literal notranslate"><span class="pre">troglitazone</span></code> tres, casos que desaparecen al aplicar las exclusiones clínicas del capítulo 2.</p>
 </section>
 <section id="cardinalidad">
 <h3>4.5. Cardinalidad<a class="headerlink" href="#cardinalidad" title="Link to this heading">#</a></h3>
@@ -2783,7 +2784,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_7f23bcc5_23a2_4ff5_bccd_8c912fa401a3" hidden="hidden">
+<table id="itables_276656ad_d252_4d8d_9a5d_7a60dfd4053a" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -2882,7 +2883,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_7f23bcc5_23a2_4ff5_bccd_8c912fa401a3_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_276656ad_d252_4d8d_9a5d_7a60dfd4053a_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">categorías</th>
       <th style="border:1px solid #ddd;padding:8px">% moda</th>
@@ -2902,12 +2903,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">repaglinide</td><td style="border:1px solid #ddd;padding:8px">4</td><td style="border:1px solid #ddd;padding:8px">98.49</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">nateglinide</td><td style="border:1px solid #ddd;padding:8px">4</td><td style="border:1px solid #ddd;padding:8px">99.31</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">chlorpropamide</td><td style="border:1px solid #ddd;padding:8px">4</td><td style="border:1px solid #ddd;padding:8px">99.92</td></tr>
-</tbody><tfoot><tr><td colspan="3" style="border:none;padding:8px;text-align:center">(22 more rows not shown)</td></tr></tfoot></table></div><script>document.getElementById("itables_7f23bcc5_23a2_4ff5_bccd_8c912fa401a3")?.removeAttribute("hidden");document.getElementById("itables_7f23bcc5_23a2_4ff5_bccd_8c912fa401a3_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody><tfoot><tr><td colspan="3" style="border:none;padding:8px;text-align:center">(22 more rows not shown)</td></tr></tfoot></table></div><script>document.getElementById("itables_276656ad_d252_4d8d_9a5d_7a60dfd4053a")?.removeAttribute("hidden");document.getElementById("itables_276656ad_d252_4d8d_9a5d_7a60dfd4053a_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_7f23bcc5_23a2_4ff5_bccd_8c912fa401a3:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_276656ad_d252_4d8d_9a5d_7a60dfd4053a:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -2946,8 +2947,11 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     <span class="s2">"admission_source_id"</span><span class="p">:</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">],</span>
 <span class="p">}</span>
 <span class="k">for</span> <span class="n">columna</span><span class="p">,</span> <span class="n">codigos</span> <span class="ow">in</span> <span class="n">NO_INFORMATIVOS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">etiquetas</span> <span class="o">=</span> <span class="p">[</span><span class="n">mapeos</span><span class="p">[</span><span class="n">columna</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">codigos</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">crudo</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">codigos</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> % "</span>
+    <span class="c1"># Algunos códigos están definidos en el diccionario pero no aparecen en los</span>
+    <span class="c1"># datos: se filtran para no listar categorías que nadie tiene.</span>
+    <span class="n">presentes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">codigos</span> <span class="k">if</span> <span class="p">(</span><span class="n">crudo</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()]</span>
+    <span class="n">etiquetas</span> <span class="o">=</span> <span class="p">[</span><span class="n">mapeos</span><span class="p">[</span><span class="n">columna</span><span class="p">][</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">presentes</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">crudo</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">presentes</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> % "</span>
           <span class="sa">f</span><span class="s2">"de los encuentros — </span><span class="si">{</span><span class="n">etiquetas</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2960,8 +2964,8 @@ Male               47055
 Unknown/Invalid        3 
 
 admission_type_id: 10.22 % de los encuentros — ['Not Available', 'NULL', 'Not Mapped']
-discharge_disposition_id: 4.60 % de los encuentros — ['NULL', 'Not Mapped', 'Unknown/Invalid']
-admission_source_id: 6.94 % de los encuentros — [' Not Available', 'Not Available', 'NULL', ' Not Mapped', 'Unknown/Invalid']
+discharge_disposition_id: 4.60 % de los encuentros — ['NULL', 'Not Mapped']
+admission_source_id: 6.94 % de los encuentros — ['Not Available', 'NULL', 'Not Mapped']
 </pre></div>
 </div>
 </div>
@@ -2992,9 +2996,9 @@ admission_source_id: 6.94 % de los encuentros — [' Not Available', 'Not Availa
 <td><p>Sección 4.6: volumen despreciable</p></td>
 </tr>
 <tr class="row-even"><td><p>3</p></td>
-<td><p>Conservar un encuentro por paciente</p></td>
-<td><p>~29 % de las filas</p></td>
-<td><p>Sección 4.1: la posición del encuentro predice el desenlace y genera dependencia entre observaciones</p></td>
+<td><p>Conservar todos los encuentros y agrupar la validación por <code class="docutils literal notranslate"><span class="pre">patient_nbr</span></code></p></td>
+<td><p>Ninguna fila descartada</p></td>
+<td><p>Sección 4.1: los encuentros de un paciente no son independientes, pero descartar episodios introduce sesgo de selección. El capítulo 2 cuantifica las cuatro alternativas</p></td>
 </tr>
 <tr class="row-odd"><td><p>4</p></td>
 <td><p>Eliminar <code class="docutils literal notranslate"><span class="pre">weight</span></code></p></td>
@@ -3012,9 +3016,9 @@ admission_source_id: 6.94 % de los encuentros — [' Not Available', 'Not Availa
 <td><p>Identificador sin contenido clínico</p></td>
 </tr>
 <tr class="row-even"><td><p>7</p></td>
-<td><p>Eliminar nueve fármacos constantes o cuasi constantes</p></td>
+<td><p>Eliminar los fármacos con menos de veinticinco encuentros de variación</p></td>
 <td><p>9 columnas</p></td>
-<td><p>Sección 4.4: varianza nula o casi nula</p></td>
+<td><p>Sección 4.4: la concentración relativa no basta como criterio; el capítulo 2 fija el umbral con una medición del costo que introducen las columnas casi vacías</p></td>
 </tr>
 <tr class="row-odd"><td><p>8</p></td>
 <td><p>Agrupar los tres códigos ICD-9 por capítulo clínico</p></td>
@@ -3057,7 +3061,7 @@ admission_source_id: 6.94 % de los encuentros — [' Not Available', 'Not Availa
 <td><p>101,766 encuentros, 71,518 pacientes, 50 variables</p></td>
 </tr>
 <tr class="row-odd"><td><p>Dependencia entre filas</p></td>
-<td><p>23.45 % de los pacientes tiene más de un encuentro; la tasa de readmisión crece del 9.0 % al 23.9 % con la posición del encuentro</p></td>
+<td><p>23.45 % de los pacientes tiene más de un encuentro; la tasa de readmisión crece del 8.80 % al 26.42 % con la posición del encuentro</p></td>
 </tr>
 <tr class="row-even"><td><p>Convenciones de faltante</p></td>
 <td><p>Dos distintas: <code class="docutils literal notranslate"><span class="pre">?</span></code> (ausente) y <code class="docutils literal notranslate"><span class="pre">None</span></code> (prueba no realizada, informativo)</p></td>
@@ -3069,7 +3073,7 @@ admission_source_id: 6.94 % de los encuentros — [' Not Available', 'Not Availa
 <td><p>Ausencias mayormente independientes entre variables, salvo <code class="docutils literal notranslate"><span class="pre">diag_2</span></code> y <code class="docutils literal notranslate"><span class="pre">diag_3</span></code> (correlación 0.39). Cuatro variables rechazan la independencia respecto al desenlace, con diferencias de 0.55 a 4.83 puntos porcentuales; <code class="docutils literal notranslate"><span class="pre">weight</span></code>, <code class="docutils literal notranslate"><span class="pre">diag_1</span></code> y <code class="docutils literal notranslate"><span class="pre">diag_2</span></code> no la rechazan</p></td>
 </tr>
 <tr class="row-odd"><td><p>Varianza</p></td>
-<td><p>Nueve fármacos constantes o cuasi constantes</p></td>
+<td><p>Diecisiete columnas superan el 95 % de concentración; solo <code class="docutils literal notranslate"><span class="pre">examide</span></code> y <code class="docutils literal notranslate"><span class="pre">citoglipton</span></code> son estrictamente constantes</p></td>
 </tr>
 <tr class="row-even"><td><p>Cardinalidad</p></td>
 <td><p>Diagnósticos con 716 a 789 categorías; especialidad médica con 72</p></td>
