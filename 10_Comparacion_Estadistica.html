@@ -30,9 +30,9 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -50,7 +50,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -420,25 +420,25 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">maestra</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"tabla_maestra_clasificacion.csv"</span><span class="p">)</span>
-<span class="n">completadas</span> <span class="o">=</span> <span class="n">maestra</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"estado == 'completada'"</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">completadas</span><span class="p">[</span><span class="s2">"configuracion"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">completadas</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]</span> <span class="o">+</span> <span class="s2">" | "</span>
-                                <span class="o">+</span> <span class="n">completadas</span><span class="p">[</span><span class="s2">"balanceo"</span><span class="p">]</span> <span class="o">+</span> <span class="s2">" | "</span>
-                                <span class="o">+</span> <span class="n">completadas</span><span class="p">[</span><span class="s2">"optimizador"</span><span class="p">])</span>
+<span class="n">maestra</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">&quot;tabla_maestra_clasificacion.csv&quot;</span><span class="p">)</span>
+<span class="n">completadas</span> <span class="o">=</span> <span class="n">maestra</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;estado == &#39;completada&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">completadas</span><span class="p">[</span><span class="s2">&quot;configuracion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">completadas</span><span class="p">[</span><span class="s2">&quot;modelo&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; | &quot;</span>
+                                <span class="o">+</span> <span class="n">completadas</span><span class="p">[</span><span class="s2">&quot;balanceo&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; | &quot;</span>
+                                <span class="o">+</span> <span class="n">completadas</span><span class="p">[</span><span class="s2">&quot;optimizador&quot;</span><span class="p">])</span>
 
 <span class="c1"># Matriz de métricas por fold: filas = folds externos, columnas = modelos.</span>
 <span class="c1"># Es la estructura que requieren Friedman y Nemenyi, que tratan los folds</span>
 <span class="c1"># como bloques de medidas repetidas.</span>
 <span class="n">por_fold</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="n">fila</span><span class="p">[</span><span class="s2">"configuracion"</span><span class="p">]:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">"auc_pr_por_fold"</span><span class="p">])</span>
+    <span class="n">fila</span><span class="p">[</span><span class="s2">&quot;configuracion&quot;</span><span class="p">]:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">&quot;auc_pr_por_fold&quot;</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">fila</span> <span class="ow">in</span> <span class="n">completadas</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
 <span class="p">})</span>
-<span class="n">por_fold</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"fold </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">por_fold</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="n">por_fold</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;fold </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">por_fold</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Configuraciones comparadas: </span><span class="si">{</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Bloques (folds externos)  : </span><span class="si">{</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Comparaciones por pares posibles: "</span>
-      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="mi">2</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Configuraciones comparadas: </span><span class="si">{</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bloques (folds externos)  : </span><span class="si">{</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Comparaciones por pares posibles: &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">por_fold</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="mi">2</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -451,10 +451,10 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mejores_por_modelo</span> <span class="o">=</span> <span class="p">(</span><span class="n">completadas</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
-    <span class="n">completadas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)[</span><span class="s2">"auc_pr_media"</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()])</span>
+    <span class="n">completadas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;modelo&quot;</span><span class="p">)[</span><span class="s2">&quot;auc_pr_media&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()])</span>
 
 <span class="n">por_fold_modelos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="n">fila</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">"auc_pr_por_fold"</span><span class="p">])</span>
+    <span class="n">fila</span><span class="p">[</span><span class="s2">&quot;modelo&quot;</span><span class="p">]:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">&quot;auc_pr_por_fold&quot;</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">fila</span> <span class="ow">in</span> <span class="n">mejores_por_modelo</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
 <span class="p">})</span>
 
@@ -462,16 +462,16 @@ document.write(`
     <span class="o">*</span><span class="p">[</span><span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">columns</span><span class="p">])</span>
 
 <span class="n">friedman</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span>
-    <span class="s2">"comparación"</span><span class="p">:</span> <span class="s2">"7 modelos base (mejor configuración de cada uno)"</span><span class="p">,</span>
-    <span class="s2">"k (modelos)"</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-    <span class="s2">"n (folds)"</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-    <span class="s2">"chi² de Friedman"</span><span class="p">:</span> <span class="n">estadistico</span><span class="p">,</span>
-    <span class="s2">"grados de libertad"</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">"p-valor"</span><span class="p">:</span> <span class="n">p_valor</span><span class="p">,</span>
-    <span class="s2">"conclusión"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Se rechaza H0: hay diferencias"</span> <span class="k">if</span> <span class="n">p_valor</span> <span class="o">&lt;</span> <span class="mf">0.05</span>
-                   <span class="k">else</span> <span class="s2">"No se rechaza H0"</span><span class="p">),</span>
+    <span class="s2">&quot;comparación&quot;</span><span class="p">:</span> <span class="s2">&quot;7 modelos base (mejor configuración de cada uno)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;k (modelos)&quot;</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="s2">&quot;n (folds)&quot;</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="s2">&quot;chi² de Friedman&quot;</span><span class="p">:</span> <span class="n">estadistico</span><span class="p">,</span>
+    <span class="s2">&quot;grados de libertad&quot;</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;p-valor&quot;</span><span class="p">:</span> <span class="n">p_valor</span><span class="p">,</span>
+    <span class="s2">&quot;conclusión&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Se rechaza H0: hay diferencias&quot;</span> <span class="k">if</span> <span class="n">p_valor</span> <span class="o">&lt;</span> <span class="mf">0.05</span>
+                   <span class="k">else</span> <span class="s2">&quot;No se rechaza H0&quot;</span><span class="p">),</span>
 <span class="p">}])</span>
-<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">friedman</span><span class="p">,</span> <span class="s2">"friedman_modelos"</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">friedman</span><span class="p">,</span> <span class="s2">&quot;friedman_modelos&quot;</span><span class="p">)</span>
 <span class="n">friedman</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -487,12 +487,12 @@ document.write(`
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">))</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">rangos_promedio</span><span class="o">.</span><span class="n">index</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">rangos_promedio</span><span class="o">.</span><span class="n">values</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
         <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Rango promedio en AUC-PR (menor es mejor)"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Rangos promedio de los modelos entre folds externos"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Rango promedio en AUC-PR (menor es mejor)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Rangos promedio de los modelos entre folds externos&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<span class="n">rangos_promedio</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">"rango promedio"</span><span class="p">)</span>
+<span class="n">rangos_promedio</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">&quot;rango promedio&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -513,14 +513,14 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scikit_posthocs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
 
 <span class="n">nemenyi</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">posthoc_nemenyi_friedman</span><span class="p">(</span><span class="n">por_fold_modelos</span><span class="p">)</span>
-<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">nemenyi</span><span class="p">,</span> <span class="s2">"nemenyi_modelos"</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">nemenyi</span><span class="p">,</span> <span class="s2">&quot;nemenyi_modelos&quot;</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">))</span>
 <span class="n">mascara</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">nemenyi</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">))</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">nemenyi</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mascara</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">".3f"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"RdYlGn_r"</span><span class="p">,</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">nemenyi</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mascara</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;.3f&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdYlGn_r&quot;</span><span class="p">,</span>
             <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">"label"</span><span class="p">:</span> <span class="s2">"p-valor de Nemenyi"</span><span class="p">},</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Prueba post-hoc de Nemenyi (p-valores por pares)"</span><span class="p">)</span>
+            <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;p-valor de Nemenyi&quot;</span><span class="p">},</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Prueba post-hoc de Nemenyi (p-valores por pares)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -530,7 +530,7 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">diferencia_critica</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">alfa</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Diferencia crítica de Nemenyi para k modelos y n bloques.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Diferencia crítica de Nemenyi para k modelos y n bloques.</span>
 
 <span class="sd">    Usa la aproximación habitual con el valor crítico del rango</span>
 <span class="sd">    studentizado dividido por la raíz de dos.</span>
@@ -538,28 +538,28 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    float</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">q_alfa</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">studentized_range</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alfa</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">q_alfa</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="n">n</span><span class="p">)))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">diagrama_cd</span><span class="p">(</span><span class="n">rangos_promedio</span><span class="p">,</span> <span class="n">cd</span><span class="p">,</span> <span class="n">titulo</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Dibuja un diagrama de diferencia crítica.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dibuja un diagrama de diferencia crítica.</span>
 
 <span class="sd">    Ubica cada modelo según su rango promedio y conecta con una línea</span>
 <span class="sd">    horizontal los grupos cuya diferencia no alcanza la diferencia crítica.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ordenados</span> <span class="o">=</span> <span class="n">rangos_promedio</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
     <span class="n">nombres</span><span class="p">,</span> <span class="n">valores</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ordenados</span><span class="o">.</span><span class="n">index</span><span class="p">),</span> <span class="n">ordenados</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mf">2.2</span> <span class="o">+</span> <span class="mf">0.32</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">nombres</span><span class="p">)))</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">valores</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">valores</span><span class="p">),</span> <span class="s2">"o"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">valores</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">valores</span><span class="p">),</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">nombre</span><span class="p">,</span> <span class="n">valor</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">nombres</span><span class="p">,</span> <span class="n">valores</span><span class="p">)):</span>
         <span class="n">altura</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.12</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">valor</span><span class="p">,</span> <span class="n">valor</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">altura</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">valor</span><span class="p">,</span> <span class="n">altura</span> <span class="o">-</span> <span class="mf">0.03</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">valor</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
-                <span class="n">ha</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">"top"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">valor</span><span class="p">,</span> <span class="n">altura</span> <span class="o">-</span> <span class="mf">0.03</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">valor</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
 
     <span class="c1"># Grupos de modelos no distinguibles entre sí.</span>
     <span class="n">nivel</span> <span class="o">=</span> <span class="mf">0.10</span>
@@ -570,29 +570,29 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
             <span class="n">fin</span> <span class="o">=</span> <span class="n">compatibles</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">valores</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">valores</span><span class="p">[</span><span class="n">fin</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.02</span><span class="p">],</span>
                     <span class="p">[</span><span class="n">nivel</span><span class="p">,</span> <span class="n">nivel</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                    <span class="n">solid_capstyle</span><span class="o">=</span><span class="s2">"butt"</span><span class="p">)</span>
+                    <span class="n">solid_capstyle</span><span class="o">=</span><span class="s2">&quot;butt&quot;</span><span class="p">)</span>
             <span class="n">nivel</span> <span class="o">+=</span> <span class="mf">0.08</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">valores</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">nivel</span> <span class="o">+</span> <span class="mf">0.08</span><span class="p">),</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">valores</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">nivel</span> <span class="o">+</span> <span class="mf">0.08</span><span class="p">),</span>
                 <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="n">valores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="n">cd</span><span class="p">,</span> <span class="n">nivel</span> <span class="o">+</span> <span class="mf">0.08</span><span class="p">),</span>
-                <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s2">"arrowstyle"</span><span class="p">:</span> <span class="s2">"|-|"</span><span class="p">,</span> <span class="s2">"lw"</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">})</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">valores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="n">cd</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nivel</span> <span class="o">+</span> <span class="mf">0.12</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"CD = </span><span class="si">{</span><span class="n">cd</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-            <span class="n">ha</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Rango promedio (menor es mejor)"</span><span class="p">)</span>
+                <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;arrowstyle&quot;</span><span class="p">:</span> <span class="s2">&quot;|-|&quot;</span><span class="p">,</span> <span class="s2">&quot;lw&quot;</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">})</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">valores</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="n">cd</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nivel</span> <span class="o">+</span> <span class="mf">0.12</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;CD = </span><span class="si">{</span><span class="n">cd</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Rango promedio (menor es mejor)&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.12</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nombres</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="n">nivel</span> <span class="o">+</span> <span class="mf">0.22</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titulo</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">lado</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"left"</span><span class="p">,</span> <span class="s2">"right"</span><span class="p">,</span> <span class="s2">"top"</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">lado</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">]:</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">lado</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 
 <span class="n">cd</span> <span class="o">=</span> <span class="n">diferencia_critica</span><span class="p">(</span><span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Diferencia crítica (alfa = 0.05, k = </span><span class="si">{</span><span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, "</span>
-      <span class="sa">f</span><span class="s2">"n = </span><span class="si">{</span><span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">cd</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Diferencia crítica (alfa = 0.05, k = </span><span class="si">{</span><span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;n = </span><span class="si">{</span><span class="n">por_fold_modelos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">cd</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">diagrama_cd</span><span class="p">(</span><span class="n">rangos_promedio</span><span class="p">,</span> <span class="n">cd</span><span class="p">,</span>
-            <span class="s2">"Diagrama de diferencia crítica — modelos base (AUC-PR)"</span><span class="p">)</span>
+            <span class="s2">&quot;Diagrama de diferencia crítica — modelos base (AUC-PR)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -606,20 +606,20 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <p>Se reserva para el subconjunto reducido de los tres finalistas del capítulo 9, tal como exige la guía, y sus valores p se ajustan por comparaciones múltiples.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">predicciones</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"predicciones_prueba.csv"</span><span class="p">)</span>
-<span class="n">y_real</span> <span class="o">=</span> <span class="n">predicciones</span><span class="p">[</span><span class="s2">"y_real"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">columnas_modelos</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">predicciones</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"p_"</span><span class="p">)]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">predicciones</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">&quot;predicciones_prueba.csv&quot;</span><span class="p">)</span>
+<span class="n">y_real</span> <span class="o">=</span> <span class="n">predicciones</span><span class="p">[</span><span class="s2">&quot;y_real&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">columnas_modelos</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">predicciones</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;p_&quot;</span><span class="p">)]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_estructura_delong</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Componentes de la varianza del AUC según DeLong.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Componentes de la varianza del AUC según DeLong.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    tuple</span>
 <span class="sd">        AUC y las dos series de pseudovalores (V10 sobre positivos y V01</span>
 <span class="sd">        sobre negativos) que definen su varianza.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">positivos</span> <span class="o">=</span> <span class="n">probabilidades</span><span class="p">[</span><span class="n">y_real</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">negativos</span> <span class="o">=</span> <span class="n">probabilidades</span><span class="p">[</span><span class="n">y_real</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">positivos</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">negativos</span><span class="p">)</span>
@@ -635,7 +635,7 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">prueba_delong</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades_a</span><span class="p">,</span> <span class="n">probabilidades_b</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Prueba de DeLong para dos AUC correlacionados.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prueba de DeLong para dos AUC correlacionados.</span>
 
 <span class="sd">    Contrasta H0: AUC_A = AUC_B sobre las mismas observaciones, usando la</span>
 <span class="sd">    representación del AUC como estadístico U y su matriz de covarianzas</span>
@@ -646,7 +646,7 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <span class="sd">    dict</span>
 <span class="sd">        AUC de cada modelo, su diferencia, el estadístico z y el p-valor</span>
 <span class="sd">        bilateral.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">auc_a</span><span class="p">,</span> <span class="n">v10_a</span><span class="p">,</span> <span class="n">v01_a</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">_estructura_delong</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades_a</span><span class="p">)</span>
     <span class="n">auc_b</span><span class="p">,</span> <span class="n">v10_b</span><span class="p">,</span> <span class="n">v01_b</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_estructura_delong</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades_b</span><span class="p">)</span>
 
@@ -657,12 +657,12 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
     <span class="n">diferencia</span> <span class="o">=</span> <span class="n">auc_a</span> <span class="o">-</span> <span class="n">auc_b</span>
     <span class="n">varianza</span> <span class="o">=</span> <span class="n">covarianza</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">covarianza</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">covarianza</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">diferencia</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">varianza</span><span class="p">)</span> <span class="k">if</span> <span class="n">varianza</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"auc_a"</span><span class="p">:</span> <span class="n">auc_a</span><span class="p">,</span> <span class="s2">"auc_b"</span><span class="p">:</span> <span class="n">auc_b</span><span class="p">,</span> <span class="s2">"diferencia"</span><span class="p">:</span> <span class="n">diferencia</span><span class="p">,</span>
-            <span class="s2">"z"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s2">"p"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">z</span><span class="p">)))}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;auc_a&quot;</span><span class="p">:</span> <span class="n">auc_a</span><span class="p">,</span> <span class="s2">&quot;auc_b&quot;</span><span class="p">:</span> <span class="n">auc_b</span><span class="p">,</span> <span class="s2">&quot;diferencia&quot;</span><span class="p">:</span> <span class="n">diferencia</span><span class="p">,</span>
+            <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">z</span><span class="p">)))}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">correccion_holm</span><span class="p">(</span><span class="n">valores_p</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Corrección de Holm-Bonferroni para comparaciones múltiples."""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Corrección de Holm-Bonferroni para comparaciones múltiples.&quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">valores_p</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
     <span class="n">orden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
@@ -685,19 +685,19 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
                               <span class="n">predicciones</span><span class="p">[</span><span class="n">columna_a</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
                               <span class="n">predicciones</span><span class="p">[</span><span class="n">columna_b</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
     <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s2">"modelo A"</span><span class="p">:</span> <span class="n">columna_a</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="s2">"modelo B"</span><span class="p">:</span> <span class="n">columna_b</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
-        <span class="s2">"AUC A"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"auc_a"</span><span class="p">],</span> <span class="s2">"AUC B"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"auc_b"</span><span class="p">],</span>
-        <span class="s2">"diferencia"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"diferencia"</span><span class="p">],</span>
-        <span class="s2">"z"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"z"</span><span class="p">],</span> <span class="s2">"p crudo"</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">"p"</span><span class="p">],</span>
+        <span class="s2">&quot;modelo A&quot;</span><span class="p">:</span> <span class="n">columna_a</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="s2">&quot;modelo B&quot;</span><span class="p">:</span> <span class="n">columna_b</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
+        <span class="s2">&quot;AUC A&quot;</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;auc_a&quot;</span><span class="p">],</span> <span class="s2">&quot;AUC B&quot;</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;auc_b&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;diferencia&quot;</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;diferencia&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">],</span> <span class="s2">&quot;p crudo&quot;</span><span class="p">:</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">],</span>
     <span class="p">})</span>
 
 <span class="n">delong</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span>
-<span class="n">delong</span><span class="p">[</span><span class="s2">"p (Holm)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">correccion_holm</span><span class="p">(</span><span class="n">delong</span><span class="p">[</span><span class="s2">"p crudo"</span><span class="p">])</span>
-<span class="n">delong</span><span class="p">[</span><span class="s2">"p (Benjamini-Hochberg)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">false_discovery_control</span><span class="p">(</span>
-    <span class="n">delong</span><span class="p">[</span><span class="s2">"p crudo"</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">"bh"</span><span class="p">)</span>
-<span class="n">delong</span><span class="p">[</span><span class="s2">"significativa (Holm)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">delong</span><span class="p">[</span><span class="s2">"p (Holm)"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">,</span>
-                                          <span class="s2">"Sí"</span><span class="p">,</span> <span class="s2">"No"</span><span class="p">)</span>
-<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">delong</span><span class="p">,</span> <span class="s2">"delong_finalistas"</span><span class="p">)</span>
+<span class="n">delong</span><span class="p">[</span><span class="s2">&quot;p (Holm)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">correccion_holm</span><span class="p">(</span><span class="n">delong</span><span class="p">[</span><span class="s2">&quot;p crudo&quot;</span><span class="p">])</span>
+<span class="n">delong</span><span class="p">[</span><span class="s2">&quot;p (Benjamini-Hochberg)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">false_discovery_control</span><span class="p">(</span>
+    <span class="n">delong</span><span class="p">[</span><span class="s2">&quot;p crudo&quot;</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bh&quot;</span><span class="p">)</span>
+<span class="n">delong</span><span class="p">[</span><span class="s2">&quot;significativa (Holm)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">delong</span><span class="p">[</span><span class="s2">&quot;p (Holm)&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">,</span>
+                                          <span class="s2">&quot;Sí&quot;</span><span class="p">,</span> <span class="s2">&quot;No&quot;</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">delong</span><span class="p">,</span> <span class="s2">&quot;delong_finalistas&quot;</span><span class="p">)</span>
 <span class="n">delong</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -712,21 +712,21 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">delta_cliff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Delta de Cliff entre dos muestras a partir del estadístico U."""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delta de Cliff entre dos muestras a partir del estadístico U.&quot;&quot;&quot;</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">mannwhitneyu</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">statistic</span>
     <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">u</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">magnitud_cliff</span><span class="p">(</span><span class="n">delta</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Clasifica la delta de Cliff según los umbrales convencionales."""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clasifica la delta de Cliff según los umbrales convencionales.&quot;&quot;&quot;</span>
     <span class="n">d</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mf">0.147</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Insignificante"</span>
+        <span class="k">return</span> <span class="s2">&quot;Insignificante&quot;</span>
     <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mf">0.330</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Pequeño"</span>
+        <span class="k">return</span> <span class="s2">&quot;Pequeño&quot;</span>
     <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mf">0.474</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Mediano"</span>
-    <span class="k">return</span> <span class="s2">"Grande"</span>
+        <span class="k">return</span> <span class="s2">&quot;Mediano&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;Grande&quot;</span>
 
 
 <span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
@@ -734,16 +734,16 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
     <span class="n">delta</span> <span class="o">=</span> <span class="n">delta_cliff</span><span class="p">(</span><span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">modelo_a</span><span class="p">],</span>
                         <span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">modelo_b</span><span class="p">])</span>
     <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s2">"modelo A"</span><span class="p">:</span> <span class="n">modelo_a</span><span class="p">,</span> <span class="s2">"modelo B"</span><span class="p">:</span> <span class="n">modelo_b</span><span class="p">,</span>
-        <span class="s2">"AUC-PR medio A"</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">modelo_a</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
-        <span class="s2">"AUC-PR medio B"</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">modelo_b</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
-        <span class="s2">"delta de Cliff"</span><span class="p">:</span> <span class="n">delta</span><span class="p">,</span>
-        <span class="s2">"magnitud"</span><span class="p">:</span> <span class="n">magnitud_cliff</span><span class="p">(</span><span class="n">delta</span><span class="p">),</span>
+        <span class="s2">&quot;modelo A&quot;</span><span class="p">:</span> <span class="n">modelo_a</span><span class="p">,</span> <span class="s2">&quot;modelo B&quot;</span><span class="p">:</span> <span class="n">modelo_b</span><span class="p">,</span>
+        <span class="s2">&quot;AUC-PR medio A&quot;</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">modelo_a</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">&quot;AUC-PR medio B&quot;</span><span class="p">:</span> <span class="n">por_fold_modelos</span><span class="p">[</span><span class="n">modelo_b</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">&quot;delta de Cliff&quot;</span><span class="p">:</span> <span class="n">delta</span><span class="p">,</span>
+        <span class="s2">&quot;magnitud&quot;</span><span class="p">:</span> <span class="n">magnitud_cliff</span><span class="p">(</span><span class="n">delta</span><span class="p">),</span>
     <span class="p">})</span>
 
 <span class="n">efectos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
-    <span class="s2">"delta de Cliff"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">abs</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">efectos</span><span class="p">,</span> <span class="s2">"tamanos_efecto_modelos"</span><span class="p">)</span>
+    <span class="s2">&quot;delta de Cliff&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">abs</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">efectos</span><span class="p">,</span> <span class="s2">&quot;tamanos_efecto_modelos&quot;</span><span class="p">)</span>
 <span class="n">tabla</span><span class="p">(</span><span class="n">efectos</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">filas</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -758,17 +758,17 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">average_precision_score</span><span class="p">,</span> <span class="n">roc_auc_score</span>
 
-<span class="n">prueba</span> <span class="o">=</span> <span class="n">leer_tabla</span><span class="p">(</span><span class="s2">"diabetes_test"</span><span class="p">)</span>
-<span class="n">identificadores</span> <span class="o">=</span> <span class="n">prueba</span><span class="p">[</span><span class="n">roles_variables</span><span class="p">()[</span><span class="s2">"identificador"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> \
-    <span class="k">if</span> <span class="s2">"roles_variables"</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+<span class="n">prueba</span> <span class="o">=</span> <span class="n">leer_tabla</span><span class="p">(</span><span class="s2">&quot;diabetes_test&quot;</span><span class="p">)</span>
+<span class="n">identificadores</span> <span class="o">=</span> <span class="n">prueba</span><span class="p">[</span><span class="n">roles_variables</span><span class="p">()[</span><span class="s2">&quot;identificador&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> \
+    <span class="k">if</span> <span class="s2">&quot;roles_variables&quot;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
 
 <span class="n">roles</span> <span class="o">=</span> <span class="n">roles_variables</span><span class="p">()</span>
-<span class="n">identificadores</span> <span class="o">=</span> <span class="n">prueba</span><span class="p">[</span><span class="n">roles</span><span class="p">[</span><span class="s2">"identificador"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">identificadores</span> <span class="o">=</span> <span class="n">prueba</span><span class="p">[</span><span class="n">roles</span><span class="p">[</span><span class="s2">&quot;identificador&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">bootstrap_bca</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">probabilidades</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">funcion_metrica</span><span class="p">,</span>
                   <span class="n">n_repeticiones</span><span class="o">=</span><span class="mi">2_000</span><span class="p">,</span> <span class="n">confianza</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">semilla</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Intervalo de confianza BCa remuestreando grupos completos.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Intervalo de confianza BCa remuestreando grupos completos.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -785,7 +785,7 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <span class="sd">    -------</span>
 <span class="sd">    dict</span>
 <span class="sd">        Estimación puntual y límites del intervalo.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">aleatorio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">semilla</span><span class="p">)</span>
     <span class="n">y_real</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_real</span><span class="p">)</span>
     <span class="n">probabilidades</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">probabilidades</span><span class="p">)</span>
@@ -833,8 +833,8 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
         <span class="p">(</span><span class="n">inferior</span> <span class="k">if</span> <span class="n">z_alfa</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">superior</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">replicas</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">percentil</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)))</span>
 
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"estimación"</span><span class="p">:</span> <span class="n">estimacion</span><span class="p">,</span> <span class="s2">"IC inferior"</span><span class="p">:</span> <span class="n">inferior</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="s2">"IC superior"</span><span class="p">:</span> <span class="n">superior</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"réplicas válidas"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">replicas</span><span class="p">)}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;estimación&quot;</span><span class="p">:</span> <span class="n">estimacion</span><span class="p">,</span> <span class="s2">&quot;IC inferior&quot;</span><span class="p">:</span> <span class="n">inferior</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s2">&quot;IC superior&quot;</span><span class="p">:</span> <span class="n">superior</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;réplicas válidas&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">replicas</span><span class="p">)}</span>
 </pre></div>
 </div>
 </div>
@@ -844,15 +844,15 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">columna</span> <span class="ow">in</span> <span class="n">columnas_modelos</span><span class="p">:</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">predicciones</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">nombre_metrica</span><span class="p">,</span> <span class="n">funcion</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"AUC-ROC"</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">),</span>
-                                    <span class="p">(</span><span class="s2">"AUC-PR"</span><span class="p">,</span> <span class="n">average_precision_score</span><span class="p">)]:</span>
+    <span class="k">for</span> <span class="n">nombre_metrica</span><span class="p">,</span> <span class="n">funcion</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">&quot;AUC-ROC&quot;</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">),</span>
+                                    <span class="p">(</span><span class="s2">&quot;AUC-PR&quot;</span><span class="p">,</span> <span class="n">average_precision_score</span><span class="p">)]:</span>
         <span class="n">resultado</span> <span class="o">=</span> <span class="n">bootstrap_bca</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">identificadores</span><span class="p">,</span> <span class="n">funcion</span><span class="p">,</span>
                                   <span class="n">n_repeticiones</span><span class="o">=</span><span class="mi">1_000</span><span class="p">)</span>
-        <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"modelo"</span><span class="p">:</span> <span class="n">columna</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="s2">"métrica"</span><span class="p">:</span> <span class="n">nombre_metrica</span><span class="p">,</span>
+        <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;modelo&quot;</span><span class="p">:</span> <span class="n">columna</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="s2">&quot;métrica&quot;</span><span class="p">:</span> <span class="n">nombre_metrica</span><span class="p">,</span>
                       <span class="o">**</span><span class="n">resultado</span><span class="p">})</span>
 
 <span class="n">intervalos</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span>
-<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">intervalos</span><span class="p">,</span> <span class="s2">"intervalos_bca"</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">intervalos</span><span class="p">,</span> <span class="s2">&quot;intervalos_bca&quot;</span><span class="p">)</span>
 <span class="n">intervalos</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -861,17 +861,17 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">))</span>
-<span class="n">subconjunto</span> <span class="o">=</span> <span class="n">intervalos</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"métrica == 'AUC-PR'"</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">subconjunto</span> <span class="o">=</span> <span class="n">intervalos</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;métrica == &#39;AUC-PR&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">posiciones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">subconjunto</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">subconjunto</span><span class="p">[</span><span class="s2">"estimación"</span><span class="p">],</span> <span class="n">posiciones</span><span class="p">,</span>
-            <span class="n">xerr</span><span class="o">=</span><span class="p">[</span><span class="n">subconjunto</span><span class="p">[</span><span class="s2">"estimación"</span><span class="p">]</span> <span class="o">-</span> <span class="n">subconjunto</span><span class="p">[</span><span class="s2">"IC inferior"</span><span class="p">],</span>
-                  <span class="n">subconjunto</span><span class="p">[</span><span class="s2">"IC superior"</span><span class="p">]</span> <span class="o">-</span> <span class="n">subconjunto</span><span class="p">[</span><span class="s2">"estimación"</span><span class="p">]],</span>
-            <span class="n">fmt</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">subconjunto</span><span class="p">[</span><span class="s2">&quot;estimación&quot;</span><span class="p">],</span> <span class="n">posiciones</span><span class="p">,</span>
+            <span class="n">xerr</span><span class="o">=</span><span class="p">[</span><span class="n">subconjunto</span><span class="p">[</span><span class="s2">&quot;estimación&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">subconjunto</span><span class="p">[</span><span class="s2">&quot;IC inferior&quot;</span><span class="p">],</span>
+                  <span class="n">subconjunto</span><span class="p">[</span><span class="s2">&quot;IC superior&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">subconjunto</span><span class="p">[</span><span class="s2">&quot;estimación&quot;</span><span class="p">]],</span>
+            <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">posiciones</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">subconjunto</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">y_real</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Prevalencia"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"AUC-PR en el conjunto de prueba (IC 95 % BCa)"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Intervalos de confianza de los finalistas"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">subconjunto</span><span class="p">[</span><span class="s2">&quot;modelo&quot;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">y_real</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Prevalencia&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;AUC-PR en el conjunto de prueba (IC 95 % BCa)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Intervalos de confianza de los finalistas&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>

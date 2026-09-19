@@ -30,9 +30,9 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -50,7 +50,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -387,7 +387,6 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicacion-de-los-filtros-con-trazabilidad">2.2. Aplicación de los filtros con trazabilidad</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eleccion-de-la-unidad-de-analisis">Elección de la unidad de análisis</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ponderacion-implicita-de-los-pacientes-recurrentes">Ponderación implícita de los pacientes recurrentes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#por-que-la-posicion-del-encuentro-no-se-incorpora-como-predictor">Por qué la posición del encuentro no se incorpora como predictor</a></li>
 </ul>
 </li>
@@ -431,12 +430,12 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">crudo</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="n">DATOS_CRUDOS</span> <span class="o">/</span> <span class="s2">"diabetic_data.csv"</span><span class="p">,</span>
-    <span class="n">na_values</span><span class="o">=</span><span class="p">[</span><span class="s2">"?"</span><span class="p">],</span>
+    <span class="n">DATOS_CRUDOS</span> <span class="o">/</span> <span class="s2">&quot;diabetic_data.csv&quot;</span><span class="p">,</span>
+    <span class="n">na_values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;?&quot;</span><span class="p">],</span>
     <span class="n">keep_default_na</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">low_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Punto de partida: </span><span class="si">{</span><span class="n">crudo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> filas x </span><span class="si">{</span><span class="n">crudo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> columnas"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Punto de partida: </span><span class="si">{</span><span class="n">crudo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> filas x </span><span class="si">{</span><span class="n">crudo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> columnas&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -452,8 +451,8 @@ document.write(`
 <h3>Distribución original en tres niveles<a class="headerlink" href="#distribucion-original-en-tres-niveles" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">distribucion</span> <span class="o">=</span> <span class="n">crudo</span><span class="p">[</span><span class="s2">"readmitted"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"encuentros"</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
-<span class="n">distribucion</span><span class="p">[</span><span class="s2">"%"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">crudo</span><span class="p">[</span><span class="s2">"readmitted"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">distribucion</span> <span class="o">=</span> <span class="n">crudo</span><span class="p">[</span><span class="s2">&quot;readmitted&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;encuentros&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+<span class="n">distribucion</span><span class="p">[</span><span class="s2">&quot;%&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">crudo</span><span class="p">[</span><span class="s2">&quot;readmitted&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">distribucion</span>
 </pre></div>
 </div>
@@ -513,19 +512,19 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DESTINOS_EXCLUIDOS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">]</span>
-<span class="n">excluidos</span> <span class="o">=</span> <span class="n">crudo</span><span class="p">[</span><span class="s2">"discharge_disposition_id"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">DESTINOS_EXCLUIDOS</span><span class="p">)</span>
+<span class="n">excluidos</span> <span class="o">=</span> <span class="n">crudo</span><span class="p">[</span><span class="s2">&quot;discharge_disposition_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">DESTINOS_EXCLUIDOS</span><span class="p">)</span>
 
 <span class="n">comparacion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">"encuentros"</span><span class="p">:</span> <span class="p">[</span><span class="n">excluidos</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="p">(</span><span class="o">~</span><span class="n">excluidos</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()],</span>
-    <span class="s2">"</span><span class="si">% d</span><span class="s2">el total"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;encuentros&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">excluidos</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="p">(</span><span class="o">~</span><span class="n">excluidos</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()],</span>
+    <span class="s2">&quot;</span><span class="si">% d</span><span class="s2">el total&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="mi">100</span> <span class="o">*</span> <span class="n">excluidos</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
         <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="o">~</span><span class="n">excluidos</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
     <span class="p">],</span>
-    <span class="s2">"tasa readmisión &lt; 30 días (%)"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">crudo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">excluidos</span><span class="p">,</span> <span class="s2">"readmitted"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"&lt;30"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
-        <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">crudo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">excluidos</span><span class="p">,</span> <span class="s2">"readmitted"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"&lt;30"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+    <span class="s2">&quot;tasa readmisión &lt; 30 días (%)&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">crudo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">excluidos</span><span class="p">,</span> <span class="s2">&quot;readmitted&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&lt;30&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">crudo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">excluidos</span><span class="p">,</span> <span class="s2">&quot;readmitted&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&lt;30&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
     <span class="p">],</span>
-<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"Fallecimiento / hospicio"</span><span class="p">,</span> <span class="s2">"Resto"</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Fallecimiento / hospicio&quot;</span><span class="p">,</span> <span class="s2">&quot;Resto&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">comparacion</span>
 </pre></div>
 </div>
@@ -574,19 +573,19 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ETIQUETAS_EXCLUIDOS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="mi">11</span><span class="p">:</span> <span class="s2">"Fallecido"</span><span class="p">,</span>
-    <span class="mi">13</span><span class="p">:</span> <span class="s2">"Hospicio / domicilio"</span><span class="p">,</span>
-    <span class="mi">14</span><span class="p">:</span> <span class="s2">"Hospicio / institución"</span><span class="p">,</span>
-    <span class="mi">19</span><span class="p">:</span> <span class="s2">"Fallecido en domicilio (hospicio)"</span><span class="p">,</span>
-    <span class="mi">20</span><span class="p">:</span> <span class="s2">"Fallecido en institución (hospicio)"</span><span class="p">,</span>
-    <span class="mi">21</span><span class="p">:</span> <span class="s2">"Fallecido, lugar desconocido (hospicio)"</span><span class="p">,</span>
+    <span class="mi">11</span><span class="p">:</span> <span class="s2">&quot;Fallecido&quot;</span><span class="p">,</span>
+    <span class="mi">13</span><span class="p">:</span> <span class="s2">&quot;Hospicio / domicilio&quot;</span><span class="p">,</span>
+    <span class="mi">14</span><span class="p">:</span> <span class="s2">&quot;Hospicio / institución&quot;</span><span class="p">,</span>
+    <span class="mi">19</span><span class="p">:</span> <span class="s2">&quot;Fallecido en domicilio (hospicio)&quot;</span><span class="p">,</span>
+    <span class="mi">20</span><span class="p">:</span> <span class="s2">&quot;Fallecido en institución (hospicio)&quot;</span><span class="p">,</span>
+    <span class="mi">21</span><span class="p">:</span> <span class="s2">&quot;Fallecido, lugar desconocido (hospicio)&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="n">desglose</span> <span class="o">=</span> <span class="p">(</span><span class="n">crudo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">excluidos</span><span class="p">]</span>
-            <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"discharge_disposition_id"</span><span class="p">)[</span><span class="s2">"readmitted"</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;discharge_disposition_id&quot;</span><span class="p">)[</span><span class="s2">&quot;readmitted&quot;</span><span class="p">]</span>
             <span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">unstack</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-<span class="n">desglose</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="o">=</span> <span class="n">desglose</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">desglose</span><span class="p">[</span><span class="s2">"% &lt; 30 días"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">desglose</span><span class="p">[</span><span class="s2">"&lt;30"</span><span class="p">]</span> <span class="o">/</span> <span class="n">desglose</span><span class="p">[</span><span class="s2">"total"</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">desglose</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">desglose</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">desglose</span><span class="p">[</span><span class="s2">&quot;% &lt; 30 días&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">desglose</span><span class="p">[</span><span class="s2">&quot;&lt;30&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">desglose</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">desglose</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">ETIQUETAS_EXCLUIDOS</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">desglose</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
 <span class="n">desglose</span>
 </pre></div>
@@ -674,25 +673,25 @@ document.write(`
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">registrar</span><span class="p">(</span><span class="n">etapa</span><span class="p">,</span> <span class="n">datos</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Añade una fila al registro de trazabilidad del proceso de depuración."""</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Añade una fila al registro de trazabilidad del proceso de depuración.&quot;&quot;&quot;</span>
     <span class="n">traza</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s2">"etapa"</span><span class="p">:</span> <span class="n">etapa</span><span class="p">,</span>
-        <span class="s2">"filas"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">datos</span><span class="p">),</span>
-        <span class="s2">"columnas"</span><span class="p">:</span> <span class="n">datos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-        <span class="s2">"pacientes"</span><span class="p">:</span> <span class="n">datos</span><span class="p">[</span><span class="s2">"patient_nbr"</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
+        <span class="s2">&quot;etapa&quot;</span><span class="p">:</span> <span class="n">etapa</span><span class="p">,</span>
+        <span class="s2">&quot;filas&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">datos</span><span class="p">),</span>
+        <span class="s2">&quot;columnas&quot;</span><span class="p">:</span> <span class="n">datos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;pacientes&quot;</span><span class="p">:</span> <span class="n">datos</span><span class="p">[</span><span class="s2">&quot;patient_nbr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
     <span class="p">})</span>
 
 
 <span class="n">limpio</span> <span class="o">=</span> <span class="n">crudo</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">registrar</span><span class="p">(</span><span class="s2">"0. Dataset crudo"</span><span class="p">,</span> <span class="n">limpio</span><span class="p">)</span>
+<span class="n">registrar</span><span class="p">(</span><span class="s2">&quot;0. Dataset crudo&quot;</span><span class="p">,</span> <span class="n">limpio</span><span class="p">)</span>
 
 <span class="c1"># --- Filtro 1: altas incompatibles con una readmisión --------------------</span>
-<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="o">~</span><span class="n">limpio</span><span class="p">[</span><span class="s2">"discharge_disposition_id"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">DESTINOS_EXCLUIDOS</span><span class="p">)]</span>
-<span class="n">registrar</span><span class="p">(</span><span class="s2">"1. Sin fallecimiento ni hospicio"</span><span class="p">,</span> <span class="n">limpio</span><span class="p">)</span>
+<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="o">~</span><span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;discharge_disposition_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">DESTINOS_EXCLUIDOS</span><span class="p">)]</span>
+<span class="n">registrar</span><span class="p">(</span><span class="s2">&quot;1. Sin fallecimiento ni hospicio&quot;</span><span class="p">,</span> <span class="n">limpio</span><span class="p">)</span>
 
 <span class="c1"># --- Filtro 2: género inválido ------------------------------------------</span>
-<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="n">limpio</span><span class="p">[</span><span class="s2">"gender"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"Unknown/Invalid"</span><span class="p">]</span>
-<span class="n">registrar</span><span class="p">(</span><span class="s2">"2. Sin género inválido"</span><span class="p">,</span> <span class="n">limpio</span><span class="p">)</span>
+<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Unknown/Invalid&quot;</span><span class="p">]</span>
+<span class="n">registrar</span><span class="p">(</span><span class="s2">&quot;2. Sin género inválido&quot;</span><span class="p">,</span> <span class="n">limpio</span><span class="p">)</span>
 
 <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">traza</span><span class="p">)</span>
 </pre></div>
@@ -749,37 +748,30 @@ document.write(`
 </table>
 </div></div></div>
 </div>
-<section id="eleccion-de-la-unidad-de-analisis">
-<h3>Elección de la unidad de análisis<a class="headerlink" href="#eleccion-de-la-unidad-de-analisis" title="Link to this heading">#</a></h3>
-<div class="cell tag_hide-cell docutils container">
-<details class="admonition hide above-input">
-<summary aria-label="Toggle hidden content">
-<p class="collapsed admonition-title">Show code cell content</p>
-<p class="expanded admonition-title">Hide code cell content</p>
-</summary>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">IDENTIFICADOR</span> <span class="o">=</span> <span class="s2">"patient_nbr"</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">IDENTIFICADOR</span> <span class="o">=</span> <span class="s2">&quot;patient_nbr&quot;</span>
 
 <span class="c1"># Las cohortes se construyen desde el crudo, aplicando solo las exclusiones</span>
 <span class="c1"># clínicas, para poder comparar antes de decidir la unidad de análisis.</span>
-<span class="n">base</span> <span class="o">=</span> <span class="n">crudo</span><span class="p">[</span><span class="o">~</span><span class="n">crudo</span><span class="p">[</span><span class="s2">"discharge_disposition_id"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">DESTINOS_EXCLUIDOS</span><span class="p">)]</span>
-<span class="n">base</span> <span class="o">=</span> <span class="n">base</span><span class="p">[</span><span class="n">base</span><span class="p">[</span><span class="s2">"gender"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"Unknown/Invalid"</span><span class="p">]</span>
-<span class="n">ordenado</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"encounter_id"</span><span class="p">)</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">crudo</span><span class="p">[</span><span class="o">~</span><span class="n">crudo</span><span class="p">[</span><span class="s2">&quot;discharge_disposition_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">DESTINOS_EXCLUIDOS</span><span class="p">)]</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">base</span><span class="p">[</span><span class="n">base</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Unknown/Invalid&quot;</span><span class="p">]</span>
+<span class="n">ordenado</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;encounter_id&quot;</span><span class="p">)</span>
 
 <span class="n">cohortes</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"Todos los encuentros"</span><span class="p">:</span> <span class="n">base</span><span class="p">,</span>
-    <span class="s2">"Uno aleatorio por paciente"</span><span class="p">:</span> <span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
+    <span class="s2">&quot;Todos los encuentros&quot;</span><span class="p">:</span> <span class="n">base</span><span class="p">,</span>
+    <span class="s2">&quot;Uno aleatorio por paciente&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
                                        <span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">IDENTIFICADOR</span><span class="p">)),</span>
-    <span class="s2">"Primer encuentro por paciente"</span><span class="p">:</span> <span class="n">ordenado</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">IDENTIFICADOR</span><span class="p">,</span>
-                                                              <span class="n">keep</span><span class="o">=</span><span class="s2">"first"</span><span class="p">),</span>
-    <span class="s2">"Último encuentro por paciente"</span><span class="p">:</span> <span class="n">ordenado</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">IDENTIFICADOR</span><span class="p">,</span>
-                                                              <span class="n">keep</span><span class="o">=</span><span class="s2">"last"</span><span class="p">),</span>
+    <span class="s2">&quot;Primer encuentro por paciente&quot;</span><span class="p">:</span> <span class="n">ordenado</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">IDENTIFICADOR</span><span class="p">,</span>
+                                                              <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;first&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Último encuentro por paciente&quot;</span><span class="p">:</span> <span class="n">ordenado</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">IDENTIFICADOR</span><span class="p">,</span>
+                                                              <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">),</span>
 <span class="p">}</span>
 
 <span class="n">comparacion_cohortes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">"registros"</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cohortes</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
-    <span class="s2">"pacientes"</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cohortes</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
-    <span class="s2">"tasa positiva (%)"</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">"readmitted"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"&lt;30"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="s2">&quot;registros&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cohortes</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="s2">&quot;pacientes&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cohortes</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="s2">&quot;tasa positiva (%)&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;readmitted&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&lt;30&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
                           <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cohortes</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
 <span class="p">})</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">comparacion_cohortes</span>
@@ -838,38 +830,32 @@ document.write(`
   </tbody>
 </table>
 </div></div></div>
-</details>
 </div>
-<div class="cell tag_hide-cell docutils container">
-<details class="admonition hide above-input">
-<summary aria-label="Toggle hidden content">
-<p class="collapsed admonition-title">Show code cell content</p>
-<p class="expanded admonition-title">Hide code cell content</p>
-</summary>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">frecuencia</span> <span class="o">=</span> <span class="n">base</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
-<span class="n">primero</span> <span class="o">=</span> <span class="n">ordenado</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">IDENTIFICADOR</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">"first"</span><span class="p">)</span>
-<span class="n">ultimo</span> <span class="o">=</span> <span class="n">ordenado</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">IDENTIFICADOR</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">"last"</span><span class="p">)</span>
+<span class="n">primero</span> <span class="o">=</span> <span class="n">ordenado</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">IDENTIFICADOR</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;first&quot;</span><span class="p">)</span>
+<span class="n">ultimo</span> <span class="o">=</span> <span class="n">ordenado</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">IDENTIFICADOR</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">)</span>
 
 <span class="n">varios_primero</span> <span class="o">=</span> <span class="n">primero</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">frecuencia</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
 <span class="n">varios_ultimo</span> <span class="o">=</span> <span class="n">ultimo</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">frecuencia</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
 
 <span class="n">sesgo_seleccion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">"pacientes"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;pacientes&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">(</span><span class="o">~</span><span class="n">varios_primero</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
         <span class="n">varios_primero</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
         <span class="n">varios_ultimo</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
     <span class="p">],</span>
-    <span class="s2">"tasa positiva (%)"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">primero</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">varios_primero</span><span class="p">,</span> <span class="s2">"readmitted"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"&lt;30"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
-        <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">primero</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">varios_primero</span><span class="p">,</span> <span class="s2">"readmitted"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"&lt;30"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
-        <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">ultimo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">varios_ultimo</span><span class="p">,</span> <span class="s2">"readmitted"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"&lt;30"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+    <span class="s2">&quot;tasa positiva (%)&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">primero</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">varios_primero</span><span class="p">,</span> <span class="s2">&quot;readmitted&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&lt;30&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">primero</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">varios_primero</span><span class="p">,</span> <span class="s2">&quot;readmitted&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&lt;30&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">ultimo</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">varios_ultimo</span><span class="p">,</span> <span class="s2">&quot;readmitted&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&lt;30&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
     <span class="p">],</span>
-<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"Un solo encuentro"</span><span class="p">,</span>
-          <span class="s2">"Primer encuentro de pacientes con varios"</span><span class="p">,</span>
-          <span class="s2">"Último encuentro de pacientes con varios"</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">sesgo_seleccion</span><span class="p">[</span><span class="s2">"</span><span class="si">% d</span><span class="s2">e la cohorte"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="mi">100</span> <span class="o">*</span> <span class="n">sesgo_seleccion</span><span class="p">[</span><span class="s2">"pacientes"</span><span class="p">]</span> <span class="o">/</span> <span class="n">base</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Un solo encuentro&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;Primer encuentro de pacientes con varios&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;Último encuentro de pacientes con varios&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">sesgo_seleccion</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">% d</span><span class="s2">e la cohorte&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="mi">100</span> <span class="o">*</span> <span class="n">sesgo_seleccion</span><span class="p">[</span><span class="s2">&quot;pacientes&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">base</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
 <span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">sesgo_seleccion</span>
 </pre></div>
@@ -921,8 +907,9 @@ document.write(`
   </tbody>
 </table>
 </div></div></div>
-</details>
 </div>
+<section id="eleccion-de-la-unidad-de-analisis">
+<h3>Elección de la unidad de análisis<a class="headerlink" href="#eleccion-de-la-unidad-de-analisis" title="Link to this heading">#</a></h3>
 <p>El capítulo 1 mostró que los encuentros de un mismo paciente no son independientes y que la posición del encuentro en el historial predice el desenlace. Hay cuatro formas de responder a ese problema y la elección afecta los resultados de forma sustancial, así que se documenta con evidencia.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -960,21 +947,17 @@ document.write(`
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Grupo</p></th>
-<th class="head"><p>Pacientes</p></th>
 <th class="head"><p>Tasa positiva</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Pacientes con un solo encuentro (76.7 %)</p></td>
-<td><p>53646</p></td>
 <td><p>4.26 %</p></td>
 </tr>
-<tr class="row-odd"><td><p>Primer encuentro de pacientes con varios (23.3 %)</p></td>
-<td><p>16341</p></td>
+<tr class="row-odd"><td><p>Primer encuentro de pacientes con varios</p></td>
 <td><p>24.47 %</p></td>
 </tr>
-<tr class="row-even"><td><p>Último encuentro de pacientes con varios (23.3 %)</p></td>
-<td><p>16341</p></td>
+<tr class="row-even"><td><p>Último encuentro de pacientes con varios</p></td>
 <td><p>7.23 %</p></td>
 </tr>
 </tbody>
@@ -988,13 +971,7 @@ document.write(`
 <li><p><strong>La unidad de análisis coincide con la unidad de decisión.</strong> El modelo se aplicaría en el momento de un alta concreta, no a un paciente en abstracto.</p></li>
 <li><p><strong>El agrupamiento resuelve la dependencia sin coste añadido.</strong> <code class="docutils literal notranslate"><span class="pre">StratifiedGroupKFold</span></code> mantiene a cada paciente íntegramente dentro de un mismo fold, de modo que el modelo nunca se evalúa sobre un paciente que ya vio en entrenamiento. Su costo computacional es idéntico al de <code class="docutils literal notranslate"><span class="pre">StratifiedKFold</span></code>; el incremento es únicamente el 42 % de filas adicionales.</p></li>
 </ol>
-<p>Se descarta la alternativa de colapsar el historial en una fila por paciente con variables agregadas. Tiene tres impedimentos en este dataset: la variable objetivo perdería su definición por episodio, cualquier agregado calculado sobre todos los episodios incorporaría información posterior al evento a predecir, y el 76.7 % de los pacientes tiene un único encuentro, por lo que esas variables serían constantes para tres de cada cuatro filas. Además, el dataset no incluye fechas, así que los intervalos entre ingresos no son calculables. Las variables <code class="docutils literal notranslate"><span class="pre">number_outpatient</span></code>, <code class="docutils literal notranslate"><span class="pre">number_emergency</span></code> y <code class="docutils literal notranslate"><span class="pre">number_inpatient</span></code> ya recogen esa información agregada del año previo a cada episodio, mirando solo hacia atrás y con una ventana idéntica para todas las filas, que es justo lo que un agregado construido a mano no podría garantizar.</p>
-</section>
-<section id="ponderacion-implicita-de-los-pacientes-recurrentes">
-<h3>Ponderación implícita de los pacientes recurrentes<a class="headerlink" href="#ponderacion-implicita-de-los-pacientes-recurrentes" title="Link to this heading">#</a></h3>
-<p>Conservar todos los encuentros tiene una consecuencia que conviene declarar: <strong>cada paciente pesa en la función de pérdida en proporción a su número de episodios</strong>. Un paciente con cuarenta ingresos contribuye cuarenta veces más al ajuste que uno con un solo ingreso, de modo que el modelo optimiza preferentemente el acierto sobre el perfil del paciente crónico recurrente.</p>
-<p>Esto no es un defecto del diseño, sino su consecuencia lógica. La unidad de decisión es el alta, no el paciente: cada egreso obliga a decidir si ese paciente necesita seguimiento reforzado, y un paciente que egresa cuarenta veces genera cuarenta decisiones. Ponderar por episodios es entonces la representación fiel del problema que el modelo va a resolver en la práctica, mientras que dar a cada paciente el mismo peso respondería a una pregunta distinta, la de caracterizar individuos en lugar de orientar altas.</p>
-<p>El precio de esa elección es que el desempeño observado refleja sobre todo a los pacientes de mayor recurrencia. Conviene tenerlo presente al interpretar los resultados de los capítulos 7 a 9: una métrica agregada no garantiza el mismo desempeño en un paciente que ingresa por primera vez, cuya tasa de readmisión es sustancialmente menor. La tabla siguiente cuantifica esa asimetría.</p>
+<p>Se descarta la alternativa de colapsar el historial en una fila por paciente con variables agregadas. Tiene tres impedimentos en este dataset: la variable objetivo perdería su definición por episodio, cualquier agregado calculado sobre todos los episodios incorporaría información posterior al evento a predecir, y el 76.7 % de los pacientes tiene un único encuentro, por lo que esas variables serían constantes para tres de cada cuatro filas. Además, el dataset no incluye fechas, así que los intervalos entre ingresos no son calculables. Las variables <code class="docutils literal notranslate"><span class="pre">number_inpatient</span></code>,</p>
 </section>
 <section id="por-que-la-posicion-del-encuentro-no-se-incorpora-como-predictor">
 <h3>Por qué la posición del encuentro no se incorpora como predictor<a class="headerlink" href="#por-que-la-posicion-del-encuentro-no-se-incorpora-como-predictor" title="Link to this heading">#</a></h3>
@@ -1013,354 +990,22 @@ document.write(`
 <p><strong><code class="docutils literal notranslate"><span class="pre">encounter_id</span></code>.</strong> Identificador secuencial del episodio, sin contenido clínico. Su eliminación no solo evita ruido: al ser creciente en el tiempo, un modelo podría usarlo para captar tendencias del propio registro (cambios de codificación, incorporación de hospitales a la red) en lugar del mecanismo clínico que se quiere modelar.</p>
 <p><strong><code class="docutils literal notranslate"><span class="pre">weight</span></code>.</strong> El 96.86 % de los valores está ausente. Imputar supondría generar un valor sintético para casi toda la muestra, de modo que la variable aportaría el artefacto de la imputación y no información del paciente. La sección 4.3 del capítulo 1 añade un argumento definitivo: su ausencia es la única del conjunto completamente independiente del desenlace (chi² nulo, p = 1.00), así que tampoco el hecho de faltar es informativo. Se descarta sin sustituto.</p>
 <p><strong><code class="docutils literal notranslate"><span class="pre">payer_code</span></code>.</strong> El 39.56 % de valores ausentes y, sobre todo, su naturaleza: identifica al asegurador, no describe el estado clínico del paciente. Su asociación con la readmisión reflejaría diferencias de cobertura y acceso al sistema antes que riesgo médico, lo que introduciría un factor de confusión difícil de interpretar en un modelo destinado a orientar decisiones clínicas al alta. Se deja constancia en las limitaciones de que el contexto asegurador queda, por tanto, fuera del análisis.</p>
-<div class="cell tag_hide-input docutils container">
-<details class="admonition hide above-input">
-<summary aria-label="Toggle hidden content">
-<p class="collapsed admonition-title">Show code cell source</p>
-<p class="expanded admonition-title">Hide code cell source</p>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PANEL_FARMACOS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">"metformin"</span><span class="p">,</span> <span class="s2">"repaglinide"</span><span class="p">,</span> <span class="s2">"nateglinide"</span><span class="p">,</span> <span class="s2">"chlorpropamide"</span><span class="p">,</span>
-    <span class="s2">"glimepiride"</span><span class="p">,</span> <span class="s2">"acetohexamide"</span><span class="p">,</span> <span class="s2">"glipizide"</span><span class="p">,</span> <span class="s2">"glyburide"</span><span class="p">,</span> <span class="s2">"tolbutamide"</span><span class="p">,</span>
-    <span class="s2">"pioglitazone"</span><span class="p">,</span> <span class="s2">"rosiglitazone"</span><span class="p">,</span> <span class="s2">"acarbose"</span><span class="p">,</span> <span class="s2">"miglitol"</span><span class="p">,</span> <span class="s2">"troglitazone"</span><span class="p">,</span>
-    <span class="s2">"tolazamide"</span><span class="p">,</span> <span class="s2">"examide"</span><span class="p">,</span> <span class="s2">"citoglipton"</span><span class="p">,</span> <span class="s2">"insulin"</span><span class="p">,</span> <span class="s2">"glyburide-metformin"</span><span class="p">,</span>
-    <span class="s2">"glipizide-metformin"</span><span class="p">,</span> <span class="s2">"glimepiride-pioglitazone"</span><span class="p">,</span>
-    <span class="s2">"metformin-rosiglitazone"</span><span class="p">,</span> <span class="s2">"metformin-pioglitazone"</span><span class="p">,</span>
-<span class="p">]</span>
-<span class="n">MINIMO_VARIACION</span> <span class="o">=</span> <span class="mi">25</span>
-
-<span class="n">variacion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
-    <span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="n">limpio</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"No"</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">PANEL_FARMACOS</span><span class="p">}</span>
-<span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">colores</span> <span class="o">=</span> <span class="p">[</span><span class="n">PALETA</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">MINIMO_VARIACION</span> <span class="k">else</span> <span class="n">PALETA</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-           <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">variacion</span><span class="p">]</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">variacion</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">variacion</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colores</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">MINIMO_VARIACION</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
-           <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Umbral (</span><span class="si">{</span><span class="n">MINIMO_VARIACION</span><span class="si">}</span><span class="s2"> encuentros)"</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">valor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">variacion</span><span class="p">):</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">valor</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.25</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">valor</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Encuentros con valor distinto de 'No' (escala logarítmica)"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Variación de cada fármaco del panel"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"lower right"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="n">FARMACOS_DESCARTADOS</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">variacion</span><span class="p">[</span><span class="n">variacion</span> <span class="o">&lt;</span> <span class="n">MINIMO_VARIACION</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Descartados (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">FARMACOS_DESCARTADOS</span><span class="p">)</span><span class="si">}</span><span class="s2">): "</span>
-      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FARMACOS_DESCARTADOS</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Retenidos   (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">PANEL_FARMACOS</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">FARMACOS_DESCARTADOS</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
-
-<span class="n">resumen_variacion</span> <span class="o">=</span> <span class="n">variacion</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">"encuentros con variación"</span><span class="p">)</span>
-<span class="n">resumen_variacion</span><span class="p">[</span><span class="s2">"</span><span class="si">% d</span><span class="s2">el total"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="mi">100</span> <span class="o">*</span> <span class="n">resumen_variacion</span><span class="p">[</span><span class="s2">"encuentros con variación"</span><span class="p">]</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">limpio</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">resumen_variacion</span><span class="p">[</span><span class="s2">"decisión"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-    <span class="n">resumen_variacion</span><span class="p">[</span><span class="s2">"encuentros con variación"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">MINIMO_VARIACION</span><span class="p">,</span>
-    <span class="s2">"descartado"</span><span class="p">,</span> <span class="s2">"retenido"</span><span class="p">)</span>
-<span class="n">resumen_variacion</span>
-</pre></div>
-</div>
-</div>
-</details>
-<div class="cell_output docutils container">
-<img alt="_images/9e37e3e8b99c2b349749b08a1f2a66a8d423ad3c29f2f590e1ee8080fea8219e.png" src="_images/9e37e3e8b99c2b349749b08a1f2a66a8d423ad3c29f2f590e1ee8080fea8219e.png" />
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Descartados (9): acetohexamide, citoglipton, examide, glimepiride-pioglitazone, glipizide-metformin, metformin-pioglitazone, metformin-rosiglitazone, tolbutamide, troglitazone
-Retenidos   (14)
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>encuentros con variación</th>
-      <th>% del total</th>
-      <th>decisión</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>examide</th>
-      <td>0</td>
-      <td>0.000</td>
-      <td>descartado</td>
-    </tr>
-    <tr>
-      <th>citoglipton</th>
-      <td>0</td>
-      <td>0.000</td>
-      <td>descartado</td>
-    </tr>
-    <tr>
-      <th>glimepiride-pioglitazone</th>
-      <td>1</td>
-      <td>0.001</td>
-      <td>descartado</td>
-    </tr>
-    <tr>
-      <th>acetohexamide</th>
-      <td>1</td>
-      <td>0.001</td>
-      <td>descartado</td>
-    </tr>
-    <tr>
-      <th>metformin-pioglitazone</th>
-      <td>1</td>
-      <td>0.001</td>
-      <td>descartado</td>
-    </tr>
-    <tr>
-      <th>metformin-rosiglitazone</th>
-      <td>2</td>
-      <td>0.002</td>
-      <td>descartado</td>
-    </tr>
-    <tr>
-      <th>troglitazone</th>
-      <td>3</td>
-      <td>0.003</td>
-      <td>descartado</td>
-    </tr>
-    <tr>
-      <th>glipizide-metformin</th>
-      <td>13</td>
-      <td>0.013</td>
-      <td>descartado</td>
-    </tr>
-    <tr>
-      <th>tolbutamide</th>
-      <td>21</td>
-      <td>0.021</td>
-      <td>descartado</td>
-    </tr>
-    <tr>
-      <th>miglitol</th>
-      <td>38</td>
-      <td>0.038</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>tolazamide</th>
-      <td>39</td>
-      <td>0.039</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>chlorpropamide</th>
-      <td>85</td>
-      <td>0.086</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>acarbose</th>
-      <td>305</td>
-      <td>0.307</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>nateglinide</th>
-      <td>689</td>
-      <td>0.694</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>glyburide-metformin</th>
-      <td>698</td>
-      <td>0.703</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>repaglinide</th>
-      <td>1518</td>
-      <td>1.528</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>glimepiride</th>
-      <td>5122</td>
-      <td>5.156</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>rosiglitazone</th>
-      <td>6303</td>
-      <td>6.345</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>pioglitazone</th>
-      <td>7254</td>
-      <td>7.302</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>glyburide</th>
-      <td>10523</td>
-      <td>10.593</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>glipizide</th>
-      <td>12530</td>
-      <td>12.613</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>metformin</th>
-      <td>19843</td>
-      <td>19.975</td>
-      <td>retenido</td>
-    </tr>
-    <tr>
-      <th>insulin</th>
-      <td>52964</td>
-      <td>53.316</td>
-      <td>retenido</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<div class="cell tag_hide-input docutils container">
-<details class="admonition hide above-input">
-<summary aria-label="Toggle hidden content">
-<p class="collapsed admonition-title">Show code cell source</p>
-<p class="expanded admonition-title">Hide code cell source</p>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">OneHotEncoder</span>
-
-<span class="n">categoricas_actuales</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columnas_texto</span><span class="p">(</span><span class="n">limpio</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s2">"readmitted"</span><span class="p">]</span>
-<span class="n">CASI_NULOS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"examide"</span><span class="p">,</span> <span class="s2">"citoglipton"</span><span class="p">,</span> <span class="s2">"acetohexamide"</span><span class="p">,</span>
-              <span class="s2">"glimepiride-pioglitazone"</span><span class="p">,</span> <span class="s2">"metformin-pioglitazone"</span><span class="p">,</span>
-              <span class="s2">"metformin-rosiglitazone"</span><span class="p">,</span> <span class="s2">"troglitazone"</span><span class="p">]</span>
-<span class="n">ESCASOS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"glipizide-metformin"</span><span class="p">,</span> <span class="s2">"tolbutamide"</span><span class="p">]</span>
-<span class="n">objetivo</span> <span class="o">=</span> <span class="p">(</span><span class="n">limpio</span><span class="p">[</span><span class="s2">"readmitted"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"&lt;30"</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-<span class="n">escenarios</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"Solo sin varianza nula (descarta 7)"</span><span class="p">:</span>
-        <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">categoricas_actuales</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CASI_NULOS</span><span class="p">],</span>
-    <span class="s2">"Umbral de 25 (descarta 9)"</span><span class="p">:</span>
-        <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">categoricas_actuales</span>
-         <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CASI_NULOS</span> <span class="o">+</span> <span class="n">ESCASOS</span><span class="p">],</span>
-    <span class="s2">"Panel completo (descarta 0)"</span><span class="p">:</span> <span class="n">categoricas_actuales</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">etiqueta</span><span class="p">,</span> <span class="n">columnas</span> <span class="ow">in</span> <span class="n">escenarios</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">matriz</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s2">"infrequent_if_exist"</span><span class="p">,</span>
-                           <span class="n">min_frequency</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">limpio</span><span class="p">[</span><span class="n">columnas</span><span class="p">])</span>
-    <span class="n">modelo</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s2">"saga"</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-                                <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
-    <span class="n">inicio</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-    <span class="n">modelo</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">matriz</span><span class="p">,</span> <span class="n">objetivo</span><span class="p">)</span>
-    <span class="n">duracion</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">inicio</span>
-    <span class="n">no_nulos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">((</span><span class="n">matriz</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s2">"escenario"</span><span class="p">:</span> <span class="n">etiqueta</span><span class="p">,</span>
-        <span class="s2">"columnas"</span><span class="p">:</span> <span class="n">matriz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-        <span class="s2">"columnas con menos de 5 no nulos"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="n">no_nulos</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
-        <span class="s2">"columnas con menos de 30 no nulos"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="n">no_nulos</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
-        <span class="s2">"tiempo (s)"</span><span class="p">:</span> <span class="n">duracion</span><span class="p">,</span>
-    <span class="p">})</span>
-
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"escenario"</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</details>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>columnas</th>
-      <th>columnas con menos de 5 no nulos</th>
-      <th>columnas con menos de 30 no nulos</th>
-      <th>tiempo (s)</th>
-    </tr>
-    <tr>
-      <th>escenario</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Solo sin varianza nula (descarta 7)</th>
-      <td>166</td>
-      <td>0</td>
-      <td>2</td>
-      <td>3.80</td>
-    </tr>
-    <tr>
-      <th>Umbral de 25 (descarta 9)</th>
-      <td>162</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2.31</td>
-    </tr>
-    <tr>
-      <th>Panel completo (descarta 0)</th>
-      <td>178</td>
-      <td>5</td>
-      <td>7</td>
-      <td>9.30</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<p><strong>Los nueve fármacos con variación insuficiente.</strong> El criterio de eliminación no puede ser la concentración relativa: <code class="docutils literal notranslate"><span class="pre">repaglinide</span></code> tiene el 98.5 % de sus registros en <code class="docutils literal notranslate"><span class="pre">No</span></code> y aun así 1,518 encuentros con variación, suficientes para estimar un efecto. Tampoco puede basarse en el número de readmisiones dentro de la categoría minoritaria, porque eso supondría usar la variable objetivo para seleccionar predictores, una forma de selección supervisada ejecutada fuera de la validación cruzada.</p>
-<p>Se adopta un criterio no supervisado y de naturaleza computacional: se descartan los fármacos con <strong>menos de veinticinco encuentros de variación</strong>. <code class="docutils literal notranslate"><span class="pre">examide</span></code> y <code class="docutils literal notranslate"><span class="pre">citoglipton</span></code> no registran ninguno; <code class="docutils literal notranslate"><span class="pre">acetohexamide</span></code>, <code class="docutils literal notranslate"><span class="pre">glimepiride-pioglitazone</span></code> y <code class="docutils literal notranslate"><span class="pre">metformin-pioglitazone</span></code> registran uno; <code class="docutils literal notranslate"><span class="pre">metformin-rosiglitazone</span></code> dos; <code class="docutils literal notranslate"><span class="pre">troglitazone</span></code> tres; <code class="docutils literal notranslate"><span class="pre">glipizide-metformin</span></code> trece y <code class="docutils literal notranslate"><span class="pre">tolbutamide</span></code> veintiuno. El siguiente fármaco del panel salta a treinta y ocho, de modo que el umbral cae en un tramo vacío de la distribución y no parte ningún grupo por la mitad.</p>
-<p>La justificación del umbral no es teórica sino el resultado de un diagnóstico, y la comparación de tres escenarios lo sustenta. El costo del solver no depende del número de columnas sino de su dispersión: conservar el panel completo añade un 10 % de columnas respecto al conjunto depurado, pero <strong>cuadruplica</strong> el tiempo de ajuste de la regresión logística, de 2.31 a 9.30 segundos. Conservar solo los dos fármacos con trece y veintiún encuentros añade un 2.5 % de columnas y aun así eleva el tiempo un 64 %. El número de columnas con menos de treinta valores no nulos predice el tiempo mucho mejor que el total de columnas, y el umbral de veinticinco encuentros es exactamente el punto en que esas columnas desaparecen.</p>
-<p>El mecanismo es el condicionamiento del problema de optimización. Una columna con un puñado de valores no nulos sobre casi cien mil filas introduce una dirección de curvatura casi nula, lo que aumenta el número de condición de la matriz de diseño y ralentiza cada iteración del solver SAGA sin aportar capacidad predictiva. Extrapolado a las dieciséis corridas de la familia lineal, con 185 ajustes cada una, la diferencia entre el escenario depurado y el panel completo supera las cinco horas de cómputo. En Naive Bayes el problema es distinto pero del mismo origen: una columna de varianza nula vuelve numéricamente inestable la verosimilitud con los valores más pequeños de <code class="docutils literal notranslate"><span class="pre">var_smoothing</span></code>.</p>
-<p>Los fármacos poco frecuentes que superan el umbral se conservan, y el capítulo 4 cuantifica la incertidumbre de su estimación en lugar de descartarlos: la escasez de una categoría no implica ausencia de señal, sino imposibilidad de estimarla con precisión, y ambas cosas se distinguen mirando el intervalo de confianza y no la tasa puntual.</p>
+<p><strong>Los nueve fármacos con varianza nula o casi nula.</strong> <code class="docutils literal notranslate"><span class="pre">acetohexamide</span></code>, <code class="docutils literal notranslate"><span class="pre">troglitazone</span></code>, <code class="docutils literal notranslate"><span class="pre">examide</span></code>, <code class="docutils literal notranslate"><span class="pre">citoglipton</span></code>, <code class="docutils literal notranslate"><span class="pre">glimepiride-pioglitazone</span></code>, <code class="docutils literal notranslate"><span class="pre">metformin-rosiglitazone</span></code> y <code class="docutils literal notranslate"><span class="pre">metformin-pioglitazone</span></code> son estrictamente constantes: todos los encuentros registran el valor <code class="docutils literal notranslate"><span class="pre">No</span></code>, por lo que su varianza es cero y no pueden discriminar entre clases. En <code class="docutils literal notranslate"><span class="pre">tolbutamide</span></code> y <code class="docutils literal notranslate"><span class="pre">glipizide-metformin</span></code> la variación se limita a una decena de casos sobre 99,340, cantidad insuficiente para estimar ningún efecto con estabilidad. Más allá de su inutilidad predictiva, conservarlos tiene un costo concreto: al aplicar <code class="docutils literal notranslate"><span class="pre">OneHotEncoder</span></code> dentro de cada fold generarían columnas casi vacías, y una categoría presente solo en el conjunto de entrenamiento de un fold produce una columna nula en el de validación, lo que desestabiliza los coeficientes de los modelos lineales entre repeticiones.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># --- Variable objetivo ---------------------------------------------------</span>
-<span class="n">limpio</span><span class="p">[</span><span class="s2">"readmitted_30"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">limpio</span><span class="p">[</span><span class="s2">"readmitted"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"&lt;30"</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;readmitted_30&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;readmitted&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&lt;30&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
 <span class="c1"># --- Columnas descartadas (justificación en el capítulo 1, sección 5) ----</span>
-<span class="n">CASI_NULOS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"examide"</span><span class="p">,</span> <span class="s2">"citoglipton"</span><span class="p">,</span> <span class="s2">"acetohexamide"</span><span class="p">,</span>
-              <span class="s2">"glimepiride-pioglitazone"</span><span class="p">,</span> <span class="s2">"metformin-pioglitazone"</span><span class="p">,</span>
-              <span class="s2">"metformin-rosiglitazone"</span><span class="p">,</span> <span class="s2">"troglitazone"</span><span class="p">]</span>
-<span class="n">COLUMNAS_DESCARTADAS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"encounter_id"</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">,</span> <span class="s2">"payer_code"</span><span class="p">,</span> <span class="s2">"readmitted"</span><span class="p">]</span>
+<span class="n">FARMACOS_CONSTANTES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;acetohexamide&quot;</span><span class="p">,</span> <span class="s2">&quot;troglitazone&quot;</span><span class="p">,</span> <span class="s2">&quot;examide&quot;</span><span class="p">,</span> <span class="s2">&quot;citoglipton&quot;</span><span class="p">,</span> <span class="s2">&quot;tolbutamide&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;glipizide-metformin&quot;</span><span class="p">,</span> <span class="s2">&quot;glimepiride-pioglitazone&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;metformin-rosiglitazone&quot;</span><span class="p">,</span> <span class="s2">&quot;metformin-pioglitazone&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">COLUMNAS_DESCARTADAS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;encounter_id&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;payer_code&quot;</span><span class="p">,</span> <span class="s2">&quot;readmitted&quot;</span><span class="p">]</span>
 
-<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">COLUMNAS_DESCARTADAS</span> <span class="o">+</span> <span class="n">CASI_NULOS</span><span class="p">)</span>
-<span class="n">registrar</span><span class="p">(</span><span class="s2">"4. Columnas descartadas y target derivado"</span><span class="p">,</span> <span class="n">limpio</span><span class="p">)</span>
+<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">COLUMNAS_DESCARTADAS</span> <span class="o">+</span> <span class="n">FARMACOS_CONSTANTES</span><span class="p">)</span>
+<span class="n">registrar</span><span class="p">(</span><span class="s2">&quot;4. Columnas descartadas y target derivado&quot;</span><span class="p">,</span> <span class="n">limpio</span><span class="p">)</span>
 
 <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">traza</span><span class="p">)</span>
 </pre></div>
@@ -1417,14 +1062,14 @@ Retenidos   (14)
       <th>3</th>
       <td>4. Columnas descartadas y target derivado</td>
       <td>99340</td>
-      <td>40</td>
+      <td>38</td>
       <td>69987</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>La depuración lleva el conjunto de 101,766 encuentros a 69,987 pacientes únicos, y de 50 a 40 columnas. La pérdida de filas se explica casi por completo por el filtro de independencia (29,353 encuentros repetidos); las exclusiones clínicas suman 2,426 registros.</p>
+<p>La depuración lleva el conjunto de 101,766 encuentros a 69,987 pacientes únicos, y de 50 a 38 columnas. La pérdida de filas se explica casi por completo por el filtro de independencia (29,353 encuentros repetidos); las exclusiones clínicas suman 2,426 registros.</p>
 </section>
 </section>
 <section id="ingenieria-de-caracteristicas">
@@ -1436,7 +1081,7 @@ Retenidos   (14)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">agrupar_icd9</span><span class="p">(</span><span class="n">codigo</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Asigna un código ICD-9 a su capítulo clínico.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Asigna un código ICD-9 a su capítulo clínico.</span>
 
 <span class="sd">    El agrupamiento sigue el usado en la literatura sobre este dataset: se</span>
 <span class="sd">    aísla la diabetes (250.xx) y el resto se asigna al capítulo ICD-9</span>
@@ -1452,47 +1097,47 @@ Retenidos   (14)
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
 <span class="sd">        Nombre del capítulo clínico.</span>
-<span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">codigo</span><span class="p">)</span> <span class="ow">or</span> <span class="n">codigo</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"No registrado"</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">codigo</span><span class="p">)</span> <span class="ow">or</span> <span class="n">codigo</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;No registrado&quot;</span>
 
     <span class="n">codigo</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">codigo</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">codigo</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">"V"</span><span class="p">,</span> <span class="s2">"E"</span><span class="p">)):</span>
-        <span class="k">return</span> <span class="s2">"Otro"</span>
-    <span class="k">if</span> <span class="n">codigo</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"250"</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">"Diabetes"</span>
+    <span class="k">if</span> <span class="n">codigo</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">&quot;V&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="s2">&quot;Otro&quot;</span>
+    <span class="k">if</span> <span class="n">codigo</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;250&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Diabetes&quot;</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">valor</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">codigo</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Otro"</span>
+        <span class="k">return</span> <span class="s2">&quot;Otro&quot;</span>
 
     <span class="k">if</span> <span class="mi">390</span> <span class="o">&lt;=</span> <span class="n">valor</span> <span class="o">&lt;=</span> <span class="mi">459</span> <span class="ow">or</span> <span class="n">valor</span> <span class="o">==</span> <span class="mi">785</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Circulatorio"</span>
+        <span class="k">return</span> <span class="s2">&quot;Circulatorio&quot;</span>
     <span class="k">if</span> <span class="mi">460</span> <span class="o">&lt;=</span> <span class="n">valor</span> <span class="o">&lt;=</span> <span class="mi">519</span> <span class="ow">or</span> <span class="n">valor</span> <span class="o">==</span> <span class="mi">786</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Respiratorio"</span>
+        <span class="k">return</span> <span class="s2">&quot;Respiratorio&quot;</span>
     <span class="k">if</span> <span class="mi">520</span> <span class="o">&lt;=</span> <span class="n">valor</span> <span class="o">&lt;=</span> <span class="mi">579</span> <span class="ow">or</span> <span class="n">valor</span> <span class="o">==</span> <span class="mi">787</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Digestivo"</span>
+        <span class="k">return</span> <span class="s2">&quot;Digestivo&quot;</span>
     <span class="k">if</span> <span class="mi">800</span> <span class="o">&lt;=</span> <span class="n">valor</span> <span class="o">&lt;=</span> <span class="mi">999</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Lesiones"</span>
+        <span class="k">return</span> <span class="s2">&quot;Lesiones&quot;</span>
     <span class="k">if</span> <span class="mi">710</span> <span class="o">&lt;=</span> <span class="n">valor</span> <span class="o">&lt;=</span> <span class="mi">739</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Musculoesquelético"</span>
+        <span class="k">return</span> <span class="s2">&quot;Musculoesquelético&quot;</span>
     <span class="k">if</span> <span class="mi">580</span> <span class="o">&lt;=</span> <span class="n">valor</span> <span class="o">&lt;=</span> <span class="mi">629</span> <span class="ow">or</span> <span class="n">valor</span> <span class="o">==</span> <span class="mi">788</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Genitourinario"</span>
+        <span class="k">return</span> <span class="s2">&quot;Genitourinario&quot;</span>
     <span class="k">if</span> <span class="mi">140</span> <span class="o">&lt;=</span> <span class="n">valor</span> <span class="o">&lt;=</span> <span class="mi">239</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Neoplasias"</span>
-    <span class="k">return</span> <span class="s2">"Otro"</span>
+        <span class="k">return</span> <span class="s2">&quot;Neoplasias&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;Otro&quot;</span>
 
 
-<span class="k">for</span> <span class="n">columna</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"diag_1"</span><span class="p">,</span> <span class="s2">"diag_2"</span><span class="p">,</span> <span class="s2">"diag_3"</span><span class="p">]:</span>
-    <span class="n">limpio</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s2">_grupo"</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">agrupar_icd9</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">columna</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;diag_1&quot;</span><span class="p">,</span> <span class="s2">&quot;diag_2&quot;</span><span class="p">,</span> <span class="s2">&quot;diag_3&quot;</span><span class="p">]:</span>
+    <span class="n">limpio</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s2">_grupo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">agrupar_icd9</span><span class="p">)</span>
 
-<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"diag_1"</span><span class="p">,</span> <span class="s2">"diag_2"</span><span class="p">,</span> <span class="s2">"diag_3"</span><span class="p">])</span>
+<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;diag_1&quot;</span><span class="p">,</span> <span class="s2">&quot;diag_2&quot;</span><span class="p">,</span> <span class="s2">&quot;diag_3&quot;</span><span class="p">])</span>
 
 <span class="n">grupos_diag</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">"principal"</span><span class="p">:</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">"diag_1_grupo"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-    <span class="s2">"secundario"</span><span class="p">:</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">"diag_2_grupo"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-    <span class="s2">"terciario"</span><span class="p">:</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">"diag_3_grupo"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;principal&quot;</span><span class="p">:</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;diag_1_grupo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;secundario&quot;</span><span class="p">:</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;diag_2_grupo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;terciario&quot;</span><span class="p">:</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;diag_3_grupo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
 <span class="p">})</span>
 <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">grupos_diag</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
@@ -1595,16 +1240,16 @@ Retenidos   (14)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ORDEN_EDAD</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">"[0-10)"</span><span class="p">,</span> <span class="s2">"[10-20)"</span><span class="p">,</span> <span class="s2">"[20-30)"</span><span class="p">,</span> <span class="s2">"[30-40)"</span><span class="p">,</span> <span class="s2">"[40-50)"</span><span class="p">,</span>
-    <span class="s2">"[50-60)"</span><span class="p">,</span> <span class="s2">"[60-70)"</span><span class="p">,</span> <span class="s2">"[70-80)"</span><span class="p">,</span> <span class="s2">"[80-90)"</span><span class="p">,</span> <span class="s2">"[90-100)"</span><span class="p">,</span>
+    <span class="s2">&quot;[0-10)&quot;</span><span class="p">,</span> <span class="s2">&quot;[10-20)&quot;</span><span class="p">,</span> <span class="s2">&quot;[20-30)&quot;</span><span class="p">,</span> <span class="s2">&quot;[30-40)&quot;</span><span class="p">,</span> <span class="s2">&quot;[40-50)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;[50-60)&quot;</span><span class="p">,</span> <span class="s2">&quot;[60-70)&quot;</span><span class="p">,</span> <span class="s2">&quot;[70-80)&quot;</span><span class="p">,</span> <span class="s2">&quot;[80-90)&quot;</span><span class="p">,</span> <span class="s2">&quot;[90-100)&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 <span class="n">ETIQUETAS_EDAD</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ORDEN_EDAD</span><span class="p">)}</span>
 
-<span class="n">limpio</span><span class="p">[</span><span class="s2">"age_ord"</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span><span class="n">v</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ORDEN_EDAD</span><span class="p">)})</span>
-<span class="k">assert</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">"age_ord"</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="s2">"Hay categorías de edad sin mapear"</span>
+<span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;age_ord&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span><span class="n">v</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ORDEN_EDAD</span><span class="p">)})</span>
+<span class="k">assert</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;age_ord&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="s2">&quot;Hay categorías de edad sin mapear&quot;</span>
 
-<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"age"</span><span class="p">])</span>
-<span class="n">limpio</span><span class="p">[</span><span class="s2">"age_ord"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">ETIQUETAS_EDAD</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">"pacientes"</span><span class="p">)</span>
+<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">])</span>
+<span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;age_ord&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">ETIQUETAS_EDAD</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">&quot;pacientes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1686,24 +1331,24 @@ Retenidos   (14)
 <p><strong>Nota metodológica.</strong> Una primera versión de este trabajo incluía también <code class="docutils literal notranslate"><span class="pre">visitas_previas</span></code>, la suma de las tres variables de utilización. Se descartó como predictor: al ser una combinación lineal exacta de <code class="docutils literal notranslate"><span class="pre">number_outpatient</span></code>, <code class="docutils literal notranslate"><span class="pre">number_emergency</span></code> y <code class="docutils literal notranslate"><span class="pre">number_inpatient</span></code>, introduce colinealidad perfecta. El factor de inflación de la varianza de ese bloque se vuelve infinito y los coeficientes de cualquier modelo lineal quedan indeterminados. El indicador binario no tiene ese problema porque es una función no lineal de una sola variable, y aporta información distinta: separa el hecho de haber estado hospitalizado del número de veces.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">limpio</span><span class="p">[</span><span class="s2">"hospitalizacion_previa"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">limpio</span><span class="p">[</span><span class="s2">"number_inpatient"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;hospitalizacion_previa&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;number_inpatient&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
 <span class="n">utilizacion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">"</span><span class="si">% c</span><span class="s2">on valor cero"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;</span><span class="si">% c</span><span class="s2">on valor cero&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">limpio</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"number_outpatient"</span><span class="p">,</span> <span class="s2">"number_emergency"</span><span class="p">,</span> <span class="s2">"number_inpatient"</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;number_outpatient&quot;</span><span class="p">,</span> <span class="s2">&quot;number_emergency&quot;</span><span class="p">,</span> <span class="s2">&quot;number_inpatient&quot;</span><span class="p">]</span>
     <span class="p">],</span>
-    <span class="s2">"media"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;media&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="n">limpio</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"number_outpatient"</span><span class="p">,</span> <span class="s2">"number_emergency"</span><span class="p">,</span> <span class="s2">"number_inpatient"</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;number_outpatient&quot;</span><span class="p">,</span> <span class="s2">&quot;number_emergency&quot;</span><span class="p">,</span> <span class="s2">&quot;number_inpatient&quot;</span><span class="p">]</span>
     <span class="p">],</span>
-    <span class="s2">"máximo"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;máximo&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="n">limpio</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"number_outpatient"</span><span class="p">,</span> <span class="s2">"number_emergency"</span><span class="p">,</span> <span class="s2">"number_inpatient"</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;number_outpatient&quot;</span><span class="p">,</span> <span class="s2">&quot;number_emergency&quot;</span><span class="p">,</span> <span class="s2">&quot;number_inpatient&quot;</span><span class="p">]</span>
     <span class="p">],</span>
-<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"number_outpatient"</span><span class="p">,</span> <span class="s2">"number_emergency"</span><span class="p">,</span> <span class="s2">"number_inpatient"</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Pacientes con hospitalización previa: "</span>
-      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">limpio</span><span class="p">[</span><span class="s1">'hospitalizacion_previa'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> %"</span><span class="p">)</span>
+<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;number_outpatient&quot;</span><span class="p">,</span> <span class="s2">&quot;number_emergency&quot;</span><span class="p">,</span> <span class="s2">&quot;number_inpatient&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pacientes con hospitalización previa: &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">limpio</span><span class="p">[</span><span class="s1">&#39;hospitalizacion_previa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> %&quot;</span><span class="p">)</span>
 <span class="n">utilizacion</span>
 </pre></div>
 </div>
@@ -1766,18 +1411,18 @@ Retenidos   (14)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">FARMACOS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">"metformin"</span><span class="p">,</span> <span class="s2">"repaglinide"</span><span class="p">,</span> <span class="s2">"nateglinide"</span><span class="p">,</span> <span class="s2">"chlorpropamide"</span><span class="p">,</span> <span class="s2">"glimepiride"</span><span class="p">,</span>
-    <span class="s2">"glipizide"</span><span class="p">,</span> <span class="s2">"glyburide"</span><span class="p">,</span> <span class="s2">"pioglitazone"</span><span class="p">,</span> <span class="s2">"rosiglitazone"</span><span class="p">,</span> <span class="s2">"acarbose"</span><span class="p">,</span>
-    <span class="s2">"miglitol"</span><span class="p">,</span> <span class="s2">"tolazamide"</span><span class="p">,</span> <span class="s2">"insulin"</span><span class="p">,</span> <span class="s2">"glyburide-metformin"</span><span class="p">,</span>
+    <span class="s2">&quot;metformin&quot;</span><span class="p">,</span> <span class="s2">&quot;repaglinide&quot;</span><span class="p">,</span> <span class="s2">&quot;nateglinide&quot;</span><span class="p">,</span> <span class="s2">&quot;chlorpropamide&quot;</span><span class="p">,</span> <span class="s2">&quot;glimepiride&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;glipizide&quot;</span><span class="p">,</span> <span class="s2">&quot;glyburide&quot;</span><span class="p">,</span> <span class="s2">&quot;pioglitazone&quot;</span><span class="p">,</span> <span class="s2">&quot;rosiglitazone&quot;</span><span class="p">,</span> <span class="s2">&quot;acarbose&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;miglitol&quot;</span><span class="p">,</span> <span class="s2">&quot;tolazamide&quot;</span><span class="p">,</span> <span class="s2">&quot;insulin&quot;</span><span class="p">,</span> <span class="s2">&quot;glyburide-metformin&quot;</span><span class="p">,</span>
 <span class="p">]</span>
-<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">limpio</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">FARMACOS</span><span class="p">),</span> <span class="s2">"Fármaco no encontrado"</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">limpio</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">FARMACOS</span><span class="p">),</span> <span class="s2">&quot;Fármaco no encontrado&quot;</span>
 
-<span class="n">limpio</span><span class="p">[</span><span class="s2">"n_farmacos_activos"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">limpio</span><span class="p">[</span><span class="n">FARMACOS</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">"Up"</span><span class="p">,</span> <span class="s2">"Down"</span><span class="p">,</span> <span class="s2">"Steady"</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;n_farmacos_activos&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">limpio</span><span class="p">[</span><span class="n">FARMACOS</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Up&quot;</span><span class="p">,</span> <span class="s2">&quot;Down&quot;</span><span class="p">,</span> <span class="s2">&quot;Steady&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Fármacos retenidos: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">FARMACOS</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="n">limpio</span><span class="p">[</span><span class="s2">"n_farmacos_activos"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">"pacientes"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fármacos retenidos: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">FARMACOS</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;n_farmacos_activos&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">&quot;pacientes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1853,9 +1498,9 @@ borrando en silencio la categoría más frecuente de ambas variables. Se renombr
 a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <span class="pre">medida&quot;</span></code>, que es además más legible en las tablas y los gráficos.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PRUEBAS_LABORATORIO</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"A1Cresult"</span><span class="p">,</span> <span class="s2">"max_glu_serum"</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PRUEBAS_LABORATORIO</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A1Cresult&quot;</span><span class="p">,</span> <span class="s2">&quot;max_glu_serum&quot;</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">columna</span> <span class="ow">in</span> <span class="n">PRUEBAS_LABORATORIO</span><span class="p">:</span>
-    <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">"None"</span><span class="p">:</span> <span class="s2">"No medida"</span><span class="p">})</span>
+    <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;None&quot;</span><span class="p">:</span> <span class="s2">&quot;No medida&quot;</span><span class="p">})</span>
 
 <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="n">columna</span><span class="p">:</span> <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
@@ -1932,8 +1577,8 @@ a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <
 <p>Hay una excepción deliberada: <strong><code class="docutils literal notranslate"><span class="pre">race</span></code> no se agrupa</strong>. Con la regla mecánica, la categoría <code class="docutils literal notranslate"><span class="pre">Asian</span></code> (0.6 % de los pacientes) se fundiría en una categoría residual y el grupo desaparecería del análisis. Dos razones lo desaconsejan. La estadística es que no hace falta: con cerca de 430 pacientes, la frecuencia esperada en la tabla de contingencia ronda las 38 observaciones, muy por encima del mínimo exigido. La sustantiva es que los atributos protegidos son precisamente los que se necesitan desagregados para auditar la equidad del modelo, de modo que agrupar el grupo minoritario iría en contra del objetivo. La excepción se declara en el código con una constante explícita, no se aplica en silencio.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">agrupar_poco_frecuentes</span><span class="p">(</span><span class="n">serie</span><span class="p">,</span> <span class="n">umbral</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">etiqueta</span><span class="o">=</span><span class="s2">"Otro"</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Agrupa en una sola categoría los valores con frecuencia relativa baja.</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">agrupar_poco_frecuentes</span><span class="p">(</span><span class="n">serie</span><span class="p">,</span> <span class="n">umbral</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">etiqueta</span><span class="o">=</span><span class="s2">&quot;Otro&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Agrupa en una sola categoría los valores con frecuencia relativa baja.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1941,14 +1586,14 @@ a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <
 <span class="sd">        Variable categórica.</span>
 <span class="sd">    umbral : float, default 0.01</span>
 <span class="sd">        Frecuencia relativa mínima para conservar una categoría.</span>
-<span class="sd">    etiqueta : str, default "Otro"</span>
+<span class="sd">    etiqueta : str, default &quot;Otro&quot;</span>
 <span class="sd">        Nombre de la categoría agrupada.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pandas.Series</span>
 <span class="sd">        Serie con las categorías poco frecuentes reemplazadas.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">frecuencias</span> <span class="o">=</span> <span class="n">serie</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">conservadas</span> <span class="o">=</span> <span class="n">frecuencias</span><span class="p">[</span><span class="n">frecuencias</span> <span class="o">&gt;=</span> <span class="n">umbral</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
     <span class="k">return</span> <span class="n">serie</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">serie</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">conservadas</span><span class="p">),</span> <span class="n">etiqueta</span><span class="p">)</span>
@@ -1956,22 +1601,22 @@ a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <
 
 <span class="n">UMBRAL_CATEGORIA</span> <span class="o">=</span> <span class="mf">0.01</span>
 <span class="n">IDS_ADMINISTRATIVOS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">"admission_type_id"</span><span class="p">,</span> <span class="s2">"discharge_disposition_id"</span><span class="p">,</span> <span class="s2">"admission_source_id"</span><span class="p">,</span>
+    <span class="s2">&quot;admission_type_id&quot;</span><span class="p">,</span> <span class="s2">&quot;discharge_disposition_id&quot;</span><span class="p">,</span> <span class="s2">&quot;admission_source_id&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="n">mapeos</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">linea</span> <span class="ow">in</span> <span class="p">(</span><span class="n">DATOS_CRUDOS</span> <span class="o">/</span> <span class="s2">"IDS_mapping.csv"</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span>
-        <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">linea</span> <span class="ow">in</span> <span class="p">(</span><span class="n">DATOS_CRUDOS</span> <span class="o">/</span> <span class="s2">&quot;IDS_mapping.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span>
+        <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
     <span class="n">linea</span> <span class="o">=</span> <span class="n">linea</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">linea</span> <span class="ow">or</span> <span class="n">linea</span> <span class="o">==</span> <span class="s2">","</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">linea</span> <span class="ow">or</span> <span class="n">linea</span> <span class="o">==</span> <span class="s2">&quot;,&quot;</span><span class="p">:</span>
         <span class="k">continue</span>
-    <span class="k">if</span> <span class="n">linea</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"_id,description"</span><span class="p">):</span>
-        <span class="n">clave</span> <span class="o">=</span> <span class="n">linea</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">linea</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_id,description&quot;</span><span class="p">):</span>
+        <span class="n">clave</span> <span class="o">=</span> <span class="n">linea</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">mapeos</span><span class="p">[</span><span class="n">clave</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">continue</span>
-    <span class="n">codigo</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">descripcion</span> <span class="o">=</span> <span class="n">linea</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span>
+    <span class="n">codigo</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">descripcion</span> <span class="o">=</span> <span class="n">linea</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">codigo</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
-        <span class="n">mapeos</span><span class="p">[</span><span class="n">clave</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">codigo</span><span class="p">)]</span> <span class="o">=</span> <span class="n">descripcion</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">'"'</span><span class="p">)</span>
+        <span class="n">mapeos</span><span class="p">[</span><span class="n">clave</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">codigo</span><span class="p">)]</span> <span class="o">=</span> <span class="n">descripcion</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
 
 <span class="c1"># Los identificadores administrativos se traducen a su descripción antes de</span>
 <span class="c1"># agrupar, para que las etiquetas resultantes sean legibles e interpretables.</span>
@@ -1979,8 +1624,8 @@ a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <
     <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">mapeos</span><span class="p">[</span><span class="n">columna</span><span class="p">])</span>
 
 <span class="c1"># medical_specialty: la ausencia se conserva como categoría explícita.</span>
-<span class="n">limpio</span><span class="p">[</span><span class="s2">"especialidad"</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">"medical_specialty"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">"No registrada"</span><span class="p">)</span>
-<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"medical_specialty"</span><span class="p">])</span>
+<span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;especialidad&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;medical_specialty&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;No registrada&quot;</span><span class="p">)</span>
+<span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;medical_specialty&quot;</span><span class="p">])</span>
 
 <span class="c1"># El umbral se aplica de forma uniforme a todas las variables categóricas,</span>
 <span class="c1"># incluidos el panel de fármacos y los grupos diagnósticos, para no dejar</span>
@@ -1989,7 +1634,7 @@ a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <
 <span class="c1"># agrupar (se verifica en el capítulo 4) y agrupar un grupo demográfico</span>
 <span class="c1"># minoritario en una categoría residual lo haría desaparecer del análisis de</span>
 <span class="c1"># equidad del modelo, que es justo donde su información resulta necesaria.</span>
-<span class="n">EXENTAS_DE_AGRUPAR</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"race"</span><span class="p">]</span>
+<span class="n">EXENTAS_DE_AGRUPAR</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span>
 <span class="n">candidatas</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columnas_texto</span><span class="p">(</span><span class="n">limpio</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">EXENTAS_DE_AGRUPAR</span><span class="p">]</span>
 
 <span class="n">resumen_agrupacion</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1999,15 +1644,15 @@ a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <
     <span class="n">despues</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">antes</span> <span class="o">!=</span> <span class="n">despues</span><span class="p">:</span>
         <span class="n">resumen_agrupacion</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-            <span class="s2">"variable"</span><span class="p">:</span> <span class="n">columna</span><span class="p">,</span>
-            <span class="s2">"categorías antes"</span><span class="p">:</span> <span class="n">antes</span><span class="p">,</span>
-            <span class="s2">"categorías después"</span><span class="p">:</span> <span class="n">despues</span><span class="p">,</span>
-            <span class="s2">"categoría menos frecuente después (%)"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span>
+            <span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="n">columna</span><span class="p">,</span>
+            <span class="s2">&quot;categorías antes&quot;</span><span class="p">:</span> <span class="n">antes</span><span class="p">,</span>
+            <span class="s2">&quot;categorías después&quot;</span><span class="p">:</span> <span class="n">despues</span><span class="p">,</span>
+            <span class="s2">&quot;categoría menos frecuente después (%)&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span>
                 <span class="mi">100</span> <span class="o">*</span> <span class="n">limpio</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
         <span class="p">})</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Variables con categorías agrupadas: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">resumen_agrupacion</span><span class="p">)</span><span class="si">}</span><span class="s2"> "</span>
-      <span class="sa">f</span><span class="s2">"de </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">candidatas</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Variables con categorías agrupadas: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">resumen_agrupacion</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;de </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">candidatas</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">resumen_agrupacion</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2179,11 +1824,11 @@ a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <
 <p>La ética, más importante, es que <code class="docutils literal notranslate"><span class="pre">race</span></code> es un atributo protegido. Imputar la moda equivale a <strong>atribuir a 1,917 pacientes una pertenencia racial que no declararon</strong>, y esa atribución sintética se propagaría a cualquier análisis de equidad del modelo. Registrar “No informada” es la representación honesta del dato disponible.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">limpio</span><span class="p">[</span><span class="s2">"race"</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">"race"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">"No informada"</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;No informada&quot;</span><span class="p">)</span>
 
 <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">"pacientes"</span><span class="p">:</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">"race"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(),</span>
-    <span class="s2">"%"</span><span class="p">:</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">"race"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="s2">&quot;pacientes&quot;</span><span class="p">:</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(),</span>
+    <span class="s2">&quot;%&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
 <span class="p">})</span>
 </pre></div>
 </div>
@@ -2259,44 +1904,44 @@ a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">registrar</span><span class="p">(</span><span class="s2">"5. Características derivadas y categorías agrupadas"</span><span class="p">,</span> <span class="n">limpio</span><span class="p">)</span>
+<span class="n">registrar</span><span class="p">(</span><span class="s2">&quot;5. Características derivadas y categorías agrupadas&quot;</span><span class="p">,</span> <span class="n">limpio</span><span class="p">)</span>
 
-<span class="n">OBJETIVO</span> <span class="o">=</span> <span class="s2">"readmitted_30"</span>
-<span class="n">IDENTIFICADOR</span> <span class="o">=</span> <span class="s2">"patient_nbr"</span>
+<span class="n">OBJETIVO</span> <span class="o">=</span> <span class="s2">&quot;readmitted_30&quot;</span>
+<span class="n">IDENTIFICADOR</span> <span class="o">=</span> <span class="s2">&quot;patient_nbr&quot;</span>
 
 <span class="n">NUMERICAS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">"time_in_hospital"</span><span class="p">,</span> <span class="s2">"num_lab_procedures"</span><span class="p">,</span> <span class="s2">"num_procedures"</span><span class="p">,</span>
-    <span class="s2">"num_medications"</span><span class="p">,</span> <span class="s2">"number_outpatient"</span><span class="p">,</span> <span class="s2">"number_emergency"</span><span class="p">,</span>
-    <span class="s2">"number_inpatient"</span><span class="p">,</span> <span class="s2">"number_diagnoses"</span><span class="p">,</span> <span class="s2">"n_farmacos_activos"</span><span class="p">,</span>
+    <span class="s2">&quot;time_in_hospital&quot;</span><span class="p">,</span> <span class="s2">&quot;num_lab_procedures&quot;</span><span class="p">,</span> <span class="s2">&quot;num_procedures&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;num_medications&quot;</span><span class="p">,</span> <span class="s2">&quot;number_outpatient&quot;</span><span class="p">,</span> <span class="s2">&quot;number_emergency&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;number_inpatient&quot;</span><span class="p">,</span> <span class="s2">&quot;number_diagnoses&quot;</span><span class="p">,</span> <span class="s2">&quot;n_farmacos_activos&quot;</span><span class="p">,</span>
 <span class="p">]</span>
-<span class="n">ORDINALES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"age_ord"</span><span class="p">]</span>
-<span class="n">BINARIAS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"hospitalizacion_previa"</span><span class="p">]</span>
+<span class="n">ORDINALES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age_ord&quot;</span><span class="p">]</span>
+<span class="n">BINARIAS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hospitalizacion_previa&quot;</span><span class="p">]</span>
 <span class="n">CATEGORICAS</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
     <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">limpio</span><span class="o">.</span><span class="n">columns</span>
     <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">NUMERICAS</span> <span class="o">+</span> <span class="n">ORDINALES</span> <span class="o">+</span> <span class="n">BINARIAS</span> <span class="o">+</span> <span class="p">[</span><span class="n">OBJETIVO</span><span class="p">,</span> <span class="n">IDENTIFICADOR</span><span class="p">]</span>
 <span class="p">)</span>
 
 <span class="n">roles</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"objetivo"</span><span class="p">:</span> <span class="n">OBJETIVO</span><span class="p">,</span>
-    <span class="s2">"identificador"</span><span class="p">:</span> <span class="n">IDENTIFICADOR</span><span class="p">,</span>
-    <span class="s2">"numericas"</span><span class="p">:</span> <span class="n">NUMERICAS</span><span class="p">,</span>
-    <span class="s2">"ordinales"</span><span class="p">:</span> <span class="n">ORDINALES</span><span class="p">,</span>
-    <span class="s2">"binarias"</span><span class="p">:</span> <span class="n">BINARIAS</span><span class="p">,</span>
-    <span class="s2">"categoricas"</span><span class="p">:</span> <span class="n">CATEGORICAS</span><span class="p">,</span>
-    <span class="s2">"farmacos"</span><span class="p">:</span> <span class="n">FARMACOS</span><span class="p">,</span>
-    <span class="s2">"etiquetas_edad"</span><span class="p">:</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ETIQUETAS_EDAD</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
-    <span class="s2">"random_state"</span><span class="p">:</span> <span class="n">RANDOM_STATE</span><span class="p">,</span>
+    <span class="s2">&quot;objetivo&quot;</span><span class="p">:</span> <span class="n">OBJETIVO</span><span class="p">,</span>
+    <span class="s2">&quot;identificador&quot;</span><span class="p">:</span> <span class="n">IDENTIFICADOR</span><span class="p">,</span>
+    <span class="s2">&quot;numericas&quot;</span><span class="p">:</span> <span class="n">NUMERICAS</span><span class="p">,</span>
+    <span class="s2">&quot;ordinales&quot;</span><span class="p">:</span> <span class="n">ORDINALES</span><span class="p">,</span>
+    <span class="s2">&quot;binarias&quot;</span><span class="p">:</span> <span class="n">BINARIAS</span><span class="p">,</span>
+    <span class="s2">&quot;categoricas&quot;</span><span class="p">:</span> <span class="n">CATEGORICAS</span><span class="p">,</span>
+    <span class="s2">&quot;farmacos&quot;</span><span class="p">:</span> <span class="n">FARMACOS</span><span class="p">,</span>
+    <span class="s2">&quot;etiquetas_edad&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ETIQUETAS_EDAD</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="n">RANDOM_STATE</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DATOS_PROCESADOS</span> <span class="o">/</span> <span class="s2">"roles_variables.json"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DATOS_PROCESADOS</span> <span class="o">/</span> <span class="s2">&quot;roles_variables.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">roles</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Numéricas   : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">NUMERICAS</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Ordinales   : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ORDINALES</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Binarias    : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">BINARIAS</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Categóricas : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">CATEGORICAS</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Total de predictores: "</span>
-      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">NUMERICAS</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">ORDINALES</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">BINARIAS</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">CATEGORICAS</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Numéricas   : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">NUMERICAS</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ordinales   : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ORDINALES</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Binarias    : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">BINARIAS</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Categóricas : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">CATEGORICAS</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total de predictores: &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">NUMERICAS</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">ORDINALES</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">BINARIAS</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">CATEGORICAS</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2313,16 +1958,16 @@ Total de predictores: 38
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inventario</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">"tipo"</span><span class="p">:</span> <span class="n">limpio</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="s2">"categorías"</span><span class="p">:</span> <span class="n">limpio</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
-    <span class="s2">"</span><span class="si">% f</span><span class="s2">altantes"</span><span class="p">:</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">limpio</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-    <span class="s2">"rol"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">"objetivo"</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">OBJETIVO</span>
-        <span class="k">else</span> <span class="s2">"identificador"</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">IDENTIFICADOR</span>
-        <span class="k">else</span> <span class="s2">"numérica"</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">NUMERICAS</span>
-        <span class="k">else</span> <span class="s2">"ordinal"</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ORDINALES</span>
-        <span class="k">else</span> <span class="s2">"binaria"</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">BINARIAS</span>
-        <span class="k">else</span> <span class="s2">"categórica"</span>
+    <span class="s2">&quot;tipo&quot;</span><span class="p">:</span> <span class="n">limpio</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="s2">&quot;categorías&quot;</span><span class="p">:</span> <span class="n">limpio</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
+    <span class="s2">&quot;</span><span class="si">% f</span><span class="s2">altantes&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">limpio</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="s2">&quot;rol&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;objetivo&quot;</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">OBJETIVO</span>
+        <span class="k">else</span> <span class="s2">&quot;identificador&quot;</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">IDENTIFICADOR</span>
+        <span class="k">else</span> <span class="s2">&quot;numérica&quot;</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">NUMERICAS</span>
+        <span class="k">else</span> <span class="s2">&quot;ordinal&quot;</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ORDINALES</span>
+        <span class="k">else</span> <span class="s2">&quot;binaria&quot;</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">BINARIAS</span>
+        <span class="k">else</span> <span class="s2">&quot;categórica&quot;</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">limpio</span><span class="o">.</span><span class="n">columns</span>
     <span class="p">],</span>
 <span class="p">})</span>
@@ -2527,23 +2172,23 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <span class="n">prueba</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices_prueba</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">resumen_particion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">"registros"</span><span class="p">:</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">entrenamiento</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">prueba</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">limpio</span><span class="p">)],</span>
-    <span class="s2">"pacientes"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;registros&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">entrenamiento</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">prueba</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">limpio</span><span class="p">)],</span>
+    <span class="s2">&quot;pacientes&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="n">entrenamiento</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
         <span class="n">prueba</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
         <span class="n">limpio</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
     <span class="p">],</span>
-    <span class="s2">"tasa clase positiva (%)"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;tasa clase positiva (%)&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="mi">100</span> <span class="o">*</span> <span class="n">entrenamiento</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
         <span class="mi">100</span> <span class="o">*</span> <span class="n">prueba</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
         <span class="mi">100</span> <span class="o">*</span> <span class="n">limpio</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
     <span class="p">],</span>
-<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"Entrenamiento"</span><span class="p">,</span> <span class="s2">"Prueba"</span><span class="p">,</span> <span class="s2">"Total"</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Entrenamiento&quot;</span><span class="p">,</span> <span class="s2">&quot;Prueba&quot;</span><span class="p">,</span> <span class="s2">&quot;Total&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="c1"># Verificación: ningún paciente puede aparecer en ambos conjuntos.</span>
 <span class="n">solapamiento</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">entrenamiento</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">])</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">prueba</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">])</span>
-<span class="k">assert</span> <span class="ow">not</span> <span class="n">solapamiento</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">solapamiento</span><span class="p">)</span><span class="si">}</span><span class="s2"> pacientes en ambas particiones"</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Sin pacientes compartidos entre particiones"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">solapamiento</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">solapamiento</span><span class="p">)</span><span class="si">}</span><span class="s2"> pacientes en ambas particiones&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sin pacientes compartidos entre particiones&quot;</span><span class="p">)</span>
 <span class="n">resumen_particion</span>
 </pre></div>
 </div>
@@ -2606,16 +2251,16 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verificaciones de integridad antes de exportar. Cualquier fallo detiene el</span>
 <span class="c1"># notebook, de modo que un error no puede propagarse a los capítulos siguientes.</span>
-<span class="k">assert</span> <span class="n">limpio</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"Quedan valores faltantes sin tratar"</span>
-<span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">limpio</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">==</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="s2">"Target mal codificado"</span>
-<span class="k">assert</span> <span class="s2">"None"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">limpio</span><span class="p">[</span><span class="n">columnas_texto</span><span class="p">(</span><span class="n">limpio</span><span class="p">)]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> \
-    <span class="s2">"Quedan cadenas 'None' que una lectura posterior convertiría en nulo"</span>
-<span class="k">assert</span> <span class="ow">not</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">"discharge_disposition_id"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">mapeos</span><span class="p">[</span><span class="s2">"discharge_disposition_id"</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">DESTINOS_EXCLUIDOS</span><span class="p">]</span>
-<span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(),</span> <span class="s2">"Quedan altas incompatibles con una readmisión"</span>
+<span class="k">assert</span> <span class="n">limpio</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Quedan valores faltantes sin tratar&quot;</span>
+<span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">limpio</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">==</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="s2">&quot;Target mal codificado&quot;</span>
+<span class="k">assert</span> <span class="s2">&quot;None&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">limpio</span><span class="p">[</span><span class="n">columnas_texto</span><span class="p">(</span><span class="n">limpio</span><span class="p">)]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> \
+    <span class="s2">&quot;Quedan cadenas &#39;None&#39; que una lectura posterior convertiría en nulo&quot;</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">limpio</span><span class="p">[</span><span class="s2">&quot;discharge_disposition_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">mapeos</span><span class="p">[</span><span class="s2">&quot;discharge_disposition_id&quot;</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">DESTINOS_EXCLUIDOS</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(),</span> <span class="s2">&quot;Quedan altas incompatibles con una readmisión&quot;</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Verificaciones superadas: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">limpio</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> encuentros de "</span>
-      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">limpio</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> pacientes"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Verificaciones superadas: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">limpio</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> encuentros de &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">limpio</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> pacientes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2628,14 +2273,14 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">destinos</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">escribir_tabla</span><span class="p">(</span><span class="n">limpio</span><span class="p">,</span> <span class="s2">"diabetes_limpio"</span><span class="p">),</span>
-    <span class="n">escribir_tabla</span><span class="p">(</span><span class="n">entrenamiento</span><span class="p">,</span> <span class="s2">"diabetes_train"</span><span class="p">),</span>
-    <span class="n">escribir_tabla</span><span class="p">(</span><span class="n">prueba</span><span class="p">,</span> <span class="s2">"diabetes_test"</span><span class="p">),</span>
+    <span class="n">escribir_tabla</span><span class="p">(</span><span class="n">limpio</span><span class="p">,</span> <span class="s2">&quot;diabetes_limpio&quot;</span><span class="p">),</span>
+    <span class="n">escribir_tabla</span><span class="p">(</span><span class="n">entrenamiento</span><span class="p">,</span> <span class="s2">&quot;diabetes_train&quot;</span><span class="p">),</span>
+    <span class="n">escribir_tabla</span><span class="p">(</span><span class="n">prueba</span><span class="p">,</span> <span class="s2">&quot;diabetes_test&quot;</span><span class="p">),</span>
 <span class="p">]</span>
-<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">traza</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"etapa"</span><span class="p">),</span> <span class="s2">"trazabilidad_etl"</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">traza</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;etapa&quot;</span><span class="p">),</span> <span class="s2">&quot;trazabilidad_etl&quot;</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">destino</span> <span class="ow">in</span> <span class="n">destinos</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Exportado: </span><span class="si">{</span><span class="n">destino</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exportado: </span><span class="si">{</span><span class="n">destino</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">traza</span><span class="p">)</span>
 </pre></div>
@@ -2822,7 +2467,6 @@ Exportado: diabetes_test.parquet
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicacion-de-los-filtros-con-trazabilidad">2.2. Aplicación de los filtros con trazabilidad</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eleccion-de-la-unidad-de-analisis">Elección de la unidad de análisis</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ponderacion-implicita-de-los-pacientes-recurrentes">Ponderación implícita de los pacientes recurrentes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#por-que-la-posicion-del-encuentro-no-se-incorpora-como-predictor">Por qué la posición del encuentro no se incorpora como predictor</a></li>
 </ul>
 </li>
