@@ -614,15 +614,21 @@ METRICA_PRINCIPAL = "auc_pr"
 # Optimizadores
 # ==========================================================================
 
-def _puntuar(pipeline, parametros, X, y, grupos, cv, metrica):
-    """Puntaje medio de validación cruzada de una configuración."""
+def _puntuar(pipeline, parametros, X, y, particiones, metrica):
+    """Puntaje medio de validación cruzada de una configuración.
+
+    Recibe las particiones ya calculadas (una lista de pares de índices) en
+    lugar de un particionador: el reparto agrupado es costoso y no cambia
+    entre configuraciones, de modo que se calcula una sola vez por fold
+    externo (véase el perfilamiento del capítulo 6).
+    """
     candidato = clone(pipeline).set_params(**parametros)
     return float(np.mean(cross_val_score(
-        candidato, X, y, groups=grupos, cv=cv, scoring=metrica, n_jobs=1,
+        candidato, X, y, cv=particiones, scoring=metrica, n_jobs=1,
         error_score="raise")))
 
 
-def _puntuar_con_poda(pipeline, parametros, X, y, grupos, cv, metrica,
+def _puntuar_con_poda(pipeline, parametros, X, y, particiones, metrica,
                       intento, optuna):
     """Evalúa fold a fold e informa a Optuna para que pueda podar.
 
@@ -632,7 +638,7 @@ def _puntuar_con_poda(pipeline, parametros, X, y, grupos, cv, metrica,
     from sklearn.metrics import get_scorer
     evaluador = get_scorer(metrica)
     puntajes = []
-    for paso, (i_ent, i_val) in enumerate(cv.split(X, y, groups=grupos), 1):
+    for paso, (i_ent, i_val) in enumerate(particiones, 1):
         candidato = clone(pipeline).set_params(**parametros)
         candidato.fit(X.iloc[i_ent], y.iloc[i_ent])
         puntajes.append(evaluador(candidato, X.iloc[i_val], y.iloc[i_val]))
@@ -644,7 +650,7 @@ def _puntuar_con_poda(pipeline, parametros, X, y, grupos, cv, metrica,
     return float(np.mean(puntajes))
 
 
-def optimizar(estrategia, pipeline, rejilla, espacio, X, y, grupos, cv,
+def optimizar(estrategia, pipeline, rejilla, espacio, X, y, particiones,
               metrica, presupuesto, semilla=SEMILLA, paralelo_interno=False,
               multifidelidad=True):
     """Busca hiperparámetros con la estrategia indicada.
@@ -663,6 +669,12 @@ def optimizar(estrategia, pipeline, rejilla, espacio, X, y, grupos, cv,
       tercio superior se descarta sin evaluar los demás.
     * ``deap``: algoritmo genético sobre una discretización del espacio.
 
+    ``particiones`` es la lista de pares de índices que produce el
+    particionador interno, calculada una sola vez fuera de esta función: el
+    reparto agrupado por paciente cuesta más que el propio ajuste de los
+    modelos lineales, y recalcularlo por configuración multiplicaba ese costo
+    por el presupuesto (véase el perfilamiento del capítulo 6).
+
     Paralelización: si el modelo no paraleliza internamente, las
     configuraciones de Grid, Random y de cada generación del genético se
     evalúan en paralelo (configuraciones × folds). Optuna es secuencial por
@@ -677,7 +689,7 @@ def optimizar(estrategia, pipeline, rejilla, espacio, X, y, grupos, cv,
         de pipeline consumidos.
     """
     aleatorio = np.random.default_rng(semilla)
-    n_folds = cv.get_n_splits()
+    n_folds = len(particiones)
     evaluados, historial = [], []
     ajustes = 0
 
@@ -694,10 +706,10 @@ def optimizar(estrategia, pipeline, rejilla, espacio, X, y, grupos, cv,
         """Evalúa varias configuraciones, en paralelo si conviene."""
         if not paralelo_interno and N_JOBS != 1 and len(lista) > 1:
             puntajes = Parallel(n_jobs=N_JOBS)(
-                delayed(_puntuar)(pipeline, p, X, y, grupos, cv, metrica)
+                delayed(_puntuar)(pipeline, p, X, y, particiones, metrica)
                 for p in lista)
         else:
-            puntajes = [_puntuar(pipeline, p, X, y, grupos, cv, metrica)
+            puntajes = [_puntuar(pipeline, p, X, y, particiones, metrica)
                         for p in lista]
         for p, s in zip(lista, puntajes):
             registrar(p, s)
@@ -740,8 +752,8 @@ def optimizar(estrategia, pipeline, rejilla, espacio, X, y, grupos, cv,
             if multifidelidad:
                 try:
                     puntaje = _puntuar_con_poda(pipeline, parametros, X, y,
-                                                grupos, cv, metrica, intento,
-                                                optuna)
+                                                particiones, metrica,
+                                                intento, optuna)
                 except optuna.TrialPruned:
                     # Configuración podada: consume los folds que alcanzó a
                     # evaluar, pero no compite por el mejor puntaje.
@@ -751,7 +763,7 @@ def optimizar(estrategia, pipeline, rejilla, espacio, X, y, grupos, cv,
             else:
                 candidato = clone(pipeline).set_params(**parametros)
                 puntaje = float(np.mean(cross_val_score(
-                    candidato, X, y, groups=grupos, cv=cv, scoring=metrica,
+                    candidato, X, y, cv=particiones, scoring=metrica,
                     n_jobs=1 if paralelo_interno else N_JOBS,
                     error_score="raise")))
             registrar(parametros, puntaje)
@@ -1021,10 +1033,15 @@ def ejecutar_corrida(corrida, X, y, grupos, roles, folds_externos=5,
                                       roles, semilla,
                                       corrida.razon_desbalance)
 
+        # El reparto agrupado no cambia entre configuraciones, así que se
+        # calcula una vez por fold externo en lugar de una vez por evaluación.
+        particiones_internas = list(
+            interno.split(X_busqueda, y_busqueda, groups=grupos_busqueda))
+
         inicio = time.perf_counter()
         resultado = optimizar(
             corrida.optimizador, pipeline, rejilla, espacio, X_busqueda,
-            y_busqueda, grupos_busqueda, interno, metrica, presupuesto,
+            y_busqueda, particiones_internas, metrica, presupuesto,
             semilla=semilla + i, paralelo_interno=paralelo_interno,
             multifidelidad=multifidelidad)
         t_busqueda += time.perf_counter() - inicio

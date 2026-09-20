@@ -1,14 +1,14 @@
-modelo,versión,complejidad,ajuste_s,memoria_pico_mb,auc_pr,inferencia_s
-Logística,estándar: SAGA,"O(s·nnz), s grande",98.0232,182.5493,0.23,0.4431
-Logística,optimizado: liblinear,"O(s·nnz), s pequeño",53.5424,182.5465,0.23,0.3962
-Árbol,estándar: matriz dispersa,O(p·n·log n),63.2181,182.5465,0.1797,0.3802
-Árbol,optimizado: matriz densa,O(p·n·log n),59.2517,200.9137,0.1797,0.5475
-Random Forest (100 árboles),estándar: matriz dispersa,O(T·m·n·log n),81.5788,182.5463,0.2483,0.5897
-Random Forest (100 árboles),optimizado: matriz densa,O(T·m·n·log n),69.5426,200.9111,0.2483,0.6216
-k-NN (k = 51),estándar: matriz dispersa,inferencia O(n·p),50.7996,182.5465,0.211,60.9127
-k-NN (k = 51),optimizado: matriz densa,inferencia O(n·p),45.331,200.9158,0.2111,8.8118
-XGBoost,"estándar: exacto, sin parada",O(T·d·nnz·log n),54.2,182.5454,0.2367,0.502
-XGBoost,"intermedio: hist, sin parada",O(T·d·nnz),47.9551,182.5463,0.237,0.4823
-XGBoost,optimizado: hist con parada temprana,"O(T*·d·nnz), T* ≤ T",48.4635,182.5459,0.2462,0.3939
-"SVM (submuestra 5,000)",estándar: kernel RBF,O(n²·p) a O(n³),11.2757,14.5878,0.1939,23.6521
-"SVM (submuestra 5,000)",optimizado: LinearSVC calibrado,O(s·nnz),4.2708,14.5734,0.2017,0.3779
+modelo,versión,complejidad,ajuste_s,memoria_pico_mb,inferencia_s,auc_pr
+Logística,estándar: SAGA,"O(s·nnz), s grande",55.5524,182.5452,0.3276,0.23
+Logística,optimizado: liblinear,"O(s·nnz), s pequeño",8.2641,182.5493,0.3351,0.23
+Árbol,estándar: matriz dispersa,O(p·n·log n),17.4131,182.547,0.3487,0.1797
+Árbol,optimizado: matriz densa,O(p·n·log n),7.3046,200.9153,0.3271,0.1797
+Random Forest (100 árboles),estándar: matriz dispersa,O(T·m·n·log n),34.5573,182.5471,0.4938,0.2483
+Random Forest (100 árboles),optimizado: matriz densa,O(T·m·n·log n),9.7198,200.9154,0.4666,0.2483
+k-NN (k = 51),estándar: matriz dispersa,inferencia O(n·p),5.0501,182.5451,50.3044,0.211
+k-NN (k = 51),optimizado: matriz densa,inferencia O(n·p),5.0322,200.918,8.0297,0.2111
+XGBoost,"estándar: exacto, sin parada",O(T·d·nnz·log n),13.5727,182.5541,0.4473,0.2367
+XGBoost,"intermedio: hist, sin parada",O(T·d·nnz),7.0733,182.5596,0.4356,0.237
+XGBoost,optimizado: hist con parada temprana,"O(T*·d·nnz), T* ≤ T",6.7006,182.5486,0.3535,0.2462
+"SVM (submuestra 5,000)",estándar: kernel RBF,O(n²·p) a O(n³),7.7536,14.4306,21.6088,0.1939
+"SVM (submuestra 5,000)",optimizado: LinearSVC calibrado,O(s·nnz),0.7512,14.4338,0.3403,0.2017

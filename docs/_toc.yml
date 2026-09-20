@@ -9,3 +9,5 @@ chapters:
 - file: 03_Univariado
 - file: 04_Bivariado
 - file: 05_Sintesis
+- file: 06_Preprocesamiento
+- file: 07_Clasificacion

@@ -1,8 +1,8 @@
 modelo,presupuesto,ajuste interno medio (s),ajuste interno máximo (s),"por corrida, 1 núcleo (min)","por corrida, paralelo (min)","16 corridas, paralelo (h)"
-knn,8,3.56,3.76,12.01,12.01,3.2
-bayes,12,3.66,3.79,12.05,6.03,1.61
-logistica,12,5.23,9.52,16.8,8.19,2.19
-arbol,12,4.37,4.82,14.12,6.92,1.85
-random_forest,8,17.72,28.62,38.61,38.61,10.3
-xgboost,8,5.06,6.07,11.13,11.13,2.97
-svm,12,5.19,5.8,16.74,8.2,2.19
+knn,8,3.58,3.63,11.69,11.69,3.12
+bayes,12,3.7,3.74,12.1,6.7,1.79
+logistica,12,5.28,9.64,16.99,9.28,2.47
+arbol,12,4.48,4.92,14.46,7.92,2.11
+random_forest,8,16.7,28.67,36.34,36.34,9.69
+xgboost,8,4.91,5.89,10.8,10.8,2.88
+svm,12,4.89,5.54,15.75,8.61,2.3

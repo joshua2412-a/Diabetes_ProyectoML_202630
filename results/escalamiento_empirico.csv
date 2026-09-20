@@ -1,6 +1,6 @@
 modelo,fase medida,exponente teórico,exponente empírico,tiempo en el n mayor (s)
-logística (liblinear),ajuste,≈ 1,0.96,8.88
-árbol (denso),ajuste,≈ 1 (n·log n),1.04,10.83
-"Random Forest, 100 árboles (denso)",ajuste,≈ 1 (n·log n),0.91,6.09
-"k-NN, 2,000 consultas (denso)",inferencia,1,0.73,1.3
-SVM con kernel RBF,ajuste,2 a 3,1.81,19.7
+logística (liblinear),ajuste,≈ 1,1.0,9.17
+árbol (denso),ajuste,≈ 1 (n·log n),1.06,11.64
+"Random Forest, 100 árboles (denso)",ajuste,≈ 1 (n·log n),0.91,7.13
+"k-NN, 2,000 consultas (denso)",inferencia,1,0.76,1.29
+SVM con kernel RBF,ajuste,2 a 3,1.72,19.4
