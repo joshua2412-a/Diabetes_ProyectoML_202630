@@ -52,36 +52,19 @@ pd.set_option("display.width", 250)
 def tabla(datos, filas=15, titulo=None, indice=True):
     """
     Muestra un DataFrame con formato visual uniforme.
-
-    Parámetros
-    ----------
-    datos : pandas.DataFrame
-        DataFrame que se desea mostrar.
-
-    filas : int, default=15
-        Número de filas mostradas por página.
-
-    titulo : str, optional
-        Título que aparecerá encima de la tabla.
-
-    indice : bool, default=True
-        Indica si se muestra el índice del DataFrame.
     """
 
     from IPython.display import display, HTML, Markdown
 
-    # Mostrar título opcional
     if titulo is not None:
         display(Markdown(f"### {titulo}"))
 
-    # Copia para evitar modificar el DataFrame original
     datos_mostrar = datos.copy()
 
     if not indice:
         datos_mostrar = datos_mostrar.reset_index(drop=True)
 
     try:
-        # Intentar utilizar itables para tablas interactivas
         from itables import show
 
         show(
@@ -89,17 +72,39 @@ def tabla(datos, filas=15, titulo=None, indice=True):
             pageLength=filas,
             scrollX=True,
             classes="display compact",
-            showIndex=indice
+            showIndex=indice,
+            columnDefs=[
+                {
+                    "targets": "_all",
+                    "className": "dt-center"
+                }
+            ]
         )
 
+        display(HTML("""
+        <style>
+            table.dataTable td,
+            table.dataTable th {
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                overflow-wrap: anywhere !important;
+                vertical-align: middle !important;
+            }
+
+            table.dataTable td {
+                padding: 8px !important;
+            }
+        </style>
+        """))
+
     except ImportError:
-        # Alternativa usando pandas Styler
         tabla_estilizada = (
             datos_mostrar.head(filas)
             .style
             .set_properties(**{
                 "text-align": "center",
-                "white-space": "nowrap",
+                "white-space": "normal",
+                "overflow-wrap": "break-word",
                 "font-size": "11pt",
                 "padding": "8px"
             })
@@ -111,12 +116,6 @@ def tabla(datos, filas=15, titulo=None, indice=True):
                         ("color", "white"),
                         ("font-weight", "bold"),
                         ("text-align", "center")
-                    ]
-                },
-                {
-                    "selector": "td",
-                    "props": [
-                        ("padding", "8px")
                     ]
                 },
                 {
@@ -142,6 +141,91 @@ def tabla(datos, filas=15, titulo=None, indice=True):
             {tabla_estilizada.to_html()}
         </div>
         """))
+
+
+def tabla_estilizada(
+    datos,
+    filas=5,
+    titulo=None,
+    indice=True,
+    posicion="inicio"
+):
+    """
+    Muestra las primeras o últimas filas de un DataFrame con estilo.
+
+    posicion : str, default="inicio"
+        "inicio" para las primeras filas.
+        "final" para las últimas filas.
+    """
+
+    from IPython.display import display, HTML
+
+    if posicion == "final":
+        datos_mostrar = datos.tail(filas).copy()
+    else:
+        datos_mostrar = datos.head(filas).copy()
+
+    if not indice:
+        datos_mostrar = datos_mostrar.reset_index(drop=True)
+
+    tabla_formateada = (
+        datos_mostrar.style
+        .set_caption(titulo if titulo else "")
+        .set_properties(**{
+            "text-align": "center",
+            "white-space": "nowrap",
+            "font-size": "11pt",
+            "padding": "8px"
+        })
+        .set_table_styles([
+            {
+                "selector": "caption",
+                "props": [
+                    ("font-size", "16px"),
+                    ("font-weight", "bold"),
+                    ("color", PALETA[0]),
+                    ("padding", "10px")
+                ]
+            },
+            {
+                "selector": "th",
+                "props": [
+                    ("background-color", PALETA[0]),
+                    ("color", "white"),
+                    ("font-weight", "bold"),
+                    ("text-align", "center")
+                ]
+            },
+            {
+                "selector": "td",
+                "props": [
+                    ("padding", "8px")
+                ]
+            },
+            {
+                "selector": "table",
+                "props": [
+                    ("width", "100%"),
+                    ("table-layout", "auto"),
+                    ("border-collapse", "collapse")
+                ]
+            }
+        ])
+    )
+
+    display(HTML(f"""
+    <div style="
+        max-width: 100%;
+        max-height: 400px;
+        overflow: auto;
+        border: 1px solid {GRIS};
+        border-radius: 8px;
+        margin: 10px 0;
+    ">
+        {tabla_formateada.to_html()}
+    </div>
+    """))
+
 
 
 def columnas_texto(datos):
