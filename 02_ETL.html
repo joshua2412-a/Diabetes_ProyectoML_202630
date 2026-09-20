@@ -409,10 +409,8 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#roles-de-las-variables">2.7. Roles de las variables</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#particion-de-entrenamiento-y-prueba">2.8. Partición de entrenamiento y prueba</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exportacion">2.9. Exportación</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">2.10. Síntesis del capítulo</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exportacion">2.9. Exportación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">2.10. Síntesis del capítulo</a></li>
 </ul>
             </nav>
         </div>
@@ -1011,7 +1009,7 @@ document.write(`
 <p>Las eliminaciones responden a motivos distintos y cada una se justifica por separado.</p>
 <p><strong><code class="docutils literal notranslate"><span class="pre">readmitted</span></code>.</strong> Es la variable original de tres niveles, que se deriva en la celda de aplicación de esta sección. Conservarla dejaría el desenlace entre los predictores, la forma más directa de fuga de información posible: cualquier modelo alcanzaría un AUC perfecto sin haber aprendido nada. Se elimina después de derivar <code class="docutils literal notranslate"><span class="pre">readmitted_30</span></code>, no antes.</p>
 <p><strong><code class="docutils literal notranslate"><span class="pre">encounter_id</span></code>.</strong> Identificador secuencial del episodio, sin contenido clínico. Su eliminación no solo evita ruido: al ser creciente en el tiempo, un modelo podría usarlo para captar tendencias del propio registro (cambios de codificación, incorporación de hospitales a la red) en lugar del mecanismo clínico que se quiere modelar.</p>
-<p><strong><code class="docutils literal notranslate"><span class="pre">weight</span></code>.</strong> El 96.86 % de los valores está ausente. Imputar supondría generar un valor sintético para casi toda la muestra, de modo que la variable aportaría el artefacto de la imputación y no información del paciente. La sección 4.3 del capítulo 1 añade un argumento definitivo: su ausencia es la única del conjunto completamente independiente del desenlace (chi² nulo, p = 1.00), así que tampoco el hecho de faltar es informativo. Se descarta sin sustituto.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">weight</span></code>.</strong> El 96.86 % de los valores está ausente. Imputar supondría generar un valor sintético para casi toda la muestra, de modo que la variable aportaría el artefacto de la imputación y no información del paciente. La sección 4.3 del capítulo 1 añade un argumento definitivo: su ausencia es el caso extremo de independencia respecto al desenlace (chi² nulo, p = 1.00), así que tampoco el hecho de faltar es informativo. Se descarta sin sustituto.</p>
 <p><strong><code class="docutils literal notranslate"><span class="pre">payer_code</span></code>.</strong> El 39.56 % de valores ausentes y, sobre todo, su naturaleza: identifica al asegurador, no describe el estado clínico del paciente. Su asociación con la readmisión reflejaría diferencias de cobertura y acceso al sistema antes que riesgo médico, lo que introduciría un factor de confusión difícil de interpretar en un modelo destinado a orientar decisiones clínicas al alta. Se deja constancia en las limitaciones de que el contexto asegurador queda, por tanto, fuera del análisis.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="admonition hide above-input">
@@ -1325,21 +1323,21 @@ Retenidos   (14)
       <td>166</td>
       <td>0</td>
       <td>2</td>
-      <td>3.86</td>
+      <td>3.79</td>
     </tr>
     <tr>
       <th>Umbral de 25 (descarta 9)</th>
       <td>162</td>
       <td>0</td>
       <td>0</td>
-      <td>2.42</td>
+      <td>2.66</td>
     </tr>
     <tr>
       <th>Panel completo (descarta 0)</th>
       <td>178</td>
       <td>5</td>
       <td>7</td>
-      <td>10.05</td>
+      <td>10.51</td>
     </tr>
   </tbody>
 </table>
@@ -1347,8 +1345,8 @@ Retenidos   (14)
 </div>
 <p><strong>Los nueve fármacos con variación insuficiente.</strong> El criterio de eliminación no puede ser la concentración relativa: <code class="docutils literal notranslate"><span class="pre">repaglinide</span></code> tiene el 98.5 % de sus registros en <code class="docutils literal notranslate"><span class="pre">No</span></code> y aun así 1,518 encuentros con variación, suficientes para estimar un efecto. Tampoco puede basarse en el número de readmisiones dentro de la categoría minoritaria, porque eso supondría usar la variable objetivo para seleccionar predictores, una forma de selección supervisada ejecutada fuera de la validación cruzada.</p>
 <p>Se adopta un criterio no supervisado y de naturaleza computacional: se descartan los fármacos con <strong>menos de veinticinco encuentros de variación</strong>. <code class="docutils literal notranslate"><span class="pre">examide</span></code> y <code class="docutils literal notranslate"><span class="pre">citoglipton</span></code> no registran ninguno; <code class="docutils literal notranslate"><span class="pre">acetohexamide</span></code>, <code class="docutils literal notranslate"><span class="pre">glimepiride-pioglitazone</span></code> y <code class="docutils literal notranslate"><span class="pre">metformin-pioglitazone</span></code> registran uno; <code class="docutils literal notranslate"><span class="pre">metformin-rosiglitazone</span></code> dos; <code class="docutils literal notranslate"><span class="pre">troglitazone</span></code> tres; <code class="docutils literal notranslate"><span class="pre">glipizide-metformin</span></code> trece y <code class="docutils literal notranslate"><span class="pre">tolbutamide</span></code> veintiuno. El siguiente fármaco del panel salta a treinta y ocho, de modo que el umbral cae en un tramo vacío de la distribución y no parte ningún grupo por la mitad.</p>
-<p>La justificación del umbral no es teórica sino el resultado de un diagnóstico, y la comparación de tres escenarios lo sustenta. El costo del solver no depende del número de columnas sino de su dispersión: conservar el panel completo añade un 10 % de columnas respecto al conjunto depurado, pero <strong>cuadruplica</strong> el tiempo de ajuste de la regresión logística. Conservar solo los dos fármacos con trece y veintiún encuentros añade un 2.5 % de columnas y aun así eleva el tiempo en torno a dos tercios. El número de columnas con menos de treinta valores no nulos predice el tiempo mucho mejor que el total de columnas, y el umbral de veinticinco encuentros es exactamente el punto en que esas columnas desaparecen.</p>
-<p>El mecanismo es el condicionamiento del problema de optimización. Una columna con un puñado de valores no nulos sobre casi cien mil filas introduce una dirección de curvatura casi nula, lo que aumenta el número de condición de la matriz de diseño y ralentiza cada iteración del solver SAGA sin aportar capacidad predictiva. Extrapolado a las dieciséis corridas de la familia lineal, con 185 ajustes cada una, la diferencia entre el escenario depurado y el panel completo supone varias horas de cómputo adicional. En Naive Bayes el problema es distinto pero del mismo origen: una columna de varianza nula vuelve numéricamente inestable la verosimilitud con los valores más pequeños de <code class="docutils literal notranslate"><span class="pre">var_smoothing</span></code>.</p>
+<p>La justificación del umbral no es teórica sino el resultado de un diagnóstico, y la comparación de tres escenarios lo sustenta. El costo del solver no depende del número de columnas sino de su dispersión: conservar el panel completo añade un 10 % de columnas respecto al conjunto depurado, pero <strong>cuadruplica</strong> el tiempo de ajuste de la regresión logística. Conservar solo los dos fármacos con trece y veintiún encuentros añade un 2.5 % de columnas y aun así lo eleva de forma apreciable, entre un 40 % y dos tercios según la ejecución. El número de columnas con menos de treinta valores no nulos predice el tiempo mucho mejor que el total de columnas, y el umbral de veinticinco encuentros es exactamente el punto en que esas columnas desaparecen.</p>
+<p>El mecanismo es el condicionamiento del problema de optimización. Una columna con un puñado de valores no nulos sobre casi cien mil filas introduce una dirección de curvatura casi nula, lo que aumenta el número de condición de la matriz de diseño y ralentiza la convergencia del solver (SAGA en este diagnóstico; el efecto afecta igualmente a liblinear, el que usa el experimento) sin aportar capacidad predictiva. Extrapolado a las dieciséis corridas de la familia lineal, con 185 ajustes cada una, la diferencia entre el escenario depurado y el panel completo supone varias horas de cómputo adicional. En Naive Bayes el problema es distinto pero del mismo origen: una columna de varianza nula vuelve numéricamente inestable la verosimilitud con los valores más pequeños de <code class="docutils literal notranslate"><span class="pre">var_smoothing</span></code>.</p>
 <p>Los fármacos poco frecuentes que superan el umbral se conservan, y el capítulo 4 cuantifica la incertidumbre de su estimación en lugar de descartarlos: la escasez de una categoría no implica ausencia de señal, sino imposibilidad de estimarla con precisión, y ambas cosas se distinguen mirando el intervalo de confianza y no la tasa puntual.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2127,7 +2125,7 @@ Capítulos después       : 19
 <p>La comparación entre las tres posiciones diagnósticas caracteriza a la población. El aparato circulatorio domina en las tres por igual, alrededor del 30 %, lo que confirma que la comorbilidad cardiovascular es transversal en esta cohorte. La diabetes, en cambio, muestra un gradiente claro: aparece como diagnóstico principal en el 8.72 % de los encuentros, como secundario en el 12.79 % y como terciario en el 17.09 %. Es la confirmación cuantitativa de que en esta población la diabetes es mayoritariamente comorbilidad de fondo y no motivo de ingreso.</p>
 <p>El gradiente inverso lo presentan los capítulos que sí motivan la hospitalización: el digestivo baja del 9.13 % al 3.53 % y las lesiones del 6.90 % al 1.91 %. Son causas agudas de ingreso, no condiciones crónicas acompañantes.</p>
 <p>Las enfermedades endocrinas y metabólicas distintas de la diabetes siguen el patrón contrario, del 2.66 % al 8.95 %, coherente con el perfil metabólico del paciente diabético de larga evolución: dislipidemias y trastornos de líquidos y electrolitos que acompañan al ingreso sin causarlo.</p>
-<p>Los capítulos poco frecuentes se agruparán con el umbral uniforme de la sección 2.6: dos categorías en el diagnóstico principal, dos en el secundario y una en el terciario. No se aplica aquí ningún criterio específico para los diagnósticos, sino el que ya rige para el resto de variables categóricas, de modo que no haya una regla distinta por bloque de variables.</p>
+<p>Los capítulos poco frecuentes se agruparán con el umbral uniforme de la sección 2.6: tres categorías en el diagnóstico principal, tres en el secundario y dos en el terciario. No se aplica aquí ningún criterio específico para los diagnósticos, sino el que ya rige para el resto de variables categóricas, de modo que no haya una regla distinta por bloque de variables.</p>
 </section>
 <section id="edad-como-variable-ordinal">
 <h3>2.5.2. Edad como variable ordinal<a class="headerlink" href="#edad-como-variable-ordinal" title="Link to this heading">#</a></h3>
@@ -2546,8 +2544,7 @@ a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <
 <span class="n">limpio</span> <span class="o">=</span> <span class="n">limpio</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"medical_specialty"</span><span class="p">])</span>
 
 <span class="c1"># El umbral se aplica de forma uniforme a todas las variables categóricas,</span>
-<span class="c1"># incluidos el panel de fármacos y los grupos diagnósticos, para no dejar</span>
-<span class="c1"># ninguna categoría residual con frecuencias insuficientes.</span>
+<span class="c1"># incluidos los grupos diagnósticos, con dos excepciones declaradas:</span>
 <span class="c1"># race queda exenta: sus categorías cumplen los supuestos estadísticos sin</span>
 <span class="c1"># agrupar (se verifica en el capítulo 4) y agrupar un grupo demográfico</span>
 <span class="c1"># minoritario en una categoría residual lo haría desaparecer del análisis de</span>
@@ -2670,11 +2667,11 @@ a <code class="docutils literal notranslate"><span class="pre">&quot;No</span> <
 </table>
 </div></div></div>
 </div>
-<p>El efecto es sustancial en las variables de cardinalidad alta: el destino al alta pasa de 21 a 8 categorías, la especialidad médica de 73 a 11, el tipo de admisión de 8 a 6 y la fuente de admisión de 17 a 7. Los grupos diagnósticos pierden entre una y dos categorías cada uno. El panel de fármacos recibe su propia regla, que unifica en <code class="docutils literal notranslate"><span class="pre">&quot;Cambio&quot;</span></code> los ajustes de dosis cuando alguna dirección no alcanza el umbral; la insulina conserva sus cuatro niveles porque todos lo superan. El capítulo 4 verifica que, tras esta agrupación, las frecuencias esperadas cumplen el supuesto de la prueba chi-cuadrado, lo que no ocurría antes: más de una cuarta parte de las celdas tenía frecuencia esperada inferior a 5.</p>
+<p>El efecto es sustancial en las variables de cardinalidad alta: el destino al alta pasa de 21 a 8 categorías, la especialidad médica de 73 a 11, el tipo de admisión de 8 a 6 y la fuente de admisión de 17 a 7. Los grupos diagnósticos pierden entre dos y tres categorías cada uno. El panel de fármacos recibe su propia regla, que unifica en <code class="docutils literal notranslate"><span class="pre">&quot;Cambio&quot;</span></code> los ajustes de dosis cuando alguna dirección no alcanza el umbral; la insulina conserva sus cuatro niveles porque todos lo superan. El capítulo 4 verifica que, tras esta agrupación, las frecuencias esperadas cumplen el supuesto de la prueba chi-cuadrado en las variables agrupadas, lo que no ocurría antes: más de una cuarta parte de las celdas tenía frecuencia esperada inferior a 5. Los fármacos infrecuentes, que conservan categorías con muy pocos casos incluso tras su propia regla, se analizan en el capítulo 4 con la prueba exacta de Fisher.</p>
 <section id="tratamiento-de-race">
 <h3>2.6.1. Tratamiento de <code class="docutils literal notranslate"><span class="pre">race</span></code><a class="headerlink" href="#tratamiento-de-race" title="Link to this heading">#</a></h3>
 <p>La variable <code class="docutils literal notranslate"><span class="pre">race</span></code> tiene un 2.25 % de faltantes. La decisión es <strong>conservar la ausencia como categoría explícita</strong>, no imputarla, por dos razones.</p>
-<p>La estadística es que el capítulo 1 rechazó la ausencia completamente aleatoria: imputar la moda asignaría a todos los casos sin dato la categoría mayoritaria, creando una falsa homogeneidad.</p>
+<p>La estadística es que el capítulo 1 mostró que la ausencia de race se asocia al desenlace, lo que es evidencia contra una ausencia completamente aleatoria: imputar la moda asignaría a todos los casos sin dato la categoría mayoritaria, creando una falsa homogeneidad.</p>
 <p>La ética, más importante, es que <code class="docutils literal notranslate"><span class="pre">race</span></code> es un atributo protegido. Imputar la moda equivale a <strong>atribuir a 2,232 encuentros una pertenencia racial que no declararon</strong>, y esa atribución sintética se propagaría a cualquier análisis de equidad del modelo. Registrar “No informada” es la representación honesta del dato disponible.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2831,7 +2828,7 @@ Total de predictores: 38
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_1faf38a4_9b74_49a5_8ff9_864c5fd2fb7b" hidden="hidden">
+<table id="itables_8359871b_c886_4b2f_9d50_c46981cb07d7" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -2930,7 +2927,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_1faf38a4_9b74_49a5_8ff9_864c5fd2fb7b_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_8359871b_c886_4b2f_9d50_c46981cb07d7_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">tipo</th>
       <th style="border:1px solid #ddd;padding:8px">categorías</th>
@@ -2977,18 +2974,18 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">hospitalizacion_previa</td><td style="border:1px solid #ddd;padding:8px">int64</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">binaria</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">n_farmacos_activos</td><td style="border:1px solid #ddd;padding:8px">int64</td><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">numérica</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">especialidad</td><td style="border:1px solid #ddd;padding:8px">str</td><td style="border:1px solid #ddd;padding:8px">11</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">categórica</td></tr>
-</tbody></table></div><script>document.getElementById("itables_1faf38a4_9b74_49a5_8ff9_864c5fd2fb7b")?.removeAttribute("hidden");document.getElementById("itables_1faf38a4_9b74_49a5_8ff9_864c5fd2fb7b_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_8359871b_c886_4b2f_9d50_c46981cb07d7")?.removeAttribute("hidden");document.getElementById("itables_8359871b_c886_4b2f_9d50_c46981cb07d7_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_1faf38a4_9b74_49a5_8ff9_864c5fd2fb7b:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_8359871b_c886_4b2f_9d50_c46981cb07d7:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
         let dt_args = {
           "classes": ["display", "compact"],
-          "columnDefs": [{"render": "function (data, type, row, meta) { return type === 'sort' || type === 'type' ? data[1] : data[0]; }", "targets": [3]}],
+          "columnDefs": [{"render": "function (data, type, row, meta) { return type === 'sort' || type === 'type' ? data[1] : data[0]; }", "targets": [3]}, {"className": "dt-center", "targets": "_all"}],
           "data_json": "[[\"patient_nbr\", \"int64\", 69987, [\"0.0\", 0.0], \"identificador\"], [\"race\", \"str\", 6, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"gender\", \"str\", 2, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"admission_type_id\", \"str\", 6, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"discharge_disposition_id\", \"str\", 8, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"admission_source_id\", \"str\", 7, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"time_in_hospital\", \"int64\", 14, [\"0.0\", 0.0], \"num\\u00e9rica\"], [\"num_lab_procedures\", \"int64\", 118, [\"0.0\", 0.0], \"num\\u00e9rica\"], [\"num_procedures\", \"int64\", 7, [\"0.0\", 0.0], \"num\\u00e9rica\"], [\"num_medications\", \"int64\", 75, [\"0.0\", 0.0], \"num\\u00e9rica\"], [\"number_outpatient\", \"int64\", 39, [\"0.0\", 0.0], \"num\\u00e9rica\"], [\"number_emergency\", \"int64\", 33, [\"0.0\", 0.0], \"num\\u00e9rica\"], [\"number_inpatient\", \"int64\", 21, [\"0.0\", 0.0], \"num\\u00e9rica\"], [\"number_diagnoses\", \"int64\", 16, [\"0.0\", 0.0], \"num\\u00e9rica\"], [\"max_glu_serum\", \"str\", 4, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"A1Cresult\", \"str\", 4, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"metformin\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"repaglinide\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"nateglinide\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"chlorpropamide\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"glimepiride\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"glipizide\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"glyburide\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"pioglitazone\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"rosiglitazone\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"acarbose\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"miglitol\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"tolazamide\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"insulin\", \"str\", 4, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"glyburide-metformin\", \"str\", 3, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"change\", \"str\", 2, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"diabetesMed\", \"str\", 2, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"readmitted_30\", \"int64\", 2, [\"0.0\", 0.0], \"objetivo\"], [\"diag_1_grupo\", \"str\", 17, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"diag_2_grupo\", \"str\", 17, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"diag_3_grupo\", \"str\", 18, [\"0.0\", 0.0], \"categ\\u00f3rica\"], [\"age_ord\", \"int64\", 10, [\"0.0\", 0.0], \"ordinal\"], [\"hospitalizacion_previa\", \"int64\", 2, [\"0.0\", 0.0], \"binaria\"], [\"n_farmacos_activos\", \"int64\", 7, [\"0.0\", 0.0], \"num\\u00e9rica\"], [\"especialidad\", \"str\", 11, [\"0.0\", 0.0], \"categ\\u00f3rica\"]]",
           "keys_to_be_evaluated": [["columnDefs", 0, "render"]],
           "layout": {"bottomEnd": "paging", "bottomStart": "info", "topEnd": "search", "topStart": "pageLength"},
@@ -3002,14 +2999,28 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
         new ITable(table, dt_args);
     });
 </script>
-</div></div>
+</div><div class="output text_html">
+        <style>
+            table.dataTable td,
+            table.dataTable th {
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                overflow-wrap: anywhere !important;
+                vertical-align: middle !important;
+            }
+
+            table.dataTable td {
+                padding: 8px !important;
+            }
+        </style>
+        </div></div>
 </div>
 <p>No queda ningún valor faltante en el conjunto final: los dos casos con ausencias sustantivas (<code class="docutils literal notranslate"><span class="pre">race</span></code> y la especialidad médica) se resolvieron con categorías explícitas, y las columnas con faltantes masivos se eliminaron. Esto simplifica el pipeline, que necesitará imputación únicamente como salvaguarda.</p>
 </section>
 <section id="particion-de-entrenamiento-y-prueba">
 <h2>2.8. Partición de entrenamiento y prueba<a class="headerlink" href="#particion-de-entrenamiento-y-prueba" title="Link to this heading">#</a></h2>
 <p>La partición se crea <strong>aquí</strong>, antes de cualquier análisis bivariado, por una razón metodológica: explorar la relación entre predictores y desenlace sobre el conjunto completo y luego decidir qué variables o transformaciones usar introduce un sesgo de selección difícil de cuantificar. Los capítulos 3 a 5 trabajan solo con entrenamiento.</p>
-<p>Se usa una partición estratificada 80/20 con semilla fija. La estratificación es indispensable dado el desbalance: con un 11.4 % de casos positivos, una partición aleatoria simple podría producir conjuntos con prevalencias apreciablemente distintas.</p>
+<p>Se usa una partición 80/20 estratificada y agrupada por paciente, con semilla fija. La estratificación es indispensable dado el desbalance: con un 11.4 % de casos positivos, una partición aleatoria simple podría producir conjuntos con prevalencias apreciablemente distintas.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">StratifiedGroupKFold</span>
@@ -3210,8 +3221,9 @@ Exportado: diabetes_test.parquet
 </table>
 </div></div></div>
 </div>
+</section>
 <section id="sintesis-del-capitulo">
-<h3>2.10. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h3>
+<h2>2.10. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Etapa</p></th>
@@ -3243,7 +3255,6 @@ Exportado: diabetes_test.parquet
 </tbody>
 </table>
 </div>
-</section>
 </section>
 </section>
 
@@ -3340,10 +3351,8 @@ Exportado: diabetes_test.parquet
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#roles-de-las-variables">2.7. Roles de las variables</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#particion-de-entrenamiento-y-prueba">2.8. Partición de entrenamiento y prueba</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exportacion">2.9. Exportación</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">2.10. Síntesis del capítulo</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exportacion">2.9. Exportación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">2.10. Síntesis del capítulo</a></li>
 </ul>
   </nav></div>
 
