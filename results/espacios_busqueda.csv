@@ -1,0 +1,8 @@
+modelo,presupuesto,rejilla (Grid),"espacio continuo (Random, Optuna, genético)"
+knn,8,"n_neighbors: [25, 51, 101, 201]; weights: ['uniform', 'distance']","n_neighbors: intlog[5, 301]; weights: cat['uniform', 'distance']; p: cat[1, 2]"
+bayes,12,"var_smoothing: [np.float64(0.0), np.float64(0.0), np.float64(0.0), np.float64(0.0), np.float64(0.0), np.float64(1e-06), np.float64(1e-05), np.float64(0.0001), np.float64(0.001), np.float64(0.01), np.float64(0.1), np.float64(1.0)]","var_smoothing: log[1e-12, 1.0]"
+logistica,12,"C: [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]; penalty: ['l1', 'l2']","C: log[0.0001, 100.0]; penalty: cat['l1', 'l2']"
+arbol,12,"max_depth: [4, 8, 16]; min_samples_leaf: [20, 100]; criterion: ['gini', 'entropy']","max_depth: int[2, 30]; min_samples_leaf: intlog[1, 500]; criterion: cat['gini', 'entropy']; ccp_alpha: log[1e-07, 0.01]"
+random_forest,8,"max_depth: [8, 16]; min_samples_leaf: [5, 25]; max_features: ['sqrt', 0.3]","n_estimators: int[100, 500]; max_depth: int[4, 30]; min_samples_leaf: intlog[1, 100]; max_features: float[0.05, 0.6]"
+xgboost,8,"max_depth: [3, 6]; learning_rate: [0.05, 0.2]; min_child_weight: [1, 10]","learning_rate: log[0.01, 0.3]; max_depth: int[2, 10]; min_child_weight: log[1.0, 50.0]; subsample: float[0.5, 1.0]; colsample_bytree: float[0.5, 1.0]"
+svm,12,"C: [np.float64(1e-05), np.float64(4.3e-05), np.float64(0.000187), np.float64(0.000811), np.float64(0.003511), np.float64(0.015199), np.float64(0.065793), np.float64(0.284804), np.float64(1.232847), np.float64(5.336699), np.float64(23.101297), np.float64(100.0)]","C: log[1e-06, 100.0]"

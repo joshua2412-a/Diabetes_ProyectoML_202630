@@ -1,0 +1,8 @@
+modelo,presupuesto,ajuste interno (s),ajuste externo (s),"por corrida, 1 núcleo (min)","por corrida, paralelo (min)","16 corridas, paralelo (h)"
+knn,8,3.79,5.46,13.91,13.91,3.71
+bayes,12,3.71,5.72,12.11,3.77,1.0
+logistica,12,4.59,6.7,14.77,4.44,1.18
+arbol,12,5.39,8.92,17.36,5.24,1.4
+random_forest,8,14.44,22.08,31.62,31.62,8.43
+xgboost,8,4.2,7.11,9.34,9.34,2.49
+svm,12,5.54,8.21,17.79,5.32,1.42
