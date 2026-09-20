@@ -881,33 +881,50 @@ def _algoritmo_genetico(espacio, evaluar_lote, presupuesto, aleatorio,
 # Perfilamiento
 # ==========================================================================
 
-def medir_ajuste(pipeline, X_ent, y_ent, X_eval=None, y_eval=None):
-    """Mide tiempo, memoria pico y desempeño (AUC-PR) de un ajuste.
+def medir_ajuste(pipeline, X_ent, y_ent, X_eval=None, y_eval=None,
+                 medir_memoria=True):
+    """Mide tiempo, memoria pico y desempeño de un ajuste.
 
-    La memoria pico se mide con ``tracemalloc``, que registra las
-    asignaciones de Python y de numpy en el proceso principal; no ve la
-    memoria interna de bibliotecas en C++ (XGBoost) ni la de procesos
-    hijos, así que es una cota inferior en esos casos.
+    El tiempo se mide **sin** ``tracemalloc``: el perfilador de memoria
+    registra cada asignación y ralentiza de forma desigual las operaciones
+    con muchas asignaciones pequeñas (preprocesamiento, matrices dispersas),
+    lo que añadía un piso común de decenas de segundos a todos los modelos y
+    aplastaba las diferencias que se quieren medir. La memoria pico se mide
+    en un segundo ajuste independiente, sobre una copia sin ajustar.
+
+    ``tracemalloc`` registra las asignaciones de Python y de numpy en el
+    proceso principal; no ve la memoria interna de bibliotecas en C++
+    (XGBoost) ni la de procesos hijos, así que en esos casos es una cota
+    inferior.
+
+    Parameters
+    ----------
+    medir_memoria : bool, default True
+        Si es ``False`` se omite el segundo ajuste (la mitad del costo).
 
     Returns
     -------
     dict
-        ``ajuste_s``, ``inferencia_s``, ``memoria_pico_mb`` y, si se pasa un
-        conjunto de evaluación, ``auc_pr``.
+        ``ajuste_s``, ``memoria_pico_mb`` (si se mide) y, si se pasa un
+        conjunto de evaluación, ``inferencia_s`` y ``auc_pr``.
     """
-    tracemalloc.start()
     inicio = time.perf_counter()
     pipeline.fit(X_ent, y_ent)
-    ajuste = time.perf_counter() - inicio
-    _, pico = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
+    resultado = {"ajuste_s": time.perf_counter() - inicio}
 
-    resultado = {"ajuste_s": ajuste, "memoria_pico_mb": pico / 2**20}
+    if medir_memoria:
+        copia = clone(pipeline)
+        tracemalloc.start()
+        copia.fit(X_ent, y_ent)
+        _, pico = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+        resultado["memoria_pico_mb"] = pico / 2**20
+
     if X_eval is not None:
         inicio = time.perf_counter()
-        salida = pipeline.predict_proba(X_eval)[:, 1]
-        resultado["auc_pr"] = average_precision_score(y_eval, salida)
+        probabilidades = pipeline.predict_proba(X_eval)[:, 1]
         resultado["inferencia_s"] = time.perf_counter() - inicio
+        resultado["auc_pr"] = average_precision_score(y_eval, probabilidades)
     return resultado
 
 
