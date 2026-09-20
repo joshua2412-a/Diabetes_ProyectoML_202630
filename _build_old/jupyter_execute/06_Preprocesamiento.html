@@ -1,0 +1,1001 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6. Preprocesamiento, validación y línea base &#8212; Machine Learning - Diabetes</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_build_old/jupyter_execute/06_Preprocesamiento';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo1.png" class="logo__image only-light" alt="Machine Learning - Diabetes - Home"/>
+    <script>document.write(`<img src="../../_static/logo1.png" class="logo__image only-dark" alt="Machine Learning - Diabetes - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Predicción de Readmisión Hospitalaria en Pacientes Diabéticos
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../01_Datos.html">1. Dataset y Estructura</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_ETL.html">2. Depuración, ingeniería de características y partición</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../03_Univariado.html">3. Análisis univariado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_Bivariado.html">4. Análisis bivariado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Sintesis.html">5. Redundancia, fuga de información y síntesis del EDA</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/joshua2412-a/Diabetes_ProyectoML_202630" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/joshua2412-a/Diabetes_ProyectoML_202630/issues/new?title=Issue%20on%20page%20%2F_build_old/jupyter_execute/06_Preprocesamiento.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/_build_old/jupyter_execute/06_Preprocesamiento.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>6. Preprocesamiento, validación y línea base</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivo-del-capitulo">6.1. Objetivo del capítulo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-preprocesador">6.2. El preprocesador</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#por-que-va-dentro-del-pipeline">6.2.1. Por qué va dentro del pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tratamiento-por-bloque-de-variables">6.2.2. Tratamiento por bloque de variables</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-esquema-de-validacion">6.3. El esquema de validación</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#por-que-agrupada">6.3.1. Por qué agrupada</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validacion-anidada">6.3.2. Validación anidada</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linea-base-regresion-logistica">6.4. Línea base: regresión logística</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-linea-base">6.4.1. Interpretación de la línea base</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calibracion-y-umbral">6.4.2. Calibración y umbral</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#presupuesto-computacional">6.5. Presupuesto computacional</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-tabla-maestra">6.6. La tabla maestra</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">6.7. Síntesis del capítulo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-sigue">6.7.1. Lo que sigue</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="preprocesamiento-validacion-y-linea-base">
+<h1>6. Preprocesamiento, validación y línea base<a class="headerlink" href="#preprocesamiento-validacion-y-linea-base" title="Link to this heading">#</a></h1>
+<section id="objetivo-del-capitulo">
+<h2>6.1. Objetivo del capítulo<a class="headerlink" href="#objetivo-del-capitulo" title="Link to this heading">#</a></h2>
+<p>Este capítulo construye la infraestructura sobre la que corren las 140 combinaciones del experimento y establece el punto de referencia contra el que se medirán. Tres productos concretos:</p>
+<ol class="arabic simple">
+<li><p>Un <strong>preprocesador encapsulado</strong> que se ajusta dentro de cada fold, de modo que ninguna estimación (medianas, modas, niveles de categorías) use información del conjunto de evaluación.</p></li>
+<li><p>Un <strong>esquema de validación cruzada anidada y agrupada por paciente</strong>, con el bucle interno para seleccionar hiperparámetros y el externo para estimar desempeño.</p></li>
+<li><p>Una <strong>línea base</strong> con regresión logística, que fija la expectativa realista de desempeño y sirve de referencia para juzgar si la complejidad añadida de los modelos posteriores se traduce en mejora.</p></li>
+</ol>
+<p>Además se mide el costo computacional real de cada familia de modelos y se dimensiona el experimento completo, porque el resultado de esa medición obliga a tomar decisiones de diseño que conviene justificar antes y no improvisar a mitad de camino.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">experimento</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ex</span>
+
+<span class="n">train</span> <span class="o">=</span> <span class="n">leer_tabla</span><span class="p">(</span><span class="s2">&quot;diabetes_train&quot;</span><span class="p">)</span>
+<span class="n">roles</span> <span class="o">=</span> <span class="n">roles_variables</span><span class="p">()</span>
+
+<span class="n">OBJETIVO</span> <span class="o">=</span> <span class="n">roles</span><span class="p">[</span><span class="s2">&quot;objetivo&quot;</span><span class="p">]</span>
+<span class="n">IDENTIFICADOR</span> <span class="o">=</span> <span class="n">roles</span><span class="p">[</span><span class="s2">&quot;identificador&quot;</span><span class="p">]</span>
+<span class="n">PREDICTORES</span> <span class="o">=</span> <span class="p">(</span><span class="n">roles</span><span class="p">[</span><span class="s2">&quot;numericas&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">&quot;ordinales&quot;</span><span class="p">]</span>
+               <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">&quot;binarias&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">&quot;categoricas&quot;</span><span class="p">])</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">PREDICTORES</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span>
+<span class="n">grupos</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entrenamiento : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> encuentros de </span><span class="si">{</span><span class="n">grupos</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> pacientes&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Predictores   : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">PREDICTORES</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Clase positiva: </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="el-preprocesador">
+<h2>6.2. El preprocesador<a class="headerlink" href="#el-preprocesador" title="Link to this heading">#</a></h2>
+<section id="por-que-va-dentro-del-pipeline">
+<h3>6.2.1. Por qué va dentro del pipeline<a class="headerlink" href="#por-que-va-dentro-del-pipeline" title="Link to this heading">#</a></h3>
+<p>La imputación, el escalado y la codificación son <strong>transformaciones con parámetros estimados</strong>: una mediana, un rango intercuartílico, una moda, el conjunto de niveles observados de cada categórica. Si esos parámetros se calculan sobre todo el conjunto y luego se parte en folds, cada fold de validación habrá contribuido a definir la transformación con la que se le evalúa. El resultado es una estimación optimista del desempeño, y el efecto crece con la agresividad de la transformación: es leve en un escalado y severo en un remuestreo sintético como SMOTE, donde las muestras generadas pueden interpolar entre un punto de entrenamiento y otro de validación.</p>
+<p>La solución no es un orden cuidadoso de las celdas, sino estructural: todo el preprocesamiento se declara como etapas de un <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>, y el pipeline completo se pasa al validador cruzado. Así el ajuste ocurre por construcción dentro de cada fold y no depende de que nadie se equivoque al escribir el código.</p>
+</section>
+<section id="tratamiento-por-bloque-de-variables">
+<h3>6.2.2. Tratamiento por bloque de variables<a class="headerlink" href="#tratamiento-por-bloque-de-variables" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bloque</p></th>
+<th class="head"><p>Transformación</p></th>
+<th class="head"><p>Justificación</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Numéricas y ordinales</p></td>
+<td><p>Imputación por mediana y escalado robusto</p></td>
+<td><p>El capítulo 3 rechazó la normalidad en todas y documentó atípicos clínicamente plausibles que no se recortan. Con colas pesadas, la media y la desviación estándar quedan desplazadas, mientras que la mediana y el rango intercuartílico no. La imputación actúa solo como salvaguarda: el conjunto no tiene faltantes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Binarias</p></td>
+<td><p>Ninguna</p></td>
+<td><p>Ya están en <code class="docutils literal notranslate"><span class="pre">{0,</span> <span class="pre">1}</span></code>; escalarlas no aporta y dificulta interpretar los coeficientes</p></td>
+</tr>
+<tr class="row-even"><td><p>Categóricas</p></td>
+<td><p>Imputación por moda y codificación one-hot con agrupación de niveles poco frecuentes</p></td>
+<td><p>La codificación one-hot no impone orden entre categorías nominales. El umbral de frecuencia evita que un nivel presente en el fold de entrenamiento y ausente en el de validación genere una columna constante, que desestabiliza los coeficientes de los modelos lineales entre folds</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>El escalado es indispensable para los modelos basados en distancias o en márgenes (k-NN, SVM) y para los lineales regularizados, donde la penalización es sensible a la escala de cada coeficiente. Los ensambles de árboles son invariantes a transformaciones monótonas, así que para ellos es inocuo: se aplica de todas formas para que todas las combinaciones compartan el mismo preprocesador y las diferencias observadas se atribuyan al modelo y no al preprocesamiento.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">preprocesador</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">construir_preprocesador</span><span class="p">(</span><span class="n">roles</span><span class="p">)</span>
+<span class="n">preprocesador</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ajuste ilustrativo sobre el conjunto completo de entrenamiento, únicamente</span>
+<span class="c1"># para inspeccionar la dimensión resultante. En el experimento este ajuste</span>
+<span class="c1"># ocurre dentro de cada fold.</span>
+<span class="n">matriz</span> <span class="o">=</span> <span class="n">preprocesador</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">nombres_variables</span><span class="p">(</span><span class="n">preprocesador</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dimensión de la matriz: </span><span class="si">{</span><span class="n">matriz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="n">matriz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tipo de matriz        : </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">matriz</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Densidad              : </span><span class="si">{</span><span class="n">matriz</span><span class="o">.</span><span class="n">nnz</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">matriz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">matriz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Primeras 12 variables: </span><span class="si">{</span><span class="n">variables</span><span class="p">[:</span><span class="mi">12</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Los 38 predictores originales se convierten en 129 columnas. La matriz resultante es dispersa, con alrededor del 20 % de entradas no nulas, consecuencia de la codificación one-hot: cada variable categórica aporta tantas columnas como niveles, de las cuales solo una vale 1 en cada fila.</p>
+<p>Conservar la representación dispersa ahorra memoria y acelera los modelos lineales. Una excepción: <code class="docutils literal notranslate"><span class="pre">GaussianNB</span></code> no admite matrices dispersas, así que para ese modelo el motor cambia la codificación a densa de forma automática. Es el tipo de detalle que conviene resolver en la infraestructura y no en cada capítulo.</p>
+</section>
+</section>
+<section id="el-esquema-de-validacion">
+<h2>6.3. El esquema de validación<a class="headerlink" href="#el-esquema-de-validacion" title="Link to this heading">#</a></h2>
+<section id="por-que-agrupada">
+<h3>6.3.1. Por qué agrupada<a class="headerlink" href="#por-que-agrupada" title="Link to this heading">#</a></h3>
+<p>El capítulo 2 adoptó la cohorte completa de encuentros, de modo que un paciente puede aportar varias filas. Una partición por filas reparte esas filas entre entrenamiento y validación, y el modelo puede reconocer al paciente en lugar de aprender el mecanismo clínico.</p>
+<p>La magnitud del problema se puede medir, y conviene hacerlo en lugar de asumirla.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">StratifiedGroupKFold</span><span class="p">,</span> <span class="n">StratifiedKFold</span>
+
+<span class="n">por_filas</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
+<span class="n">indices_train</span><span class="p">,</span> <span class="n">indices_val</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">por_filas</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="n">compartidos</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">grupos</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices_train</span><span class="p">])</span>
+                  <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">grupos</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices_val</span><span class="p">]))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Con partición por filas (StratifiedKFold):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  pacientes en validación          : &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">grupos</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices_val</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  de ellos, presentes en entrenamiento: </span><span class="si">{</span><span class="n">compartidos</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">compartidos</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">grupos</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices_val</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>El 38 % de los pacientes del fold de validación también aparece en el de entrenamiento. Queda por ver cuánto infla eso las métricas, que es la pregunta que realmente importa.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
+
+<span class="n">pipeline_base</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">construir_pipeline</span><span class="p">(</span><span class="s2">&quot;logistica&quot;</span><span class="p">,</span> <span class="s2">&quot;class_weight&quot;</span><span class="p">,</span> <span class="n">roles</span><span class="p">)</span>
+
+<span class="n">esquemas</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Por filas (StratifiedKFold)&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">),</span>
+        <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;Por paciente (StratifiedGroupKFold)&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">),</span>
+        <span class="n">grupos</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">nombre</span><span class="p">,</span> <span class="p">(</span><span class="n">cv</span><span class="p">,</span> <span class="n">agrupacion</span><span class="p">)</span> <span class="ow">in</span> <span class="n">esquemas</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">auc</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">pipeline_base</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">agrupacion</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+                          <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;roc_auc&quot;</span><span class="p">)</span>
+    <span class="n">ap</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">pipeline_base</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">agrupacion</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+                         <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;average_precision&quot;</span><span class="p">)</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">&quot;esquema&quot;</span><span class="p">:</span> <span class="n">nombre</span><span class="p">,</span>
+        <span class="s2">&quot;AUC-ROC media&quot;</span><span class="p">:</span> <span class="n">auc</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s2">&quot;AUC-ROC sd&quot;</span><span class="p">:</span> <span class="n">auc</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="s2">&quot;AUC-PR media&quot;</span><span class="p">:</span> <span class="n">ap</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s2">&quot;AUC-PR sd&quot;</span><span class="p">:</span> <span class="n">ap</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="p">})</span>
+
+<span class="n">comparacion_cv</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;esquema&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">comparacion_cv</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>El resultado es instructivo y merece registrarse con precisión: <strong>para la regresión logística el efecto es nulo</strong>. Las dos estimaciones coinciden hasta la tercera cifra decimal, pese a que el 38 % de los pacientes de validación aparecía también en entrenamiento.</p>
+<p>La explicación es la capacidad del modelo. Una regresión logística con 129 coeficientes no puede memorizar pacientes individuales: ajusta una superficie de decisión global, y ver dos veces a la misma persona apenas la desplaza. El riesgo de la partición por filas no está en los modelos lineales, sino en los de alta capacidad, que sí pueden aprender identidades.</p>
+<p>Eso se comprueba con dos modelos de mayor capacidad sobre una submuestra, para que el cálculo sea viable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Submuestra de pacientes: k-NN y Random Forest son costosos y aquí solo se</span>
+<span class="c1"># necesita contrastar los dos esquemas de validación entre sí.</span>
+<span class="n">pacientes_muestra</span> <span class="o">=</span> <span class="p">(</span><span class="n">grupos</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+                           <span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">12_000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">))</span>
+<span class="n">submuestra</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">train</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pacientes_muestra</span><span class="p">)]</span>
+<span class="n">X_sub</span> <span class="o">=</span> <span class="n">submuestra</span><span class="p">[</span><span class="n">PREDICTORES</span><span class="p">]</span>
+<span class="n">y_sub</span> <span class="o">=</span> <span class="n">submuestra</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span>
+<span class="n">g_sub</span> <span class="o">=</span> <span class="n">submuestra</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span>
+
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">modelo</span><span class="p">,</span> <span class="n">balanceo</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="s2">&quot;ninguno&quot;</span><span class="p">),</span>
+                         <span class="p">(</span><span class="s2">&quot;random_forest&quot;</span><span class="p">,</span> <span class="s2">&quot;class_weight&quot;</span><span class="p">)]:</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">construir_pipeline</span><span class="p">(</span><span class="n">modelo</span><span class="p">,</span> <span class="n">balanceo</span><span class="p">,</span> <span class="n">roles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">modelo</span> <span class="o">==</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">:</span>
+        <span class="n">pipeline</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">modelo__n_estimators</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="n">resultado</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;modelo&quot;</span><span class="p">:</span> <span class="n">modelo</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">etiqueta</span><span class="p">,</span> <span class="n">cv</span><span class="p">,</span> <span class="n">agrupacion</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;filas&quot;</span><span class="p">,</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">),</span>
+         <span class="kc">None</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;paciente&quot;</span><span class="p">,</span> <span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                          <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">),</span> <span class="n">g_sub</span><span class="p">),</span>
+    <span class="p">]:</span>
+        <span class="n">auc</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">X_sub</span><span class="p">,</span> <span class="n">y_sub</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">agrupacion</span><span class="p">,</span>
+                              <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;roc_auc&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">ap</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">X_sub</span><span class="p">,</span> <span class="n">y_sub</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">agrupacion</span><span class="p">,</span>
+                             <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;average_precision&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">resultado</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AUC-ROC (</span><span class="si">{</span><span class="n">etiqueta</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auc</span>
+        <span class="n">resultado</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AUC-PR (</span><span class="si">{</span><span class="n">etiqueta</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ap</span>
+    <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;sesgo AUC-ROC&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;AUC-ROC (filas)&quot;</span><span class="p">]</span>
+                                  <span class="o">-</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;AUC-ROC (paciente)&quot;</span><span class="p">])</span>
+    <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;sesgo AUC-PR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;AUC-PR (filas)&quot;</span><span class="p">]</span>
+                                 <span class="o">-</span> <span class="n">resultado</span><span class="p">[</span><span class="s2">&quot;AUC-PR (paciente)&quot;</span><span class="p">])</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">resultado</span><span class="p">)</span>
+
+<span class="n">sesgo_capacidad</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;modelo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">sesgo_capacidad</span><span class="p">,</span> <span class="s2">&quot;sesgo_por_esquema_cv&quot;</span><span class="p">)</span>
+<span class="n">sesgo_capacidad</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ahora sí aparece el sesgo, y en la dirección esperada: la partición por filas sobrestima el desempeño de k-NN en unos 0.009 de AUC-ROC y el de Random Forest en unos 0.015 de AUC-PR. Son magnitudes modestas, no catastróficas, pero tienen dos consecuencias que justifican el agrupamiento.</p>
+<p>La primera es que el sesgo <strong>no es uniforme entre modelos</strong>: penaliza menos a los lineales y más a los de alta capacidad. En un experimento cuyo propósito es comparar familias de modelos entre sí, un sesgo diferencial de ese tipo distorsiona precisamente la comparación que se quiere hacer, aunque su valor absoluto sea pequeño.</p>
+<p>La segunda es que el orden de magnitud del sesgo es comparable al de las diferencias que se esperan entre modelos. Si dos modelos difieren en 0.01 de AUC-PR, un sesgo de 0.015 puede invertir el ranking.</p>
+</section>
+<section id="validacion-anidada">
+<h3>6.3.2. Validación anidada<a class="headerlink" href="#validacion-anidada" title="Link to this heading">#</a></h3>
+<p>Seleccionar hiperparámetros y estimar el desempeño con los mismos datos produce una estimación optimista, porque la selección se aprovecha del ruido del conjunto con el que se la evalúa. La validación anidada separa ambas funciones:</p>
+<ul class="simple">
+<li><p><strong>Bucle externo (5 folds):</strong> cada fold se reserva por completo y su métrica se calcula con el modelo ya seleccionado. La media y la desviación estándar entre estos cinco valores son lo que se reporta.</p></li>
+<li><p><strong>Bucle interno (3 folds):</strong> dentro de cada fold externo de entrenamiento, se buscan los hiperparámetros. El fold externo de validación no participa en esa búsqueda.</p></li>
+</ul>
+<p>Ambos bucles usan <code class="docutils literal notranslate"><span class="pre">StratifiedGroupKFold</span></code>, así que el agrupamiento por paciente se respeta en los dos niveles. El costo es multiplicativo: con un presupuesto de 12 configuraciones, cada corrida requiere 5 × (12 × 3 + 1) = 185 ajustes del pipeline.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">externo</span> <span class="o">=</span> <span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
+<span class="n">interno</span> <span class="o">=</span> <span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
+
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">idx_train</span><span class="p">,</span> <span class="n">idx_val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">externo</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">grupos</span><span class="p">),</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">g_train</span> <span class="o">=</span> <span class="n">grupos</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx_train</span><span class="p">]</span>
+    <span class="n">n_internos</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">interno</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx_train</span><span class="p">],</span> <span class="n">y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx_train</span><span class="p">],</span> <span class="n">groups</span><span class="o">=</span><span class="n">g_train</span><span class="p">))</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">&quot;fold externo&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+        <span class="s2">&quot;encuentros entrenamiento&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_train</span><span class="p">),</span>
+        <span class="s2">&quot;encuentros validación&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_val</span><span class="p">),</span>
+        <span class="s2">&quot;pacientes validación&quot;</span><span class="p">:</span> <span class="n">grupos</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx_val</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
+        <span class="s2">&quot;tasa positiva validación (%)&quot;</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx_val</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">&quot;folds internos&quot;</span><span class="p">:</span> <span class="n">n_internos</span><span class="p">,</span>
+        <span class="s2">&quot;pacientes compartidos&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">g_train</span><span class="p">)</span>
+                                     <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">grupos</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx_val</span><span class="p">])),</span>
+    <span class="p">})</span>
+
+<span class="n">estructura_cv</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;fold externo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">estructura_cv</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Los cinco folds son equilibrados en tamaño y prevalencia, y la columna de pacientes compartidos confirma en cero que el agrupamiento funciona en todos ellos.</p>
+</section>
+</section>
+<section id="linea-base-regresion-logistica">
+<h2>6.4. Línea base: regresión logística<a class="headerlink" href="#linea-base-regresion-logistica" title="Link to this heading">#</a></h2>
+<p>La línea base cumple dos funciones. Fija la expectativa realista de desempeño, coherente con lo que el capítulo 4 anticipó al no encontrar predictores individuales fuertes. Y sirve de referencia para juzgar los modelos posteriores: un ensamble con cientos de árboles que no supere claramente a una logística no justifica su costo computacional ni su opacidad.</p>
+<p>Se usa <code class="docutils literal notranslate"><span class="pre">class_weight=&quot;balanced&quot;</span></code>, que pondera cada clase por el inverso de su frecuencia. Es la forma más simple de atender el desbalance y no altera los datos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">corrida_base</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">&quot;logistica&quot;</span><span class="p">,</span> <span class="s2">&quot;class_weight&quot;</span><span class="p">,</span> <span class="s2">&quot;grid&quot;</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">resultado_base</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">ejecutar_corrida</span><span class="p">(</span>
+    <span class="n">corrida_base</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span>
+    <span class="n">folds_externos</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">folds_internos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">metrica</span><span class="o">=</span><span class="s2">&quot;average_precision&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">resumen_base</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;media&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">resultado_base</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">_media&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ex</span><span class="o">.</span><span class="n">METRICAS</span><span class="p">],</span>
+    <span class="s2">&quot;desviación estándar&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">resultado_base</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">_sd&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ex</span><span class="o">.</span><span class="n">METRICAS</span><span class="p">],</span>
+<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">ex</span><span class="o">.</span><span class="n">METRICAS</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tiempo de búsqueda   : </span><span class="si">{</span><span class="n">resultado_base</span><span class="p">[</span><span class="s1">&#39;tiempo_busqueda_s&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tiempo de ajuste     : </span><span class="si">{</span><span class="n">resultado_base</span><span class="p">[</span><span class="s1">&#39;tiempo_ajuste_s&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tiempo de inferencia : </span><span class="si">{</span><span class="n">resultado_base</span><span class="p">[</span><span class="s1">&#39;tiempo_inferencia_s&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> s&quot;</span><span class="p">)</span>
+<span class="n">resumen_base</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hiperparámetro seleccionado en cada fold externo: su estabilidad indica si</span>
+<span class="c1"># la superficie de validación es plana o si la selección es sensible al ruido.</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resultado_base</span><span class="p">[</span><span class="s2">&quot;hiperparametros_por_fold&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="interpretacion-de-la-linea-base">
+<h3>6.4.1. Interpretación de la línea base<a class="headerlink" href="#interpretacion-de-la-linea-base" title="Link to this heading">#</a></h3>
+<p>El AUC-ROC se sitúa en torno a 0.66 y el AUC-PR en torno a 0.21, con desviaciones estándar entre folds pequeñas. Tres lecturas:</p>
+<ul class="simple">
+<li><p><strong>Es un desempeño moderado y era previsible.</strong> El capítulo 4 mostró que ningún predictor individual alcanza un tamaño de efecto pequeño. Un AUC-ROC de 0.66 significa que, tomando un paciente readmitido y otro no readmitido al azar, el modelo asigna mayor riesgo al primero en dos de cada tres casos. Está lejos de un clasificador útil por sí solo, pero muy por encima del azar.</p></li>
+<li><p><strong>El AUC-PR contextualiza la utilidad clínica.</strong> Un valor de 0.21 frente a una prevalencia del 11.4 % implica que la precisión media casi duplica la que obtendría una selección aleatoria de pacientes. Traducido a la práctica: si el hospital puede dar seguimiento intensivo a un número limitado de pacientes, priorizarlos con este modelo acierta cerca del doble que hacerlo al azar.</p></li>
+<li><p><strong>La estabilidad entre folds es buena.</strong> Desviaciones estándar de ese orden indican que la estimación no depende de la partición concreta, lo que da confianza a las comparaciones posteriores.</p></li>
+</ul>
+</section>
+<section id="calibracion-y-umbral">
+<h3>6.4.2. Calibración y umbral<a class="headerlink" href="#calibracion-y-umbral" title="Link to this heading">#</a></h3>
+<p>El coeficiente de Brier se reporta porque el AUC solo mide el ordenamiento de los pacientes, no si las probabilidades predichas son correctas en magnitud. Un modelo puede ordenar bien y estar mal calibrado, y para una decisión clínica al alta la magnitud importa: “este paciente tiene un 30 % de riesgo” es una afirmación que debe ser cierta, no solo mayor que la de otro paciente. El capítulo 8 desarrolla el análisis de calibración con curvas de fiabilidad y las correcciones de Platt e isotónica.</p>
+<p>Sobre el umbral: las métricas F1 y exactitud balanceada de la tabla usan el umbral 0.5 por convención, pero con <code class="docutils literal notranslate"><span class="pre">class_weight=&quot;balanced&quot;</span></code> ese umbral no es el óptimo, y en un problema desbalanceado casi nunca lo es. La elección del umbral de decisión es una decisión clínica que depende del costo relativo de un falso negativo (un reingreso no anticipado) frente a un falso positivo (seguimiento innecesario), y se aborda en el capítulo 8. Las métricas independientes del umbral, AUC-ROC y AUC-PR, son las que gobiernan la comparación entre modelos.</p>
+</section>
+</section>
+<section id="presupuesto-computacional">
+<h2>6.5. Presupuesto computacional<a class="headerlink" href="#presupuesto-computacional" title="Link to this heading">#</a></h2>
+<p>El diseño pide 112 corridas de clasificación. Antes de lanzarlas conviene medir cuánto cuesta un solo ajuste de cada familia de modelos y extrapolar, porque el resultado condiciona el diseño.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="n">perfil</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;logistica&quot;</span><span class="p">,</span> <span class="s2">&quot;ridge&quot;</span><span class="p">,</span> <span class="s2">&quot;lasso&quot;</span><span class="p">,</span> <span class="s2">&quot;bayes&quot;</span><span class="p">,</span> <span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="s2">&quot;knn&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;random_forest&quot;</span><span class="p">]:</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">construir_pipeline</span><span class="p">(</span><span class="n">modelo</span><span class="p">,</span> <span class="s2">&quot;ninguno&quot;</span><span class="p">,</span> <span class="n">roles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">modelo</span> <span class="o">==</span> <span class="s2">&quot;random_forest&quot;</span><span class="p">:</span>
+        <span class="n">pipeline</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">modelo__n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="n">inicio</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">t_ajuste</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">inicio</span>
+
+    <span class="n">inicio</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">5_000</span><span class="p">])</span>
+    <span class="n">t_inferencia</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">inicio</span>
+
+    <span class="n">perfil</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">&quot;modelo&quot;</span><span class="p">:</span> <span class="n">modelo</span><span class="p">,</span>
+        <span class="s2">&quot;ajuste (s)&quot;</span><span class="p">:</span> <span class="n">t_ajuste</span><span class="p">,</span>
+        <span class="s2">&quot;inferencia 5k filas (s)&quot;</span><span class="p">:</span> <span class="n">t_inferencia</span><span class="p">,</span>
+    <span class="p">})</span>
+
+<span class="n">perfil</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">perfil</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;modelo&quot;</span><span class="p">)</span>
+<span class="c1"># 5 folds externos x (12 configuraciones x 3 folds internos + 1 ajuste final)</span>
+<span class="n">AJUSTES_POR_CORRIDA</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">perfil</span><span class="p">[</span><span class="s2">&quot;proyección por corrida (h)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">perfil</span><span class="p">[</span><span class="s2">&quot;ajuste (s)&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">AJUSTES_POR_CORRIDA</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">)</span>
+<span class="n">perfil</span><span class="p">[</span><span class="s2">&quot;proyección 16 corridas (h)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">perfil</span><span class="p">[</span><span class="s2">&quot;proyección por corrida (h)&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span><span class="p">)</span>
+
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">perfil</span><span class="p">,</span> <span class="s2">&quot;perfil_computacional&quot;</span><span class="p">)</span>
+<span class="n">perfil</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>La medición cambia el diseño. Los modelos lineales y el bayesiano cuestan minutos por corrida, pero Random Forest requiere horas, y las 16 combinaciones de cada modelo (4 estrategias de balanceo × 4 optimizadores) multiplican ese costo. k-NN presenta el perfil inverso: se ajusta en un instante y es caro al predecir, porque calcula distancias contra todo el conjunto de entrenamiento en cada consulta.</p>
+<p>Ejecutar el diseño literal en un solo núcleo llevaría semanas. Se adoptan cuatro medidas, todas declaradas de antemano para que no parezcan ajustes oportunistas:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Medida</p></th>
+<th class="head"><p>Descripción</p></th>
+<th class="head"><p>Efecto</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Paralelización</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">n_jobs=-1</span></code> en el bucle interno de búsqueda y en los modelos que lo admiten</p></td>
+<td><p>Divide el tiempo por el número de núcleos disponibles</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Multi-fidelidad</strong></p></td>
+<td><p>La búsqueda de hiperparámetros se ejecuta sobre una submuestra estratificada de pacientes; el ajuste final de cada fold externo usa el fold completo</p></td>
+<td><p>El costo de la búsqueda, que es el 97 % del total, baja proporcionalmente al tamaño de la submuestra</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Presupuesto diferenciado</strong></p></td>
+<td><p>12 configuraciones para los modelos económicos, 8 para los costosos</p></td>
+<td><p>Reduce el número de evaluaciones donde cada una es más cara</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Sustitución del SVM con kernel</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">LinearSVC</span></code> calibrado en lugar de <code class="docutils literal notranslate"><span class="pre">SVC</span></code> con kernel radial</p></td>
+<td><p>Pasa de complejidad cúbica a lineal en el número de observaciones</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>La tercera medida introduce un sesgo conocido: un presupuesto menor explora menos el espacio, lo que podría penalizar a los modelos costosos. Por eso el presupuesto se registra como columna de la tabla maestra y se declara al comparar, en lugar de quedar implícito.</p>
+<p>La segunda merece una advertencia metodológica: la multi-fidelidad supone que el orden relativo de las configuraciones de hiperparámetros se conserva al cambiar el tamaño de la muestra. Es un supuesto razonable y de uso extendido, pero no es gratuito, y el capítulo 9 lo verifica comparando, para los modelos económicos, la configuración elegida con submuestra frente a la elegida con el fold completo.</p>
+</section>
+<section id="la-tabla-maestra">
+<h2>6.6. La tabla maestra<a class="headerlink" href="#la-tabla-maestra" title="Link to this heading">#</a></h2>
+<p>Las 140 corridas se registran en una única tabla, con una fila por combinación. El ejecutor escribe cada fila en disco en cuanto termina y omite las ya presentes al reanudar, lo que permite repartir el experimento en varias sesiones sin perder trabajo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">demostracion</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">&quot;logistica&quot;</span><span class="p">,</span> <span class="s2">&quot;ninguno&quot;</span><span class="p">,</span> <span class="s2">&quot;grid&quot;</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+    <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">&quot;bayes&quot;</span><span class="p">,</span> <span class="s2">&quot;class_weight&quot;</span><span class="p">,</span> <span class="s2">&quot;grid&quot;</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+    <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="s2">&quot;lasso&quot;</span><span class="p">,</span> <span class="s2">&quot;ninguno&quot;</span><span class="p">,</span> <span class="s2">&quot;random&quot;</span><span class="p">,</span> <span class="n">presupuesto</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">tabla_demo</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">ejecutar_experimento</span><span class="p">(</span>
+    <span class="n">demostracion</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span>
+    <span class="n">ruta_tabla</span><span class="o">=</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">&quot;tabla_maestra_demo.csv&quot;</span><span class="p">,</span>
+    <span class="n">folds_externos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">folds_internos</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">columnas</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;modelo&quot;</span><span class="p">,</span> <span class="s2">&quot;balanceo&quot;</span><span class="p">,</span> <span class="s2">&quot;optimizador&quot;</span><span class="p">,</span> <span class="s2">&quot;estado&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;auc_pr_media&quot;</span><span class="p">,</span> <span class="s2">&quot;auc_pr_sd&quot;</span><span class="p">,</span> <span class="s2">&quot;auc_roc_media&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tiempo_busqueda_s&quot;</span><span class="p">,</span> <span class="s2">&quot;tiempo_total_s&quot;</span><span class="p">]</span>
+<span class="n">tabla</span><span class="p">(</span><span class="n">tabla_demo</span><span class="p">[</span><span class="n">columnas</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>La segunda fila ilustra el registro de combinaciones inaplicables: <code class="docutils literal notranslate"><span class="pre">GaussianNB</span></code> no acepta el parámetro <code class="docutils literal notranslate"><span class="pre">class_weight</span></code>, y en lugar de omitir la celda en silencio, el motor la registra con estado <code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">aplicable&quot;</span></code> y el motivo. Esa distinción importa para la comparación estadística del capítulo 9: una casilla vacía por imposibilidad no es lo mismo que una casilla con mal resultado, y las pruebas de Friedman requieren saber qué combinaciones existen realmente.</p>
+<p>Las columnas de la tabla maestra son:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Grupo</p></th>
+<th class="head"><p>Columnas</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Identificación</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">modelo</span></code>, <code class="docutils literal notranslate"><span class="pre">balanceo</span></code>, <code class="docutils literal notranslate"><span class="pre">optimizador</span></code>, <code class="docutils literal notranslate"><span class="pre">presupuesto</span></code>, <code class="docutils literal notranslate"><span class="pre">folds_externos</span></code>, <code class="docutils literal notranslate"><span class="pre">folds_internos</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Desempeño</p></td>
+<td><p>media y desviación estándar de AUC-ROC, AUC-PR, F1, exactitud balanceada y Brier</p></td>
+</tr>
+<tr class="row-even"><td><p>Distribución por fold</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auc_pr_por_fold</span></code>, <code class="docutils literal notranslate"><span class="pre">auc_roc_por_fold</span></code>, necesarias para las pruebas de Friedman y Nemenyi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Costo</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiempo_busqueda_s</span></code>, <code class="docutils literal notranslate"><span class="pre">tiempo_ajuste_s</span></code>, <code class="docutils literal notranslate"><span class="pre">tiempo_inferencia_s</span></code>, <code class="docutils literal notranslate"><span class="pre">tiempo_total_s</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Trazabilidad</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hiperparametros_por_fold</span></code>, <code class="docutils literal notranslate"><span class="pre">estado</span></code>, <code class="docutils literal notranslate"><span class="pre">detalle</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Guardar las métricas por fold y no solo su media es lo que permitirá aplicar las pruebas no paramétricas del capítulo 9 sobre las distribuciones, en lugar de comparar únicamente promedios.</p>
+</section>
+<section id="sintesis-del-capitulo">
+<h2>6.7. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dimensión</p></th>
+<th class="head"><p>Resultado</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Preprocesador</p></td>
+<td><p>38 predictores a 129 columnas; escalado robusto, imputación de salvaguarda y one-hot con agrupación de niveles poco frecuentes, todo ajustado dentro de cada fold</p></td>
+</tr>
+<tr class="row-odd"><td><p>Esquema de validación</p></td>
+<td><p>Anidado: 5 folds externos y 3 internos, ambos con <code class="docutils literal notranslate"><span class="pre">StratifiedGroupKFold</span></code> por <code class="docutils literal notranslate"><span class="pre">patient_nbr</span></code>; cero pacientes compartidos en los cinco folds</p></td>
+</tr>
+<tr class="row-even"><td><p>Sesgo de la partición por filas</p></td>
+<td><p>Nulo en regresión logística; aproximadamente +0.009 de AUC-ROC en k-NN y +0.015 de AUC-PR en Random Forest. El sesgo es diferencial por capacidad del modelo, lo que distorsionaría la comparación entre familias</p></td>
+</tr>
+<tr class="row-odd"><td><p>Línea base</p></td>
+<td><p>Regresión logística con ponderación por clase: AUC-ROC ≈ 0.66, AUC-PR ≈ 0.21, con desviaciones estándar entre folds reducidas</p></td>
+</tr>
+<tr class="row-even"><td><p>Costo computacional</p></td>
+<td><p>Los modelos lineales cuestan minutos por corrida; Random Forest, horas. Se adoptan paralelización, multi-fidelidad en la búsqueda, presupuesto diferenciado y sustitución del SVM con kernel</p></td>
+</tr>
+<tr class="row-odd"><td><p>Infraestructura</p></td>
+<td><p>Motor con puntos de control en disco, registro explícito de combinaciones no aplicables y métricas por fold para la comparación estadística posterior</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="lo-que-sigue">
+<h3>6.7.1. Lo que sigue<a class="headerlink" href="#lo-que-sigue" title="Link to this heading">#</a></h3>
+<p>El capítulo 7 ejecuta las 112 corridas de clasificación con esta infraestructura y compara las estrategias de balanceo. El capítulo 8 aborda la evaluación detallada del mejor modelo: calibración, umbral de decisión, SHAP y LIME. El capítulo 9 aplica la comparación estadística jerárquica (Friedman, Nemenyi, DeLong con corrección de Holm y delta de Cliff) sobre las métricas por fold que esta tabla maestra ya está registrando.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./_build_old\jupyter_execute"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivo-del-capitulo">6.1. Objetivo del capítulo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-preprocesador">6.2. El preprocesador</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#por-que-va-dentro-del-pipeline">6.2.1. Por qué va dentro del pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tratamiento-por-bloque-de-variables">6.2.2. Tratamiento por bloque de variables</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-esquema-de-validacion">6.3. El esquema de validación</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#por-que-agrupada">6.3.1. Por qué agrupada</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validacion-anidada">6.3.2. Validación anidada</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linea-base-regresion-logistica">6.4. Línea base: regresión logística</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-linea-base">6.4.1. Interpretación de la línea base</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calibracion-y-umbral">6.4.2. Calibración y umbral</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#presupuesto-computacional">6.5. Presupuesto computacional</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#la-tabla-maestra">6.6. La tabla maestra</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">6.7. Síntesis del capítulo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-sigue">6.7.1. Lo que sigue</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
