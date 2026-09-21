@@ -185,6 +185,8 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">3. Análisis univariado</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04_Bivariado.html">4. Análisis bivariado</a></li>
 <li class="toctree-l1"><a class="reference internal" href="05_Sintesis.html">5. Redundancia, fuga de información y síntesis del EDA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Preprocesamiento.html">6. Preprocesamiento, validación y línea base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_Clasificacion.html">7. Experimento combinatorio de clasificación</a></li>
 </ul>
 
     </div>
@@ -417,7 +419,7 @@ document.write(`
 <span class="n">BINARIAS</span> <span class="o">=</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"binarias"</span><span class="p">]</span>
 <span class="n">ETIQUETAS_EDAD</span> <span class="o">=</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"etiquetas_edad"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
-<span class="n">train</span> <span class="o">=</span> <span class="n">leer_tabla</span><span class="p">(</span><span class="s2">"Diabetes_train"</span><span class="p">)</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">leer_tabla</span><span class="p">(</span><span class="s2">"diabetes_train"</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">train</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"El conjunto cargado tiene faltantes"</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Conjunto de entrenamiento: </span><span class="si">{</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> filas x "</span>
       <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> columnas"</span><span class="p">)</span>
@@ -435,95 +437,29 @@ document.write(`
 <p>El grado de desbalance determina las métricas de evaluación y justifica la etapa de balanceo del pipeline experimental.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conteo</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">train</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span>
-    <span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
-    <span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conteo</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+<span class="n">proporcion</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
 
-<span class="n">proporcion</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">train</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span>
-    <span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
-<span class="p">)</span>
-
-<span class="n">etiquetas</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">"No readmitido"</span><span class="p">,</span>
-    <span class="s2">"Readmitido</span><span class="se">\n</span><span class="s2">(&lt; 30 días)"</span>
-<span class="p">]</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
-
-<span class="n">barras</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
-    <span class="n">etiquetas</span><span class="p">,</span>
-    <span class="n">conteo</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="n">COLORES</span><span class="p">,</span>
-    <span class="n">width</span><span class="o">=</span><span class="mf">0.58</span><span class="p">,</span>
-    <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
-    <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.2</span>
-<span class="p">)</span>
-
-<span class="k">for</span> <span class="n">barra</span><span class="p">,</span> <span class="n">porcentaje</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">barras</span><span class="p">,</span> <span class="n">proporcion</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-        <span class="n">barra</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">barra</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="n">barra</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span> <span class="o">+</span> <span class="n">conteo</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.015</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">porcentaje</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-        <span class="n">ha</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span>
-        <span class="n">va</span><span class="o">=</span><span class="s2">"bottom"</span><span class="p">,</span>
-        <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
-        <span class="n">fontweight</span><span class="o">=</span><span class="s2">"bold"</span>
-    <span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Número de pacientes"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Categoría de readmisión"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-    <span class="s2">"Distribución de la variable objetivo</span><span class="se">\n</span><span class="s2">"</span>
-    <span class="s2">"Conjunto de entrenamiento"</span><span class="p">,</span>
-    <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
-    <span class="n">fontweight</span><span class="o">=</span><span class="s2">"bold"</span><span class="p">,</span>
-    <span class="n">pad</span><span class="o">=</span><span class="mi">15</span>
-<span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">conteo</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1.16</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"y"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_axisbelow</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">"top"</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">"right"</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"y"</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">5.2</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">))</span>
+<span class="n">barras</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">([</span><span class="s2">"No readmitido"</span><span class="p">,</span> <span class="s2">"Readmitido &lt; 30 días"</span><span class="p">],</span> <span class="n">conteo</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">COLORES</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">barra</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">barras</span><span class="p">,</span> <span class="n">proporcion</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">barra</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">barra</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">barra</span><span class="o">.</span><span class="n">get_height</span><span class="p">(),</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">p</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">"bottom"</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">"bold"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Pacientes"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Distribución de la variable objetivo (entrenamiento)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">conteo</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1.15</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Resumen del desbalance de clases"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span>
-    <span class="sa">f</span><span class="s2">"Clase minoritaria: </span><span class="si">{</span><span class="n">conteo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> pacientes "</span>
-    <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">proporcion</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">)"</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span>
-    <span class="sa">f</span><span class="s2">"Clase mayoritaria: </span><span class="si">{</span><span class="n">conteo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> pacientes "</span>
-    <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">proporcion</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">)"</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span>
-    <span class="sa">f</span><span class="s2">"Razón de desbalance: 1 a "</span>
-    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">conteo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">conteo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span>
-<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Clase minoritaria  : </span><span class="si">{</span><span class="n">conteo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> pacientes (</span><span class="si">{</span><span class="n">proporcion</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Razón de desbalance: 1 a </span><span class="si">{</span><span class="n">conteo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">conteo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/79235c527afa342f33fb117dc8934aed6ee4f241fe6fc68302ba3435c2d2889e.png" src="_images/79235c527afa342f33fb117dc8934aed6ee4f241fe6fc68302ba3435c2d2889e.png" />
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Resumen del desbalance de clases
-----------------------------------------
-Clase minoritaria: 9,051 pacientes (11.39%)
-Clase mayoritaria: 70,422 pacientes (88.61%)
+<img alt="_images/19ae7e4adbb6179ca981a54b3342bd5c6861add297d6de3809c45884f7301bdb.png" src="_images/19ae7e4adbb6179ca981a54b3342bd5c6861add297d6de3809c45884f7301bdb.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clase minoritaria  : 9,051 pacientes (11.39%)
 Razón de desbalance: 1 a 7.8
 </pre></div>
 </div>

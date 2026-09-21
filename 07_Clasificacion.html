@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -60,6 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '07_Clasificacion';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="6. Preprocesamiento, validación y línea base" href="06_Preprocesamiento.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -122,8 +123,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -179,12 +178,14 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_Datos.html">1. Dataset y Estructura</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_ETL.html">2. Depuración, ingeniería de características y partición</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03_Univariado.html">3. Análisis univariado</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04_Bivariado.html">4. Análisis bivariado</a></li>
 <li class="toctree-l1"><a class="reference internal" href="05_Sintesis.html">5. Redundancia, fuga de información y síntesis del EDA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Preprocesamiento.html">6. Preprocesamiento, validación y línea base</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">7. Experimento combinatorio de clasificación</a></li>
 </ul>
 
     </div>
@@ -499,22 +500,27 @@ document.write(`
 </section>
 <section id="presupuesto-y-multi-fidelidad">
 <h2>7.2. Presupuesto y multi-fidelidad<a class="headerlink" href="#presupuesto-y-multi-fidelidad" title="Link to this heading">#</a></h2>
-<p>El capítulo 6 midió el costo por ajuste de cada familia y mostró que ejecutar el diseño literal en un núcleo llevaría semanas. Se aplican dos medidas declaradas de antemano.</p>
-<p><strong>Presupuesto diferenciado.</strong> Los modelos económicos reciben 12 configuraciones y los costosos 8. La reducción se registra como columna de la tabla maestra, de modo que la comparación entre modelos pueda tenerla en cuenta: un modelo con menos evaluaciones explora menos su espacio, y eso lo penaliza.</p>
-<p><strong>Multi-fidelidad por submuestreo.</strong> La búsqueda interna se ejecuta sobre una submuestra de pacientes del fold externo de entrenamiento; el ajuste final de cada fold usa todos sus datos. La fidelidad elegida es el <strong>tamaño de muestra</strong>, no el número de árboles ni de iteraciones, porque es la única dimensión aplicable a los siete modelos por igual y permite que el factor de reducción sea idéntico para todos. El factor es de 4 para los modelos costosos (25 % de los pacientes) y de 1 para los económicos, que no lo necesitan.</p>
-<p>El supuesto que introduce la multi-fidelidad es que el orden relativo entre configuraciones se conserva al reducir la muestra. El capítulo 8 lo verifica de forma directa, comparando en los modelos económicos la configuración elegida con submuestra frente a la elegida con el fold completo.</p>
+<p>El capítulo 6 midió el costo por ajuste de cada familia y proyectó el experimento completo en unas 24 horas de cómputo, como cota inferior. Se aplican tres medidas, todas declaradas antes de ejecutar y registradas en la tabla maestra.</p>
+<p><strong>Presupuesto por modelo.</strong> Cada modelo evalúa tantas configuraciones como tiene su rejilla: 12 en los económicos y 8 en los costosos (k-NN, Random Forest y XGBoost). El presupuesto es <strong>idéntico para los cuatro optimizadores de un mismo modelo</strong>, de modo que la comparación entre optimizadores del capítulo 8 sea a igualdad de evaluaciones. Entre modelos, en cambio, introduce una asimetría: un modelo con 8 configuraciones explora menos su espacio que uno con 12, y eso lo penaliza. La columna <code class="docutils literal notranslate"><span class="pre">presupuesto</span></code> de la tabla maestra permite tenerlo en cuenta al comparar.</p>
+<p><strong>Multi-fidelidad, primer mecanismo: Successive Halving.</strong> Viene del motor y solo afecta a Optuna. La fidelidad es el número de folds internos evaluados: una configuración que tras el primer fold no está en el tercio superior se descarta sin evaluar los dos restantes (factor de reducción η = 3). La columna <code class="docutils literal notranslate"><span class="pre">n_ajustes</span></code> registra cuántos ajustes consumió realmente cada corrida, lo que permite medir el ahorro en el capítulo 8.</p>
+<p><strong>Multi-fidelidad, segundo mecanismo: submuestreo de pacientes.</strong> La búsqueda interna de los modelos costosos se ejecuta sobre el <strong>25 % de los pacientes</strong> del fold externo de entrenamiento (factor de reducción 4); el ajuste final de cada fold externo usa siempre todos sus datos, de modo que las métricas reportadas no pierden precisión. La submuestra se toma por paciente y no por fila, así que la integridad de los grupos se mantiene también en la búsqueda. Se aplica igual a los cuatro optimizadores del mismo modelo, por la misma razón que el presupuesto.</p>
+<p>El factor 4 se elige para dejar unos 10,000 pacientes en la búsqueda, suficientes para estimar el AUC-PR con una precisión del orden de 0.01, que es la escala de las diferencias entre configuraciones. La fracción queda registrada en la columna <code class="docutils literal notranslate"><span class="pre">fraccion_busqueda</span></code>.</p>
+<p>El supuesto que introduce el submuestreo es que el orden relativo entre configuraciones se conserva al reducir la muestra. No se da por bueno: el capítulo 8 lo verifica de forma directa, repitiendo la búsqueda de los modelos económicos con el 25 % y comparando la configuración elegida con la que sale del fold completo.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modelos cuyo costo por ajuste justifica reducir presupuesto y fidelidad</span>
-<span class="c1"># (medición en el capítulo 6, sección 6.5).</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modelos cuyo costo por ajuste justifica reducir la fidelidad de la búsqueda</span>
+<span class="c1"># (medición en el capítulo 6, secciones 6.7 y 6.9).</span>
 <span class="n">COSTOSOS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"random_forest"</span><span class="p">,</span> <span class="s2">"xgboost"</span><span class="p">,</span> <span class="s2">"knn"</span><span class="p">}</span>
 
-<span class="n">PRESUPUESTO_ECONOMICO</span><span class="p">,</span> <span class="n">PRESUPUESTO_COSTOSO</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">8</span>
 <span class="n">FIDELIDAD_ECONOMICA</span><span class="p">,</span> <span class="n">FIDELIDAD_COSTOSA</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.25</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">construir_corridas</span><span class="p">(</span><span class="n">modelos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">balanceos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">optimizadores</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Genera las combinaciones del diseño con su presupuesto asignado.</span>
+<span class="w">    </span><span class="sd">"""Genera las combinaciones del diseño con su fidelidad de búsqueda.</span>
+
+<span class="sd">    El presupuesto no se fija aquí: lo deriva el motor del tamaño de la</span>
+<span class="sd">    rejilla de cada modelo (`ex.presupuesto_modelo`), de modo que rejilla y</span>
+<span class="sd">    presupuesto no puedan desincronizarse.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -539,8 +545,6 @@ document.write(`
                     <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span>
                         <span class="n">modelo</span><span class="o">=</span><span class="n">modelo</span><span class="p">,</span> <span class="n">balanceo</span><span class="o">=</span><span class="n">balanceo</span><span class="p">,</span>
                         <span class="n">optimizador</span><span class="o">=</span><span class="n">optimizador</span><span class="p">,</span>
-                        <span class="n">presupuesto</span><span class="o">=</span><span class="p">(</span><span class="n">PRESUPUESTO_COSTOSO</span> <span class="k">if</span> <span class="n">costoso</span>
-                                     <span class="k">else</span> <span class="n">PRESUPUESTO_ECONOMICO</span><span class="p">),</span>
                         <span class="n">razon_desbalance</span><span class="o">=</span><span class="n">RAZON_DESBALANCE</span><span class="p">,</span>
                     <span class="p">),</span>
                     <span class="n">FIDELIDAD_COSTOSA</span> <span class="k">if</span> <span class="n">costoso</span> <span class="k">else</span> <span class="n">FIDELIDAD_ECONOMICA</span><span class="p">,</span>
@@ -551,7 +555,8 @@ document.write(`
 <span class="n">diseno</span> <span class="o">=</span> <span class="n">construir_corridas</span><span class="p">()</span>
 <span class="n">resumen_diseno</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
     <span class="p">{</span><span class="s2">"modelo"</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">modelo</span><span class="p">,</span> <span class="s2">"balanceo"</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">balanceo</span><span class="p">,</span>
-     <span class="s2">"optimizador"</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">optimizador</span><span class="p">,</span> <span class="s2">"presupuesto"</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">presupuesto</span><span class="p">,</span>
+     <span class="s2">"optimizador"</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">optimizador</span><span class="p">,</span>
+     <span class="s2">"presupuesto"</span><span class="p">:</span> <span class="n">ex</span><span class="o">.</span><span class="n">presupuesto_modelo</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">modelo</span><span class="p">),</span>
      <span class="s2">"fidelidad"</span><span class="p">:</span> <span class="n">f</span><span class="p">}</span>
     <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">diseno</span>
 <span class="p">])</span>
@@ -626,8 +631,10 @@ document.write(`
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tiempo total acumulado: "</span>
       <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">maestra</span><span class="p">[</span><span class="s1">'tiempo_total_s'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">3600</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> h"</span><span class="p">)</span>
 
-<span class="n">maestra</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"estado == 'no aplicable'"</span><span class="p">)[</span>
-    <span class="p">[</span><span class="s2">"modelo"</span><span class="p">,</span> <span class="s2">"balanceo"</span><span class="p">,</span> <span class="s2">"optimizador"</span><span class="p">,</span> <span class="s2">"detalle"</span><span class="p">]]</span>
+<span class="c1"># reindex, no indexación directa: mientras no haya ninguna fila no aplicable</span>
+<span class="c1"># la columna "detalle" todavía no existe en la tabla maestra.</span>
+<span class="n">maestra</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"estado == 'no aplicable'"</span><span class="p">)</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">,</span> <span class="s2">"balanceo"</span><span class="p">,</span> <span class="s2">"optimizador"</span><span class="p">,</span> <span class="s2">"detalle"</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -635,11 +642,13 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">COLUMNAS_RESUMEN</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">"modelo"</span><span class="p">,</span> <span class="s2">"balanceo"</span><span class="p">,</span> <span class="s2">"optimizador"</span><span class="p">,</span> <span class="s2">"presupuesto"</span><span class="p">,</span>
+    <span class="s2">"modelo"</span><span class="p">,</span> <span class="s2">"balanceo"</span><span class="p">,</span> <span class="s2">"optimizador"</span><span class="p">,</span> <span class="s2">"presupuesto"</span><span class="p">,</span> <span class="s2">"fraccion_busqueda"</span><span class="p">,</span>
     <span class="s2">"auc_pr_media"</span><span class="p">,</span> <span class="s2">"auc_pr_sd"</span><span class="p">,</span> <span class="s2">"auc_roc_media"</span><span class="p">,</span> <span class="s2">"auc_roc_sd"</span><span class="p">,</span>
     <span class="s2">"recall_media"</span><span class="p">,</span> <span class="s2">"precision_media"</span><span class="p">,</span> <span class="s2">"f1_media"</span><span class="p">,</span>
     <span class="s2">"exactitud_balanceada_media"</span><span class="p">,</span> <span class="s2">"brier_media"</span><span class="p">,</span>
+    <span class="s2">"n_evaluaciones"</span><span class="p">,</span> <span class="s2">"n_ajustes"</span><span class="p">,</span> <span class="s2">"tiempo_por_evaluacion_s"</span><span class="p">,</span>
     <span class="s2">"tiempo_busqueda_s"</span><span class="p">,</span> <span class="s2">"tiempo_ajuste_s"</span><span class="p">,</span> <span class="s2">"tiempo_inferencia_s"</span><span class="p">,</span>
+    <span class="s2">"semilla"</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="n">ranking</span> <span class="o">=</span> <span class="n">completadas</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"auc_pr_media"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -681,6 +690,7 @@ document.write(`
 </div>
 <p>La línea discontinua marca la prevalencia de la clase positiva, que es el AUC-PR que obtendría un clasificador aleatorio. La distancia de cada barra a esa línea es la señal real que captura el modelo.</p>
 <p>Al leer esta figura conviene comparar las diferencias entre modelos con las barras de error. Si los intervalos se solapan ampliamente, la diferencia observada puede ser ruido de partición y no una ventaja real: es precisamente la pregunta que el capítulo 10 responde con pruebas formales en lugar de con inspección visual.</p>
+<p>Las columnas de costo (<code class="docutils literal notranslate"><span class="pre">n_evaluaciones</span></code>, <code class="docutils literal notranslate"><span class="pre">n_ajustes</span></code> y <code class="docutils literal notranslate"><span class="pre">tiempo_por_evaluacion_s</span></code>) se incluyen en el ranking porque son las que permiten leer cada resultado junto a lo que costó obtenerlo. Su comparación sistemática entre optimizadores corresponde al capítulo 8.</p>
 <section id="efecto-de-las-estrategias-de-balanceo">
 <h3>7.4.1. Efecto de las estrategias de balanceo<a class="headerlink" href="#efecto-de-las-estrategias-de-balanceo" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
@@ -765,7 +775,8 @@ document.write(`
 </section>
 <section id="estabilidad-frente-a-la-semilla">
 <h3>7.4.3. Estabilidad frente a la semilla<a class="headerlink" href="#estabilidad-frente-a-la-semilla" title="Link to this heading">#</a></h3>
-<p>Reportar media y desviación estándar entre folds captura la variabilidad por partición, pero no la que introduce la aleatoriedad interna de los algoritmos. Se repite la mejor configuración con tres semillas distintas para separar ambas fuentes.</p>
+<p>La media y la desviación estándar entre folds capturan la variabilidad de una partición concreta. Repetir la mejor configuración con otras semillas mide algo más amplio: la semilla gobierna a la vez el reparto en folds, la submuestra de la búsqueda y la aleatoriedad interna de los algoritmos (arranque de Optuna, población inicial del genético, remuestreo de SMOTE, árboles de Random Forest). El rango entre semillas es, por tanto, la variabilidad total del procedimiento de principio a fin, no solo la del algoritmo.</p>
+<p>Esa es justamente la cifra que hace falta para interpretar el ranking: si dos combinaciones difieren menos de lo que varía una sola combinación al cambiar de semilla, la diferencia no es atribuible al método.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SEMILLAS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">42</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2026</span><span class="p">]</span>
@@ -776,12 +787,13 @@ document.write(`
     <span class="n">corrida</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span>
         <span class="n">modelo</span><span class="o">=</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">],</span> <span class="n">balanceo</span><span class="o">=</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">"balanceo"</span><span class="p">],</span>
         <span class="n">optimizador</span><span class="o">=</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">"optimizador"</span><span class="p">],</span>
-        <span class="n">presupuesto</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">mejor_global</span><span class="p">[</span><span class="s2">"presupuesto"</span><span class="p">]),</span>
         <span class="n">razon_desbalance</span><span class="o">=</span><span class="n">RAZON_DESBALANCE</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">resultado</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">ejecutar_corrida</span><span class="p">(</span>
         <span class="n">corrida</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span> <span class="n">folds_externos</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">folds_internos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">fraccion_busqueda</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">mejor_global</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fraccion_busqueda"</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)),</span>
+        <span class="n">fraccion_busqueda</span><span class="o">=</span><span class="p">(</span><span class="n">FIDELIDAD_COSTOSA</span>
+                           <span class="k">if</span> <span class="n">mejor_global</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]</span> <span class="ow">in</span> <span class="n">COSTOSOS</span>
+                           <span class="k">else</span> <span class="n">FIDELIDAD_ECONOMICA</span><span class="p">),</span>
         <span class="n">semilla</span><span class="o">=</span><span class="n">semilla</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"semilla"</span><span class="p">:</span> <span class="n">semilla</span><span class="p">,</span>
@@ -797,7 +809,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>La fila <code class="docutils literal notranslate"><span class="pre">rango</span></code> es la que importa: si la variación entre semillas es del mismo orden que las diferencias entre modelos del ranking, esas diferencias no son interpretables sin pruebas estadísticas. Es el argumento que motiva el capítulo 10.</p>
+<p>La fila <code class="docutils literal notranslate"><span class="pre">rango</span></code> es la que importa: si la variación entre semillas es del mismo orden que las diferencias entre combinaciones del ranking, esas diferencias no son interpretables sin pruebas estadísticas. Es el argumento que motiva el capítulo 10.</p>
 </section>
 </section>
 <section id="sintesis-del-capitulo">
@@ -822,13 +834,14 @@ document.write(`
 <tr class="row-odd"><td><p>¿Justifican los ensambles su costo computacional frente a los modelos lineales?</p></td>
 <td><p>Gráfico de desempeño frente a costo</p></td>
 </tr>
-<tr class="row-even"><td><p>¿Son las diferencias entre modelos mayores que la variabilidad por semilla y por partición?</p></td>
+<tr class="row-even"><td><p>¿Son las diferencias entre combinaciones mayores que la variabilidad por semilla?</p></td>
 <td><p>Sección 7.4.3, y de forma formal en el capítulo 10</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>El capítulo 8 compara los cuatro métodos de optimización entre sí y desarrolla el análisis de complejidad y las técnicas de optimización computacional. El capítulo 9 evalúa en detalle el mejor modelo sobre el conjunto de prueba, con calibración e interpretabilidad. El capítulo 10 aplica la secuencia estadística jerárquica.</p>
+<p>Dos decisiones de diseño quedan declaradas y registradas en la tabla maestra, para que cualquier lectura del ranking las tenga presentes: el presupuesto es menor en los modelos costosos (8 configuraciones frente a 12) y su búsqueda usa el 25 % de los pacientes. Ambas afectan por igual a los cuatro optimizadores de un mismo modelo, de modo que no distorsionan la comparación del capítulo 8, pero sí penalizan a los modelos costosos frente a los económicos.</p>
+<p>El capítulo 8 compara los cuatro métodos de optimización entre sí: calidad alcanzada por presupuesto, curvas de convergencia, diversidad genética, costo por evaluación y verificación del supuesto de la multi-fidelidad. El capítulo 9 evalúa en detalle la mejor combinación sobre el conjunto de prueba, con calibración, elección de umbral e interpretabilidad. El capítulo 10 aplica la secuencia estadística jerárquica sobre las métricas por fold.</p>
 </section>
 </section>
 
@@ -862,6 +875,15 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="06_Preprocesamiento.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">6. Preprocesamiento, validación y línea base</p>
+      </div>
+    </a>
 </div>
                 </footer>
               
