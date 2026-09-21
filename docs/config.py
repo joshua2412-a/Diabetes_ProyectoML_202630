@@ -61,6 +61,8 @@ def tabla(datos, filas=15, titulo=None, indice=True):
 
     datos_mostrar = datos.copy()
 
+    datos_mostrar.index.name = None
+
     if not indice:
         datos_mostrar = datos_mostrar.reset_index(drop=True)
 
@@ -81,19 +83,60 @@ def tabla(datos, filas=15, titulo=None, indice=True):
             ]
         )
 
-        display(HTML("""
+        display(HTML(f"""
         <style>
-            table.dataTable td,
-            table.dataTable th {
-                white-space: normal !important;
-                word-wrap: break-word !important;
-                overflow-wrap: anywhere !important;
-                vertical-align: middle !important;
-            }
+            /* Contenedor principal de la tabla */
+            .dataTables_wrapper {{
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 10px 0 20px 0 !important;
+            }}
 
-            table.dataTable td {
-                padding: 8px !important;
-            }
+            /* Tabla */
+            table.dataTable {{
+                width: 100% !important;
+                border-collapse: collapse !important;
+                font-size: 14px !important;
+            }}
+
+            /* Encabezados */
+            table.dataTable thead th {{
+                background-color: {PALETA[0]} !important;
+                color: white !important;
+                font-weight: bold !important;
+                text-align: center !important;
+                padding: 10px 12px !important;
+                white-space: nowrap !important;
+            }}
+
+            /* Celdas */
+            table.dataTable tbody td {{
+                text-align: center !important;
+                vertical-align: middle !important;
+                padding: 9px 12px !important;
+                white-space: nowrap !important;
+            }}
+
+            /* Filas alternas */
+            table.dataTable tbody tr:nth-child(even) {{
+                background-color: #F4F6F7 !important;
+            }}
+
+            table.dataTable tbody tr:hover {{
+                background-color: #EAF2F8 !important;
+            }}
+
+            /* Bordes suaves */
+            table.dataTable th,
+            table.dataTable td {{
+                border-bottom: 1px solid #DADADA !important;
+            }}
+
+            /* Evita que el buscador y controles se compriman */
+            .dataTables_wrapper .dataTables_filter,
+            .dataTables_wrapper .dataTables_length {{
+                margin-bottom: 8px !important;
+            }}
         </style>
         """))
 
@@ -103,10 +146,10 @@ def tabla(datos, filas=15, titulo=None, indice=True):
             .style
             .set_properties(**{
                 "text-align": "center",
-                "white-space": "normal",
-                "overflow-wrap": "break-word",
+                "white-space": "nowrap",
                 "font-size": "11pt",
-                "padding": "8px"
+                "padding": "9px 12px",
+                "vertical-align": "middle"
             })
             .set_table_styles([
                 {
@@ -115,7 +158,8 @@ def tabla(datos, filas=15, titulo=None, indice=True):
                         ("background-color", PALETA[0]),
                         ("color", "white"),
                         ("font-weight", "bold"),
-                        ("text-align", "center")
+                        ("text-align", "center"),
+                        ("white-space", "nowrap")
                     ]
                 },
                 {
@@ -125,18 +169,25 @@ def tabla(datos, filas=15, titulo=None, indice=True):
                         ("table-layout", "auto"),
                         ("border-collapse", "collapse")
                     ]
+                },
+                {
+                    "selector": "tbody tr:nth-child(even)",
+                    "props": [
+                        ("background-color", "#F4F6F7")
+                    ]
                 }
             ])
         )
 
         display(HTML(f"""
         <div style="
+            width: 100%;
             max-height: 400px;
-            max-width: 100%;
-            overflow: auto;
+            overflow-x: auto;
+            overflow-y: auto;
             border: 1px solid {GRIS};
             border-radius: 8px;
-            margin: 10px 0;
+            margin: 10px 0 20px 0;
         ">
             {tabla_estilizada.to_html()}
         </div>
