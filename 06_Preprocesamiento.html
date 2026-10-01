@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>6. Preprocesamiento, validación y línea base &#8212; Machine Learning - Diabetes</title>
+    <title>6. Preprocesamiento y validación &#8212; Machine Learning - Diabetes</title>
   
   
   
@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -60,8 +60,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '06_Preprocesamiento';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="7. Experimento combinatorio de clasificación" href="07_Clasificacion.html" />
-    <link rel="prev" title="5. Redundancia, fuga de información y síntesis del EDA" href="05_Sintesis.html" />
+    <link rel="next" title="7. Modelo base: regresión logística" href="07_ModeloBase.html" />
+    <link rel="prev" title="5. Redundancia, fuga de información y techo de desempeño" href="05_Sintesis.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -184,9 +184,13 @@
 <li class="toctree-l1"><a class="reference internal" href="02_ETL.html">2. Depuración, ingeniería de características y partición</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03_Univariado.html">3. Análisis univariado</a></li>
 <li class="toctree-l1"><a class="reference internal" href="04_Bivariado.html">4. Análisis bivariado</a></li>
-<li class="toctree-l1"><a class="reference internal" href="05_Sintesis.html">5. Redundancia, fuga de información y síntesis del EDA</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">6. Preprocesamiento, validación y línea base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="07_Clasificacion.html">7. Experimento combinatorio de clasificación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_Sintesis.html">5. Redundancia, fuga de información y techo de desempeño</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">6. Preprocesamiento y validación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_ModeloBase.html">7. Modelo base: regresión logística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Clasificacion.html">8. Experimento combinatorio de clasificación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Optimizadores.html">9. Comparación de optimizadores y optimización computacional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Evaluacion.html">10. Evaluación del modelo final, calibración e interpretabilidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Comparacion_Estadistica.html">11. Comparación estadística de los modelos</a></li>
 </ul>
 
     </div>
@@ -372,7 +376,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>6. Preprocesamiento, validación y línea base</h1>
+    <h1>6. Preprocesamiento y validación</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -393,7 +397,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validacion-anidada">6.3.2. Validación anidada</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linea-base-regresion-logistica">6.4. Línea base: regresión logística</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#primera-estimacion-regresion-logistica">6.4. Primera estimación: regresión logística</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-linea-base">6.4.1. Interpretación de la línea base</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calibracion-y-umbral">6.4.2. Calibración y umbral</a></li>
 </ul>
@@ -429,19 +433,19 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="preprocesamiento-validacion-y-linea-base">
-<h1>6. Preprocesamiento, validación y línea base<a class="headerlink" href="#preprocesamiento-validacion-y-linea-base" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="preprocesamiento-y-validacion">
+<h1>6. Preprocesamiento y validación<a class="headerlink" href="#preprocesamiento-y-validacion" title="Link to this heading">#</a></h1>
 <section id="objetivo-del-capitulo">
 <h2>6.1. Objetivo del capítulo<a class="headerlink" href="#objetivo-del-capitulo" title="Link to this heading">#</a></h2>
 <p>Este capítulo construye la infraestructura sobre la que corren las 112 combinaciones del experimento de clasificación (siete modelos, cuatro estrategias de balanceo y cuatro optimizadores) y establece el punto de referencia contra el que se medirán. Productos concretos:</p>
 <ol class="arabic simple">
 <li><p>Un <strong>preprocesador encapsulado</strong> que se ajusta dentro de cada fold, de modo que ninguna estimación (medianas, modas, niveles de categorías) use información del conjunto de evaluación.</p></li>
 <li><p>Un <strong>esquema de validación cruzada anidada y agrupada por paciente</strong>, con el bucle interno para seleccionar hiperparámetros y el externo para estimar desempeño.</p></li>
-<li><p>Una <strong>línea base</strong> con regresión logística, que fija la expectativa realista de desempeño y sirve de referencia para juzgar si la complejidad añadida de los modelos posteriores se traduce en mejora.</p></li>
+<li><p>Una <strong>primera estimación</strong> con regresión logística, que fija la expectativa realista de desempeño. El capítulo 7 la retoma y la desarrolla como modelo base del proyecto.</p></li>
 <li><p>Los <strong>espacios de búsqueda</strong> de los cuatro optimizadores, diseñados para que la comparación entre ellos sea a igual presupuesto.</p></li>
 <li><p>El <strong>análisis de optimización computacional</strong> que exige la guía: complejidad teórica frente a tiempo medido, comparación entre la versión estándar y la optimizada de cada modelo, paralelización y perfilamiento. Del resultado se deriva el presupuesto del experimento completo.</p></li>
 </ol>
-<p>El código de este motor (preprocesador, fábricas de modelos, optimizadores y el ejecutor con validación anidada) vive en <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> y no en este notebook. La razón es la misma que llevó las utilidades del capítulo 1 a <code class="docutils literal notranslate"><span class="pre">config.py</span></code>: los capítulos 6 a 9 comparten esta infraestructura, y duplicarla en cada uno arriesgaría que una corrección se aplique en un notebook y se olvide en otro.</p>
+<p>El código de este motor (preprocesador, fábricas de modelos, optimizadores y el ejecutor con validación anidada) vive en <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> y no en este notebook. La razón es la misma que llevó las utilidades del capítulo 1 a <code class="docutils literal notranslate"><span class="pre">config.py</span></code>: los capítulos 6 a 10 comparten esta infraestructura, y duplicarla en cada uno arriesgaría que una corrección se aplique en un notebook y se olvide en otro.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
@@ -2308,6 +2312,7 @@ Primeras 12 variables: ['time_in_hospital', 'num_lab_procedures', 'num_procedure
 <section id="por-que-agrupada">
 <h3>6.3.1. Por qué agrupada<a class="headerlink" href="#por-que-agrupada" title="Link to this heading">#</a></h3>
 <p>El capítulo 2 adoptó como población de estudio todos los encuentros, de modo que un paciente puede aportar varias filas. Una partición por filas reparte esas filas entre entrenamiento y validación, y el modelo puede reconocer al paciente en lugar de aprender el mecanismo clínico.</p>
+<p>La sección 3.2 midió por qué ese riesgo es real y de dónde viene: los <strong>predictores</strong> se repiten dentro del paciente muy por encima de lo que produciría el azar (la edad comparte el 99 % de su varianza dentro del paciente, la especialidad coincide en el 71 % de los pares frente a un 30 % de referencia), mientras que la <strong>etiqueta</strong> no se hereda entre encuentros. Un modelo evaluado sin agrupar vería en validación filas casi idénticas a las de entrenamiento, con desenlaces que no se deducen de ellas.</p>
 <p>La magnitud del problema se puede medir, y conviene hacerlo en lugar de asumirla.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2539,7 +2544,7 @@ Primeras 12 variables: ['time_in_hospital', 'num_lab_procedures', 'num_procedure
 <li><p><strong>Bucle interno (3 folds):</strong> dentro de cada fold externo de entrenamiento, se buscan los hiperparámetros. El fold externo de validación no participa en esa búsqueda.</p></li>
 </ul>
 <p>Ambos bucles usan <code class="docutils literal notranslate"><span class="pre">StratifiedGroupKFold</span></code>, así que el agrupamiento por paciente se respeta en los dos niveles. El costo es multiplicativo: con un presupuesto de 12 configuraciones, cada corrida requiere 5 × (12 × 3 + 1) = 185 ajustes del pipeline.</p>
-<p><strong>Elección del número de pliegues.</strong> Cinco pliegues externos dejan unos 15,900 encuentros de evaluación por fold, con unos 1,800 casos positivos, suficientes para estimar el AUC-PR con una desviación estándar entre folds del orden de 0.01; y dan cinco valores por combinación para las pruebas de Friedman y Nemenyi del capítulo 10. Tres pliegues internos son el mínimo que permite promediar la selección sin triplicar el costo de la búsqueda, que ya domina el tiempo total.</p>
+<p><strong>Elección del número de pliegues.</strong> Cinco pliegues externos dejan unos 15,900 encuentros de evaluación por fold, con unos 1,800 casos positivos, suficientes para estimar el AUC-PR con una desviación estándar entre folds del orden de 0.01; y dan cinco valores por combinación para las pruebas de Friedman y Nemenyi del capítulo 11. Tres pliegues internos son el mínimo que permite promediar la selección sin triplicar el costo de la búsqueda, que ya domina el tiempo total.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">externo</span> <span class="o">=</span> <span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -2657,10 +2662,11 @@ Primeras 12 variables: ['time_in_hospital', 'num_lab_procedures', 'num_procedure
 <p>Los cinco folds son equilibrados en tamaño y prevalencia, y la columna de pacientes compartidos confirma en cero que el agrupamiento funciona en todos ellos.</p>
 </section>
 </section>
-<section id="linea-base-regresion-logistica">
-<h2>6.4. Línea base: regresión logística<a class="headerlink" href="#linea-base-regresion-logistica" title="Link to this heading">#</a></h2>
-<p>La línea base cumple dos funciones. Fija la expectativa realista de desempeño, coherente con lo que el capítulo 4 anticipó: solo el historial de hospitalización previa alcanza un tamaño de efecto pequeño, y el resto de predictores, por separado, apenas distingue las clases. Y sirve de referencia para juzgar los modelos posteriores: un ensamble con cientos de árboles que no supere claramente a una logística no justifica su costo computacional ni su opacidad.</p>
+<section id="primera-estimacion-regresion-logistica">
+<h2>6.4. Primera estimación: regresión logística<a class="headerlink" href="#primera-estimacion-regresion-logistica" title="Link to this heading">#</a></h2>
+<p>La línea base cumple dos funciones. Fija la expectativa realista de desempeño, coherente con lo que el capítulo 4 anticipó: solo las dos variables de hospitalización previa (<code class="docutils literal notranslate"><span class="pre">number_inpatient</span></code> y su binarización <code class="docutils literal notranslate"><span class="pre">hospitalizacion_previa</span></code>) alcanzan un tamaño de efecto pequeño, y el resto de predictores, por separado, apenas distingue las clases. El mejor predictor individual alcanza un AUC univariado de 0.607, y esa es la primera referencia que la línea base debe batir. Y sirve de referencia para juzgar los modelos posteriores: un ensamble con cientos de árboles que no supere claramente a una logística no justifica su costo computacional ni su opacidad.</p>
 <p>Se usa <code class="docutils literal notranslate"><span class="pre">class_weight=&quot;balanced&quot;</span></code>, que pondera cada clase por el inverso de su frecuencia. Es la forma más simple de atender el desbalance y no altera los datos.</p>
+<p>Esta sección se limita a obtener la cifra de referencia. El capítulo 7 retoma esta misma configuración y desarrolla el modelo: coeficientes y razones de momios, curvas ROC y de precisión-recall, elección de umbral, calibración y tasas de error por atributo protegido.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Línea base de clasificación: Grid Search exhaustivo sobre la rejilla de la</span>
@@ -2910,16 +2916,16 @@ Tiempo de inferencia : 2.09 s
 <h3>6.4.1. Interpretación de la línea base<a class="headerlink" href="#interpretacion-de-la-linea-base" title="Link to this heading">#</a></h3>
 <p>El AUC-ROC se sitúa en torno a 0.66 y el AUC-PR en torno a 0.21, con desviaciones estándar entre folds pequeñas. Tres lecturas:</p>
 <ul class="simple">
-<li><p><strong>Es un desempeño moderado y era previsible.</strong> El capítulo 4 mostró que solo el historial de hospitalización previa alcanza un tamaño de efecto pequeño y que ningún otro predictor lo hace de forma individual. Un AUC-ROC de 0.66 significa que, tomando al azar un encuentro seguido de readmisión y otro sin ella, el modelo asigna mayor riesgo al primero en dos de cada tres casos. Está lejos de un clasificador útil por sí solo, pero claramente por encima del azar.</p></li>
+<li><p><strong>Es un desempeño moderado, era previsible y está cerca del techo del problema.</strong> Un AUC-ROC de 0.66 significa que, tomando al azar un encuentro seguido de readmisión y otro sin ella, el modelo asigna mayor riesgo al primero en dos de cada tres casos. Está lejos de un clasificador útil por sí solo, pero la referencia correcta no es 1.0 sino la que fijó el análisis exploratorio. El capítulo 4 mostró que el mejor predictor individual alcanza un AUC de 0.607, y el capítulo 5 estimó un techo de 0.651 con un oráculo por perfiles calculado fuera de muestra sobre los cuatro predictores más informativos. Las tres cifras son comparables, porque las tres se estiman con la misma validación cruzada agrupada por paciente sobre el conjunto de entrenamiento. La línea base <strong>supera ese techo</strong>, lo que confirma la predicción de la sección 5.4: un modelo regularizado que use todos los predictores comparte información entre perfiles parecidos en lugar de tratarlos como categorías independientes, y por eso no sufre la caída que el oráculo experimenta al añadir variables. La consecuencia para los capítulos siguientes es que el margen de mejora disponible es estrecho: se mide en centésimas de AUC, no en décimas. La sección 7.2.2 rehace esta comparación con las tres cifras lado a lado.</p></li>
 <li><p><strong>El AUC-PR contextualiza la utilidad clínica.</strong> Un valor de 0.21 frente a una prevalencia del 11.4 % indica que, promediando sobre todos los umbrales, la precisión casi duplica la de una selección aleatoria. La lectura operativa es más concreta, y la da la tabla anterior: si el hospital solo puede dar seguimiento intensivo al 10 % de las altas con mayor riesgo estimado, una de cada cuatro será una readmisión real (precisión del 25 %, frente al 11.4 % de elegir al azar), y ese 10 % concentra algo más de una quinta parte de todas las readmisiones.</p></li>
 <li><p><strong>La estabilidad entre folds es buena.</strong> Desviaciones estándar de ese orden indican que la estimación no depende de la partición concreta, lo que da confianza a las comparaciones posteriores.</p></li>
 </ul>
 </section>
 <section id="calibracion-y-umbral">
 <h3>6.4.2. Calibración y umbral<a class="headerlink" href="#calibracion-y-umbral" title="Link to this heading">#</a></h3>
-<p>El coeficiente de Brier se reporta porque el AUC solo mide el ordenamiento de los encuentros, no si las probabilidades predichas son correctas en magnitud. Un modelo puede ordenar bien y estar mal calibrado, y para una decisión clínica al alta la magnitud importa: “este paciente tiene un 30 % de riesgo” es una afirmación que debe ser cierta, no solo mayor que la de otro paciente. El capítulo 9 desarrolla el análisis de calibración con curvas de fiabilidad y las correcciones de Platt e isotónica.</p>
+<p>El coeficiente de Brier se reporta porque el AUC solo mide el ordenamiento de los encuentros, no si las probabilidades predichas son correctas en magnitud. Un modelo puede ordenar bien y estar mal calibrado, y para una decisión clínica al alta la magnitud importa: “este paciente tiene un 30 % de riesgo” es una afirmación que debe ser cierta, no solo mayor que la de otro paciente. La sección 7.5 diagnostica la calibración de esta línea base con un diagrama de fiabilidad y mide cuánto se recupera con las correcciones de Platt e isotónica; el capítulo 10 repite el análisis sobre el modelo final.</p>
 <p>En la línea base el coeficiente de Brier ronda 0.227, peor que el 0.101 que obtendría un predictor constante igual a la prevalencia (0.114 × 0.886). No indica un mal modelo, sino una consecuencia esperada de <code class="docutils literal notranslate"><span class="pre">class_weight=&quot;balanced&quot;</span></code>: al ponderar la clase minoritaria, el ajuste desplaza todas las probabilidades hacia 0.5, de modo que el orden de los encuentros se conserva (lo que mide el AUC) pero su magnitud deja de ser interpretable como riesgo. Recalibrarlas es condición previa para cualquier uso clínico de las probabilidades.</p>
-<p>Sobre el umbral: las métricas F1 y exactitud balanceada de la tabla usan el umbral 0.5 por convención, pero con <code class="docutils literal notranslate"><span class="pre">class_weight=&quot;balanced&quot;</span></code> ese umbral no es el óptimo, y en un problema desbalanceado casi nunca lo es. La elección del umbral de decisión es una decisión clínica que depende del costo relativo de un falso negativo (un reingreso no anticipado) frente a un falso positivo (seguimiento innecesario), y se aborda en el capítulo 9. Las métricas independientes del umbral, AUC-ROC y AUC-PR, son las que gobiernan la comparación entre modelos.</p>
+<p>Sobre el umbral: las métricas F1 y exactitud balanceada de la tabla usan el umbral 0.5 por convención, pero con <code class="docutils literal notranslate"><span class="pre">class_weight=&quot;balanced&quot;</span></code> ese umbral no es el óptimo, y en un problema desbalanceado casi nunca lo es. La elección del umbral de decisión es una decisión clínica que depende del costo relativo de un falso negativo (un reingreso no anticipado) frente a un falso positivo (seguimiento innecesario), y se aborda en el capítulo 10. Las métricas independientes del umbral, AUC-ROC y AUC-PR, son las que gobiernan la comparación entre modelos.</p>
 </section>
 </section>
 <section id="espacios-de-busqueda-y-optimizadores">
@@ -3150,7 +3156,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <section id="multi-fidelidad-successive-halving-en-optuna">
 <h3>6.5.3. Multi-fidelidad: Successive Halving en Optuna<a class="headerlink" href="#multi-fidelidad-successive-halving-en-optuna" title="Link to this heading">#</a></h3>
 <p>La guía recomienda al menos un método de eliminación sucesiva de configuraciones poco prometedoras. Se implementa <strong>Successive Halving</strong> dentro de la optimización bayesiana, con el número de folds internos evaluados como <strong>fidelidad</strong>: tras el primer fold, cada configuración informa su puntaje parcial, y solo continúa si está en el tercio superior de las que llegaron a ese punto (<strong>factor de reducción η = 3</strong>). Las configuraciones descartadas consumen un fold en lugar de tres.</p>
-<p>La fidelidad por folds se elige porque es una estimación no sesgada del mismo objetivo con menor precisión, a diferencia de reducir árboles o épocas, que cambia el modelo evaluado. El factor η = 3 coincide con el número de folds internos: con tres niveles de fidelidad, un único corte intermedio es todo lo que cabe. El riesgo es descartar una configuración buena por un primer fold desfavorable; con desviaciones estándar entre folds del orden de 0.01 en AUC-PR, solo afecta a configuraciones que ya están cerca del umbral. La tabla maestra registra cuántos ajustes consumió cada corrida, lo que permite medir el ahorro en el capítulo 8.</p>
+<p>La fidelidad por folds se elige porque es una estimación no sesgada del mismo objetivo con menor precisión, a diferencia de reducir árboles o épocas, que cambia el modelo evaluado. El factor η = 3 coincide con el número de folds internos: con tres niveles de fidelidad, un único corte intermedio es todo lo que cabe. El riesgo es descartar una configuración buena por un primer fold desfavorable; con desviaciones estándar entre folds del orden de 0.01 en AUC-PR, solo afecta a configuraciones que ya están cerca del umbral. La tabla maestra registra cuántos ajustes consumió cada corrida, lo que permite medir el ahorro en el capítulo 9.</p>
 </section>
 </section>
 <section id="complejidad-algoritmica">
@@ -4048,7 +4054,7 @@ Control: la línea base real tardó 22.2 min; la proyección de una corrida de l
 </table>
 </div></div></div>
 </div>
-<p>Antes de estas optimizaciones, la misma proyección daba del orden de 270 horas: más de once días de cómputo continuo, inviable dentro del plazo del proyecto. La tabla anterior muestra el costo con el motor optimizado, y la última línea de la celda contrasta la proyección de la logística con el tiempo real de la línea base. La proyección mide solo ajustes, así que es una cota inferior: la diferencia respecto al tiempo real (un factor cercano a 2.4) corresponde al arranque de los procesos de <code class="docutils literal notranslate"><span class="pre">joblib</span></code> y al envío de los datos a cada uno, a la predicción sobre los folds internos de validación, y a que la paralelización rinde ×1.9 y no el ×4 teórico. Con ese factor en mente, el total de la tabla se lee como el piso del costo real. La columna del ajuste máximo señala qué modelos tienen configuraciones especialmente caras en su rejilla. Si el total resulta alto para el plazo disponible, el motor ofrece una palanca adicional ya implementada y declarada: <code class="docutils literal notranslate"><span class="pre">fraccion_busqueda</span></code>, que ejecuta la búsqueda de hiperparámetros sobre una submuestra de pacientes y reserva el fold completo para el ajuste final. No se activa por defecto; si se usa en el capítulo 7, la fracción debe registrarse (la tabla maestra la guarda) y declararse al comparar.</p>
+<p>Antes de estas optimizaciones, la misma proyección daba del orden de 270 horas: más de once días de cómputo continuo, inviable dentro del plazo del proyecto. La tabla anterior muestra el costo con el motor optimizado, y la última línea de la celda contrasta la proyección de la logística con el tiempo real de la línea base. La proyección mide solo ajustes, así que es una cota inferior: la diferencia respecto al tiempo real (un factor cercano a 2.4) corresponde al arranque de los procesos de <code class="docutils literal notranslate"><span class="pre">joblib</span></code> y al envío de los datos a cada uno, a la predicción sobre los folds internos de validación, y a que la paralelización rinde ×1.9 y no el ×4 teórico. Con ese factor en mente, el total de la tabla se lee como el piso del costo real. La columna del ajuste máximo señala qué modelos tienen configuraciones especialmente caras en su rejilla. Si el total resulta alto para el plazo disponible, el motor ofrece una palanca adicional ya implementada y declarada: <code class="docutils literal notranslate"><span class="pre">fraccion_busqueda</span></code>, que ejecuta la búsqueda de hiperparámetros sobre una submuestra de pacientes y reserva el fold completo para el ajuste final. No se activa por defecto; si se usa en el capítulo 8, la fracción debe registrarse (la tabla maestra la guarda) y declararse al comparar.</p>
 <p>Resumen de las medidas de eficiencia, todas declaradas antes de ejecutar el experimento:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -4305,14 +4311,14 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
         </style>
         </div></div>
 </div>
-<p>La segunda fila de la demostración ilustra el registro de combinaciones inaplicables: k-NN no tiene equivalente de <code class="docutils literal notranslate"><span class="pre">class_weight</span></code>, porque su predicción es un voto de vecinos sin ponderación de clase, y en lugar de omitir la celda en silencio, el motor la registra con estado <code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">aplicable&quot;</span></code> y el motivo. Es la única combinación del diseño en esa situación: Naive Bayes y XGBoost no aceptan <code class="docutils literal notranslate"><span class="pre">class_weight</span></code> como tal, pero tienen equivalentes directos (probabilidades a priori uniformes y <code class="docutils literal notranslate"><span class="pre">scale_pos_weight</span></code>), y el motor los usa. Esa distinción importa para la comparación estadística del capítulo 10: una casilla vacía por imposibilidad no es lo mismo que una casilla con mal resultado, y las pruebas de Friedman requieren saber qué combinaciones existen realmente.</p>
+<p>La segunda fila de la demostración ilustra el registro de combinaciones inaplicables: k-NN no tiene equivalente de <code class="docutils literal notranslate"><span class="pre">class_weight</span></code>, porque su predicción es un voto de vecinos sin ponderación de clase, y en lugar de omitir la celda en silencio, el motor la registra con estado <code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">aplicable&quot;</span></code> y el motivo. Es la única combinación del diseño en esa situación: Naive Bayes y XGBoost no aceptan <code class="docutils literal notranslate"><span class="pre">class_weight</span></code> como tal, pero tienen equivalentes directos (probabilidades a priori uniformes y <code class="docutils literal notranslate"><span class="pre">scale_pos_weight</span></code>), y el motor los usa. Esa distinción importa para la comparación estadística del capítulo 11: una casilla vacía por imposibilidad no es lo mismo que una casilla con mal resultado, y las pruebas de Friedman requieren saber qué combinaciones existen realmente.</p>
 <p>El motor distingue además entre una combinación imposible por diseño y un error de ejecución: solo la primera se registra como <code class="docutils literal notranslate"><span class="pre">&quot;no</span> <span class="pre">aplicable&quot;</span></code>, mientras que cualquier error real (un ajuste que falla, una dependencia sin instalar) detiene la ejecución, de modo que un fallo no puede disfrazarse de decisión metodológica en la tabla maestra.</p>
-<p>La tercera fila usa Optuna con Successive Halving: su número de ajustes es menor que el de la primera fila con el mismo presupuesto de configuraciones, porque las configuraciones podadas consumen un solo fold interno. Aun así, en esta ejecución <strong>Optuna tardó más del doble que Grid</strong> (389 s frente a 150 s) con la misma logística. No es una contradicción, y anticipa un resultado del capítulo 7:</p>
+<p>La tercera fila usa Optuna con Successive Halving: su número de ajustes es menor que el de la primera fila con el mismo presupuesto de configuraciones, porque las configuraciones podadas consumen un solo fold interno. Aun así, en esta ejecución <strong>Optuna tardó más del doble que Grid</strong> (389 s frente a 150 s) con la misma logística. No es una contradicción, y anticipa un resultado del capítulo 8:</p>
 <ul class="simple">
 <li><p><strong>Optuna es secuencial.</strong> Cada propuesta depende de las anteriores, y con la poda activa los folds internos también se evalúan en serie; no aprovecha los núcleos que Grid usa en paralelo.</p></li>
 <li><p><strong>El espacio continuo lo lleva a zonas caras.</strong> Al explorar valores de <code class="docutils literal notranslate"><span class="pre">C</span></code> fuera de la rejilla, Optuna visita configuraciones con L1 y <code class="docutils literal notranslate"><span class="pre">C</span></code> alto, las más lentas de ajustar.</p></li>
 </ul>
-<p>Successive Halving reduce el número de ajustes, no necesariamente el tiempo de pared. Por eso la comparación entre optimizadores del capítulo 8 debe hacerse a la vez por calidad alcanzada, por número de evaluaciones y por tiempo, como exige la guía.</p>
+<p>Successive Halving reduce el número de ajustes, no necesariamente el tiempo de pared. Por eso la comparación entre optimizadores del capítulo 9 debe hacerse a la vez por calidad alcanzada, por número de evaluaciones y por tiempo, como exige la guía.</p>
 <p>Las columnas de la tabla maestra son:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -4336,7 +4342,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </tbody>
 </table>
 </div>
-<p>Las métricas por fold permiten aplicar las pruebas no paramétricas del capítulo 10 sobre las distribuciones y no solo sobre promedios; las curvas <em>anytime</em> (mejor puntaje tras cada evaluación) y el número de evaluaciones permiten comparar los optimizadores por calidad alcanzada por unidad de presupuesto, como exige la guía.</p>
+<p>Las métricas por fold permiten aplicar las pruebas no paramétricas del capítulo 11 sobre las distribuciones y no solo sobre promedios; las curvas <em>anytime</em> (mejor puntaje tras cada evaluación) y el número de evaluaciones permiten comparar los optimizadores por calidad alcanzada por unidad de presupuesto, como exige la guía.</p>
 </section>
 <section id="sintesis-del-capitulo">
 <h2>6.11. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h2>
@@ -4360,7 +4366,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <td><p>Prácticamente nulo en regresión logística; en torno a +0.006 de AUC-ROC en k-NN y +0.013 de AUC-PR en Random Forest. Diferencial por capacidad del modelo, y la partición por filas subestima además la variabilidad entre folds</p></td>
 </tr>
 <tr class="row-even"><td><p>Línea base</p></td>
-<td><p>Logística con ponderación por clase: AUC-ROC ≈ 0.66, AUC-PR ≈ 0.21; al priorizar el 10 % de mayor riesgo, precisión del 25 % frente a una prevalencia del 11.4 %. Brier ≈ 0.23, peor que la referencia constante por efecto de la ponderación: requiere recalibración</p></td>
+<td><p>Logística con ponderación por clase: AUC-ROC ≈ 0.66, AUC-PR ≈ 0.21; al priorizar el 10 % de mayor riesgo, precisión del 25 % frente a una prevalencia del 11.4 %. Supera el techo de 0.651 que estimó la sección 5.4 y el 0.607 del mejor predictor individual, de modo que el margen que queda para los modelos posteriores es de centésimas. Brier ≈ 0.23, peor que la referencia constante por efecto de la ponderación: requiere recalibración; el capítulo 7 la desarrolla en detalle</p></td>
 </tr>
 <tr class="row-odd"><td><p>Optimizadores</p></td>
 <td><p>Grid exhaustivo sobre una rejilla gruesa; Random, Optuna (TPE con Mejora Esperada y Successive Halving, η = 3) y genético sobre un espacio continuo, todos con el mismo presupuesto por modelo (12 u 8 configuraciones)</p></td>
@@ -4376,7 +4382,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </div>
 <section id="lo-que-sigue">
 <h3>6.11.1. Lo que sigue<a class="headerlink" href="#lo-que-sigue" title="Link to this heading">#</a></h3>
-<p>El capítulo 7 ejecuta las 112 corridas con esta infraestructura y compara las estrategias de balanceo. El capítulo 8 compara los cuatro optimizadores entre sí: calidad alcanzada por presupuesto, curvas de convergencia, diversidad genética y costo. El capítulo 9 evalúa en detalle la mejor combinación sobre el conjunto de prueba: calibración, umbral de decisión, SHAP y LIME. El capítulo 10 aplica la comparación estadística jerárquica (Friedman, Nemenyi y DeLong con corrección de Holm) y los tamaños de efecto sobre las métricas por fold que la tabla maestra ya registra.</p>
+<p>El capítulo 7 desarrolla la línea base como modelo base del proyecto: coeficientes y razones de momios, contraste con el ordenamiento del capítulo 4, elección de umbral, calibración y equidad. El capítulo 8 ejecuta las 112 corridas con esta infraestructura y compara las estrategias de balanceo. El capítulo 9 compara los cuatro optimizadores entre sí: calidad alcanzada por presupuesto, curvas de convergencia, diversidad genética y costo. El capítulo 10 evalúa en detalle la mejor combinación sobre el conjunto de prueba: calibración, umbral de decisión, SHAP y LIME. El capítulo 11 aplica la comparación estadística jerárquica (Friedman, Nemenyi y DeLong con corrección de Holm) y los tamaños de efecto sobre las métricas por fold que la tabla maestra ya registra.</p>
 </section>
 </section>
 </section>
@@ -4417,15 +4423,15 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">5. Redundancia, fuga de información y síntesis del EDA</p>
+        <p class="prev-next-title">5. Redundancia, fuga de información y techo de desempeño</p>
       </div>
     </a>
     <a class="right-next"
-       href="07_Clasificacion.html"
+       href="07_ModeloBase.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">7. Experimento combinatorio de clasificación</p>
+        <p class="prev-next-title">7. Modelo base: regresión logística</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -4456,7 +4462,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validacion-anidada">6.3.2. Validación anidada</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linea-base-regresion-logistica">6.4. Línea base: regresión logística</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#primera-estimacion-regresion-logistica">6.4. Primera estimación: regresión logística</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-linea-base">6.4.1. Interpretación de la línea base</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calibracion-y-umbral">6.4.2. Calibración y umbral</a></li>
 </ul>
