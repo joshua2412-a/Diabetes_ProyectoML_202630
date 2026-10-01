@@ -1,0 +1,13 @@
+,Dimensión,Hallazgo
+0,Predictor numérico más asociado,"number_inpatient (delta de Cliff 0.214, AUC univariado 0.607)"
+1,Predictor categórico más asociado,discharge_disposition_id (V de Cramér 0.106)
+2,Predictor más informativo en conjunto,"number_inpatient, con el 2.45 % de la entropía del desenlace"
+3,Significancia frente a relevancia,9 de 11 contrastes numéricos sobreviven Holm; 2 alcanzan siquiera un efecto pequeño
+4,Efecto de la corrección múltiple,"2 variables categóricas pierden la significancia al corregir: pioglitazone, repaglinide"
+5,Forma de la asociación,"De 4 relaciones examinadas, 2 son lineales en el logit y 2 tienen curvatura; 0 no son monótonas"
+6,Supuestos de chi²,"3 variables incumplen el supuesto de frecuencias esperadas (miglitol, chlorpropamide, tolazamide); 0 de ellas son significativas, así que ninguna conclusión depende de ellas"
+7,Interacciones,7 de 28 pares muestran sinergia; la mayor aporta el 0.129 % de la entropía
+8,Control glucémico,"Discrimina el hecho de medir, no el valor medido: 11.66 % sin medición frente a 9.89-10.23 % entre los niveles medidos (V de Cramér 0.018)"
+9,Robustez a la dependencia,El AUC univariado se desplaza como mucho 0.0170 al usar un encuentro por paciente; ninguna conclusión cambia
+10,Equidad,Tasas base por grupo racial entre 8.5 % y 11.6 %; quedan como línea de comparación para el modelo final
+11,Expectativa de desempeño,"Ningún predictor individual supera un AUC de 0.607. Esa es la referencia que los modelos deben batir; la sinergia disponible es pequeña, así que cabe esperar una mejora de unas centésimas y no un salto cualitativo"

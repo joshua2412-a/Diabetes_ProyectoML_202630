@@ -1,0 +1,12 @@
+,Dimensión,Hallazgo
+0,Modelo base,"Logística con penalización L1 (C = 0.1) y class_weight=""balanced""; configuración unánime en los cinco folds"
+1,Desempeño fuera de muestra,"AUC-ROC 0.6634 ± 0.0065; AUC-PR 0.2101, 1.8 veces la prevalencia"
+2,Frente a las referencias del EDA,"Supera al mejor predictor individual (AUC 0.607) y al oráculo por perfiles (AUC 0.651), como predijo la sección 5.4"
+3,Superficie de validación,"Meseta de 2.7 milésimas de AUC-PR para C ≥ 0.01; por debajo, L1 se derrumba 28 milésimas"
+4,Selección de variables,"L1 anula 53 de 152 columnas por fold, pero solo 18 en los cinco: la selección es inestable por redundancia entre predictores"
+5,Efecto de mayor peso,"Destino al alta: traslado a rehabilitación con razón de momios 2.67; alta a domicilio, 0.65"
+6,Coherencia con el capítulo 4,Rho de Spearman 0.59 entre el peso en el modelo y la información mutua neta univariada
+7,Lectura operativa,"Priorizando el 10 % de las altas: precisión 25.5 %, 22.4 % de las readmisiones capturadas"
+8,Calibración,"Brier 0.227, peor que el predictor constante (0.101) por efecto de la ponderación; la isotónica lo baja a 0.097 sin perder AUC"
+9,Equidad,Cobertura global 22.4 %; brecha de 6.9 veces entre [20-30) (42.0 %) y [10-20) (6.1 %)
+10,Costo,"76 s para los cinco ajustes, sin búsqueda de hiperparámetros"

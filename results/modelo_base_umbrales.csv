@@ -1,0 +1,4 @@
+umbral,alertas emitidas,precisión (%),cobertura (%),F1,falsos negativos
+0.50 (convención),27992,17.987,55.629,0.272,4016
+0.54 (máxima F1),20975,19.709,45.675,0.275,4917
+0.48 (sensibilidad = especificidad),32600,17.11,61.629,0.268,3473

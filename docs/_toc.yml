@@ -10,4 +10,8 @@ chapters:
 - file: 04_Bivariado
 - file: 05_Sintesis
 - file: 06_Preprocesamiento
-- file: 07_Clasificacion
+- file: 07_ModeloBase
+- file: 08_Clasificacion
+- file: 09_Optimizadores
+- file: 10_Evaluacion
+- file: 11_Comparacion_Estadistica

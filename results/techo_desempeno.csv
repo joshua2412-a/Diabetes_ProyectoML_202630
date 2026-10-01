@@ -1,0 +1,9 @@
+predictores usados,último añadido,perfiles distintos,AUC del oráculo (fuera de muestra),% sin perfil conocido
+1,number_inpatient,4,0.6035815513453011,0.0
+2,hospitalizacion_previa,4,0.6035815513453011,0.0
+3,discharge_disposition_id,32,0.6481849241945964,0.0
+4,number_emergency,64,0.650720229442366,0.0
+5,time_in_hospital,252,0.6402716124348212,0.008808022850527852
+6,number_diagnoses,1191,0.6221127831781332,0.15225296641626715
+7,num_medications,6593,0.5613440057459871,2.9091641186314847
+8,insulin,14852,0.5380408787140369,9.539088747121664

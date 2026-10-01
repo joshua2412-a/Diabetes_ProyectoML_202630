@@ -1,0 +1,30 @@
+,Capítulo,Dimensión,Hallazgo
+0,3. Univariado,Cohorte de entrenamiento,"79,473 encuentros de 56,036 pacientes, 38 predictores"
+1,3. Univariado,Desbalance de clases,11.39 % de clase positiva (razón 1 a 7.8)
+2,3. Univariado,Dependencia entre observaciones,"Efecto de diseño 1.39; tamaño efectivo 56,974 de 79,473 filas; los predictores se repiten dentro del paciente y la etiqueta no"
+3,3. Univariado,Métricas implicadas,"AUC-ROC, AUC-PR, F1 de la clase positiva y exactitud balanceada; exactitud solo como referencia"
+4,3. Univariado,Normalidad,Rechazada en las 10 variables numéricas por Shapiro-Wilk y D'Agostino-Pearson
+5,3. Univariado,Escalado implicado,Robusto (mediana e IQR) para los modelos sensibles a la escala
+6,3. Univariado,Exceso de ceros,3 variables con más del 50 % de valores en cero; máximo 88.9 %
+7,3. Univariado,Valores atípicos,"Artefacto de la regla de Tukey sobre conteos con exceso de ceros; tasa de readmisión superior a la global, así que no se tratan"
+8,3. Univariado,Composición de la cohorte,64.2 % de los encuentros en pacientes de 60 a 90 años
+9,3. Univariado,Niveles categóricos frágiles,21 niveles bajo el 1 %; 9 con menos de diez positivos
+10,4. Bivariado,Predictor numérico más asociado,"number_inpatient (delta de Cliff 0.214, AUC univariado 0.607)"
+11,4. Bivariado,Predictor categórico más asociado,discharge_disposition_id (V de Cramér 0.106)
+12,4. Bivariado,Predictor más informativo en conjunto,"number_inpatient, con el 2.45 % de la entropía del desenlace"
+13,4. Bivariado,Significancia frente a relevancia,9 de 11 contrastes numéricos sobreviven Holm; 2 alcanzan siquiera un efecto pequeño
+14,4. Bivariado,Efecto de la corrección múltiple,"2 variables categóricas pierden la significancia al corregir: pioglitazone, repaglinide"
+15,4. Bivariado,Forma de la asociación,"De 4 relaciones examinadas, 2 son lineales en el logit y 2 tienen curvatura; 0 no son monótonas"
+16,4. Bivariado,Supuestos de chi²,"3 variables incumplen el supuesto de frecuencias esperadas (miglitol, chlorpropamide, tolazamide); 0 de ellas son significativas, así que ninguna conclusión depende de ellas"
+17,4. Bivariado,Interacciones,7 de 28 pares muestran sinergia; la mayor aporta el 0.129 % de la entropía
+18,4. Bivariado,Control glucémico,"Discrimina el hecho de medir, no el valor medido: 11.66 % sin medición frente a 9.89-10.23 % entre los niveles medidos (V de Cramér 0.018)"
+19,4. Bivariado,Robustez a la dependencia,El AUC univariado se desplaza como mucho 0.0170 al usar un encuentro por paciente; ninguna conclusión cambia
+20,4. Bivariado,Equidad,Tasas base por grupo racial entre 8.5 % y 11.6 %; quedan como línea de comparación para el modelo final
+21,4. Bivariado,Expectativa de desempeño,"Ningún predictor individual supera un AUC de 0.607. Esa es la referencia que los modelos deben batir; la sinergia disponible es pequeña, así que cabe esperar una mejora de unas centésimas y no un salto cualitativo"
+22,5. Síntesis,Colinealidad numérica,Todos los VIF por debajo de 5 (máximo 2.10 en number_inpatient) tras eliminar la variable con dependencia exacta
+23,5. Síntesis,Redundancia categórica,"Par más redundante: change y insulin (V = 0.64); ninguno supera 0.9, así que no se elimina ninguna variable"
+24,5. Síntesis,Matriz codificada,"152 columnas, densidad del 22.2 %, rango numérico 125 (27 dependencias exactas por el one-hot sin categoría de referencia) y número de condición 14 sobre el subespacio de rango completo"
+25,5. Síntesis,Solapamiento de clases,Ninguna región de la proyección concentra la clase positiva: las clases se solapan casi por completo
+26,5. Síntesis,Techo de desempeño,"AUC de 0.651 fuera de muestra con 4 predictores, frente a 0.607 del mejor predictor individual y 0.499 de la referencia nula"
+27,5. Síntesis,Maldición de la dimensionalidad,"El oráculo cae a 0.538 con ocho predictores y 14,852 perfiles: es lo que la regularización debe evitar"
+28,5. Síntesis,Fuga de información,"Ausente entre los predictores. Los riesgos reales son la dependencia entre encuentros y el preprocesamiento fuera de pliegue, ambos resueltos por diseño"

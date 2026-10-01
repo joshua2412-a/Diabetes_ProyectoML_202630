@@ -1,0 +1,31 @@
+,coeficiente,razón de momios,signo estable
+discharge_disposition_id_Discharged/transferred to another rehab fac including rehab units of a hospital .,0.9816012784734944,2.6687261961336817,True
+discharge_disposition_id_Discharged/transferred to another type of inpatient care institution,0.6018058307478666,1.8254122113228923,True
+discharge_disposition_id_Discharged to home,-0.42857633243892834,0.6514358629680661,True
+diag_3_grupo_infrequent_sklearn,-0.40619855411095934,0.6661778819353186,True
+diag_2_grupo_Neoplasias,0.3338584047120698,1.3963454136451274,True
+especialidad_Orthopedics-Reconstructive,-0.3297664844116951,0.7190916329332974,True
+especialidad_Nephrology,0.31029419085154336,1.36382628033434,True
+diag_3_grupo_Neoplasias,0.2576425462427223,1.2938762350313773,True
+hospitalizacion_previa,0.22530259484463433,1.252701719928999,True
+number_inpatient,0.2246634857615216,1.2519013626664024,True
+discharge_disposition_id_Discharged/transferred to home with home health service,-0.22212996554304967,0.8008112796982513,True
+diabetesMed_No,-0.2194304366546655,0.8029760134479704,True
+diag_1_grupo_Suplementarios V y E,0.18503801191535924,1.2032641776344797,True
+especialidad_Cardiology,-0.1805275655253042,0.8348296678614304,True
+diag_3_grupo_No registrado,-0.16405474469581988,0.8486955590281983,True
+diag_1_grupo_Mentales,0.16021818565688847,1.1737669421665762,True
+diag_2_grupo_Diabetes,0.1486725544046731,1.1602929941684006,True
+diag_2_grupo_Piel,0.13959887739337465,1.1498124905594755,True
+number_diagnoses,0.13218287281481741,1.1413170160394925,True
+diag_1_grupo_Circulatorio,0.1320064171530838,1.1411156419575004,True
+glimepiride_Steady,-0.13192301629693218,0.8764084616512046,True
+diag_1_grupo_Diabetes,0.1270409909211219,1.1354635605248111,True
+diag_1_grupo_Síntomas mal definidos,-0.11893882018496929,0.8878621183405363,True
+especialidad_Emergency/Trauma,-0.11083139168966039,0.8950896557610608,True
+diag_3_grupo_Digestivo,0.10908251209743461,1.115254368522209,True
+max_glu_serum_No medida,-0.10859130824614568,0.8970969787254706,True
+diag_2_grupo_infrequent_sklearn,-0.10696383656658404,0.8985581673512035,False
+diag_3_grupo_Suplementarios V y E,-0.10653917448376651,0.8989398319675933,True
+diag_1_grupo_Endocrinas y metabólicas,0.10203119633242608,1.1074180185697051,True
+A1Cresult_No medida,0.09988420567016963,1.1050429529588015,True

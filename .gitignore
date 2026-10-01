@@ -1,18 +1,29 @@
 # ── Jupyter Book ─────────────────────────────
 _build/
+.jupyter_cache/
 
 # ── Jupyter / Python ─────────────────────────
 .ipynb_checkpoints/
+Untitled*.ipynb
 __pycache__/
 *.py[cod]
 .venv/
 venv/
+env/
+ENV/
 .env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
 
 # ── Datos ────────────────────────────────────
 # Descomenta si NO quieres subir el dataset (19 MB):
 # data/raw/*.csv
 # diabetic_data.csv
+# Datos derivados: el capítulo 2 los regenera desde data/raw.
+# Descomenta si prefieres no versionarlos (3.4 MB):
+# data/processed/*.parquet
 
 # ── Resultados pesados / modelos ─────────────
 *.pkl
@@ -20,6 +31,15 @@ venv/
 mlruns/
 optuna_*.db
 catboost_info/
+
+# ── Respaldos y temporales ───────────────────
+respaldo_*/
+*.tmp
+*.temp
+*.bak
+*.log
+*~
+*.swp
 
 # ── Sistema operativo y editores ─────────────
 .DS_Store

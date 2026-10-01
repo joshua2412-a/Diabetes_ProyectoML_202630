@@ -1,0 +1,11 @@
+,Dimensión,Hallazgo
+0,Cohorte de entrenamiento,"79,473 encuentros de 56,036 pacientes, 38 predictores"
+1,Desbalance de clases,11.39 % de clase positiva (razón 1 a 7.8)
+2,Dependencia entre observaciones,"Efecto de diseño 1.39; tamaño efectivo 56,974 de 79,473 filas; los predictores se repiten dentro del paciente y la etiqueta no"
+3,Métricas implicadas,"AUC-ROC, AUC-PR, F1 de la clase positiva y exactitud balanceada; exactitud solo como referencia"
+4,Normalidad,Rechazada en las 10 variables numéricas por Shapiro-Wilk y D'Agostino-Pearson
+5,Escalado implicado,Robusto (mediana e IQR) para los modelos sensibles a la escala
+6,Exceso de ceros,3 variables con más del 50 % de valores en cero; máximo 88.9 %
+7,Valores atípicos,"Artefacto de la regla de Tukey sobre conteos con exceso de ceros; tasa de readmisión superior a la global, así que no se tratan"
+8,Composición de la cohorte,64.2 % de los encuentros en pacientes de 60 a 90 años
+9,Niveles categóricos frágiles,21 niveles bajo el 1 %; 9 con menos de diez positivos

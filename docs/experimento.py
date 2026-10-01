@@ -1,7 +1,7 @@
 """
 Motor del experimento combinatorio de clasificación.
 
-Este módulo concentra la maquinaria que comparten los capítulos 6 a 9: la
+Este módulo concentra la maquinaria que comparten los capítulos 6 a 10: la
 construcción del preprocesador, las fábricas de modelos, las estrategias de
 balanceo, los espacios de búsqueda, los cuatro optimizadores y el ejecutor
 con validación cruzada anidada, agrupada por paciente y con puntos de
@@ -9,13 +9,13 @@ control en disco.
 
 Las decisiones metodológicas se documentan en los notebooks; aquí solo está
 la implementación, de modo que una corrección se aplique en un único lugar
-y no en nueve capítulos.
+y no en cada capítulo.
 
 Diseño: 7 modelos × 4 estrategias de balanceo × 4 optimizadores de
 hiperparámetros = 112 corridas de clasificación. La guía del entregable
 también describe una rama de regresión (7 modelos × 4 optimizadores); el
 alcance de este proyecto se limitó a clasificación por decisión explícita,
-así que ese módulo no la implementa.
+así que este módulo no la implementa.
 
 Dependencias opcionales
 -----------------------
@@ -54,7 +54,12 @@ from sklearn.preprocessing import OneHotEncoder, RobustScaler
 #: al algoritmo genético.
 SEMILLA = 42
 
-#: Núcleos para la paralelización. -1 usa todos los disponibles.
+#: Procesos para la paralelización. -1 usa todos los núcleos lógicos. Puede
+#: cambiarse desde un notebook (``ex.N_JOBS = 4``) antes de construir los
+#: pipelines: todas las fábricas y el ejecutor leen este valor en el momento
+#: de usarlo. En el equipo del proyecto (4 núcleos físicos, 8 lógicos), 8
+#: procesos solo acortan la búsqueda un 9 % respecto a 4 y duplican la
+#: memoria, así que el experimento del capítulo 7 se ejecuta con 4.
 N_JOBS = -1
 
 # scikit-learn 1.8 marca ``penalty`` como obsoleto en favor de ``l1_ratio`` y
@@ -273,8 +278,9 @@ def crear_modelo(nombre, semilla=SEMILLA):
     ``logistica``: solver ``liblinear`` (descenso por coordenadas / región de
     confianza), que admite L1 y L2 y opera sobre matrices dispersas. Su costo
     por iteración es O(n·p) como el de SAGA, pero converge en muchas menos
-    iteraciones a esta escala: medido en el capítulo 6, es entre 10 y 15
-    veces más rápido con el mismo AUC-PR.
+    iteraciones a esta escala: medido en el capítulo 6, el ajuste del
+    pipeline completo es 6.7 veces más rápido con el mismo AUC-PR (la mejora
+    del solver aislado es mayor, porque el preprocesamiento es común a ambos).
 
     ``svm``: ``LinearSVC`` en lugar del SVM con kernel, cuya complejidad
     entre O(n²) y O(n³) es inviable en validación anidada con ~80,000 filas.
@@ -316,7 +322,10 @@ def crear_modelo(nombre, semilla=SEMILLA):
         return RandomForestClassifier(n_estimators=300, random_state=semilla,
                                       n_jobs=N_JOBS)
     if nombre == "xgboost":
-        return XGBClasificadorParada(random_state=semilla)
+        # n_jobs se pasa explícito: el valor por defecto del parámetro en
+        # XGBClasificadorParada se fija al importar el módulo y no reflejaría
+        # un cambio posterior de N_JOBS (por ejemplo, ``ex.N_JOBS = 4``).
+        return XGBClasificadorParada(random_state=semilla, n_jobs=N_JOBS)
     if nombre == "svm":
         return CalibratedClassifierCV(
             LinearSVC(dual="auto", max_iter=5000, random_state=semilla),
@@ -345,10 +354,10 @@ ACEPTA_CLASS_WEIGHT = {"logistica", "arbol", "random_forest", "svm"}
 EQUIVALENTE_CLASS_WEIGHT = {"bayes": "priors", "xgboost": "scale_pos_weight"}
 
 #: Modelos que reciben matriz densa. GaussianNB no admite dispersas; los
-#: árboles y k-NN sí, pero sus rutas dispersas son un orden de magnitud más
-#: lentas (medido en el capítulo 6: ×11 árbol, ×14 Random Forest, ×4
-#: inferencia de k-NN). La matriz densa ocupa ~100 MB para el conjunto de
-#: entrenamiento, un costo de memoria aceptable a cambio de esa velocidad.
+#: árboles y k-NN sí, pero sus rutas dispersas son mucho más lentas (medido
+#: en el capítulo 6 sobre el pipeline completo: ×2.4 el árbol, ×3.6 Random
+#: Forest y ×6.3 la inferencia de k-NN, con el mismo AUC-PR). La matriz densa
+#: cuesta en torno a un 10 % más de memoria pico, a cambio de esa velocidad.
 REQUIERE_DENSO = {"bayes", "arbol", "random_forest", "knn"}
 
 #: Modelos que ya paralelizan internamente (``n_jobs`` propio). Para ellos
@@ -652,7 +661,7 @@ def _puntuar_con_poda(pipeline, parametros, X, y, particiones, metrica,
 
 def optimizar(estrategia, pipeline, rejilla, espacio, X, y, particiones,
               metrica, presupuesto, semilla=SEMILLA, paralelo_interno=False,
-              multifidelidad=True):
+              multifidelidad=True, n_jobs=None):
     """Busca hiperparámetros con la estrategia indicada.
 
     Las cuatro estrategias evalúan el mismo número de configuraciones
@@ -677,9 +686,13 @@ def optimizar(estrategia, pipeline, rejilla, espacio, X, y, particiones,
 
     Paralelización: si el modelo no paraleliza internamente, las
     configuraciones de Grid, Random y de cada generación del genético se
-    evalúan en paralelo (configuraciones × folds). Optuna es secuencial por
-    naturaleza (cada propuesta depende de las anteriores), así que en él solo
-    se paralelizan los folds cuando no hay poda.
+    evalúan en paralelo. Optuna es secuencial por naturaleza (cada propuesta
+    depende de las anteriores); su paralelismo se obtiene un nivel más
+    arriba, ejecutando a la vez los folds externos (véase
+    :func:`ejecutar_corrida`). ``n_jobs`` fija el número de procesos de esta
+    búsqueda; por defecto, :data:`N_JOBS`. Cuando la búsqueda corre dentro de
+    un fold externo que ya se ejecuta en paralelo, se pasa ``n_jobs=1`` para
+    no anidar paralelismo.
 
     Returns
     -------
@@ -690,6 +703,7 @@ def optimizar(estrategia, pipeline, rejilla, espacio, X, y, particiones,
     """
     aleatorio = np.random.default_rng(semilla)
     n_folds = len(particiones)
+    procesos = N_JOBS if n_jobs is None else n_jobs
     evaluados, historial = [], []
     ajustes = 0
 
@@ -704,8 +718,8 @@ def optimizar(estrategia, pipeline, rejilla, espacio, X, y, particiones,
 
     def evaluar_lote(lista):
         """Evalúa varias configuraciones, en paralelo si conviene."""
-        if not paralelo_interno and N_JOBS != 1 and len(lista) > 1:
-            puntajes = Parallel(n_jobs=N_JOBS)(
+        if not paralelo_interno and procesos != 1 and len(lista) > 1:
+            puntajes = Parallel(n_jobs=procesos)(
                 delayed(_puntuar)(pipeline, p, X, y, particiones, metrica)
                 for p in lista)
         else:
@@ -764,7 +778,7 @@ def optimizar(estrategia, pipeline, rejilla, espacio, X, y, particiones,
                 candidato = clone(pipeline).set_params(**parametros)
                 puntaje = float(np.mean(cross_val_score(
                     candidato, X, y, cv=particiones, scoring=metrica,
-                    n_jobs=1 if paralelo_interno else N_JOBS,
+                    n_jobs=1 if paralelo_interno else procesos,
                     error_score="raise")))
             registrar(parametros, puntaje)
             return puntaje
@@ -962,6 +976,88 @@ class Corrida:
         return f"{self.modelo}|{self.balanceo}|{self.optimizador}"
 
 
+def _procesar_fold(i, indices_train, indices_val, corrida, X, y, grupos, roles,
+                   folds_internos, metrica, presupuesto, fraccion_busqueda,
+                   multifidelidad, semilla, n_jobs_busqueda):
+    """Búsqueda, ajuste final y evaluación de un fold externo.
+
+    Está a nivel de módulo, y no dentro de :func:`ejecutar_corrida`, para
+    que ``joblib`` pueda enviarla a otro proceso cuando los folds externos se
+    ejecutan en paralelo.
+
+    El generador aleatorio de la submuestra de búsqueda se deriva de la
+    semilla y del número de fold (``semilla + i``), no se comparte entre
+    folds: así cada fold obtiene siempre la misma submuestra, se ejecute en
+    serie o en paralelo y en el orden que sea.
+
+    Returns
+    -------
+    dict
+        Métricas del fold, hiperparámetros elegidos, curvas, conteos y
+        tiempos por fase.
+    """
+    t_fold = time.perf_counter()
+    X_train, X_val = X.iloc[indices_train], X.iloc[indices_val]
+    y_train, y_val = y.iloc[indices_train], y.iloc[indices_val]
+    grupos_train = grupos.iloc[indices_train]
+
+    if fraccion_busqueda < 1.0:
+        aleatorio = np.random.default_rng(semilla + i)
+        pacientes = grupos_train.drop_duplicates()
+        elegidos_pac = aleatorio.choice(
+            pacientes.to_numpy(),
+            size=max(2, int(len(pacientes) * fraccion_busqueda)),
+            replace=False)
+        mascara = grupos_train.isin(elegidos_pac).to_numpy()
+        X_busqueda, y_busqueda = X_train[mascara], y_train[mascara]
+        grupos_busqueda = grupos_train[mascara]
+    else:
+        X_busqueda, y_busqueda = X_train, y_train
+        grupos_busqueda = grupos_train
+
+    pipeline = construir_pipeline(corrida.modelo, corrida.balanceo, roles,
+                                  semilla, corrida.razon_desbalance)
+
+    # El reparto agrupado no cambia entre configuraciones, así que se calcula
+    # una vez por fold externo en lugar de una vez por evaluación.
+    interno = StratifiedGroupKFold(n_splits=folds_internos, shuffle=True,
+                                   random_state=semilla)
+    particiones_internas = list(
+        interno.split(X_busqueda, y_busqueda, groups=grupos_busqueda))
+
+    inicio = time.perf_counter()
+    resultado = optimizar(
+        corrida.optimizador, pipeline,
+        rejilla_hiperparametros(corrida.modelo),
+        espacio_busqueda(corrida.modelo), X_busqueda, y_busqueda,
+        particiones_internas, metrica, presupuesto, semilla=semilla + i,
+        paralelo_interno=corrida.modelo in PARALELO_INTERNO,
+        multifidelidad=multifidelidad, n_jobs=n_jobs_busqueda)
+    t_busqueda = time.perf_counter() - inicio
+
+    pipeline = clone(pipeline).set_params(**resultado["mejores_parametros"])
+    inicio = time.perf_counter()
+    pipeline.fit(X_train, y_train)
+    t_ajuste = time.perf_counter() - inicio
+
+    inicio = time.perf_counter()
+    probabilidades = pipeline.predict_proba(X_val)[:, 1]
+    t_inferencia = time.perf_counter() - inicio
+
+    return {
+        "metricas": calcular_metricas(y_val, probabilidades),
+        "mejores_parametros": resultado["mejores_parametros"],
+        "historial": resultado["historial"],
+        "diversidad": resultado["diversidad"],
+        "n_evaluaciones": len(resultado["evaluaciones"]),
+        "n_ajustes": resultado["ajustes"] + 1,
+        "t_busqueda": t_busqueda,
+        "t_ajuste": t_ajuste,
+        "t_inferencia": t_inferencia,
+        "t_fold": time.perf_counter() - t_fold,
+    }
+
+
 def ejecutar_corrida(corrida, X, y, grupos, roles, folds_externos=5,
                      folds_internos=3, metrica=None, fraccion_busqueda=1.0,
                      multifidelidad=True, semilla=SEMILLA, verbose=False):
@@ -976,6 +1072,28 @@ def ejecutar_corrida(corrida, X, y, grupos, roles, folds_externos=5,
     **pacientes** del fold externo de entrenamiento; el ajuste final usa el
     fold completo. ``multifidelidad`` activa Successive Halving en Optuna.
 
+    Paralelismo entre folds externos
+    --------------------------------
+    En las corridas de Optuna con modelos secuenciales (los que no están en
+    :data:`PARALELO_INTERNO`), los folds externos se ejecutan a la vez, con
+    un tope de :data:`N_JOBS` procesos, y la búsqueda dentro de cada fold va
+    en un solo proceso. Optuna no puede repartir sus configuraciones, porque
+    cada propuesta depende de las anteriores, pero los folds externos son
+    independientes entre sí: ejecutarlos a la vez da exactamente las mismas
+    métricas que en serie. En el resto de corridas el paralelismo ya está en
+    otro nivel (configuraciones, o hilos dentro del modelo) y los folds
+    externos van en serie. La tabla lo registra en ``folds_en_paralelo``.
+
+    Tiempos que se registran
+    ------------------------
+    ``tiempo_busqueda_s``, ``tiempo_ajuste_s`` y ``tiempo_inferencia_s`` son
+    la suma sobre los folds: miden el **trabajo** de cada fase. Con folds en
+    serie, esa suma coincide con el tiempo transcurrido; con folds en
+    paralelo, lo supera. ``tiempo_trabajo_s`` suma la duración de los folds y
+    ``tiempo_real_s`` es el tiempo de reloj de la corrida, el que cuesta en
+    la práctica. Las comparaciones de costo deben declarar cuál de los dos
+    usan.
+
     Con ``verbose=True`` imprime una línea por fold externo con su duración
     y su AUC-PR. No altera ningún resultado.
 
@@ -984,6 +1102,7 @@ def ejecutar_corrida(corrida, X, y, grupos, roles, folds_externos=5,
     dict
         Una fila de la tabla maestra.
     """
+    t_corrida = time.perf_counter()
     metrica = metrica or METRICA_BUSQUEDA
     presupuesto = corrida.presupuesto or presupuesto_modelo(corrida.modelo)
 
@@ -994,80 +1113,46 @@ def ejecutar_corrida(corrida, X, y, grupos, roles, folds_externos=5,
 
     externo = StratifiedGroupKFold(n_splits=folds_externos, shuffle=True,
                                    random_state=semilla)
-    interno = StratifiedGroupKFold(n_splits=folds_internos, shuffle=True,
-                                   random_state=semilla)
-    rejilla = rejilla_hiperparametros(corrida.modelo)
-    espacio = espacio_busqueda(corrida.modelo)
-    aleatorio = np.random.default_rng(semilla)
-    paralelo_interno = corrida.modelo in PARALELO_INTERNO
+    divisiones = list(externo.split(X, y, groups=grupos))
 
-    por_fold, elegidos, historiales, diversidades = [], [], [], []
-    n_evaluaciones = n_ajustes = 0
-    t_busqueda = t_ajuste = t_inferencia = 0.0
+    folds_en_paralelo = (corrida.optimizador == "optuna"
+                         and corrida.modelo not in PARALELO_INTERNO
+                         and N_JOBS != 1)
+    comunes = dict(corrida=corrida, X=X, y=y, grupos=grupos, roles=roles,
+                   folds_internos=folds_internos, metrica=metrica,
+                   presupuesto=presupuesto,
+                   fraccion_busqueda=fraccion_busqueda,
+                   multifidelidad=multifidelidad, semilla=semilla)
 
-    for i, (indices_train, indices_val) in enumerate(
-            externo.split(X, y, groups=grupos), 1):
+    if folds_en_paralelo:
         if verbose:
-            print(f"  fold externo {i}/{folds_externos}...", end=" ",
-                  flush=True)
-        t_fold = time.perf_counter()
-
-        X_train, X_val = X.iloc[indices_train], X.iloc[indices_val]
-        y_train, y_val = y.iloc[indices_train], y.iloc[indices_val]
-        grupos_train = grupos.iloc[indices_train]
-
-        if fraccion_busqueda < 1.0:
-            pacientes = grupos_train.drop_duplicates()
-            elegidos_pac = aleatorio.choice(
-                pacientes.to_numpy(),
-                size=max(2, int(len(pacientes) * fraccion_busqueda)),
-                replace=False)
-            mascara = grupos_train.isin(elegidos_pac).to_numpy()
-            X_busqueda, y_busqueda = X_train[mascara], y_train[mascara]
-            grupos_busqueda = grupos_train[mascara]
-        else:
-            X_busqueda, y_busqueda = X_train, y_train
-            grupos_busqueda = grupos_train
-
-        pipeline = construir_pipeline(corrida.modelo, corrida.balanceo,
-                                      roles, semilla,
-                                      corrida.razon_desbalance)
-
-        # El reparto agrupado no cambia entre configuraciones, así que se
-        # calcula una vez por fold externo en lugar de una vez por evaluación.
-        particiones_internas = list(
-            interno.split(X_busqueda, y_busqueda, groups=grupos_busqueda))
-
-        inicio = time.perf_counter()
-        resultado = optimizar(
-            corrida.optimizador, pipeline, rejilla, espacio, X_busqueda,
-            y_busqueda, particiones_internas, metrica, presupuesto,
-            semilla=semilla + i, paralelo_interno=paralelo_interno,
-            multifidelidad=multifidelidad)
-        t_busqueda += time.perf_counter() - inicio
-
-        pipeline = clone(pipeline).set_params(
-            **resultado["mejores_parametros"])
-        inicio = time.perf_counter()
-        pipeline.fit(X_train, y_train)
-        t_ajuste += time.perf_counter() - inicio
-
-        inicio = time.perf_counter()
-        salida = pipeline.predict_proba(X_val)[:, 1]
-        metricas_fold = calcular_metricas(y_val, salida)
-        t_inferencia += time.perf_counter() - inicio
-
+            print(f"  {folds_externos} folds externos en paralelo "
+                  f"(hasta {N_JOBS if N_JOBS > 0 else 'todos los'} "
+                  "procesos)...", flush=True)
+        resultados = Parallel(n_jobs=N_JOBS)(
+            delayed(_procesar_fold)(i, ent, val, n_jobs_busqueda=1,
+                                    **comunes)
+            for i, (ent, val) in enumerate(divisiones, 1))
         if verbose:
-            print(f"listo en {time.perf_counter() - t_fold:.1f} s "
-                  f"(auc_pr {metricas_fold['auc_pr']:.4f})", flush=True)
+            for i, r in enumerate(resultados, 1):
+                print(f"  fold externo {i}/{folds_externos}: "
+                      f"{r['t_fold']:.1f} s (auc_pr "
+                      f"{r['metricas']['auc_pr']:.4f})", flush=True)
+    else:
+        resultados = []
+        for i, (ent, val) in enumerate(divisiones, 1):
+            if verbose:
+                print(f"  fold externo {i}/{folds_externos}...", end=" ",
+                      flush=True)
+            r = _procesar_fold(i, ent, val, n_jobs_busqueda=N_JOBS,
+                               **comunes)
+            if verbose:
+                print(f"listo en {r['t_fold']:.1f} s "
+                      f"(auc_pr {r['metricas']['auc_pr']:.4f})", flush=True)
+            resultados.append(r)
 
-        por_fold.append(metricas_fold)
-        elegidos.append(resultado["mejores_parametros"])
-        historiales.append(resultado["historial"])
-        diversidades.append(resultado["diversidad"])
-        n_evaluaciones += len(resultado["evaluaciones"])
-        n_ajustes += resultado["ajustes"] + 1
-
+    t_busqueda = sum(r["t_busqueda"] for r in resultados)
+    n_evaluaciones = sum(r["n_evaluaciones"] for r in resultados)
     fila = {
         "modelo": corrida.modelo,
         "balanceo": corrida.balanceo,
@@ -1079,22 +1164,31 @@ def ejecutar_corrida(corrida, X, y, grupos, roles, folds_externos=5,
         "multifidelidad": bool(multifidelidad and
                                corrida.optimizador == "optuna"),
         "semilla": semilla,
+        # Condiciones de ejecución: no afectan a las métricas, pero sí a los
+        # tiempos, así que se registran para que las comparaciones de costo
+        # solo mezclen corridas medidas en las mismas condiciones.
+        "n_jobs": N_JOBS,
+        "folds_en_paralelo": folds_en_paralelo,
         "n_evaluaciones": n_evaluaciones,
-        "n_ajustes": n_ajustes,
+        "n_ajustes": sum(r["n_ajustes"] for r in resultados),
     }
     for nombre in METRICAS:
-        valores = [f[nombre] for f in por_fold]
+        valores = [r["metricas"][nombre] for r in resultados]
         fila[f"{nombre}_media"] = float(np.mean(valores))
         fila[f"{nombre}_sd"] = float(np.std(valores, ddof=1))
         fila[f"{nombre}_por_fold"] = json.dumps(valores)
     fila.update({
         "tiempo_busqueda_s": t_busqueda,
-        "tiempo_ajuste_s": t_ajuste,
-        "tiempo_inferencia_s": t_inferencia,
+        "tiempo_ajuste_s": sum(r["t_ajuste"] for r in resultados),
+        "tiempo_inferencia_s": sum(r["t_inferencia"] for r in resultados),
         "tiempo_por_evaluacion_s": t_busqueda / max(n_evaluaciones, 1),
-        "hiperparametros_por_fold": json.dumps(elegidos, default=str),
-        "curvas_anytime": json.dumps(historiales),
-        "curvas_diversidad": json.dumps(diversidades),
+        "tiempo_trabajo_s": sum(r["t_fold"] for r in resultados),
+        "tiempo_real_s": time.perf_counter() - t_corrida,
+        "hiperparametros_por_fold": json.dumps(
+            [r["mejores_parametros"] for r in resultados], default=str),
+        "curvas_anytime": json.dumps([r["historial"] for r in resultados]),
+        "curvas_diversidad": json.dumps(
+            [r["diversidad"] for r in resultados]),
     })
     return fila
 
@@ -1147,6 +1241,7 @@ def ejecutar_experimento(corridas, X, y, grupos, roles, ruta_tabla,
                 "modelo": corrida.modelo, "balanceo": corrida.balanceo,
                 "optimizador": corrida.optimizador,
                 "estado": "no aplicable", "detalle": str(exc),
+                "n_jobs": N_JOBS,
             }
         tabla = pd.concat([tabla, pd.DataFrame([fila])], ignore_index=True)
         tabla.to_csv(ruta_tabla, index=False)

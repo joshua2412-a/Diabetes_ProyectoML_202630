@@ -1,0 +1,5 @@
+Referencia,AUC-ROC,AUC-PR,Procedencia
+Clasificador constante (predice la prevalencia),0.5,0.1139,definición
+Mejor predictor individual (number_inpatient),0.6072,,"capítulo 4, calculada"
+Oráculo por perfiles (techo estimado),0.6507,,"sección 5.4, calculada"
+Modelo base (esta logística),0.6634,0.2094,sección 7.2

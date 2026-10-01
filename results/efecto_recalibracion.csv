@@ -1,0 +1,4 @@
+variante,Brier,ECE,AUC-PR
+Sin recalibrar,0.0962,0.0013,0.2285
+Escalado de Platt,0.0962,0.0137,0.2302
+Regresión isotónica,0.0961,0.0015,0.2277

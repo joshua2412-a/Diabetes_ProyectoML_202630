@@ -1,0 +1,2 @@
+,comparación,k (modelos),n (folds),chi² de Friedman,grados de libertad,p-valor,conclusión
+0,7 modelos base (mejor configuración de cada uno),7,5,28.542857142857144,6,7.423092467650892e-05,Se rechaza H0: hay diferencias
