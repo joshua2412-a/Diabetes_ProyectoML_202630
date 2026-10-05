@@ -397,7 +397,10 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-ranking-unico-de-todos-los-predictores">4.5. Un ranking único de todos los predictores</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#esta-la-senal-en-las-interacciones">4.6. ¿Está la señal en las interacciones?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#robustez-frente-a-la-dependencia-entre-encuentros">4.7. Robustez frente a la dependencia entre encuentros</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equidad-tasas-base-por-atributo-protegido">4.8. Equidad: tasas base por atributo protegido</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equidad-tasas-base-por-atributo-protegido">4.8. Equidad: tasas base por atributo protegido</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#los-contrastes-categoricos-bajo-el-efecto-de-diseno">4.7.1. Los contrastes categóricos bajo el efecto de diseño</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">4.9. Síntesis del capítulo</a></li>
 </ul>
             </nav>
@@ -640,7 +643,7 @@ document.write(`
 <div class="cell_output docutils container">
 <h3 class="rubric" id="asociacion-de-las-variables-numericas-con-la-readmision-temprana">Asociación de las variables numéricas con la readmisión temprana</h3>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_99edc039_31e5_47d8_bb58_55bb748a6ec5" hidden="hidden">
+<table id="itables_422338e4_b7ed_486f_92fa_ed64ad31986b" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -739,7 +742,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_99edc039_31e5_47d8_bb58_55bb748a6ec5_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_422338e4_b7ed_486f_92fa_ed64ad31986b_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">mediana (no readm.)</th>
       <th style="border:1px solid #ddd;padding:8px">mediana (readm.)</th>
@@ -778,12 +781,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">age_ord</td><td style="border:1px solid #ddd;padding:8px">6.0</td><td style="border:1px solid #ddd;padding:8px">6.0</td><td style="border:1px solid #ddd;padding:8px">6.0615</td><td style="border:1px solid #ddd;padding:8px">6.1555</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0187</td><td style="border:1px solid #ddd;padding:8px">0.0383</td><td style="border:1px solid #ddd;padding:8px">0.5192</td><td style="border:1px solid #ddd;padding:8px">Insignificante</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">num_procedures</td><td style="border:1px solid #ddd;padding:8px">1.0</td><td style="border:1px solid #ddd;padding:8px">1.0</td><td style="border:1px solid #ddd;padding:8px">1.3467</td><td style="border:1px solid #ddd;padding:8px">1.2707</td><td style="border:1px solid #ddd;padding:8px">0.0295</td><td style="border:1px solid #ddd;padding:8px">-0.0142</td><td style="border:1px solid #ddd;padding:8px">-0.0133</td><td style="border:1px solid #ddd;padding:8px">0.4934</td><td style="border:1px solid #ddd;padding:8px">Insignificante</td><td style="border:1px solid #ddd;padding:8px">0.0589</td><td style="border:1px solid #ddd;padding:8px">No</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">n_farmacos_activos</td><td style="border:1px solid #ddd;padding:8px">1.0</td><td style="border:1px solid #ddd;padding:8px">1.0</td><td style="border:1px solid #ddd;padding:8px">1.1875</td><td style="border:1px solid #ddd;padding:8px">1.1890</td><td style="border:1px solid #ddd;padding:8px">0.2690</td><td style="border:1px solid #ddd;padding:8px">0.0005</td><td style="border:1px solid #ddd;padding:8px">0.0067</td><td style="border:1px solid #ddd;padding:8px">0.5033</td><td style="border:1px solid #ddd;padding:8px">Insignificante</td><td style="border:1px solid #ddd;padding:8px">0.2690</td><td style="border:1px solid #ddd;padding:8px">No</td></tr>
-</tbody></table></div><script>document.getElementById("itables_99edc039_31e5_47d8_bb58_55bb748a6ec5")?.removeAttribute("hidden");document.getElementById("itables_99edc039_31e5_47d8_bb58_55bb748a6ec5_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_422338e4_b7ed_486f_92fa_ed64ad31986b")?.removeAttribute("hidden");document.getElementById("itables_422338e4_b7ed_486f_92fa_ed64ad31986b_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_99edc039_31e5_47d8_bb58_55bb748a6ec5:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_422338e4_b7ed_486f_92fa_ed64ad31986b:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -941,7 +944,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <img alt="_images/16a1499b926b5d73a79b93999d94bde77fd3a27bb41b3830dba1433e6aae0a32.png" src="_images/16a1499b926b5d73a79b93999d94bde77fd3a27bb41b3830dba1433e6aae0a32.png" />
 <h3 class="rubric" id="forma-de-la-relacion-de-cada-predictor-con-el-desenlace">Forma de la relación de cada predictor con el desenlace</h3>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_e7748caa_d5d8_43fc_a7e5_5d6449547d49" hidden="hidden">
+<table id="itables_5e69a3dd_3604_4ec6_92b0_b4d865ceba32" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1040,7 +1043,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_e7748caa_d5d8_43fc_a7e5_5d6449547d49_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_5e69a3dd_3604_4ec6_92b0_b4d865ceba32_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">tramos</th>
       <th style="border:1px solid #ddd;padding:8px">monotonía (Spearman)</th>
@@ -1060,12 +1063,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">number_diagnoses</td><td style="border:1px solid #ddd;padding:8px">5</td><td style="border:1px solid #ddd;padding:8px">1.000</td><td style="border:1px solid #ddd;padding:8px">0.964</td><td style="border:1px solid #ddd;padding:8px">Monótona y lineal en el logit</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">num_medications</td><td style="border:1px solid #ddd;padding:8px">10</td><td style="border:1px solid #ddd;padding:8px">0.903</td><td style="border:1px solid #ddd;padding:8px">0.841</td><td style="border:1px solid #ddd;padding:8px">Monótona con curvatura</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">number_emergency</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">NaN</td><td style="border:1px solid #ddd;padding:8px">Sin tramos suficientes</td></tr>
-</tbody></table></div><script>document.getElementById("itables_e7748caa_d5d8_43fc_a7e5_5d6449547d49")?.removeAttribute("hidden");document.getElementById("itables_e7748caa_d5d8_43fc_a7e5_5d6449547d49_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_5e69a3dd_3604_4ec6_92b0_b4d865ceba32")?.removeAttribute("hidden");document.getElementById("itables_5e69a3dd_3604_4ec6_92b0_b4d865ceba32_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_e7748caa_d5d8_43fc_a7e5_5d6449547d49:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_5e69a3dd_3604_4ec6_92b0_b4d865ceba32:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1166,7 +1169,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <div class="cell_output docutils container">
 <h3 class="rubric" id="asociacion-de-las-variables-categoricas-con-la-readmision">Asociación de las variables categóricas con la readmisión</h3>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_48b604f5_e78a_43b8_b6bf_155df54da653" hidden="hidden">
+<table id="itables_421d1872_b6db_44a7_8a4f_86e1a7deafa6" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1265,7 +1268,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_48b604f5_e78a_43b8_b6bf_155df54da653_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_421d1872_b6db_44a7_8a4f_86e1a7deafa6_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">categorías</th>
       <th style="border:1px solid #ddd;padding:8px">mín. frecuencia esperada</th>
@@ -1318,12 +1321,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">gender</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">4162.5967</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.5171</td><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">0.4721</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">1.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td><td style="border:1px solid #ddd;padding:8px">No</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">nateglinide</td><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">3.4166</td><td style="border:1px solid #ddd;padding:8px">16.6667</td><td style="border:1px solid #ddd;padding:8px">0.6960</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">0.7061</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">1.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td><td style="border:1px solid #ddd;padding:8px">No</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">tolazamide</td><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">0.1139</td><td style="border:1px solid #ddd;padding:8px">50.0000</td><td style="border:1px solid #ddd;padding:8px">0.3013</td><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">0.8602</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">1.0000</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">No</td></tr>
-</tbody></table></div><script>document.getElementById("itables_48b604f5_e78a_43b8_b6bf_155df54da653")?.removeAttribute("hidden");document.getElementById("itables_48b604f5_e78a_43b8_b6bf_155df54da653_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_421d1872_b6db_44a7_8a4f_86e1a7deafa6")?.removeAttribute("hidden");document.getElementById("itables_421d1872_b6db_44a7_8a4f_86e1a7deafa6_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_48b604f5_e78a_43b8_b6bf_155df54da653:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_421d1872_b6db_44a7_8a4f_86e1a7deafa6:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1425,7 +1428,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <div class="cell_output docutils container">
 <h3 class="rubric" id="readmision-segun-el-destino-al-alta">Readmisión según el destino al alta</h3>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_cc4657c1_d787_4061_9441_934d953d9528" hidden="hidden">
+<table id="itables_304ade4f_3bbe_4d79_9df6_85b6bda157f6" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1524,7 +1527,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_cc4657c1_d787_4061_9441_934d953d9528_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_304ade4f_3bbe_4d79_9df6_85b6bda157f6_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">size</th>
       <th style="border:1px solid #ddd;padding:8px">tasa (%)</th>
@@ -1546,12 +1549,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">NULL</td><td style="border:1px solid #ddd;padding:8px">2961</td><td style="border:1px solid #ddd;padding:8px">12.77</td><td style="border:1px solid #ddd;padding:8px">11.61</td><td style="border:1px solid #ddd;padding:8px">14.02</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">Discharged/transferred to home with home health service</td><td style="border:1px solid #ddd;padding:8px">10314</td><td style="border:1px solid #ddd;padding:8px">12.66</td><td style="border:1px solid #ddd;padding:8px">12.03</td><td style="border:1px solid #ddd;padding:8px">13.32</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">Discharged to home</td><td style="border:1px solid #ddd;padding:8px">48241</td><td style="border:1px solid #ddd;padding:8px">9.29</td><td style="border:1px solid #ddd;padding:8px">9.03</td><td style="border:1px solid #ddd;padding:8px">9.55</td></tr>
-</tbody></table></div><script>document.getElementById("itables_cc4657c1_d787_4061_9441_934d953d9528")?.removeAttribute("hidden");document.getElementById("itables_cc4657c1_d787_4061_9441_934d953d9528_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_304ade4f_3bbe_4d79_9df6_85b6bda157f6")?.removeAttribute("hidden");document.getElementById("itables_304ade4f_3bbe_4d79_9df6_85b6bda157f6_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_cc4657c1_d787_4061_9441_934d953d9528:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_304ade4f_3bbe_4d79_9df6_85b6bda157f6:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1635,7 +1638,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <div class="cell_output docutils container">
 <h3 class="rubric" id="control-glucemico-y-tratamiento-farmacologico">Control glucémico y tratamiento farmacológico</h3>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_ada97cc1_295f_44a0_9e34_48ad32622cc2" hidden="hidden">
+<table id="itables_76ef74ad_fe49_4451_a13e_e7b89951a98f" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1734,7 +1737,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_ada97cc1_295f_44a0_9e34_48ad32622cc2_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_76ef74ad_fe49_4451_a13e_e7b89951a98f_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup>variable</th>
       <th style="border:1px solid #ddd;padding:8px">categoría</th>
       <th style="border:1px solid #ddd;padding:8px">encuentros</th>
@@ -1758,12 +1761,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">change</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">42563</td><td style="border:1px solid #ddd;padding:8px">10.84</td><td style="border:1px solid #ddd;padding:8px">10.55</td><td style="border:1px solid #ddd;padding:8px">11.14</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">diabetesMed</td><td style="border:1px solid #ddd;padding:8px">No</td><td style="border:1px solid #ddd;padding:8px">18094</td><td style="border:1px solid #ddd;padding:8px">9.80</td><td style="border:1px solid #ddd;padding:8px">9.38</td><td style="border:1px solid #ddd;padding:8px">10.25</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">diabetesMed</td><td style="border:1px solid #ddd;padding:8px">Yes</td><td style="border:1px solid #ddd;padding:8px">61379</td><td style="border:1px solid #ddd;padding:8px">11.86</td><td style="border:1px solid #ddd;padding:8px">11.60</td><td style="border:1px solid #ddd;padding:8px">12.11</td></tr>
-</tbody></table></div><script>document.getElementById("itables_ada97cc1_295f_44a0_9e34_48ad32622cc2")?.removeAttribute("hidden");document.getElementById("itables_ada97cc1_295f_44a0_9e34_48ad32622cc2_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_76ef74ad_fe49_4451_a13e_e7b89951a98f")?.removeAttribute("hidden");document.getElementById("itables_76ef74ad_fe49_4451_a13e_e7b89951a98f_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_ada97cc1_295f_44a0_9e34_48ad32622cc2:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_76ef74ad_fe49_4451_a13e_e7b89951a98f:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1955,7 +1958,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <div class="cell_output docutils container">
 <h3 class="rubric" id="ranking-unico-de-predictores-por-informacion-mutua-neta">Ranking único de predictores por información mutua neta</h3>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_4fd4e1bc_1aca_4561_a3e9_f94ceae690c1" hidden="hidden">
+<table id="itables_800b3ce2_0af9_450c_bf24_8bf799721fb3" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -2054,7 +2057,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_4fd4e1bc_1aca_4561_a3e9_f94ceae690c1_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_800b3ce2_0af9_450c_bf24_8bf799721fb3_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">tipo</th>
       <th style="border:1px solid #ddd;padding:8px">niveles</th>
@@ -2114,12 +2117,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">tolazamide</td><td style="border:1px solid #ddd;padding:8px">categórica</td><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">0.00000</td><td style="border:1px solid #ddd;padding:8px">0.00001</td><td style="border:1px solid #ddd;padding:8px">-0.00001</td><td style="border:1px solid #ddd;padding:8px">-0.00173</td><td style="border:1px solid #ddd;padding:8px">0.49995</td><td style="border:1px solid #ddd;padding:8px">0.00005</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">nateglinide</td><td style="border:1px solid #ddd;padding:8px">categórica</td><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">0.00001</td><td style="border:1px solid #ddd;padding:8px">0.00001</td><td style="border:1px solid #ddd;padding:8px">-0.00001</td><td style="border:1px solid #ddd;padding:8px">-0.00179</td><td style="border:1px solid #ddd;padding:8px">0.49829</td><td style="border:1px solid #ddd;padding:8px">0.00171</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">glyburide-metformin</td><td style="border:1px solid #ddd;padding:8px">categórica</td><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">0.00000</td><td style="border:1px solid #ddd;padding:8px">0.00001</td><td style="border:1px solid #ddd;padding:8px">-0.00001</td><td style="border:1px solid #ddd;padding:8px">-0.00214</td><td style="border:1px solid #ddd;padding:8px">0.49927</td><td style="border:1px solid #ddd;padding:8px">0.00073</td></tr>
-</tbody></table></div><script>document.getElementById("itables_4fd4e1bc_1aca_4561_a3e9_f94ceae690c1")?.removeAttribute("hidden");document.getElementById("itables_4fd4e1bc_1aca_4561_a3e9_f94ceae690c1_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_800b3ce2_0af9_450c_bf24_8bf799721fb3")?.removeAttribute("hidden");document.getElementById("itables_800b3ce2_0af9_450c_bf24_8bf799721fb3_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_4fd4e1bc_1aca_4561_a3e9_f94ceae690c1:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_800b3ce2_0af9_450c_bf24_8bf799721fb3:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -2256,7 +2259,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <div class="cell_output docutils container">
 <h3 class="rubric" id="informacion-de-interaccion-entre-pares-de-los-ocho-predictores-mas-informativos">Información de interacción entre pares de los ocho predictores más informativos</h3>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_b3785423_d30b_437f_8b50_1f9b022f4b20" hidden="hidden">
+<table id="itables_cadca945_5bc1_4095_8709_135631bfd9f4" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -2355,7 +2358,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_b3785423_d30b_437f_8b50_1f9b022f4b20_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_cadca945_5bc1_4095_8709_135631bfd9f4_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup>variable 1</th>
       <th style="border:1px solid #ddd;padding:8px">variable 2</th>
       <th style="border:1px solid #ddd;padding:8px">I neta conjunta</th>
@@ -2391,12 +2394,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">discharge_disposition_id</td><td style="border:1px solid #ddd;padding:8px">time_in_hospital</td><td style="border:1px solid #ddd;padding:8px">0.00563</td><td style="border:1px solid #ddd;padding:8px">0.00615</td><td style="border:1px solid #ddd;padding:8px">-0.00053</td><td style="border:1px solid #ddd;padding:8px">Redundancia</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">time_in_hospital</td><td style="border:1px solid #ddd;padding:8px">num_medications</td><td style="border:1px solid #ddd;padding:8px">0.00158</td><td style="border:1px solid #ddd;padding:8px">0.00216</td><td style="border:1px solid #ddd;padding:8px">-0.00058</td><td style="border:1px solid #ddd;padding:8px">Redundancia</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">number_inpatient</td><td style="border:1px solid #ddd;padding:8px">hospitalizacion_previa</td><td style="border:1px solid #ddd;padding:8px">0.00965</td><td style="border:1px solid #ddd;padding:8px">0.01535</td><td style="border:1px solid #ddd;padding:8px">-0.00570</td><td style="border:1px solid #ddd;padding:8px">Redundancia</td></tr>
-</tbody></table></div><script>document.getElementById("itables_b3785423_d30b_437f_8b50_1f9b022f4b20")?.removeAttribute("hidden");document.getElementById("itables_b3785423_d30b_437f_8b50_1f9b022f4b20_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_cadca945_5bc1_4095_8709_135631bfd9f4")?.removeAttribute("hidden");document.getElementById("itables_cadca945_5bc1_4095_8709_135631bfd9f4_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_b3785423_d30b_437f_8b50_1f9b022f4b20:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_cadca945_5bc1_4095_8709_135631bfd9f4:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -2471,7 +2474,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\joshu\AppData\Local\Temp\ipykernel_2288\2332573455.py:27: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\joshu\AppData\Local\Temp\ipykernel_13124\2332573455.py:27: UserWarning: Tight layout not applied. The bottom and top margins cannot be made large enough to accommodate all Axes decorations.
   plt.tight_layout()
 </pre></div>
 </div>
@@ -2495,9 +2498,10 @@ hospitalizacion_previa
 </section>
 <section id="robustez-frente-a-la-dependencia-entre-encuentros">
 <h2>4.7. Robustez frente a la dependencia entre encuentros<a class="headerlink" href="#robustez-frente-a-la-dependencia-entre-encuentros" title="Link to this heading">#</a></h2>
-<p>Todos los contrastes anteriores tratan las filas como independientes, y el capítulo 3 mostró que no lo son. Esta sección comprueba si esa simplificación cambia alguna conclusión, mediante dos análisis complementarios.</p>
+<p>Todos los contrastes anteriores tratan las filas como independientes, y el capítulo 3 mostró que no lo son. Esta sección comprueba si esa simplificación cambia alguna conclusión, mediante tres análisis complementarios.</p>
 <p>El primero es un <strong>análisis de sensibilidad</strong>: se repiten los contrastes sobre una submuestra de un encuentro aleatorio por paciente, donde la independencia sí se cumple por construcción. Si los tamaños de efecto se mantienen, la dependencia no estaba distorsionando el resultado.</p>
 <p>El segundo es un <strong>bootstrap por paciente</strong>: se remuestrean pacientes completos, no filas, y se recalcula el AUC univariado en cada réplica. El intervalo resultante es válido bajo dependencia intragrupo, a diferencia del que produciría un bootstrap de filas. Se calcula con una ponderación por paciente en lugar de reconstruir la tabla en cada réplica, lo que permite hacer miles de repeticiones en segundos.</p>
+<p>El tercero es una <strong>corrección de Rao-Scott</strong> para los contrastes categóricos. Los dos anteriores solo alcanzan a las variables numéricas, porque operan sobre la delta de Cliff y sobre el AUC univariado. Las categóricas se contrastaron con chi-cuadrado, que supone observaciones independientes igual que los demás, y necesitan su propio ajuste: Rao-Scott divide el estadístico por el efecto de diseño, que es la forma estándar de corregir un chi-cuadrado calculado sobre una muestra con conglomerados.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SELECCIONADAS</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">asociacion_num</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="mi">6</span><span class="p">])</span>
@@ -2592,7 +2596,7 @@ hospitalizacion_previa
 <div class="cell_output docutils container">
 <h3 class="rubric" id="contrastes-principales-bajo-dos-esquemas-robustos-a-la-dependencia-entre-encuentros">Contrastes principales bajo dos esquemas robustos a la dependencia entre encuentros</h3>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_f0560ac4_3606_4bda_83bc_1f264f828fd4" hidden="hidden">
+<table id="itables_1bbc91ad_3b4b_4a87_9cec_195736511d1d" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -2691,7 +2695,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_f0560ac4_3606_4bda_83bc_1f264f828fd4_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_1bbc91ad_3b4b_4a87_9cec_195736511d1d_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">delta (todos los encuentros)</th>
       <th style="border:1px solid #ddd;padding:8px">delta (un encuentro por paciente)</th>
@@ -2721,12 +2725,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">number_diagnoses</td><td style="border:1px solid #ddd;padding:8px">0.0837</td><td style="border:1px solid #ddd;padding:8px">0.1025</td><td style="border:1px solid #ddd;padding:8px">0.5419</td><td style="border:1px solid #ddd;padding:8px">0.5512</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">0.0094</td><td style="border:1px solid #ddd;padding:8px">0.5351</td><td style="border:1px solid #ddd;padding:8px">0.5482</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">num_medications</td><td style="border:1px solid #ddd;padding:8px">0.0785</td><td style="border:1px solid #ddd;padding:8px">0.0933</td><td style="border:1px solid #ddd;padding:8px">0.5392</td><td style="border:1px solid #ddd;padding:8px">0.5466</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">0.0074</td><td style="border:1px solid #ddd;padding:8px">0.5323</td><td style="border:1px solid #ddd;padding:8px">0.5463</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">number_emergency</td><td style="border:1px solid #ddd;padding:8px">0.0644</td><td style="border:1px solid #ddd;padding:8px">0.0435</td><td style="border:1px solid #ddd;padding:8px">0.5322</td><td style="border:1px solid #ddd;padding:8px">0.5218</td><td style="border:1px solid #ddd;padding:8px">0.0</td><td style="border:1px solid #ddd;padding:8px">0.0105</td><td style="border:1px solid #ddd;padding:8px">0.5265</td><td style="border:1px solid #ddd;padding:8px">0.5382</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
-</tbody></table></div><script>document.getElementById("itables_f0560ac4_3606_4bda_83bc_1f264f828fd4")?.removeAttribute("hidden");document.getElementById("itables_f0560ac4_3606_4bda_83bc_1f264f828fd4_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_1bbc91ad_3b4b_4a87_9cec_195736511d1d")?.removeAttribute("hidden");document.getElementById("itables_1bbc91ad_3b4b_4a87_9cec_195736511d1d_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_f0560ac4_3606_4bda_83bc_1f264f828fd4:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_1bbc91ad_3b4b_4a87_9cec_195736511d1d:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -2762,7 +2766,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
         </style>
         </div></div>
 </div>
-<p>Las conclusiones no cambian. Al repetir los contrastes sobre los <span class="pasted-text">56,036</span> encuentros de la submuestra de un episodio por paciente, el AUC univariado se desplaza como mucho <span class="pasted-text">0.0170</span> puntos respecto al calculado sobre la cohorte completa. La dependencia entre encuentros afecta a la <strong>precisión</strong> de las estimaciones, no a su <strong>magnitud</strong>: es exactamente lo que predecía el efecto de diseño del capítulo 3, que reducía el tamaño muestral efectivo sin sesgar nada.</p>
+<p>Las conclusiones no cambian. Al repetir los contrastes sobre los <span class="pasted-text">56,036</span> encuentros de la submuestra de un episodio por paciente, el AUC univariado se desplaza como mucho <span class="pasted-text">0.0170</span> puntos respecto al calculado sobre la cohorte completa. La dependencia entre encuentros afecta sobre todo a la <strong>precisión</strong> de las estimaciones, como predecía el efecto de diseño del capítulo 3 al reducir el tamaño muestral efectivo. No es exacto decir que no afecta en absoluto a la magnitud: cinco de los seis predictores examinados quedan fuera del intervalo de confianza por paciente al pasar a un encuentro por paciente, y los desplazamientos son sistemáticos por bloque, hacia arriba en las variables de proceso y hacia abajo en las de utilización previa. Siguen siendo pequeños en términos absolutos, con un máximo de 0.017 de AUC, pero el orden de magnitud no es despreciable frente al margen discriminante disponible, así que conviene presentarlos como un desplazamiento acotado y no como una ausencia de sesgo.</p>
 <p>El bootstrap por paciente confirma que <span class="pasted-text">6</span> de los <span class="pasted-text">6</span> predictores examinados tienen un intervalo de confianza que excluye el valor 0.5, es decir, que discriminan más que el azar aun contando la incertidumbre correctamente. Que discriminen no significa que sirvan por sí solos: los intervalos siguen estando muy lejos de cualquier AUC útil en la práctica.</p>
 <p>Esto valida la decisión del capítulo 2 de conservar todos los encuentros. El sesgo de selección que habría introducido quedarse con uno solo era grande y documentado; la penalización que impone la dependencia es pequeña y, sobre todo, se corrige agrupando la validación cruzada.</p>
 </section>
@@ -2770,6 +2774,372 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <h2>4.8. Equidad: tasas base por atributo protegido<a class="headerlink" href="#equidad-tasas-base-por-atributo-protegido" title="Link to this heading">#</a></h2>
 <p>El capítulo 2 conservó <code class="docutils literal notranslate"><span class="pre">race</span></code> sin imputar precisamente para poder hacer este análisis. La finalidad aquí es <strong>documentar las tasas base por grupo antes de modelar</strong>, porque un modelo entrenado sobre datos con prevalencias desiguales tenderá a reproducirlas, y sin esta línea de partida no hay forma de distinguir después si una disparidad la introdujo el modelo o ya estaba en los datos.</p>
 <p>Se reporta la tasa de readmisión por grupo con su intervalo de Wilson, junto con el tamaño de cada grupo, porque la estabilidad de la estimación depende de él y algunos grupos son pequeños.</p>
+<section id="los-contrastes-categoricos-bajo-el-efecto-de-diseno">
+<h3>4.7.1. Los contrastes categóricos bajo el efecto de diseño<a class="headerlink" href="#los-contrastes-categoricos-bajo-el-efecto-de-diseno" title="Link to this heading">#</a></h3>
+<p>El capítulo 3 estimó por bootstrap de pacientes un efecto de diseño de 1.395,
+de modo que las <span class="pasted-text">79,473</span> filas de entrenamiento aportan la
+información de unas 56,974 observaciones independientes. Un chi-cuadrado que ignora ese factor sobrestima
+su propio estadístico y declara significativo lo que no lo es.</p>
+<p>La corrección de Rao-Scott divide el chi-cuadrado por el efecto de diseño y
+recalcula el p-valor con los mismos grados de libertad. Después se vuelve a
+aplicar Holm sobre el conjunto completo, porque la corrección por multiplicidad
+depende de todos los p-valores a la vez y cambia cuando cambian.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Corrección de Rao-Scott de los contrastes categóricos de la sección 4.4.</span>
+<span class="n">EFECTO_DISENO</span> <span class="o">=</span> <span class="mf">1.395</span>  <span class="c1"># estimado en el capítulo 3, sección 3.2</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rao_scott</span><span class="p">(</span><span class="n">tabla_asociacion</span><span class="p">,</span> <span class="n">deff</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Reaplica los contrastes categóricos corrigiendo por el efecto de diseño.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tabla_asociacion : pandas.DataFrame</span>
+<span class="sd">        Tabla de la sección 4.4, con las columnas ``chi²`` y ``gl``.</span>
+<span class="sd">    deff : float</span>
+<span class="sd">        Efecto de diseño por el que se divide el estadístico.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">        Copia de la tabla con el chi² corregido, su p-valor, la corrección de</span>
+<span class="sd">        Holm recalculada sobre el conjunto completo y el veredicto resultante.</span>
+<span class="sd">    """</span>
+    <span class="n">salida</span> <span class="o">=</span> <span class="n">tabla_asociacion</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">salida</span><span class="p">[</span><span class="s2">"chi² Rao-Scott"</span><span class="p">]</span> <span class="o">=</span> <span class="n">salida</span><span class="p">[</span><span class="s2">"chi²"</span><span class="p">]</span> <span class="o">/</span> <span class="n">deff</span>
+    <span class="n">salida</span><span class="p">[</span><span class="s2">"p (Rao-Scott)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">chi2</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">salida</span><span class="p">[</span><span class="s2">"chi² Rao-Scott"</span><span class="p">],</span>
+                                            <span class="n">salida</span><span class="p">[</span><span class="s2">"gl"</span><span class="p">])</span>
+    <span class="n">salida</span><span class="p">[</span><span class="s2">"p (Rao-Scott, Holm)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">correccion_holm</span><span class="p">(</span><span class="n">salida</span><span class="p">[</span><span class="s2">"p (Rao-Scott)"</span><span class="p">])</span>
+    <span class="n">salida</span><span class="p">[</span><span class="s2">"significativa (Rao-Scott)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="n">salida</span><span class="p">[</span><span class="s2">"p (Rao-Scott, Holm)"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">,</span> <span class="s2">"Sí"</span><span class="p">,</span> <span class="s2">"No"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">salida</span>
+
+
+<span class="n">asociacion_cat_rs</span> <span class="o">=</span> <span class="n">rao_scott</span><span class="p">(</span><span class="n">asociacion_cat</span><span class="p">,</span> <span class="n">EFECTO_DISENO</span><span class="p">)</span>
+
+<span class="n">sin_corregir</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">asociacion_cat_rs</span><span class="p">[</span><span class="s2">"significativa (Holm)"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Sí"</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">con_correccion</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">asociacion_cat_rs</span><span class="p">[</span><span class="s2">"significativa (Rao-Scott)"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Sí"</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">pierden</span> <span class="o">=</span> <span class="n">asociacion_cat_rs</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">asociacion_cat_rs</span><span class="p">[</span><span class="s2">"significativa (Holm)"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Sí"</span><span class="p">)</span>
+    <span class="o">&amp;</span> <span class="p">(</span><span class="n">asociacion_cat_rs</span><span class="p">[</span><span class="s2">"significativa (Rao-Scott)"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"No"</span><span class="p">)]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Significativas sin corregir   : </span><span class="si">{</span><span class="n">sin_corregir</span><span class="si">}</span><span class="s2"> de </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">asociacion_cat_rs</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Significativas con Rao-Scott  : </span><span class="si">{</span><span class="n">con_correccion</span><span class="si">}</span><span class="s2"> de </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">asociacion_cat_rs</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Pierden la significancia      : </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pierden</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">'ninguna'</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">anotar</span><span class="p">(</span><span class="s2">"c4_cat_signif_rs"</span><span class="p">,</span> <span class="n">con_correccion</span><span class="p">)</span>
+<span class="n">anotar</span><span class="p">(</span><span class="s2">"c4_cat_pierden"</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pierden</span><span class="p">)))</span>
+
+<span class="n">guardar_resultado</span><span class="p">(</span>
+    <span class="n">asociacion_cat_rs</span><span class="p">[[</span><span class="s2">"chi²"</span><span class="p">,</span> <span class="s2">"chi² Rao-Scott"</span><span class="p">,</span> <span class="s2">"gl"</span><span class="p">,</span> <span class="s2">"p (Holm)"</span><span class="p">,</span>
+                       <span class="s2">"p (Rao-Scott, Holm)"</span><span class="p">,</span> <span class="s2">"significativa (Holm)"</span><span class="p">,</span>
+                       <span class="s2">"significativa (Rao-Scott)"</span><span class="p">]],</span>
+    <span class="s2">"asociacion_categoricas_raoscott"</span><span class="p">)</span>
+
+<span class="n">tabla</span><span class="p">(</span><span class="n">asociacion_cat_rs</span><span class="p">[[</span><span class="s2">"V de Cramér"</span><span class="p">,</span> <span class="s2">"chi²"</span><span class="p">,</span> <span class="s2">"chi² Rao-Scott"</span><span class="p">,</span> <span class="s2">"p (Holm)"</span><span class="p">,</span>
+                         <span class="s2">"p (Rao-Scott, Holm)"</span><span class="p">,</span>
+                         <span class="s2">"significativa (Rao-Scott)"</span><span class="p">]]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Significativas sin corregir   : 15 de 27
+Significativas con Rao-Scott  : 12 de 27
+Pierden la significancia      : race, max_glu_serum, glimepiride
+</pre></div>
+</div>
+<div class="output text_html"><!--| quarto-html-table-processing: none -->
+<table id="itables_2ee7bc80_87a7_4cef_83ae_6f1d8b23f5e2" hidden="hidden">
+  <tbody>
+    <tr>
+      <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
+    <g style="fill:var(--itables-logo-paper,#d9d7fc)">
+        <path d="M100,400H500V357H100Z" />
+        <path d="M100,300H400V257H100Z" />
+        <path d="M0,200H400V157H0Z" />
+        <path d="M100,100H500V57H100Z" />
+        <path d="M100,350H500V307H100Z" />
+        <path d="M100,250H400V207H100Z" />
+        <path d="M0,150H400V107H0Z" />
+        <path d="M100,50H500V7H100Z" />
+    </g>
+    <g style="fill:var(--itables-logo-ink,#1a1366);stroke:var(--itables-logo-ink,#1a1366);">
+   <rect x="100" y="7" width="400" height="43">
+    <animate
+      attributeName="width"
+      values="0;400;0"
+      dur="5s"
+      repeatCount="indefinite" />
+      <animate
+      attributeName="x"
+      values="100;100;500"
+      dur="5s"
+      repeatCount="indefinite" />
+  </rect>
+        <rect x="0" y="107" width="400" height="43">
+    <animate
+      attributeName="width"
+      values="0;400;0"
+      dur="3.5s"
+      repeatCount="indefinite" />
+    <animate
+      attributeName="x"
+      values="0;0;400"
+      dur="3.5s"
+      repeatCount="indefinite" />
+  </rect>
+        <rect x="100" y="207" width="300" height="43">
+    <animate
+      attributeName="width"
+      values="0;300;0"
+      dur="3s"
+      repeatCount="indefinite" />
+    <animate
+      attributeName="x"
+      values="100;100;400"
+      dur="3s"
+      repeatCount="indefinite" />
+  </rect>
+        <rect x="100" y="307" width="400" height="43">
+    <animate
+      attributeName="width"
+      values="0;400;0"
+      dur="4s"
+      repeatCount="indefinite" />
+      <animate
+      attributeName="x"
+      values="100;100;500"
+      dur="4s"
+      repeatCount="indefinite" />
+  </rect>
+        <g style="fill:transparent;stroke-width:8; stroke-linejoin:round" rx="5">
+            <g transform="translate(45 50) rotate(-45)">
+                <circle r="33" cx="0" cy="0" />
+                <rect x="-8" y="32" width="16" height="30" />
+            </g>
+
+            <g transform="translate(450 152)">
+                <polyline points="-15,-20 -35,-20 -35,40 25,40 25,20" />
+                <rect x="-15" y="-40" width="60" height="60" />
+            </g>
+
+            <g transform="translate(50 352)">
+                <polygon points="-35,-5 0,-40 35,-5" />
+                <polygon points="-35,10 0,45 35,10" />
+            </g>
+
+            <g transform="translate(75 250)">
+                <polyline points="-30,30 -60,0 -30,-30" />
+                <polyline points="0,30 -30,0 0,-30" />
+            </g>
+
+            <g transform="translate(425 250) rotate(180)">
+                <polyline points="-30,30 -60,0 -30,-30" />
+                <polyline points="0,30 -30,0 0,-30" />
+            </g>
+        </g>
+    </g>
+</svg>
+</a>
+        Loading ITables v2.9.1 from the internet...
+        (need <a href=https://itables.org/troubleshooting.html>help</a>?)
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div id="itables_2ee7bc80_87a7_4cef_83ae_6f1d8b23f5e2_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+      <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
+      <th style="border:1px solid #ddd;padding:8px">V de Cramér</th>
+      <th style="border:1px solid #ddd;padding:8px">chi²</th>
+      <th style="border:1px solid #ddd;padding:8px">chi² Rao-Scott</th>
+      <th style="border:1px solid #ddd;padding:8px">p (Holm)</th>
+      <th style="border:1px solid #ddd;padding:8px">p (Rao-Scott, Holm)</th>
+      <th style="border:1px solid #ddd;padding:8px">significativa (Rao-Scott)</th>
+    </tr>
+    <tr>
+      <th style="border:1px solid #ddd;padding:8px">variable</th>
+      <th style="border:1px solid #ddd;padding:8px"></th>
+      <th style="border:1px solid #ddd;padding:8px"></th>
+      <th style="border:1px solid #ddd;padding:8px"></th>
+      <th style="border:1px solid #ddd;padding:8px"></th>
+      <th style="border:1px solid #ddd;padding:8px"></th>
+      <th style="border:1px solid #ddd;padding:8px"></th>
+    </tr></thead><tbody>
+<tr><td style="border:1px solid #ddd;padding:8px">discharge_disposition_id</td><td style="border:1px solid #ddd;padding:8px">0.1064</td><td style="border:1px solid #ddd;padding:8px">906.1699</td><td style="border:1px solid #ddd;padding:8px">649.5842</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">insulin</td><td style="border:1px solid #ddd;padding:8px">0.0446</td><td style="border:1px solid #ddd;padding:8px">161.0023</td><td style="border:1px solid #ddd;padding:8px">115.4138</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">diag_3_grupo</td><td style="border:1px solid #ddd;padding:8px">0.0432</td><td style="border:1px solid #ddd;padding:8px">164.9725</td><td style="border:1px solid #ddd;padding:8px">118.2598</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">especialidad</td><td style="border:1px solid #ddd;padding:8px">0.0403</td><td style="border:1px solid #ddd;padding:8px">138.9877</td><td style="border:1px solid #ddd;padding:8px">99.6328</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">diag_1_grupo</td><td style="border:1px solid #ddd;padding:8px">0.0402</td><td style="border:1px solid #ddd;padding:8px">144.6992</td><td style="border:1px solid #ddd;padding:8px">103.7270</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">diag_2_grupo</td><td style="border:1px solid #ddd;padding:8px">0.0315</td><td style="border:1px solid #ddd;padding:8px">94.9902</td><td style="border:1px solid #ddd;padding:8px">68.0933</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">diabetesMed</td><td style="border:1px solid #ddd;padding:8px">0.0268</td><td style="border:1px solid #ddd;padding:8px">58.0754</td><td style="border:1px solid #ddd;padding:8px">41.6311</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">metformin</td><td style="border:1px solid #ddd;padding:8px">0.0229</td><td style="border:1px solid #ddd;padding:8px">43.6606</td><td style="border:1px solid #ddd;padding:8px">31.2979</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">admission_source_id</td><td style="border:1px solid #ddd;padding:8px">0.0225</td><td style="border:1px solid #ddd;padding:8px">46.0992</td><td style="border:1px solid #ddd;padding:8px">33.0460</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0002</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">admission_type_id</td><td style="border:1px solid #ddd;padding:8px">0.0188</td><td style="border:1px solid #ddd;padding:8px">32.9575</td><td style="border:1px solid #ddd;padding:8px">23.6255</td><td style="border:1px solid #ddd;padding:8px">0.0001</td><td style="border:1px solid #ddd;padding:8px">0.0041</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">change</td><td style="border:1px solid #ddd;padding:8px">0.0182</td><td style="border:1px solid #ddd;padding:8px">27.4253</td><td style="border:1px solid #ddd;padding:8px">19.6597</td><td style="border:1px solid #ddd;padding:8px">0.0000</td><td style="border:1px solid #ddd;padding:8px">0.0002</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">A1Cresult</td><td style="border:1px solid #ddd;padding:8px">0.0178</td><td style="border:1px solid #ddd;padding:8px">28.1549</td><td style="border:1px solid #ddd;padding:8px">20.1828</td><td style="border:1px solid #ddd;padding:8px">0.0001</td><td style="border:1px solid #ddd;padding:8px">0.0026</td><td style="border:1px solid #ddd;padding:8px">Sí</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">race</td><td style="border:1px solid #ddd;padding:8px">0.0144</td><td style="border:1px solid #ddd;padding:8px">21.3735</td><td style="border:1px solid #ddd;padding:8px">15.3215</td><td style="border:1px solid #ddd;padding:8px">0.0096</td><td style="border:1px solid #ddd;padding:8px">0.1180</td><td style="border:1px solid #ddd;padding:8px">No</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">max_glu_serum</td><td style="border:1px solid #ddd;padding:8px">0.0141</td><td style="border:1px solid #ddd;padding:8px">18.8699</td><td style="border:1px solid #ddd;padding:8px">13.5268</td><td style="border:1px solid #ddd;padding:8px">0.0044</td><td style="border:1px solid #ddd;padding:8px">0.0544</td><td style="border:1px solid #ddd;padding:8px">No</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">glimepiride</td><td style="border:1px solid #ddd;padding:8px">0.0122</td><td style="border:1px solid #ddd;padding:8px">13.8374</td><td style="border:1px solid #ddd;padding:8px">9.9193</td><td style="border:1px solid #ddd;padding:8px">0.0129</td><td style="border:1px solid #ddd;padding:8px">0.0982</td><td style="border:1px solid #ddd;padding:8px">No</td></tr>
+</tbody><tfoot><tr><td colspan="7" style="border:none;padding:8px;text-align:center">(12 more rows not shown)</td></tr></tfoot></table></div><script>document.getElementById("itables_2ee7bc80_87a7_4cef_83ae_6f1d8b23f5e2")?.removeAttribute("hidden");document.getElementById("itables_2ee7bc80_87a7_4cef_83ae_6f1d8b23f5e2_fallback")?.setAttribute("hidden", "hidden");</script>
+<link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
+<script type="module">
+    import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
+
+    document.querySelectorAll("#itables_2ee7bc80_87a7_4cef_83ae_6f1d8b23f5e2:not(.dataTable)").forEach(table => {
+        if (!(table instanceof HTMLTableElement))
+            return;
+
+        let dt_args = {
+          "classes": ["display", "compact"],
+          "columnDefs": [{"render": "function (data, type, row, meta) { return type === 'sort' || type === 'type' ? data[1] : data[0]; }", "targets": [1, 2, 3, 4, 5]}, {"className": "dt-center", "targets": "_all"}],
+          "data_json": "[[\"discharge_disposition_id\", [\"0.1064\", 0.1064], [\"906.1699\", 906.1699], [\"649.5842\", 649.5842], [\"0.0000\", 0.0], [\"0.0000\", 0.0], \"S\\u00ed\"], [\"insulin\", [\"0.0446\", 0.0446], [\"161.0023\", 161.0023], [\"115.4138\", 115.4138], [\"0.0000\", 0.0], [\"0.0000\", 0.0], \"S\\u00ed\"], [\"diag_3_grupo\", [\"0.0432\", 0.0432], [\"164.9725\", 164.9725], [\"118.2598\", 118.2598], [\"0.0000\", 0.0], [\"0.0000\", 0.0], \"S\\u00ed\"], [\"especialidad\", [\"0.0403\", 0.0403], [\"138.9877\", 138.9877], [\"99.6328\", 99.6328], [\"0.0000\", 0.0], [\"0.0000\", 0.0], \"S\\u00ed\"], [\"diag_1_grupo\", [\"0.0402\", 0.0402], [\"144.6992\", 144.6992], [\"103.7270\", 103.727], [\"0.0000\", 0.0], [\"0.0000\", 0.0], \"S\\u00ed\"], [\"diag_2_grupo\", [\"0.0315\", 0.0315], [\"94.9902\", 94.9902], [\"68.0933\", 68.0933], [\"0.0000\", 0.0], [\"0.0000\", 0.0], \"S\\u00ed\"], [\"diabetesMed\", [\"0.0268\", 0.0268], [\"58.0754\", 58.0754], [\"41.6311\", 41.6311], [\"0.0000\", 0.0], [\"0.0000\", 0.0], \"S\\u00ed\"], [\"metformin\", [\"0.0229\", 0.0229], [\"43.6606\", 43.6606], [\"31.2979\", 31.2979], [\"0.0000\", 0.0], [\"0.0000\", 0.0], \"S\\u00ed\"], [\"admission_source_id\", [\"0.0225\", 0.0225], [\"46.0992\", 46.0992], [\"33.0460\", 33.046], [\"0.0000\", 0.0], [\"0.0002\", 0.0002], \"S\\u00ed\"], [\"admission_type_id\", [\"0.0188\", 0.0188], [\"32.9575\", 32.9575], [\"23.6255\", 23.6255], [\"0.0001\", 0.0001], [\"0.0041\", 0.0041], \"S\\u00ed\"], [\"change\", [\"0.0182\", 0.0182], [\"27.4253\", 27.4253], [\"19.6597\", 19.6597], [\"0.0000\", 0.0], [\"0.0002\", 0.0002], \"S\\u00ed\"], [\"A1Cresult\", [\"0.0178\", 0.0178], [\"28.1549\", 28.1549], [\"20.1828\", 20.1828], [\"0.0001\", 0.0001], [\"0.0026\", 0.0026], \"S\\u00ed\"], [\"race\", [\"0.0144\", 0.0144], [\"21.3735\", 21.3735], [\"15.3215\", 15.3215], [\"0.0096\", 0.0096], [\"0.1180\", 0.118], \"No\"], [\"max_glu_serum\", [\"0.0141\", 0.0141], [\"18.8699\", 18.8699], [\"13.5268\", 13.5268], [\"0.0044\", 0.0044], [\"0.0544\", 0.0544], \"No\"], [\"glimepiride\", [\"0.0122\", 0.0122], [\"13.8374\", 13.8374], [\"9.9193\", 9.9193], [\"0.0129\", 0.0129], [\"0.0982\", 0.0982], \"No\"], [\"pioglitazone\", [\"0.0094\", 0.0094], [\"8.9975\", 8.9975], [\"6.4498\", 6.4498], [\"0.1335\", 0.1335], [\"0.4771\", 0.4771], \"No\"], [\"repaglinide\", [\"0.0072\", 0.0072], [\"6.1700\", 6.17], [\"4.4229\", 4.4229], [\"0.5030\", 0.503], [\"1.0000\", 1.0], \"No\"], [\"glipizide\", [\"0.0059\", 0.0059], [\"4.8072\", 4.8072], [\"3.4461\", 3.4461], [\"0.9039\", 0.9039], [\"1.0000\", 1.0], \"No\"], [\"acarbose\", [\"0.0050\", 0.005], [\"3.9843\", 3.9843], [\"2.8561\", 2.8561], [\"1.0000\", 1.0], [\"1.0000\", 1.0], \"No\"], [\"miglitol\", [\"0.0043\", 0.0043], [\"3.4430\", 3.443], [\"2.4681\", 2.4681], [\"1.0000\", 1.0], [\"1.0000\", 1.0], \"No\"], [\"rosiglitazone\", [\"0.0038\", 0.0038], [\"3.1663\", 3.1663], [\"2.2697\", 2.2697], [\"1.0000\", 1.0], [\"1.0000\", 1.0], \"No\"], [\"glyburide\", [\"0.0003\", 0.0003], [\"2.0059\", 2.0059], [\"1.4379\", 1.4379], [\"1.0000\", 1.0], [\"1.0000\", 1.0], \"No\"], [\"chlorpropamide\", [\"0.0000\", 0.0], [\"1.7233\", 1.7233], [\"1.2353\", 1.2353], [\"1.0000\", 1.0], [\"1.0000\", 1.0], \"No\"], [\"glyburide-metformin\", [\"0.0000\", 0.0], [\"0.2064\", 0.2064], [\"0.1480\", 0.148], [\"1.0000\", 1.0], [\"1.0000\", 1.0], \"No\"], [\"gender\", [\"0.0000\", 0.0], [\"0.5171\", 0.5171], [\"0.3707\", 0.3707], [\"1.0000\", 1.0], [\"1.0000\", 1.0], \"No\"], [\"nateglinide\", [\"0.0000\", 0.0], [\"0.6960\", 0.696], [\"0.4989\", 0.4989], [\"1.0000\", 1.0], [\"1.0000\", 1.0], \"No\"], [\"tolazamide\", [\"0.0000\", 0.0], [\"0.3013\", 0.3013], [\"0.2160\", 0.216], [\"1.0000\", 1.0], [\"1.0000\", 1.0], \"No\"]]",
+          "keys_to_be_evaluated": [["columnDefs", 0, "render"]],
+          "layout": {"bottomEnd": "paging", "bottomStart": "info", "topEnd": "search", "topStart": "pageLength"},
+          "order": [],
+          "pageLength": 15,
+          "scrollX": true,
+          "style": {"caption-side": "bottom", "margin": "0", "table-layout": "auto", "width": "auto"},
+          "table_html": "<table><thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>V de Cram\u00e9r</th>\n      <th>chi\u00b2</th>\n      <th>chi\u00b2 Rao-Scott</th>\n      <th>p (Holm)</th>\n      <th>p (Rao-Scott, Holm)</th>\n      <th>significativa (Rao-Scott)</th>\n    </tr>\n    <tr>\n      <th>variable</th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n    </tr>\n  </thead></table>",
+          "text_in_header_can_be_selected": true
+        };
+        new ITable(table, dt_args);
+    });
+</script>
+</div><div class="output text_html">
+        <style>
+            table.dataTable td,
+            table.dataTable th {
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                overflow-wrap: anywhere !important;
+                vertical-align: middle !important;
+            }
+
+            table.dataTable td {
+                padding: 8px !important;
+            }
+        </style>
+        </div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># El efecto de diseño se estimó para la prevalencia. Para las variables que</span>
+<span class="c1"># son casi constantes dentro del paciente (el capítulo 3 midió una</span>
+<span class="c1"># concordancia del 99 % en `race`) el efecto real es mayor, de modo que</span>
+<span class="c1"># 1.395 funciona como cota inferior de la corrección. Conviene entonces ver</span>
+<span class="c1"># la curva completa en lugar de un solo punto.</span>
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">deff</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="n">EFECTO_DISENO</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">]:</span>
+    <span class="n">corregida</span> <span class="o">=</span> <span class="n">rao_scott</span><span class="p">(</span><span class="n">asociacion_cat</span><span class="p">,</span> <span class="n">deff</span><span class="p">)</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">"efecto de diseño supuesto"</span><span class="p">:</span> <span class="n">deff</span><span class="p">,</span>
+        <span class="s2">"significativas tras Holm"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">corregida</span><span class="p">[</span><span class="s2">"significativa (Rao-Scott)"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Sí"</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+        <span class="s2">"de un total de"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">corregida</span><span class="p">),</span>
+    <span class="p">})</span>
+
+<span class="n">sensibilidad_deff</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">sensibilidad_deff</span><span class="p">,</span> <span class="s2">"sensibilidad_efecto_diseno"</span><span class="p">)</span>
+<span class="n">sensibilidad_deff</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>efecto de diseño supuesto</th>
+      <th>significativas tras Holm</th>
+      <th>de un total de</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.000</td>
+      <td>15</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.200</td>
+      <td>15</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.395</td>
+      <td>12</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.600</td>
+      <td>12</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2.000</td>
+      <td>11</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2.500</td>
+      <td>9</td>
+      <td>27</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>La corrección reduce el recuento de
+<span class="pasted-text">15</span> a <span class="pasted-text">12</span> de
+<span class="pasted-text">27</span> variables categóricas:
+<span class="pasted-text">3</span> dejan de ser significativas. Son
+<code class="docutils literal notranslate"><span class="pre">max_glu_serum</span></code>, <code class="docutils literal notranslate"><span class="pre">glimepiride</span></code> y <code class="docutils literal notranslate"><span class="pre">race</span></code>, las tres con p de Holm entre 0.004 y
+0.013 antes de corregir, es decir las que ya estaban cerca del umbral.</p>
+<p>Dos lecturas, y la segunda importa más que la primera. La primera es que las
+variables que sobreviven lo hacen con holgura: la más ajustada queda en 0.004
+tras la corrección, de modo que hay un corte limpio y el hallazgo central de
+la sección 4.4 no se mueve. El destino al alta, los grupos diagnósticos y el
+resultado de A1C siguen siendo las categóricas asociadas al desenlace.</p>
+<p>La segunda es que <code class="docutils literal notranslate"><span class="pre">race</span></code> queda del lado no significativo, y conviene precisar
+el alcance de eso para no sobreleerlo. El contraste corregido aquí es el de la
+variable <code class="docutils literal notranslate"><span class="pre">race</span></code> completa, con sus categorías, frente al desenlace. El argumento
+con el que el capítulo 2 justifica conservar la ausencia como categoría
+explícita es distinto: se apoya en el contraste del <strong>indicador de nulidad</strong> de
+<code class="docutils literal notranslate"><span class="pre">race</span></code>, que el capítulo 1 evaluó por separado y que esta sección no recalcula.
+Los dos son contrastes sobre observaciones agrupadas por paciente, de modo que
+el indicador de nulidad merecería la misma corrección que acaba de aplicarse, y
+con una variable casi constante dentro del paciente el efecto de diseño
+relevante es mayor que 1.395. Queda entonces como pendiente declarado: el
+argumento del capítulo 2 no está refutado, pero tampoco verificado bajo
+dependencia, y el otro motivo que ese capítulo invoca —que imputar una
+característica demográfica introduce más supuesto que información— es el que
+sostiene la decisión sin necesidad del contraste.</p>
+<p>La tabla de sensibilidad muestra además que el resultado no depende del valor
+exacto del efecto de diseño: el recuento cae de forma suave y no hay ningún
+salto brusco en el entorno de la estimación.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PROTEGIDOS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"race"</span><span class="p">,</span> <span class="s2">"gender"</span><span class="p">,</span> <span class="s2">"age_ord"</span><span class="p">]</span>
@@ -2825,7 +3195,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <img alt="_images/daab15d098561255bdcabfca6b98830e563385406ba715a376716e7e9891bc1d.png" src="_images/daab15d098561255bdcabfca6b98830e563385406ba715a376716e7e9891bc1d.png" />
 <h3 class="rubric" id="tasas-base-por-atributo-protegido">Tasas base por atributo protegido</h3>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_8eff7084_25e2_4aca_98ac_9a2a852b7bad" hidden="hidden">
+<table id="itables_85111e91_fe62_4be9_b8b7_5c722c135933" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -2924,7 +3294,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_8eff7084_25e2_4aca_98ac_9a2a852b7bad_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_85111e91_fe62_4be9_b8b7_5c722c135933_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup>atributo</th>
       <th style="border:1px solid #ddd;padding:8px">grupo</th>
       <th style="border:1px solid #ddd;padding:8px">encuentros</th>
@@ -2951,12 +3321,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">age_ord</td><td style="border:1px solid #ddd;padding:8px">[70-80)</td><td style="border:1px solid #ddd;padding:8px">20318</td><td style="border:1px solid #ddd;padding:8px">25.57</td><td style="border:1px solid #ddd;padding:8px">12.06</td><td style="border:1px solid #ddd;padding:8px">11.62</td><td style="border:1px solid #ddd;padding:8px">12.51</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">age_ord</td><td style="border:1px solid #ddd;padding:8px">[80-90)</td><td style="border:1px solid #ddd;padding:8px">13171</td><td style="border:1px solid #ddd;padding:8px">16.57</td><td style="border:1px solid #ddd;padding:8px">12.59</td><td style="border:1px solid #ddd;padding:8px">12.03</td><td style="border:1px solid #ddd;padding:8px">13.17</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">age_ord</td><td style="border:1px solid #ddd;padding:8px">[90-100)</td><td style="border:1px solid #ddd;padding:8px">2044</td><td style="border:1px solid #ddd;padding:8px">2.57</td><td style="border:1px solid #ddd;padding:8px">10.96</td><td style="border:1px solid #ddd;padding:8px">9.68</td><td style="border:1px solid #ddd;padding:8px">12.39</td></tr>
-</tbody></table></div><script>document.getElementById("itables_8eff7084_25e2_4aca_98ac_9a2a852b7bad")?.removeAttribute("hidden");document.getElementById("itables_8eff7084_25e2_4aca_98ac_9a2a852b7bad_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_85111e91_fe62_4be9_b8b7_5c722c135933")?.removeAttribute("hidden");document.getElementById("itables_85111e91_fe62_4be9_b8b7_5c722c135933_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_8eff7084_25e2_4aca_98ac_9a2a852b7bad:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_85111e91_fe62_4be9_b8b7_5c722c135933:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -2996,6 +3366,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <p>Merece una nota la categoría de raza no informada, que presenta la tasa más baja del bloque. La ausencia del dato no es, por tanto, aleatoria respecto al desenlace, y eso justifica una vez más la decisión del capítulo 2 de tratarla como categoría propia en lugar de imputar la moda: imputar habría atribuido a esos encuentros el perfil del grupo mayoritario y habría borrado una diferencia real.</p>
 <p>Por edad la variación es mayor, pero <strong>no es monótona</strong>, lo que conviene decir explícitamente porque contradice la intuición. El grupo de 20 a 30 años tiene una de las tasas más altas de toda la cohorte, por encima de la de los mayores de 80. La explicación plausible es de composición —a esa edad predomina la diabetes tipo 1, con descompensaciones agudas y reingresos frecuentes—, pero el conjunto de datos no registra el tipo de diabetes, así que queda como hipótesis y no como conclusión. Conviene recordar además la advertencia del capítulo 3: los grupos etarios extremos tienen muy pocos encuentros, de modo que sus tasas son estimaciones inestables.</p>
 <p>Un apunte metodológico necesario para el cierre: la magnitud pequeña de las diferencias marginales por raza <strong>no autoriza a concluir que el modelo será equitativo</strong>. La ausencia de asociación marginal no implica ausencia de disparidad en las predicciones, porque el modelo puede reconstruir el atributo a partir de otras variables correlacionadas con él. La comprobación tiene que hacerse sobre las predicciones, no sobre los datos.</p>
+</section>
 </section>
 <section id="sintesis-del-capitulo">
 <h2>4.9. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h2>
@@ -3066,7 +3437,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <div class="cell_output docutils container">
 <h3 class="rubric" id="sintesis-del-analisis-bivariado">Síntesis del análisis bivariado</h3>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_8fb66fea_6993_4eb9_833a_2f0bbf016083" hidden="hidden">
+<table id="itables_1823ead1_7374_47d5_a1eb_73b6f83be1e6" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -3165,7 +3536,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_8fb66fea_6993_4eb9_833a_2f0bbf016083_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_1823ead1_7374_47d5_a1eb_73b6f83be1e6_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup>Dimensión</th>
       <th style="border:1px solid #ddd;padding:8px">Hallazgo</th>
     </tr></thead><tbody>
@@ -3181,12 +3552,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">Robustez a la dependencia</td><td style="border:1px solid #ddd;padding:8px">El AUC univariado se desplaza como mucho 0.0170 al usar un encuentro por paciente; ninguna conclusión cambia</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">Equidad</td><td style="border:1px solid #ddd;padding:8px">Tasas base por grupo racial entre 8.5 % y 11.6 %; quedan como línea de comparación para el modelo final</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">Expectativa de desempeño</td><td style="border:1px solid #ddd;padding:8px">Ningún predictor individual supera un AUC de 0.607. Esa es la referencia que los modelos deben batir; la sinergia disponible es pequeña, así que cabe esperar una mejora de unas centésimas y no un salto cualitativo</td></tr>
-</tbody></table></div><script>document.getElementById("itables_8fb66fea_6993_4eb9_833a_2f0bbf016083")?.removeAttribute("hidden");document.getElementById("itables_8fb66fea_6993_4eb9_833a_2f0bbf016083_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_1823ead1_7374_47d5_a1eb_73b6f83be1e6")?.removeAttribute("hidden");document.getElementById("itables_1823ead1_7374_47d5_a1eb_73b6f83be1e6_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_8fb66fea_6993_4eb9_833a_2f0bbf016083:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_1823ead1_7374_47d5_a1eb_73b6f83be1e6:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -3301,7 +3672,10 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#un-ranking-unico-de-todos-los-predictores">4.5. Un ranking único de todos los predictores</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#esta-la-senal-en-las-interacciones">4.6. ¿Está la señal en las interacciones?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#robustez-frente-a-la-dependencia-entre-encuentros">4.7. Robustez frente a la dependencia entre encuentros</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equidad-tasas-base-por-atributo-protegido">4.8. Equidad: tasas base por atributo protegido</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equidad-tasas-base-por-atributo-protegido">4.8. Equidad: tasas base por atributo protegido</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#los-contrastes-categoricos-bajo-el-efecto-de-diseno">4.7.1. Los contrastes categóricos bajo el efecto de diseño</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">4.9. Síntesis del capítulo</a></li>
 </ul>
   </nav></div>

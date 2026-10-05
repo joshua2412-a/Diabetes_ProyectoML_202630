@@ -521,7 +521,7 @@ Procesos         : 4
 </section>
 <section id="presupuesto-y-multi-fidelidad">
 <h2>8.2. Presupuesto y multi-fidelidad<a class="headerlink" href="#presupuesto-y-multi-fidelidad" title="Link to this heading">#</a></h2>
-<p>El capítulo 6 midió el costo por ajuste de cada familia y proyectó el experimento completo en unas 24 horas de cómputo, como cota inferior. Se aplican tres medidas, todas declaradas antes de ejecutar y registradas en la tabla maestra.</p>
+<p>El capítulo 6 midió el costo por ajuste de cada familia y proyectó el experimento completo en unas 24 horas de cómputo. La ejecución real totalizó 22.9 horas, de modo que la proyección quedó algo por encima del costo efectivo. Se aplican tres medidas, todas declaradas antes de ejecutar y registradas en la tabla maestra.</p>
 <p><strong>Presupuesto por modelo.</strong> Cada modelo evalúa tantas configuraciones como tiene su rejilla: 12 en los económicos y 8 en los costosos (k-NN, Random Forest y XGBoost), cuyo costo por evaluación, medido en el capítulo 6, duplica al de los modelos lineales y en Random Forest lo sextuplica. El presupuesto es <strong>idéntico para los cuatro optimizadores de un mismo modelo</strong>, de modo que la comparación entre optimizadores del capítulo 9 sea a igualdad de evaluaciones. Entre modelos, en cambio, introduce una asimetría: un modelo con 8 configuraciones explora menos su espacio que uno con 12, y eso lo penaliza. La columna <code class="docutils literal notranslate"><span class="pre">presupuesto</span></code> de la tabla maestra permite tenerlo en cuenta al comparar.</p>
 <p><strong>Multi-fidelidad, primer mecanismo: Successive Halving.</strong> Viene del motor y solo afecta a Optuna. La fidelidad es el número de folds internos evaluados: una configuración que tras el primer fold no está en el tercio superior se descarta sin evaluar los dos restantes (factor de reducción η = 3). La columna <code class="docutils literal notranslate"><span class="pre">n_ajustes</span></code> registra cuántos ajustes consumió realmente cada corrida, lo que permite medir el ahorro en el capítulo 9.</p>
 <p><strong>Multi-fidelidad, segundo mecanismo: submuestreo de pacientes.</strong> La búsqueda interna de los modelos costosos se ejecuta sobre el <strong>25 % de los pacientes</strong> del fold externo de entrenamiento (factor de reducción 4); el ajuste final de cada fold externo usa siempre todos sus datos, de modo que las métricas reportadas no pierden precisión. La submuestra se toma por paciente y no por fila, así que la integridad de los grupos se mantiene también en la búsqueda. Se aplica igual a los cuatro optimizadores del mismo modelo, por la misma razón que el presupuesto.</p>
@@ -6109,32 +6109,33 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </section>
 <section id="sintesis-del-capitulo">
 <h2>8.5. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h2>
-<p>Al cerrar este capítulo conviene dejar por escrito, con los números de la tabla maestra:</p>
+<p>Las cinco preguntas que abrían el capítulo, respondidas con los números de la tabla maestra:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Pregunta</p></th>
-<th class="head"><p>Dónde se responde</p></th>
+<th class="head"><p>Respuesta</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>¿Qué combinación obtiene el mejor AUC-PR y con qué desviación entre folds?</p></td>
-<td><p>Ranking de la sección 8.4</p></td>
+<td><p>XGBoost con ADASYN y Random Search: 0.2267 ± 0.0153</p></td>
 </tr>
 <tr class="row-odd"><td><p>¿Cuál es el mejor modelo de cada familia y qué distancia hay entre ellos?</p></td>
-<td><p>Figura de mejores por modelo</p></td>
+<td><p>Los siete caben en un intervalo de 0.027, de XGBoost (0.2267) a Naive Bayes (0.1995). Los dos ensambles se separan entre sí por 0.0009</p></td>
 </tr>
 <tr class="row-even"><td><p>¿Aporta el balanceo en las métricas de ordenamiento, o solo desplaza el umbral?</p></td>
-<td><p>Tablas de la sección 8.4.1</p></td>
+<td><p>Solo aporta en XGBoost (+0.0024 con ADASYN). En los otros seis modelos lo mejor es no balancear: k-NN pierde 0.0118, el SVM 0.0072 y Random Forest 0.0049</p></td>
 </tr>
 <tr class="row-odd"><td><p>¿Justifican los ensambles su costo computacional frente a los modelos lineales?</p></td>
-<td><p>Gráfico de desempeño frente a costo</p></td>
+<td><p>Ganan 0.016 de AUC-PR sobre la logística multiplicando por nueve el tiempo de ajuste, de 68 a 242 segundos</p></td>
 </tr>
 <tr class="row-even"><td><p>¿Son las diferencias entre combinaciones mayores que la variabilidad por semilla?</p></td>
-<td><p>Sección 8.4.3, y de forma formal en el capítulo 11</p></td>
+<td><p>No. La distancia entre las dos primeras es 0.0009 y el rango por semilla de la primera es 0.0041, unas cuatro veces y media mayor</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<p>Sobre la tercera respuesta conviene una advertencia que el capítulo 10 retoma: la única ganancia por balanceo de todo el experimento, los 0.0024 de XGBoost, coincide en magnitud con la cota del sesgo de la parada temprana documentado en <code class="docutils literal notranslate"><span class="pre">XGBClasificadorParada</span></code>, que afecta precisamente a las corridas de XGBoost con remuestreo. No puede descartarse que esa ganancia sea un artefacto de ese sesgo en lugar de un efecto del balanceo.</p>
 <p>Dos decisiones de diseño quedan declaradas y registradas en la tabla maestra, para que cualquier lectura del ranking las tenga presentes: el presupuesto es menor en los modelos costosos (8 configuraciones frente a 12) y su búsqueda usa el 25 % de los pacientes. Ambas afectan por igual a los cuatro optimizadores de un mismo modelo, de modo que no distorsionan la comparación del capítulo 9, pero sí penalizan a los modelos costosos frente a los económicos.</p>
 <p>Las columnas <code class="docutils literal notranslate"><span class="pre">tiempo_real_s</span></code> y <code class="docutils literal notranslate"><span class="pre">tiempo_trabajo_s</span></code> difieren en las corridas de Optuna con folds en paralelo, así que toda comparación de costo debe declarar cuál usa: el tiempo real mide lo que cuesta usar cada método en la práctica; el trabajo, su eficiencia computacional intrínseca.</p>
 <p>El capítulo 9 compara los cuatro métodos de optimización entre sí: calidad alcanzada por presupuesto, curvas de convergencia, diversidad genética, costo por evaluación y verificación del supuesto de la multi-fidelidad. El capítulo 10 evalúa en detalle la mejor combinación sobre el conjunto de prueba, con calibración, elección de umbral e interpretabilidad. El capítulo 11 aplica la secuencia estadística jerárquica sobre las métricas por fold.</p>

@@ -394,7 +394,10 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#justificacion-de-la-metrica-principal">10.2.1. Justificación de la métrica principal</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-del-umbral-de-decision">10.3. Selección del umbral de decisión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-del-umbral-de-decision">10.3. Selección del umbral de decisión</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#depende-el-umbral-de-haber-visto-el-conjunto-de-prueba">10.3.1. ¿Depende el umbral de haber visto el conjunto de prueba?</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calibracion-de-probabilidades">10.4. Calibración de probabilidades</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recalibracion">10.4.1. Recalibración</a></li>
 </ul>
@@ -418,7 +421,8 @@ document.write(`
 <section id="objetivo">
 <h2>10.1. Objetivo<a class="headerlink" href="#objetivo" title="Link to this heading">#</a></h2>
 <p>Los capítulos 8 y 9 compararon 112 combinaciones usando el bucle externo de la validación anidada sobre el conjunto de entrenamiento. Este capítulo toma la mejor configuración, la ajusta con todo el entrenamiento y la evalúa <strong>por primera y única vez sobre el conjunto de prueba</strong>, reservado desde el capítulo 2.</p>
-<p>Esa restricción es la que da validez a la estimación final. Cada vez que se mira el conjunto de prueba para tomar una decisión, deja de ser independiente; por eso no se usó en la selección de modelos ni de hiperparámetros ni de umbral.</p>
+<p>Esa restricción es la que da validez a la estimación final. Cada vez que se mira el conjunto de prueba para tomar una decisión, deja de ser independiente; por eso no participó en la selección de modelos ni en la de hiperparámetros, que se resolvieron por completo dentro de la validación anidada sobre el entrenamiento.</p>
+<p>El umbral operativo merece una aclaración, porque es el único punto donde el conjunto de prueba interviene. El umbral que se adopta es el percentil 85 de las probabilidades predichas, es decir la regla de marcar al 15 % de mayor riesgo: se calcula sobre las puntuaciones del conjunto de prueba, pero no usa sus etiquetas, así que no optimiza ninguna métrica contra el desenlace. Los umbrales de máximo F1 y de Youden que aparecen en la tabla de la sección 10.3 sí se obtienen maximizando sobre las etiquetas de prueba; se incluyen como referencia comparativa y sus métricas son, por construcción, optimistas. Ninguno de los dos es el umbral con el que se reporta el modelo final.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
@@ -511,7 +515,7 @@ document.write(`
 </div>
 <section id="hiperparametros-del-modelo-final">
 <h3>10.1.1. Hiperparámetros del modelo final<a class="headerlink" href="#hiperparametros-del-modelo-final" title="Link to this heading">#</a></h3>
-<p>La validación anidada elige hiperparámetros dentro de cada fold, de modo que puede haber cinco configuraciones distintas. Para el modelo final se toma la configuración modal entre folds: es la elección más estable y evita reejecutar una búsqueda sobre todo el entrenamiento, que no tendría conjunto independiente con el que validarse.</p>
+<p>La validación anidada elige hiperparámetros dentro de cada fold, de modo que puede haber cinco configuraciones distintas. Para el modelo final se toma la configuración modal entre folds, lo que evita reejecutar una búsqueda sobre todo el entrenamiento sin un conjunto independiente con el que validarla. Conviene no sobrevender el criterio: la moda no es necesariamente mayoritaria, y cuando los cinco folds eligen configuraciones distintas se reduce a tomar una de ellas. Es una elección defendible y declarada, no una estimación estable.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
@@ -955,7 +959,110 @@ No readmitido     0.9080    0.8711    0.8892     17604
 </div>
 </div>
 </div>
+<section id="depende-el-umbral-de-haber-visto-el-conjunto-de-prueba">
+<h3>10.3.1. ¿Depende el umbral de haber visto el conjunto de prueba?<a class="headerlink" href="#depende-el-umbral-de-haber-visto-el-conjunto-de-prueba" title="Link to this heading">#</a></h3>
+<p>El umbral adoptado es el percentil 85 de las probabilidades predichas, es
+decir la regla de marcar al 15 % de mayor riesgo. Se calcula sobre las
+puntuaciones del conjunto de prueba y no sobre sus etiquetas, de modo que no
+optimiza ninguna métrica contra el desenlace; operativamente es lo que haría
+un servicio que ordena la cohorte del día y atiende a los primeros. Aun así,
+conviene comprobar que la regla no dependa de haber visto ese conjunto.</p>
+<p>La comprobación consiste en derivar el mismo percentil de las predicciones
+<strong>fuera de pliegue del entrenamiento</strong>, obtenidas con validación cruzada
+agrupada por paciente, y aplicarlo después al conjunto de prueba. Si ambos
+umbrales coinciden, el punto de operación no depende del conjunto sobre el
+que se reporta.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># El umbral derivado del entrenamiento exige predicciones fuera de pliegue:</span>
+<span class="c1"># tres ajustes adicionales del modelo final, agrupados por paciente.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">StratifiedGroupKFold</span><span class="p">,</span> <span class="n">cross_val_predict</span>
+
+<span class="n">pipeline_umbral</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">construir_pipeline</span><span class="p">(</span>
+    <span class="n">MEJOR</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">],</span> <span class="n">MEJOR</span><span class="p">[</span><span class="s2">"balanceo"</span><span class="p">],</span> <span class="n">roles</span><span class="p">,</span> <span class="n">RANDOM_STATE</span><span class="p">,</span>
+    <span class="n">RAZON_DESBALANCE</span><span class="p">)</span>
+<span class="n">pipeline_umbral</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="o">**</span><span class="n">configuracion_modal</span><span class="p">(</span><span class="n">MEJOR</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">p_entrenamiento_fp</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span>
+    <span class="n">pipeline_umbral</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">StratifiedGroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">),</span>
+    <span class="n">groups</span><span class="o">=</span><span class="n">grupos</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"predict_proba"</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">UMBRAL_ENTRENAMIENTO</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">p_entrenamiento_fp</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">))</span>
+
+<span class="n">robustez_umbral</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">{</span><span class="s2">"origen del umbral"</span><span class="p">:</span> <span class="s2">"Puntuaciones de prueba (el adoptado)"</span><span class="p">,</span>
+     <span class="s2">"umbral"</span><span class="p">:</span> <span class="n">UMBRAL_ELEGIDO</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"origen del umbral"</span><span class="p">:</span> <span class="s2">"Fuera de pliegue del entrenamiento"</span><span class="p">,</span>
+     <span class="s2">"umbral"</span><span class="p">:</span> <span class="n">UMBRAL_ENTRENAMIENTO</span><span class="p">},</span>
+<span class="p">])</span>
+<span class="k">for</span> <span class="n">indice</span><span class="p">,</span> <span class="n">fila</span> <span class="ow">in</span> <span class="n">robustez_umbral</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">predicho</span> <span class="o">=</span> <span class="p">(</span><span class="n">p_mejor</span> <span class="o">&gt;=</span> <span class="n">fila</span><span class="p">[</span><span class="s2">"umbral"</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">robustez_umbral</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">indice</span><span class="p">,</span> <span class="s2">"marcados"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">predicho</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">robustez_umbral</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">indice</span><span class="p">,</span> <span class="s2">"recall"</span><span class="p">]</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_prueba</span><span class="p">,</span> <span class="n">predicho</span><span class="p">)</span>
+    <span class="n">robustez_umbral</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">indice</span><span class="p">,</span> <span class="s2">"precision"</span><span class="p">]</span> <span class="o">=</span> <span class="n">precision_score</span><span class="p">(</span>
+        <span class="n">y_prueba</span><span class="p">,</span> <span class="n">predicho</span><span class="p">,</span> <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Diferencia entre umbrales: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">UMBRAL_ELEGIDO</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">UMBRAL_ENTRENAMIENTO</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">robustez_umbral</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="s2">"robustez_umbral"</span><span class="p">)</span>
+<span class="n">robustez_umbral</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Diferencia entre umbrales: 0.0017
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>origen del umbral</th>
+      <th>umbral</th>
+      <th>marcados</th>
+      <th>recall</th>
+      <th>precision</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Puntuaciones de prueba (el adoptado)</td>
+      <td>0.1705</td>
+      <td>2980.0</td>
+      <td>0.3137</td>
+      <td>0.2383</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Fuera de pliegue del entrenamiento</td>
+      <td>0.1689</td>
+      <td>3064.0</td>
+      <td>0.3182</td>
+      <td>0.2350</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
 <p>El contraste entre las dos matrices de confusión es el argumento más claro contra el umbral por defecto: con 0.5, el modelo marca muy pocos pacientes y pierde la mayoría de las readmisiones, aunque su exactitud global parezca alta. Con el umbral fijado por capacidad, la exactitud baja y el recall sube, que es el intercambio que la asimetría de costos clínicos justifica.</p>
+</section>
 </section>
 <section id="calibracion-de-probabilidades">
 <h2>10.4. Calibración de probabilidades<a class="headerlink" href="#calibracion-de-probabilidades" title="Link to this heading">#</a></h2>
@@ -1077,7 +1184,7 @@ No readmitido     0.9080    0.8711    0.8892     17604
 <img alt="_images/e7dd705106b5f17f2032d0a9a7d30d19a377f8c90302b7af6c1286362cc6de20.png" src="_images/e7dd705106b5f17f2032d0a9a7d30d19a377f8c90302b7af6c1286362cc6de20.png" />
 </div>
 </div>
-<p>Una curva por debajo de la diagonal indica sobreconfianza: el modelo predice probabilidades mayores que la frecuencia real. Es el patrón esperable en los modelos entrenados con <code class="docutils literal notranslate"><span class="pre">class_weight</span></code> o con sobremuestreo, porque el reponderado altera deliberadamente la prevalencia aparente durante el entrenamiento y las probabilidades resultantes dejan de estar en la escala original. Ese es un punto importante para el informe: <strong>el balanceo mejora el recall a costa de descalibrar las probabilidades</strong>, y si el uso previsto requiere probabilidades interpretables, hace falta recalibrar.</p>
+<p>Una curva por debajo de la diagonal indica sobreconfianza: el modelo predice probabilidades mayores que la frecuencia real. Es el patrón esperable en los modelos entrenados con <code class="docutils literal notranslate"><span class="pre">class_weight</span></code> o con sobremuestreo, porque el reponderado altera deliberadamente la prevalencia aparente durante el entrenamiento y las probabilidades resultantes dejan de estar en la escala original. Ese es el patrón teórico esperable, pero conviene contrastarlo con estos datos antes de darlo por bueno. El modelo final, entrenado con ADASYN, llega al conjunto de prueba con un ECE de 0.0013 y una probabilidad media predicha de 0.1149 frente a una prevalencia de 0.1139, es decir bien calibrado, y con el umbral 0.5 su cobertura es de apenas el 1.2 %. En este caso, entonces, el sobremuestreo no descalibró de forma apreciable ni mejoró el recall al umbral por defecto. La advertencia general sigue siendo pertinente para modelos reponderados, pero no describe lo que ocurrió aquí.</p>
 <section id="recalibracion">
 <h3>10.4.1. Recalibración<a class="headerlink" href="#recalibracion" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
@@ -1174,6 +1281,7 @@ No readmitido     0.9080    0.8711    0.8892     17604
 </div></div></div>
 </div>
 <p>Lo que hay que verificar en esta tabla es que la recalibración <strong>reduzca el ECE y el Brier sin degradar el AUC-PR</strong>. Tiene sentido teórico: tanto el escalado de Platt como la regresión isotónica son transformaciones monótonas de las probabilidades, y una transformación monótona no altera el ordenamiento de los pacientes ni, por tanto, las métricas basadas en ranking. Si el AUC-PR cambia de forma apreciable, conviene sospechar de un error en el procedimiento.</p>
+<p>El resultado no es el que la verificación anticipaba, y hay que decirlo. El modelo sin recalibrar ya está bien calibrado (ECE 0.0013), de modo que no había margen que recuperar. El escalado de Platt <strong>empeora</strong> el ECE en un orden de magnitud, hasta 0.0137, porque impone una sigmoide de dos parámetros a unas probabilidades que no la necesitaban; la regresión isotónica lo deja prácticamente igual (0.0015). El Brier no se mueve en ninguno de los dos casos y el AUC-PR tampoco de forma apreciable, lo que confirma que ambas transformaciones son monótonas y que el procedimiento está bien implementado. La conclusión operativa es que el modelo final se reporta <strong>sin recalibrar</strong>, y que esta sección queda como una comprobación que resultó innecesaria en este caso, no como una mejora conseguida.</p>
 <p>Entre los dos métodos: Platt ajusta una sigmoide de dos parámetros, más estable con pocos datos pero incapaz de corregir distorsiones no sigmoideas; la isotónica es no paramétrica y más flexible, con mayor riesgo de sobreajuste cuando la clase positiva es escasa. Con 9,000 casos positivos en entrenamiento, la isotónica es viable.</p>
 </section>
 </section>
@@ -1382,31 +1490,116 @@ Caso con error    : probabilidad 0.037, real 1
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lime.lime_tabular</span><span class="w"> </span><span class="kn">import</span> <span class="n">LimeTabularExplainer</span>
 
-<span class="n">matriz_train_xgb</span> <span class="o">=</span> <span class="n">pre_xgb</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">matriz_train_xgb</span><span class="p">,</span> <span class="s2">"toarray"</span><span class="p">):</span>
-    <span class="n">matriz_train_xgb</span> <span class="o">=</span> <span class="n">matriz_train_xgb</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="c1"># Un primer intento explicó la matriz codificada de 152 columnas, de las que</span>
+<span class="c1"># 142 son indicadoras dispersas. En esa representación LIME no produce nada</span>
+<span class="c1"># interpretable: al perturbar, casi todas las indicadoras caen en cero, las</span>
+<span class="c1"># predicciones del vecindario quedan prácticamente constantes, el modelo</span>
+<span class="c1"># lineal local se aplana y los pesos resultan del orden de 1e-7. Declararlas</span>
+<span class="c1"># como categóricas no bastó, porque el problema es la dimensión y la</span>
+<span class="c1"># dispersión, no el discretizador.</span>
+<span class="c1">#</span>
+<span class="c1"># La explicación se construye entonces sobre el espacio original de 38</span>
+<span class="c1"># predictores: las categóricas se codifican como enteros y se declaran como</span>
+<span class="c1"># tales, de modo que cada perturbación produce una categoría válida en lugar</span>
+<span class="c1"># de un vector disperso imposible, y la función de predicción reconstruye el</span>
+<span class="c1"># dataframe y atraviesa el pipeline completo, preprocesamiento incluido.</span>
+
+<span class="n">COLUMNAS_LIME</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">CATEGORICAS_LIME</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">COLUMNAS_LIME</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="n">c</span><span class="p">])]</span>
+<span class="n">INDICES_LIME</span> <span class="o">=</span> <span class="p">[</span><span class="n">COLUMNAS_LIME</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">CATEGORICAS_LIME</span><span class="p">]</span>
+<span class="n">NIVELES_LIME</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="n">c</span><span class="p">])</span><span class="o">.</span><span class="n">categories</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">CATEGORICAS_LIME</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">a_matriz_lime</span><span class="p">(</span><span class="n">datos</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Codifica el dataframe original como la matriz numérica que LIME espera.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    datos : pandas.DataFrame</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">    """</span>
+    <span class="n">salida</span> <span class="o">=</span> <span class="n">datos</span><span class="p">[</span><span class="n">COLUMNAS_LIME</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">columna</span> <span class="ow">in</span> <span class="n">CATEGORICAS_LIME</span><span class="p">:</span>
+        <span class="n">salida</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span>
+            <span class="n">salida</span><span class="p">[</span><span class="n">columna</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="n">NIVELES_LIME</span><span class="p">[</span><span class="n">columna</span><span class="p">])</span><span class="o">.</span><span class="n">codes</span>
+    <span class="k">return</span> <span class="n">salida</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">a_dataframe_lime</span><span class="p">(</span><span class="n">matriz</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Operación inversa: reconstruye el dataframe que el pipeline espera.</span>
+
+<span class="sd">    Los códigos se redondean y se recortan al rango válido, porque las</span>
+<span class="sd">    perturbaciones de LIME pueden caer fuera de él.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">    """</span>
+    <span class="n">matriz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">matriz</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
+    <span class="n">salida</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">columna</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">COLUMNAS_LIME</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">columna</span> <span class="ow">in</span> <span class="n">CATEGORICAS_LIME</span><span class="p">:</span>
+            <span class="n">codigos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">matriz</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
+                              <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">NIVELES_LIME</span><span class="p">[</span><span class="n">columna</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">salida</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+                <span class="n">NIVELES_LIME</span><span class="p">[</span><span class="n">columna</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)[</span><span class="n">codigos</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">salida</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span> <span class="o">=</span> <span class="n">matriz</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">salida</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">COLUMNAS_LIME</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">predecir_lime</span><span class="p">(</span><span class="n">matriz</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Probabilidades del pipeline completo a partir de la matriz de LIME."""</span>
+    <span class="k">return</span> <span class="n">pipeline_xgb</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">a_dataframe_lime</span><span class="p">(</span><span class="n">matriz</span><span class="p">))</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Espacio explicado: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">COLUMNAS_LIME</span><span class="p">)</span><span class="si">}</span><span class="s2"> predictores "</span>
+      <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">CATEGORICAS_LIME</span><span class="p">)</span><span class="si">}</span><span class="s2"> categóricos, "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">COLUMNAS_LIME</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">CATEGORICAS_LIME</span><span class="p">)</span><span class="si">}</span><span class="s2"> numéricos)"</span><span class="p">)</span>
 
 <span class="n">explicador_lime</span> <span class="o">=</span> <span class="n">LimeTabularExplainer</span><span class="p">(</span>
-    <span class="n">matriz_train_xgb</span><span class="p">,</span>
-    <span class="n">feature_names</span><span class="o">=</span><span class="n">nombres_xgb</span><span class="p">,</span>
+    <span class="n">a_matriz_lime</span><span class="p">(</span><span class="n">X_train</span><span class="p">),</span>
+    <span class="n">feature_names</span><span class="o">=</span><span class="n">COLUMNAS_LIME</span><span class="p">,</span>
     <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"No readmitido"</span><span class="p">,</span> <span class="s2">"Readmitido"</span><span class="p">],</span>
+    <span class="n">categorical_features</span><span class="o">=</span><span class="n">INDICES_LIME</span><span class="p">,</span>
+    <span class="n">categorical_names</span><span class="o">=</span><span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">NIVELES_LIME</span><span class="p">[</span><span class="n">COLUMNAS_LIME</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span>
+                       <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">INDICES_LIME</span><span class="p">},</span>
     <span class="n">discretize_continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">CASO</span> <span class="o">=</span> <span class="n">caso_acierto</span>
 <span class="n">explicacion</span> <span class="o">=</span> <span class="n">explicador_lime</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span>
-    <span class="n">matriz_xgb</span><span class="p">[</span><span class="n">CASO</span><span class="p">],</span> <span class="n">est_xgb</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">,</span> <span class="n">num_features</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">a_matriz_lime</span><span class="p">(</span><span class="n">X_prueba</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">indices</span><span class="p">])[</span><span class="n">CASO</span><span class="p">],</span>
+    <span class="n">predecir_lime</span><span class="p">,</span> <span class="n">num_features</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 
 <span class="n">lime_tabla</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">explicacion</span><span class="o">.</span><span class="n">as_list</span><span class="p">(),</span>
                           <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"condición"</span><span class="p">,</span> <span class="s2">"peso LIME"</span><span class="p">])</span>
 <span class="n">tabla</span><span class="p">(</span><span class="n">lime_tabla</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="c1"># Control de sanidad: si los pesos siguen siendo despreciables, la</span>
+<span class="c1"># explicación no es informativa y hay que decirlo en lugar de interpretarla.</span>
+<span class="n">peso_maximo</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lime_tabla</span><span class="p">[</span><span class="s2">"peso LIME"</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="k">if</span> <span class="n">peso_maximo</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">AVISO: el peso máximo es </span><span class="si">{</span><span class="n">peso_maximo</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">. LIME sigue sin "</span>
+          <span class="s2">"producir una explicación informativa; la comparación con SHAP debe "</span>
+          <span class="s2">"leerse como una limitación del método, no como un hallazgo."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Peso máximo de la explicación local: </span><span class="si">{</span><span class="n">peso_maximo</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Espacio explicado: 38 predictores (27 categóricos, 11 numéricos)
+</pre></div>
+</div>
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_ca6bd8bf_ed52_4d84_99fa_8ad4c079f9d4" hidden="hidden">
+<table id="itables_6643d7df_1641_415e_8c45_53c2474756dc" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1505,36 +1698,36 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_ca6bd8bf_ed52_4d84_99fa_8ad4c079f9d4_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_6643d7df_1641_415e_8c45_53c2474756dc_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">condición</th>
       <th style="border:1px solid #ddd;padding:8px">peso LIME</th>
     </tr></thead><tbody>
-<tr><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">diag_3_grupo_infrequent_sklearn &lt;= 0.00</td><td style="border:1px solid #ddd;padding:8px">0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">nateglinide_infrequent_sklearn &lt;= 0.00</td><td style="border:1px solid #ddd;padding:8px">0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">diag_3_grupo_No registrado &lt;= 0.00</td><td style="border:1px solid #ddd;padding:8px">0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">time_in_hospital &lt;= -0.50</td><td style="border:1px solid #ddd;padding:8px">0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">4</td><td style="border:1px solid #ddd;padding:8px">number_inpatient &gt; 1.00</td><td style="border:1px solid #ddd;padding:8px">-0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">5</td><td style="border:1px solid #ddd;padding:8px">diag_3_grupo_Sangre &lt;= 0.00</td><td style="border:1px solid #ddd;padding:8px">0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">6</td><td style="border:1px solid #ddd;padding:8px">n_farmacos_activos &lt;= 0.00</td><td style="border:1px solid #ddd;padding:8px">0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">num_procedures &lt;= -0.50</td><td style="border:1px solid #ddd;padding:8px">0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">8</td><td style="border:1px solid #ddd;padding:8px">repaglinide_infrequent_sklearn &lt;= 0.00</td><td style="border:1px solid #ddd;padding:8px">0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">9</td><td style="border:1px solid #ddd;padding:8px">chlorpropamide_infrequent_sklearn &lt;= 0.00</td><td style="border:1px solid #ddd;padding:8px">0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">10</td><td style="border:1px solid #ddd;padding:8px">num_lab_procedures &lt;= -0.50</td><td style="border:1px solid #ddd;padding:8px">-0.0</td></tr>
-<tr><td style="border:1px solid #ddd;padding:8px">11</td><td style="border:1px solid #ddd;padding:8px">especialidad_Nephrology &lt;= 0.00</td><td style="border:1px solid #ddd;padding:8px">0.0</td></tr>
-</tbody></table></div><script>document.getElementById("itables_ca6bd8bf_ed52_4d84_99fa_8ad4c079f9d4")?.removeAttribute("hidden");document.getElementById("itables_ca6bd8bf_ed52_4d84_99fa_8ad4c079f9d4_fallback")?.setAttribute("hidden", "hidden");</script>
+<tr><td style="border:1px solid #ddd;padding:8px">0</td><td style="border:1px solid #ddd;padding:8px">number_inpatient &gt; 1.00</td><td style="border:1px solid #ddd;padding:8px">0.2426</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">number_emergency &gt; 0.00</td><td style="border:1px solid #ddd;padding:8px">0.1251</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">2</td><td style="border:1px solid #ddd;padding:8px">discharge_disposition_id=Discharged/transferred to another type of inpatient care institution</td><td style="border:1px solid #ddd;padding:8px">0.1213</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">3</td><td style="border:1px solid #ddd;padding:8px">chlorpropamide=No</td><td style="border:1px solid #ddd;padding:8px">-0.0841</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">4</td><td style="border:1px solid #ddd;padding:8px">number_outpatient &lt;= 0.00</td><td style="border:1px solid #ddd;padding:8px">-0.0807</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">5</td><td style="border:1px solid #ddd;padding:8px">n_farmacos_activos &lt;= 1.00</td><td style="border:1px solid #ddd;padding:8px">0.0742</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">6</td><td style="border:1px solid #ddd;padding:8px">acarbose=No</td><td style="border:1px solid #ddd;padding:8px">-0.0635</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">7</td><td style="border:1px solid #ddd;padding:8px">age_ord &lt;= 5.00</td><td style="border:1px solid #ddd;padding:8px">-0.0556</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">8</td><td style="border:1px solid #ddd;padding:8px">glyburide-metformin=No</td><td style="border:1px solid #ddd;padding:8px">0.0455</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">9</td><td style="border:1px solid #ddd;padding:8px">insulin=Steady</td><td style="border:1px solid #ddd;padding:8px">0.0446</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">10</td><td style="border:1px solid #ddd;padding:8px">time_in_hospital &lt;= 2.00</td><td style="border:1px solid #ddd;padding:8px">0.0392</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px">11</td><td style="border:1px solid #ddd;padding:8px">num_procedures &lt;= 0.00</td><td style="border:1px solid #ddd;padding:8px">-0.0346</td></tr>
+</tbody></table></div><script>document.getElementById("itables_6643d7df_1641_415e_8c45_53c2474756dc")?.removeAttribute("hidden");document.getElementById("itables_6643d7df_1641_415e_8c45_53c2474756dc_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_ca6bd8bf_ed52_4d84_99fa_8ad4c079f9d4:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_6643d7df_1641_415e_8c45_53c2474756dc:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
         let dt_args = {
           "classes": ["display", "compact"],
           "columnDefs": [{"render": "function (data, type, row, meta) { return type === 'sort' || type === 'type' ? data[1] : data[0]; }", "targets": [2]}, {"className": "dt-center", "targets": "_all"}],
-          "data_json": "[[0, \"diag_3_grupo_infrequent_sklearn &lt;= 0.00\", [\"0.0\", 0.0]], [1, \"nateglinide_infrequent_sklearn &lt;= 0.00\", [\"0.0\", 0.0]], [2, \"diag_3_grupo_No registrado &lt;= 0.00\", [\"0.0\", 0.0]], [3, \"time_in_hospital &lt;= -0.50\", [\"0.0\", 0.0]], [4, \"number_inpatient &gt; 1.00\", [\"-0.0\", -0.0]], [5, \"diag_3_grupo_Sangre &lt;= 0.00\", [\"0.0\", 0.0]], [6, \"n_farmacos_activos &lt;= 0.00\", [\"0.0\", 0.0]], [7, \"num_procedures &lt;= -0.50\", [\"0.0\", 0.0]], [8, \"repaglinide_infrequent_sklearn &lt;= 0.00\", [\"0.0\", 0.0]], [9, \"chlorpropamide_infrequent_sklearn &lt;= 0.00\", [\"0.0\", 0.0]], [10, \"num_lab_procedures &lt;= -0.50\", [\"-0.0\", -0.0]], [11, \"especialidad_Nephrology &lt;= 0.00\", [\"0.0\", 0.0]]]",
+          "data_json": "[[0, \"number_inpatient &gt; 1.00\", [\"0.2426\", 0.2426]], [1, \"number_emergency &gt; 0.00\", [\"0.1251\", 0.1251]], [2, \"discharge_disposition_id=Discharged/transferred to another type of inpatient care institution\", [\"0.1213\", 0.1213]], [3, \"chlorpropamide=No\", [\"-0.0841\", -0.0841]], [4, \"number_outpatient &lt;= 0.00\", [\"-0.0807\", -0.0807]], [5, \"n_farmacos_activos &lt;= 1.00\", [\"0.0742\", 0.0742]], [6, \"acarbose=No\", [\"-0.0635\", -0.0635]], [7, \"age_ord &lt;= 5.00\", [\"-0.0556\", -0.0556]], [8, \"glyburide-metformin=No\", [\"0.0455\", 0.0455]], [9, \"insulin=Steady\", [\"0.0446\", 0.0446]], [10, \"time_in_hospital &lt;= 2.00\", [\"0.0392\", 0.0392]], [11, \"num_procedures &lt;= 0.00\", [\"-0.0346\", -0.0346]]]",
           "keys_to_be_evaluated": [["columnDefs", 0, "render"]],
           "layout": {"bottomEnd": "paging", "bottomStart": "info", "topEnd": "search", "topStart": "pageLength"},
           "order": [],
@@ -1561,7 +1754,10 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
                 padding: 8px !important;
             }
         </style>
-        </div></div>
+        </div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Peso máximo de la explicación local: 0.2426
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1688,89 +1884,91 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
   <tbody>
     <tr>
       <th>0</th>
-      <td>diag_3_grupo_infrequent_sklearn &lt;= 0.00</td>
-      <td>4.192272e-07</td>
+      <td>number_inpatient &gt; 1.00</td>
+      <td>0.242636</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>nateglinide_infrequent_sklearn &lt;= 0.00</td>
-      <td>3.271303e-07</td>
+      <td>number_emergency &gt; 0.00</td>
+      <td>0.125079</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>diag_3_grupo_No registrado &lt;= 0.00</td>
-      <td>2.823012e-07</td>
+      <td>discharge_disposition_id=Discharged/transferre...</td>
+      <td>0.121261</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>time_in_hospital &lt;= -0.50</td>
-      <td>2.746445e-07</td>
+      <td>chlorpropamide=No</td>
+      <td>-0.084064</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>number_inpatient &gt; 1.00</td>
-      <td>-2.460165e-07</td>
+      <td>number_outpatient &lt;= 0.00</td>
+      <td>-0.080742</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>diag_3_grupo_Sangre &lt;= 0.00</td>
-      <td>2.312608e-07</td>
+      <td>n_farmacos_activos &lt;= 1.00</td>
+      <td>0.074222</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>n_farmacos_activos &lt;= 0.00</td>
-      <td>2.225639e-07</td>
+      <td>acarbose=No</td>
+      <td>-0.063478</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>num_procedures &lt;= -0.50</td>
-      <td>2.156748e-07</td>
+      <td>age_ord &lt;= 5.00</td>
+      <td>-0.055559</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>repaglinide_infrequent_sklearn &lt;= 0.00</td>
-      <td>2.147497e-07</td>
+      <td>glyburide-metformin=No</td>
+      <td>0.045511</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>chlorpropamide_infrequent_sklearn &lt;= 0.00</td>
-      <td>1.822132e-07</td>
+      <td>insulin=Steady</td>
+      <td>0.044605</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>Al comparar ambas listas conviene fijarse en tres cosas: si coinciden las variables del bloque más importante, si el signo de la contribución es el mismo, y si LIME atribuye a una sola variable lo que SHAP reparte entre varias correlacionadas. Las discrepancias no indican que un método esté equivocado, sino que responden a preguntas distintas: SHAP atribuye la desviación respecto a la predicción media; LIME describe la pendiente local de la frontera de decisión.</p>
+<p>Las dos listas divergen, y la divergencia es informativa. LIME sitúa arriba el número de ingresos previos (peso 0.243), las visitas previas a urgencias (0.125) y el traslado a otra institución de hospitalización (0.121), es decir las mismas variables que dominan el ranking global del capítulo 4. SHAP, para este mismo paciente, encabeza con el indicador de sexo y con los grupos diagnósticos.</p>
+<p>Antes de leer eso como una contradicción conviene notar que <strong>la comparación no es simétrica</strong>: SHAP se calcula sobre la matriz codificada de 152 columnas y LIME sobre el espacio original de 38 predictores. Una variable con muchos niveles, como los grupos diagnósticos, reparte su contribución entre varias indicadoras en SHAP, mientras que LIME la agrega en una sola condición. Parte de la diferencia de orden es, por tanto, un artefacto de la representación y no un desacuerdo entre métodos.</p>
+<p>Lo que queda del desacuerdo responde a que las dos técnicas contestan preguntas distintas: SHAP atribuye la desviación respecto a la predicción media sobre todo el conjunto, mientras que LIME describe la pendiente local de la frontera de decisión en el vecindario del paciente. Un predictor que separa poco en promedio puede gobernar la decisión en una región concreta del espacio, y al revés. Ninguno de los dos está equivocado.</p>
 </section>
 <section id="sintesis-del-capitulo">
 <h2>10.7. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Dimensión</p></th>
-<th class="head"><p>Qué registrar</p></th>
+<th class="head"><p>Hallazgo</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Desempeño final</p></td>
-<td><p>AUC-ROC, AUC-PR y métricas de clasificación de los tres finalistas en el conjunto de prueba, con la comparación frente a lo estimado por el bucle externo</p></td>
+<td><p>XGBoost con ADASYN alcanza 0.6650 de AUC-ROC y 0.2285 de AUC-PR sobre los 19,867 encuentros reservados. Los tres finalistas quedan dentro de dos milésimas entre sí</p></td>
 </tr>
 <tr class="row-odd"><td><p>Coherencia con la validación</p></td>
-<td><p>Si la métrica en prueba cae dentro del intervalo media ± desviación estándar del bucle externo. Una caída fuera de ese rango indicaría sobreajuste en la selección</p></td>
+<td><p>El AUC-PR en prueba, 0.2285, cae dentro del intervalo 0.2267 ± 0.0153 del bucle externo, de modo que no hay señal de sobreajuste en la selección</p></td>
 </tr>
 <tr class="row-even"><td><p>Umbral</p></td>
-<td><p>Criterio elegido, umbral resultante y el intercambio entre recall y precisión que implica</p></td>
+<td><p>Se fija por capacidad de seguimiento y no maximizando una métrica. Marcando al 15 % de mayor riesgo detecta 710 de las 2,263 readmisiones, con 31.4 % de exhaustividad y 23.8 % de precisión frente al 11.4 % del azar. Derivar el mismo percentil del entrenamiento mueve el umbral 0.0017, así que el punto de operación no depende del conjunto de prueba</p></td>
 </tr>
 <tr class="row-odd"><td><p>Calibración</p></td>
-<td><p>Brier y ECE antes y después de recalibrar, con el efecto del balanceo sobre la calibración discutido</p></td>
+<td><p>El modelo llega bien calibrado sin tratamiento: ECE de 0.0013 y probabilidad media predicha de 0.1149 frente a una prevalencia de 0.1139. No había margen que recuperar, y el escalado de Platt de hecho empeora el ECE hasta 0.0137. Se reporta sin recalibrar</p></td>
 </tr>
 <tr class="row-even"><td><p>Interpretabilidad global</p></td>
-<td><p>Variables dominantes en el gráfico SHAP y su coherencia con los hallazgos del capítulo 4</p></td>
+<td><p>El destino al alta y la utilización previa dominan la atribución de Shapley, en coincidencia con el ranking de predictores del capítulo 4</p></td>
 </tr>
 <tr class="row-odd"><td><p>Interpretabilidad local</p></td>
-<td><p>Qué distingue al caso bien predicho del caso perdido</p></td>
+<td><p>Los gráficos de cascada de la sección 10.5 contrastan un caso acertado con uno perdido sobre el mismo modelo y la misma escala de atribución</p></td>
 </tr>
 <tr class="row-even"><td><p>SHAP frente a LIME</p></td>
-<td><p>Coincidencias y divergencias para el mismo paciente, con la explicación metodológica de las diferencias</p></td>
+<td><p>Sobre la matriz codificada de 152 columnas LIME no producía pesos interpretables, con máximos del orden de 1e-7; reconstruida sobre el espacio original de 38 predictores da pesos de magnitud normal (máximo 0.243) y sitúa arriba las mismas variables que el ranking global. SHAP, calculado sobre la matriz codificada, encabeza con otras: la comparación no es simétrica y parte de la diferencia es artefacto de la representación</p></td>
 </tr>
 </tbody>
 </table>
@@ -1850,7 +2048,10 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#justificacion-de-la-metrica-principal">10.2.1. Justificación de la métrica principal</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-del-umbral-de-decision">10.3. Selección del umbral de decisión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-del-umbral-de-decision">10.3. Selección del umbral de decisión</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#depende-el-umbral-de-haber-visto-el-conjunto-de-prueba">10.3.1. ¿Depende el umbral de haber visto el conjunto de prueba?</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calibracion-de-probabilidades">10.4. Calibración de probabilidades</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recalibracion">10.4.1. Recalibración</a></li>
 </ul>

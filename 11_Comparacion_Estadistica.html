@@ -390,11 +390,14 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-problema-de-escala">11.1. El problema de escala</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapa-1-prueba-omnibus-de-friedman">11.2. Etapa 1: prueba ómnibus de Friedman</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapa-2-post-hoc-de-nemenyi-y-diagrama-de-diferencia-critica">11.3. Etapa 2: post-hoc de Nemenyi y diagrama de diferencia crítica</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparaciones-dirigidas-prueba-de-delong">11.4. Comparaciones dirigidas: prueba de DeLong</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparaciones-dirigidas-prueba-de-delong">11.4. Comparaciones dirigidas: prueba de DeLong</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robustez-frente-a-la-regla-de-seleccion-del-representante">11.3.1. Robustez frente a la regla de selección del representante</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-del-efecto">11.5. Tamaño del efecto</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervalos-de-confianza-por-bootstrap-bca">11.6. Intervalos de confianza por bootstrap BCa</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">11.7. Síntesis del capítulo</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#como-redactar-la-conclusion">11.7.1. Cómo redactar la conclusión</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-del-capitulo">11.7.1. Conclusión del capítulo</a></li>
 </ul>
 </li>
 </ul>
@@ -412,7 +415,7 @@ document.write(`
 <h1>11. Comparación estadística de los modelos<a class="headerlink" href="#comparacion-estadistica-de-los-modelos" title="Link to this heading">#</a></h1>
 <section id="el-problema-de-escala">
 <h2>11.1. El problema de escala<a class="headerlink" href="#el-problema-de-escala" title="Link to this heading">#</a></h2>
-<p>El experimento produce 112 combinaciones. El número de comparaciones por pares posibles entre ellas es 112 × 111 / 2 = 6,216. Ejecutar esa cantidad de pruebas con un nivel de significancia de 0.05 y sin ningún control produciría alrededor de 311 resultados significativos solo por azar.</p>
+<p>El diseño del experimento contempla 112 combinaciones, de las cuales 108 son ejecutables: las cuatro de k-NN con <code class="docutils literal notranslate"><span class="pre">class_weight</span></code> no tienen equivalente y quedan documentadas como inviables en la sección 8.1.1. El número de comparaciones por pares posibles entre esas 108 es 108 × 107 / 2 = 5,778. Ejecutar esa cantidad de pruebas con un nivel de significancia de 0.05 y sin ningún control produciría alrededor de 289 resultados significativos solo por azar.</p>
 <p>Por eso la comparación no puede reducirse a aplicar pruebas por pares. Se sigue la secuencia jerárquica que exige la guía:</p>
 <ol class="arabic simple">
 <li><p><strong>Prueba ómnibus (Friedman)</strong> sobre los rangos de los modelos en los folds del bucle externo. Si no rechaza, no hay evidencia de que ningún modelo supere a los demás y el análisis se detiene.</p></li>
@@ -459,7 +462,8 @@ Comparaciones por pares posibles: 5,778
 <section id="etapa-1-prueba-omnibus-de-friedman">
 <h2>11.2. Etapa 1: prueba ómnibus de Friedman<a class="headerlink" href="#etapa-1-prueba-omnibus-de-friedman" title="Link to this heading">#</a></h2>
 <p>La prueba de Friedman es el análogo no paramétrico del ANOVA de medidas repetidas. Convierte las métricas en rangos dentro de cada fold y contrasta la hipótesis nula de que los rangos promedio son iguales entre modelos. Es la prueba apropiada aquí por dos razones: no supone normalidad de las métricas, y trata cada fold como un bloque, lo que reconoce que las mediciones de todos los modelos en un mismo fold están correlacionadas por compartir los mismos datos.</p>
-<p>Se aplica en dos niveles. Primero sobre los siete modelos base, usando su mejor configuración, que es la comparación de interés principal. Después sobre las 112 configuraciones completas.</p>
+<p>Se aplica sobre los siete modelos base, representado cada uno por su mejor configuración, que es la comparación de interés principal.</p>
+<p>Esa representación tiene un costo que conviene declarar. El representante de cada modelo se elige tomando el máximo de AUC-PR entre sus dieciséis configuraciones (doce en k-NN), y después esos mismos valores por fold sirven de bloques para la prueba: es inferencia posterior a una selección. El estadístico de Friedman y los p-valores de Nemenyi que siguen son por tanto anticonservadores, porque parte de la diferencia que detectan proviene de haber elegido el máximo. La dispersión interna de cada modelo entre sus propias configuraciones (entre 0.011 y 0.032 de AUC-PR) es de hecho mayor que las diferencias que la prueba declara, así que los resultados de esta sección se leen como indicativos y no como una medida calibrada del error de tipo I.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mejores_por_modelo</span> <span class="o">=</span> <span class="p">(</span><span class="n">completadas</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
@@ -716,12 +720,184 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 </div>
 </div>
 <p>El diagrama sustituye a una tabla de miles de comparaciones: los modelos unidos por una barra horizontal no se distinguen estadísticamente entre sí.</p>
-<p>Con solo cinco folds, la diferencia crítica es grande, y es muy posible que todos los modelos queden conectados. Esa conclusión es informativa y hay que presentarla como tal: el experimento no tiene poder suficiente para separar los modelos con este número de bloques, lo que refuerza lo que el capítulo 4 anticipaba sobre la dificultad intrínseca del problema.</p>
+<p>Con solo cinco folds la diferencia crítica es grande: 4.028 posiciones de rango, sobre rangos medios que van de 1.6 a 7.0. El diagrama no conecta a todos los modelos en un único grupo, pero tampoco separa a los que importan. XGBoost y Random Forest comparten el primer puesto con el mismo rango medio y quedan unidos por la barra; la separación que la prueba detecta ocurre en el otro extremo, entre esos dos y Naive Bayes o el árbol. La lectura es la que el capítulo 4 anticipaba: el experimento tiene poder para distinguir un buen modelo de uno malo, pero no para ordenar el extremo superior, que es justamente donde estaría la decisión.</p>
 </section>
 <section id="comparaciones-dirigidas-prueba-de-delong">
 <h2>11.4. Comparaciones dirigidas: prueba de DeLong<a class="headerlink" href="#comparaciones-dirigidas-prueba-de-delong" title="Link to this heading">#</a></h2>
 <p>DeLong contrasta la igualdad de dos AUC calculadas sobre las <strong>mismas observaciones</strong>, lo que la hace apropiada aquí: los tres finalistas se evaluaron sobre el mismo conjunto de prueba, así que sus errores están correlacionados y una prueba que ignore esa correlación sería demasiado conservadora.</p>
 <p>Se reserva para el subconjunto reducido de los tres finalistas del capítulo 10, tal como exige la guía, y sus valores p se ajustan por comparaciones múltiples.</p>
+<section id="robustez-frente-a-la-regla-de-seleccion-del-representante">
+<h3>11.3.1. Robustez frente a la regla de selección del representante<a class="headerlink" href="#robustez-frente-a-la-regla-de-seleccion-del-representante" title="Link to this heading">#</a></h3>
+<p>La sección 11.2 advirtió que elegir el representante de cada modelo por su
+máximo de AUC-PR convierte el contraste en inferencia posterior a una
+selección, y que eso vuelve anticonservadores a Friedman y a Nemenyi. La
+advertencia no basta por sí sola: lo que hay que comprobar es si la
+conclusión depende de ese paso. Se repite entonces el contraste con dos
+reglas que no miran el resultado antes de elegir.</p>
+<p>La primera fija <strong>una misma configuración para los siete modelos</strong>, decidida
+por su posición en el diseño y no por su desempeño: ausencia de balanceo con
+Grid Search, que existe para todos. La segunda <strong>promedia las dieciséis
+configuraciones de cada modelo fold a fold</strong>, lo que no descarta información
+y tampoco selecciona.</p>
+<p>Si las tres reglas coinciden en rechazar la hipótesis nula y en dejar
+indistinguibles a los dos primeros, la lectura del capítulo se sostiene
+pese al sesgo declarado. Si no coincidieran, habría que reportar la versión
+preespecificada como la válida.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Robustez de Friedman y Nemenyi frente a la regla con la que se elige el</span>
+<span class="c1"># representante de cada modelo. Reutiliza `diferencia_critica`, definida en</span>
+<span class="c1"># la celda anterior.</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">friedman_con_regla</span><span class="p">(</span><span class="n">matriz</span><span class="p">,</span> <span class="n">etiqueta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Aplica Friedman a una matriz de folds por modelos.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matriz : pandas.DataFrame</span>
+<span class="sd">        Filas: folds externos. Columnas: modelos.</span>
+<span class="sd">    etiqueta : str</span>
+<span class="sd">        Nombre de la regla con la que se eligió el representante.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Estadístico, p-valor, los dos primeros del ranking y si la</span>
+<span class="sd">        diferencia crítica de Nemenyi los separa.</span>
+<span class="sd">    """</span>
+    <span class="n">estadistico</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">friedmanchisquare</span><span class="p">(</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">matriz</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">matriz</span><span class="o">.</span><span class="n">columns</span><span class="p">])</span>
+    <span class="n">rangos</span> <span class="o">=</span> <span class="n">matriz</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+    <span class="n">cd</span> <span class="o">=</span> <span class="n">diferencia_critica</span><span class="p">(</span><span class="n">matriz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">matriz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">distancia</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rangos</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">rangos</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"regla del representante"</span><span class="p">:</span> <span class="n">etiqueta</span><span class="p">,</span>
+        <span class="s2">"chi² de Friedman"</span><span class="p">:</span> <span class="n">estadistico</span><span class="p">,</span>
+        <span class="s2">"p-valor"</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span>
+        <span class="s2">"rechaza H0"</span><span class="p">:</span> <span class="s2">"Sí"</span> <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="mf">0.05</span> <span class="k">else</span> <span class="s2">"No"</span><span class="p">,</span>
+        <span class="s2">"primero"</span><span class="p">:</span> <span class="n">rangos</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">"segundo"</span><span class="p">:</span> <span class="n">rangos</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">"distancia de rango"</span><span class="p">:</span> <span class="n">distancia</span><span class="p">,</span>
+        <span class="s2">"diferencia crítica"</span><span class="p">:</span> <span class="n">cd</span><span class="p">,</span>
+        <span class="s2">"¿los separa?"</span><span class="p">:</span> <span class="s2">"Sí"</span> <span class="k">if</span> <span class="n">distancia</span> <span class="o">&gt;</span> <span class="n">cd</span> <span class="k">else</span> <span class="s2">"No"</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># Regla A: máximo por modelo, la del contraste principal.</span>
+<span class="n">matriz_maximo</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="n">fila</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">"auc_pr_por_fold"</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">fila</span> <span class="ow">in</span> <span class="n">mejores_por_modelo</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+<span class="p">})</span>
+
+<span class="c1"># Regla B: configuración preespecificada, idéntica para todos los modelos.</span>
+<span class="n">referencia</span> <span class="o">=</span> <span class="n">completadas</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+    <span class="s2">"balanceo == 'ninguno' and optimizador == 'grid'"</span><span class="p">)</span>
+<span class="n">matriz_referencia</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="n">fila</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">"auc_pr_por_fold"</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">fila</span> <span class="ow">in</span> <span class="n">referencia</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+<span class="p">})</span>
+
+<span class="c1"># Regla C: promedio de todas las configuraciones del modelo, fold a fold.</span>
+<span class="n">matriz_promedio</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="n">modelo</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">grupo</span><span class="p">[</span><span class="s2">"auc_pr_por_fold"</span><span class="p">]]</span>
+                     <span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">modelo</span><span class="p">,</span> <span class="n">grupo</span> <span class="ow">in</span> <span class="n">completadas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="n">robustez</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="n">friedman_con_regla</span><span class="p">(</span><span class="n">matriz_maximo</span><span class="p">,</span>
+                       <span class="s2">"Máximo por modelo (contraste principal)"</span><span class="p">),</span>
+    <span class="n">friedman_con_regla</span><span class="p">(</span><span class="n">matriz_referencia</span><span class="p">,</span>
+                       <span class="s2">"Preespecificada: sin balanceo + Grid"</span><span class="p">),</span>
+    <span class="n">friedman_con_regla</span><span class="p">(</span><span class="n">matriz_promedio</span><span class="p">,</span>
+                       <span class="s2">"Promedio de las 16 configuraciones"</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">robustez</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="s2">"robustez_seleccion_representante"</span><span class="p">)</span>
+<span class="n">robustez</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>regla del representante</th>
+      <th>chi² de Friedman</th>
+      <th>p-valor</th>
+      <th>rechaza H0</th>
+      <th>primero</th>
+      <th>segundo</th>
+      <th>distancia de rango</th>
+      <th>diferencia crítica</th>
+      <th>¿los separa?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Máximo por modelo (contraste principal)</td>
+      <td>28.5429</td>
+      <td>0.0001</td>
+      <td>Sí</td>
+      <td>xgboost</td>
+      <td>random_forest</td>
+      <td>0.0</td>
+      <td>4.0282</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Preespecificada: sin balanceo + Grid</td>
+      <td>28.1143</td>
+      <td>0.0001</td>
+      <td>Sí</td>
+      <td>xgboost</td>
+      <td>random_forest</td>
+      <td>0.0</td>
+      <td>4.0282</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Promedio de las 16 configuraciones</td>
+      <td>28.4571</td>
+      <td>0.0001</td>
+      <td>Sí</td>
+      <td>xgboost</td>
+      <td>random_forest</td>
+      <td>1.0</td>
+      <td>4.0282</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Las tres reglas coinciden. El rechazo de la hipótesis nula se mantiene en
+los tres casos, con estadísticos muy próximos entre sí, y en ninguno la
+diferencia crítica llega a separar al primero del segundo: con las dos
+primeras reglas XGBoost y Random Forest empatan en rango, y con la tercera
+quedan a una posición de distancia, muy por debajo de la diferencia crítica.</p>
+<p>El sesgo por selección existe y queda declarado, pero no es el que sostiene
+la conclusión del capítulo: el extremo superior del ranking resulta
+indistinguible con cualquiera de las tres reglas, incluida la que no mira el
+desempeño antes de elegir.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">predicciones</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"predicciones_prueba.csv"</span><span class="p">)</span>
@@ -897,6 +1073,7 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 </div>
 <p>Se reportan el valor p crudo y los dos ajustados, como pide la guía. La diferencia entre Holm y Benjamini-Hochberg es el criterio que controlan: Holm controla la probabilidad de cometer <strong>al menos un</strong> falso positivo en la familia de comparaciones, más estricto; Benjamini-Hochberg controla la <strong>proporción esperada</strong> de falsos positivos entre los rechazos, más permisivo y preferible cuando el objetivo es explorar y no confirmar.</p>
 </section>
+</section>
 <section id="tamano-del-efecto">
 <h2>11.5. Tamaño del efecto<a class="headerlink" href="#tamano-del-efecto" title="Link to this heading">#</a></h2>
 <p>La significancia estadística no implica relevancia práctica, y con múltiples folds el poder puede ser suficiente para detectar diferencias irrelevantes. Se reporta el tamaño del efecto en todos los casos.</p>
@@ -942,7 +1119,7 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><!--| quarto-html-table-processing: none -->
-<table id="itables_a2cdbd66_fc8f_4d4e_8917_33af96d06bd3" hidden="hidden">
+<table id="itables_9e29ca1e_451b_4c1a_90e6_6d65d208fa46" hidden="hidden">
   <tbody>
     <tr>
       <td style="vertical-align:middle; text-align:left"><a href=https://itables.org/><svg class="main-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1041,7 +1218,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
     </tr>
   </tbody>
 </table>
-<div id="itables_a2cdbd66_fc8f_4d4e_8917_33af96d06bd3_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
+<div id="itables_9e29ca1e_451b_4c1a_90e6_6d65d208fa46_fallback"><table style="border-collapse:collapse"><thead>    <tr style="text-align: right;">
       <th style="border:1px solid #ddd;padding:8px"><sup><noscript><span title="JavaScript not allowed. Please trust this notebook to get interactive tables.">🔒</span></noscript><a href=https://itables.org/fallbacks/static_preview.html title="ITables v2.9.1 static preview">ⓘ</a></sup></th>
       <th style="border:1px solid #ddd;padding:8px">modelo A</th>
       <th style="border:1px solid #ddd;padding:8px">modelo B</th>
@@ -1071,12 +1248,12 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <tr><td style="border:1px solid #ddd;padding:8px">16</td><td style="border:1px solid #ddd;padding:8px">logistica</td><td style="border:1px solid #ddd;padding:8px">svm</td><td style="border:1px solid #ddd;padding:8px">0.2110</td><td style="border:1px solid #ddd;padding:8px">0.2145</td><td style="border:1px solid #ddd;padding:8px">-0.28</td><td style="border:1px solid #ddd;padding:8px">Pequeño</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">19</td><td style="border:1px solid #ddd;padding:8px">random_forest</td><td style="border:1px solid #ddd;padding:8px">xgboost</td><td style="border:1px solid #ddd;padding:8px">0.2258</td><td style="border:1px solid #ddd;padding:8px">0.2267</td><td style="border:1px solid #ddd;padding:8px">-0.12</td><td style="border:1px solid #ddd;padding:8px">Insignificante</td></tr>
 <tr><td style="border:1px solid #ddd;padding:8px">1</td><td style="border:1px solid #ddd;padding:8px">arbol</td><td style="border:1px solid #ddd;padding:8px">knn</td><td style="border:1px solid #ddd;padding:8px">0.2034</td><td style="border:1px solid #ddd;padding:8px">0.2058</td><td style="border:1px solid #ddd;padding:8px">-0.04</td><td style="border:1px solid #ddd;padding:8px">Insignificante</td></tr>
-</tbody></table></div><script>document.getElementById("itables_a2cdbd66_fc8f_4d4e_8917_33af96d06bd3")?.removeAttribute("hidden");document.getElementById("itables_a2cdbd66_fc8f_4d4e_8917_33af96d06bd3_fallback")?.setAttribute("hidden", "hidden");</script>
+</tbody></table></div><script>document.getElementById("itables_9e29ca1e_451b_4c1a_90e6_6d65d208fa46")?.removeAttribute("hidden");document.getElementById("itables_9e29ca1e_451b_4c1a_90e6_6d65d208fa46_fallback")?.setAttribute("hidden", "hidden");</script>
 <link href="https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.css" rel="stylesheet">
 <script type="module">
     import { ITable, jQuery as $ } from 'https://www.unpkg.com/dt_for_itables@2.5.8/dt_bundle.js';
 
-    document.querySelectorAll("#itables_a2cdbd66_fc8f_4d4e_8917_33af96d06bd3:not(.dataTable)").forEach(table => {
+    document.querySelectorAll("#itables_9e29ca1e_451b_4c1a_90e6_6d65d208fa46:not(.dataTable)").forEach(table => {
         if (!(table instanceof HTMLTableElement))
             return;
 
@@ -1337,38 +1514,39 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Etapa</p></th>
-<th class="head"><p>Resultado a registrar</p></th>
+<th class="head"><p>Resultado</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Friedman sobre los 7 modelos base</p></td>
-<td><p>Estadístico, grados de libertad, p-valor y si se rechaza la hipótesis nula</p></td>
+<td><p>χ² = 28.54 con 6 grados de libertad y p = 7.4e-05: se rechaza la equivalencia global. El rechazo se mantiene con reglas de selección del representante que no miran el desempeño (28.11 y 28.46)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Rangos promedio</p></td>
-<td><p>Orden de los modelos y distancia entre ellos</p></td>
+<td><p>XGBoost y Random Forest empatan en 1.6; después SVM (2.8), logística (4.0), k-NN (5.2), árbol (5.8) y Naive Bayes (7.0)</p></td>
 </tr>
 <tr class="row-even"><td><p>Nemenyi y diagrama CD</p></td>
-<td><p>Diferencia crítica y qué grupos de modelos quedan conectados, es decir, son indistinguibles</p></td>
+<td><p>Diferencia crítica de 4.028 sobre rangos de 1.6 a 7.0. Separa a los dos primeros del bayesiano (p = 0.0015) y del árbol (p = 0.0345), pero deja unidos a XGBoost y Random Forest (p = 1.000)</p></td>
 </tr>
 <tr class="row-odd"><td><p>DeLong entre finalistas</p></td>
-<td><p>Diferencias de AUC con p crudo, p de Holm y p de Benjamini-Hochberg</p></td>
+<td><p>Ninguna de las tres comparaciones es significativa: diferencias de AUC de 0.0001 a 0.0010, con p crudos de 0.722 a 0.941 y 1.000 tras Holm y Benjamini-Hochberg</p></td>
 </tr>
 <tr class="row-even"><td><p>Delta de Cliff</p></td>
-<td><p>Magnitud de cada comparación, reportada también cuando es insignificante</p></td>
+<td><p>Grande contra los modelos del fondo (−0.92 frente al bayesiano, −0.84 frente al árbol) e insignificante entre los dos primeros (−0.12). Con cinco folds por grupo solo toma múltiplos de 0.08, así que es un instrumento grueso</p></td>
 </tr>
 <tr class="row-odd"><td><p>Intervalos BCa</p></td>
-<td><p>IC del 95 % de AUC-ROC y AUC-PR de los finalistas, con el remuestreo hecho por paciente</p></td>
+<td><p>Solapamiento casi total: XGBoost con ADASYN en [0.2114, 0.2499] y Random Forest en [0.2115, 0.2489] de AUC-PR, con mil réplicas remuestreando pacientes completos</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<section id="como-redactar-la-conclusion">
-<h3>11.7.1. Cómo redactar la conclusión<a class="headerlink" href="#como-redactar-la-conclusion" title="Link to this heading">#</a></h3>
-<p>La conclusión honesta depende de lo que muestren las pruebas, y conviene tener preparadas las dos redacciones:</p>
-<ul class="simple">
-<li><p><strong>Si Friedman rechaza y el diagrama CD separa grupos</strong>, se puede afirmar que un subconjunto de modelos supera a otro, y la delta de Cliff dice si esa superioridad es además relevante en magnitud.</p></li>
-<li><p><strong>Si Friedman no rechaza, o el diagrama conecta a todos los modelos</strong>, la conclusión es que con cinco folds el experimento no distingue entre modelos. Eso no invalida el trabajo: significa que en este problema la elección del modelo importa menos que la calidad de los datos disponibles, lo cual es coherente con los tamaños de efecto insignificantes que el capítulo 4 encontró en todos los predictores. Presentar esa conclusión con sus pruebas es más valioso que forzar una diferencia con pruebas sin corrección.</p></li>
-</ul>
+<section id="conclusion-del-capitulo">
+<h3>11.7.1. Conclusión del capítulo<a class="headerlink" href="#conclusion-del-capitulo" title="Link to this heading">#</a></h3>
+<p>Las pruebas dan un resultado mixto que conviene enunciar con precisión, porque es más informativo que cualquiera de las dos lecturas extremas.</p>
+<p><strong>Friedman rechaza la equivalencia global.</strong> El estadístico es 28.54 con 6 grados de libertad y un p-valor de 7.4e-05, y el rechazo no depende de cómo se elija el representante de cada modelo: con una configuración preespecificada el estadístico queda en 28.11 y promediando las dieciséis configuraciones en 28.46, los tres por debajo del mismo umbral. Hay diferencias reales entre los siete modelos.</p>
+<p><strong>Nemenyi no las sitúa donde haría falta.</strong> Con cinco bloques la diferencia crítica es de 4.028 posiciones sobre rangos que van de 1.6 a 7.0, de modo que el diagrama separa tres grupos pero deja unidos a XGBoost y Random Forest, que comparten el primer puesto con el mismo rango medio. La separación que la prueba detecta ocurre contra el clasificador bayesiano (p = 0.0015) y el árbol (p = 0.0345), es decir en el extremo inferior.</p>
+<p><strong>Las comparaciones dirigidas lo confirman sobre el conjunto de prueba.</strong> Ninguna de las tres parejas de finalistas difiere según DeLong: los p-valores crudos van de 0.722 a 0.941 y quedan en 1.000 tras Holm. Los intervalos BCa se solapan casi por completo y la delta de Cliff califica de insignificante (−0.12) la distancia entre los dos primeros, frente a magnitudes grandes contra los modelos del fondo.</p>
+<p><strong>El argumento decisivo, sin embargo, no es ninguna de esas pruebas.</strong> La diferencia entre el primer y el segundo modelo del ranking es de 0.0009 de AUC-PR, mientras que repetir la mejor configuración con tres semillas distintas la mueve en un rango de 0.0041. La ventaja del primero es menos de una cuarta parte del ruido que produce cambiar un número arbitrario, y ninguna prueba estadística puede rescatar una diferencia de ese tamaño.</p>
+<p>La conclusión, entonces: <strong>el experimento distingue un buen modelo de uno malo, pero no ordena el extremo superior.</strong> La elección entre XGBoost y Random Forest debería decidirse por costo computacional, interpretabilidad o facilidad de mantenimiento, no por desempeño. Eso no invalida el trabajo ni es un resultado menor: es coherente con lo que el capítulo 4 encontró, que ningún predictor individual separa las clases, y con el techo que el capítulo 5 estimó, que el modelo final alcanza. En este problema la elección del modelo importa menos que la información disponible en los datos, y presentar esa conclusión con sus pruebas vale más que forzar una diferencia con contrastes sin corregir.</p>
 </section>
 </section>
 </section>
@@ -1431,11 +1609,14 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-problema-de-escala">11.1. El problema de escala</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapa-1-prueba-omnibus-de-friedman">11.2. Etapa 1: prueba ómnibus de Friedman</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapa-2-post-hoc-de-nemenyi-y-diagrama-de-diferencia-critica">11.3. Etapa 2: post-hoc de Nemenyi y diagrama de diferencia crítica</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparaciones-dirigidas-prueba-de-delong">11.4. Comparaciones dirigidas: prueba de DeLong</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparaciones-dirigidas-prueba-de-delong">11.4. Comparaciones dirigidas: prueba de DeLong</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robustez-frente-a-la-regla-de-seleccion-del-representante">11.3.1. Robustez frente a la regla de selección del representante</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-del-efecto">11.5. Tamaño del efecto</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervalos-de-confianza-por-bootstrap-bca">11.6. Intervalos de confianza por bootstrap BCa</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">11.7. Síntesis del capítulo</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#como-redactar-la-conclusion">11.7.1. Cómo redactar la conclusión</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-del-capitulo">11.7.1. Conclusión del capítulo</a></li>
 </ul>
 </li>
 </ul>

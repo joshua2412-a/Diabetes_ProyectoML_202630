@@ -431,7 +431,7 @@ document.write(`
 <section id="grid-search">
 <h3>9.2.1. Grid Search<a class="headerlink" href="#grid-search" title="Link to this heading">#</a></h3>
 <p>Evalúa exhaustivamente el producto cartesiano de los valores declarados. Su ventaja es la reproducibilidad total y la cobertura garantizada de la rejilla; su defecto es que el número de evaluaciones crece de forma exponencial con el número de hiperparámetros, y que reparte el presupuesto por igual entre dimensiones que no son igual de importantes. En un espacio donde un solo hiperparámetro domina el desempeño, la rejilla gasta la mayor parte de las evaluaciones variando parámetros irrelevantes.</p>
-<p>En este proyecto, cuando la rejilla completa excede el presupuesto asignado, se evalúa un subconjunto tomado de la rejilla, lo que se registra explícitamente: no es Grid Search exhaustivo sino Grid Search truncado, y conviene no presentarlo como lo primero.</p>
+<p>El motor del experimento contempla truncar la rejilla cuando excede el presupuesto asignado, y en ese caso lo registra de forma explícita. En este experimento no llegó a ocurrir: el presupuesto de cada modelo se fija en el tamaño completo de su rejilla (doce configuraciones en los modelos económicos, ocho en los costosos), de modo que todas las corridas de Grid Search fueron exhaustivas sobre el espacio declarado.</p>
 </section>
 <section id="random-search">
 <h3>9.2.2. Random Search<a class="headerlink" href="#random-search" title="Link to this heading">#</a></h3>
@@ -853,17 +853,17 @@ document.write(`
 <tr class="row-even"><td><p>k-NN</p></td>
 <td><p>O(1), solo almacena</p></td>
 <td><p>O(n·p) exhaustivo; O(p·log n) con KD-Tree o Ball-Tree en dimensión baja</p></td>
-<td><p>Los árboles espaciales degeneran a búsqueda exhaustiva cuando p crece, fenómeno conocido como maldición de la dimensionalidad. Con p = 129 no aportan</p></td>
+<td><p>Los árboles espaciales degeneran a búsqueda exhaustiva cuando p crece, fenómeno conocido como maldición de la dimensionalidad. Con p = 152 no aportan</p></td>
 </tr>
 <tr class="row-odd"><td><p>Naive Bayes</p></td>
 <td><p>O(n·p)</p></td>
 <td><p>O(p)</p></td>
 <td><p>Admite <code class="docutils literal notranslate"><span class="pre">partial_fit</span></code> para aprendizaje incremental por lotes</p></td>
 </tr>
-<tr class="row-even"><td><p>Logística (SAGA)</p></td>
-<td><p>O(n·p) por época</p></td>
+<tr class="row-even"><td><p>Logística (<code class="docutils literal notranslate"><span class="pre">liblinear</span></code>)</p></td>
+<td><p>O(n·p) por iteración</p></td>
 <td><p>O(p)</p></td>
-<td><p>SAGA opera sobre matrices dispersas y su costo por iteración es lineal, frente a los solvers de segundo orden que requieren O(n·p²)</p></td>
+<td><p>Descenso por coordenadas sobre el problema dual; su costo por iteración es lineal en las entradas no nulas, frente a los solvers de segundo orden que requieren O(n·p²). SAGA sería la alternativa para matrices mucho mayores que esta</p></td>
 </tr>
 <tr class="row-odd"><td><p>Árbol de decisión</p></td>
 <td><p>O(n·p·log n)</p></td>
@@ -1625,7 +1625,7 @@ suficientes sin conservar el conjunto completo.
 </div>
 </div>
 </div>
-<p>La lectura relevante del perfil es la proporción entre el tiempo del solver y el del preprocesamiento. Si la codificación one-hot y el escalado consumen una fracción apreciable, optimizar el modelo no reduce el costo total del experimento, y la palanca correcta es cachear el preprocesamiento entre configuraciones que comparten el mismo preprocesador. El parámetro <code class="docutils literal notranslate"><span class="pre">memory</span></code> de <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> permite hacerlo, con la salvedom de que solo es válido cuando el preprocesamiento no depende de los hiperparámetros que se están variando.</p>
+<p>La lectura relevante del perfil es la proporción entre el tiempo del solver y el del preprocesamiento. Si la codificación one-hot y el escalado consumen una fracción apreciable, optimizar el modelo no reduce el costo total del experimento, y la palanca correcta es cachear el preprocesamiento entre configuraciones que comparten el mismo preprocesador. El parámetro <code class="docutils literal notranslate"><span class="pre">memory</span></code> de <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> permite hacerlo, con la salvedad de que solo es válido cuando el preprocesamiento no depende de los hiperparámetros que se están variando.</p>
 </section>
 </section>
 <section id="sintesis-del-capitulo">
@@ -1633,30 +1633,30 @@ suficientes sin conservar el conjunto completo.
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Dimensión</p></th>
-<th class="head"><p>Qué registrar del capítulo</p></th>
+<th class="head"><p>Hallazgo</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Mejor optimizador</p></td>
-<td><p>Rango medio dentro de cada modelo y número de veces que queda primero</p></td>
+<td><p>Ninguno destaca. Optuna 0.2062, Random 0.2061, Grid 0.2057 y el genético 0.2031 de AUC-PR medio, con el mismo presupuesto de 10.4 evaluaciones: un rango de 0.0031, por debajo del ruido por semilla</p></td>
 </tr>
 <tr class="row-odd"><td><p>Eficiencia</p></td>
-<td><p>AUC-PR alcanzado por minuto de búsqueda y evaluaciones necesarias para llegar al 99 % del mejor valor propio</p></td>
+<td><p>Aquí sí hay diferencia. Grid rinde 0.0217 de AUC-PR por minuto de búsqueda frente a 0.0140 de Optuna, que resulta el más lento por ser secuencial y no paralelizar sus folds internos con la poda activa</p></td>
 </tr>
 <tr class="row-even"><td><p>Convergencia</p></td>
-<td><p>Forma de las curvas anytime; si Optuna y el genético superan a Grid y Random con el mismo presupuesto, y en qué modelos</p></td>
+<td><p>Las curvas <em>anytime</em> se separan poco: la superficie de validación es una meseta y la búsqueda informada no tiene estructura que explotar. El argumento teórico a favor de los métodos bayesianos y evolutivos presupone una premisa que aquí no se cumple</p></td>
 </tr>
 <tr class="row-odd"><td><p>Diversidad genética</p></td>
-<td><p>Si cae a valores bajos en las primeras generaciones, con la limitación de presupuesto declarada</p></td>
+<td><p>Cae en las primeras generaciones, pero con presupuestos de 8 a 12 evaluaciones el algoritmo solo alcanza dos o tres generaciones. La curva informa de si tuvo margen para operar, no de convergencia asintótica, y así queda declarado</p></td>
 </tr>
 <tr class="row-even"><td><p>Complejidad</p></td>
-<td><p>Exponente empírico frente al teórico, con las desviaciones discutidas</p></td>
+<td><p>Los exponentes empíricos siguen a los teóricos: pendiente cercana a cero en el ajuste de k-NN y cercana a uno en su inferencia, próxima a uno en los lineales y el bayesiano, algo por encima en los basados en árboles</p></td>
 </tr>
 <tr class="row-odd"><td><p>Optimización computacional</p></td>
-<td><p>Aceleración de LinearSVC frente a kernel, de <code class="docutils literal notranslate"><span class="pre">hist</span></code> frente a <code class="docutils literal notranslate"><span class="pre">exact</span></code>, y de la paralelización, siempre junto al efecto sobre el AUC-PR</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">liblinear</span></code> acelera el ajuste de la logística 6.7 veces; la matriz densa, 2.4 en el árbol y 3.6 en Random Forest; <code class="docutils literal notranslate"><span class="pre">hist</span></code> con parada temprana, 2.0 en XGBoost; y <code class="docutils literal notranslate"><span class="pre">LinearSVC</span></code> ajusta 10.3 veces más rápido e infiere 63 veces más rápido. Ninguna degrada el AUC-PR y dos lo mejoran</p></td>
 </tr>
 <tr class="row-even"><td><p>Cuello de botella</p></td>
-<td><p>Componente que domina el perfil y la palanca de optimización que sugiere</p></td>
+<td><p>El perfil reparte el costo entre el solver y el preprocesamiento, de modo que la palanca con más margen no es el modelo sino cachear el preprocesamiento entre configuraciones que comparten preprocesador, con el parámetro <code class="docutils literal notranslate"><span class="pre">memory</span></code> de <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></p></td>
 </tr>
 </tbody>
 </table>
