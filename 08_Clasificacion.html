@@ -1910,8 +1910,8 @@ identificador con las de la tabla maestra.</p>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">RUTA_COSTOSOS_FID1</span> <span class="o">=</span> <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"tabla_maestra_costosos_fid1.csv"</span>
 <span class="n">MODELOS_COSTOSOS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"xgboost"</span><span class="p">,</span> <span class="s2">"knn"</span><span class="p">,</span> <span class="s2">"random_forest"</span><span class="p">]</span>
 
@@ -1926,6 +1926,11 @@ identificador con las de la tabla maestra.</p>
 </pre></div>
 </div>
 </div>
+<details class="admonition hide below-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell output</p>
+<p class="expanded admonition-title">Hide code cell output</p>
+</summary>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[omitida] xgboost|ninguno|grid
 [omitida] xgboost|ninguno|random
@@ -5674,6 +5679,7 @@ y:144: UserWarning: `sklearn.utils.parallel.delayed` should be used with `sklear
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <p>La lectura de la tabla siguiente depende del optimizador, y conviene advertirlo antes
 de interpretarla. Grid Search recorre una rejilla fija y Random Search extrae sus
