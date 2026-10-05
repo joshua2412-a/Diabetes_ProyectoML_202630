@@ -1,3 +1,19 @@
+# Entorno del proyecto de readmision hospitalaria en pacientes diabeticos
+#
+# Python 3.12.13  (entorno conda `ml_proyecto`)
+#
+# Reproduccion en una maquina limpia:
+#   conda create -n ml_proyecto python=3.12.13
+#   conda activate ml_proyecto
+#   pip install -r requirements.txt
+#
+# pywinpty lleva marcador de plataforma porque solo existe en Windows; en Linux
+# y macOS pip lo omite y el resto se instala igual.
+#
+# Si se regenera este archivo con `pip freeze`, hay que volver a aplicar dos
+# cosas: guardarlo en UTF-8 (PowerShell escribe UTF-16 por defecto, lo que hace
+# fallar a `pip install -r`) y restaurar el marcador de plataforma de pywinpty.
+
 accessible-pygments==0.0.5
 alabaster==0.7.16
 alembic==1.20.0
