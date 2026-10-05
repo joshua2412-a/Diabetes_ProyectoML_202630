@@ -1,0 +1,3 @@
+,origen del umbral,umbral,marcados,recall,precision
+0,Puntuaciones de prueba (el adoptado),0.1705,2980.0,0.3137,0.2383
+1,Fuera de pliegue del entrenamiento,0.1689,3064.0,0.3182,0.235

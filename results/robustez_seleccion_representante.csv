@@ -1,0 +1,4 @@
+,regla del representante,chi² de Friedman,p-valor,rechaza H0,primero,segundo,distancia de rango,diferencia crítica,¿los separa?
+0,Máximo por modelo (contraste principal),28.5429,0.0001,Sí,xgboost,random_forest,0.0,4.0282,No
+1,Preespecificada: sin balanceo + Grid,28.1143,0.0001,Sí,xgboost,random_forest,0.0,4.0282,No
+2,Promedio de las 16 configuraciones,28.4571,0.0001,Sí,xgboost,random_forest,1.0,4.0282,No

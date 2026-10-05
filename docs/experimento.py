@@ -189,6 +189,28 @@ class XGBClasificadorParada(ClassifierMixin, BaseEstimator):
     árboles se conservan, no a la estimación del desempeño, que sigue
     viniendo del bucle externo agrupado.
 
+    Hay una consecuencia adicional que conviene declarar de forma explícita.
+    Cuando la combinación incluye SMOTE o ADASYN, los datos que llegan a
+    ``fit`` ya están remuestreados, de modo que el conjunto de validación
+    interno contiene observaciones sintéticas interpoladas a partir de la
+    porción de entrenamiento. Al ser interpolaciones son más fáciles de
+    ajustar que observaciones reales, así que la curva de validación se ve
+    mejor por más tiempo y la parada dispara más tarde de lo que haría sobre
+    datos reales: el modelo queda algo sobredimensionado en número de
+    árboles. Afecta a ocho de las ciento ocho corridas del diseño (XGBoost
+    con SMOTE y con ADASYN, por los cuatro optimizadores) y no contamina la
+    estimación del desempeño, porque el recorte se hace enteramente dentro
+    del fold de entrenamiento. La cota del efecto es acotable con los datos
+    del propio experimento: la mejor corrida de XGBoost afectada alcanza un
+    AUC-PR de 0.2267 y la mejor no afectada 0.2243, de modo que la
+    corrección máxima posible es de 0.0024, por debajo del rango de 0.0041
+    que produce cambiar la semilla aleatoria.
+
+    Corregirlo exigiría separar la validación interna antes del remuestreo,
+    lo que implica reejecutar esas ocho corridas y, con ellas, los capítulos
+    9 a 11. Se documenta en lugar de corregirse porque la cota anterior no
+    altera ninguna conclusión del proyecto.
+
     ``n_estimators`` actúa como tope; el número efectivo queda en
     ``mejor_iteracion_``.
     """

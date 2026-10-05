@@ -41,6 +41,25 @@ respaldo_*/
 *~
 *.swp
 
+# ── LaTeX (compilación del paper) ────────────
+# El fuente que se versiona es docs/paper/sn-article.tex y su .bib;
+# todo lo que genera la compilación se regenera y no se sube.
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+*.xdv
+docs/paper/*.pdf
+
 # ── Sistema operativo y editores ─────────────
 .DS_Store
 Thumbs.db

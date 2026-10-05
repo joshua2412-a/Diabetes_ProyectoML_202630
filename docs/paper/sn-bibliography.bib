@@ -1,0 +1,483 @@
+% ============================================================
+%  Dominio del problema: readmisión hospitalaria y el dataset
+% ============================================================
+
+@article{bib_strack,
+  author  = {Strack, Beata and DeShazo, Jonathan P. and Gennings, Chris and
+             Olmo, Juan L. and Ventura, Sebasti{\'a}n and Cios, Krzysztof J. and
+             Clore, John N.},
+  title   = {Impact of {HbA1c} Measurement on Hospital Readmission Rates:
+             Analysis of 70,000 Clinical Database Patient Records},
+  journal = {BioMed Research International},
+  volume  = {2014},
+  pages   = {781670},
+  year    = {2014},
+  doi     = {10.1155/2014/781670}
+}
+
+@misc{bib_uci,
+  author       = {Dua, Dheeru and Graff, Casey},
+  title        = {{UCI} Machine Learning Repository},
+  howpublished = {University of California, Irvine, School of Information and
+                  Computer Sciences},
+  year         = {2019},
+  note         = {\url{https://archive.ics.uci.edu/ml}}
+}
+
+@article{bib_jencks,
+  author  = {Jencks, Stephen F. and Williams, Mark V. and Coleman, Eric A.},
+  title   = {Rehospitalizations among Patients in the {Medicare}
+             Fee-for-Service Program},
+  journal = {New England Journal of Medicine},
+  volume  = {360},
+  number  = {14},
+  pages   = {1418--1428},
+  year    = {2009},
+  doi     = {10.1056/NEJMsa0803563}
+}
+
+@article{bib_kansagara,
+  author  = {Kansagara, Devan and Englander, Honora and Salanitro, Amanda and
+             Kagen, David and Theobald, Cecelia and Freeman, Michele and
+             Kripalani, Sunil},
+  title   = {Risk Prediction Models for Hospital Readmission: A Systematic
+             Review},
+  journal = {JAMA},
+  volume  = {306},
+  number  = {15},
+  pages   = {1688--1698},
+  year    = {2011},
+  doi     = {10.1001/jama.2011.1515}
+}
+
+@article{bib_futoma,
+  author  = {Futoma, Joseph and Morris, Jonathan and Lucas, Joseph},
+  title   = {A Comparison of Models for Predicting Early Hospital Readmissions},
+  journal = {Journal of Biomedical Informatics},
+  volume  = {56},
+  pages   = {229--238},
+  year    = {2015},
+  doi     = {10.1016/j.jbi.2015.05.016}
+}
+
+% ============================================================
+%  Modelos base
+% ============================================================
+
+@article{bib_cover,
+  author  = {Cover, Thomas M. and Hart, Peter E.},
+  title   = {Nearest Neighbor Pattern Classification},
+  journal = {IEEE Transactions on Information Theory},
+  volume  = {13},
+  number  = {1},
+  pages   = {21--27},
+  year    = {1967},
+  doi     = {10.1109/TIT.1967.1053964}
+}
+
+@inproceedings{bib_zhang,
+  author    = {Zhang, Harry},
+  title     = {The Optimality of Naive {B}ayes},
+  booktitle = {Proceedings of the Seventeenth International Florida Artificial
+               Intelligence Research Society Conference (FLAIRS)},
+  pages     = {562--567},
+  year      = {2004}
+}
+
+@article{bib_tibshirani,
+  author  = {Tibshirani, Robert},
+  title   = {Regression Shrinkage and Selection via the Lasso},
+  journal = {Journal of the Royal Statistical Society: Series B},
+  volume  = {58},
+  number  = {1},
+  pages   = {267--288},
+  year    = {1996},
+  doi     = {10.1111/j.2517-6161.1996.tb02080.x}
+}
+
+@book{bib_breiman_cart,
+  author    = {Breiman, Leo and Friedman, Jerome H. and Olshen, Richard A. and
+               Stone, Charles J.},
+  title     = {Classification and Regression Trees},
+  publisher = {Wadsworth and Brooks/Cole},
+  address   = {Monterey, CA},
+  year      = {1984}
+}
+
+@article{bib_breiman_rf,
+  author  = {Breiman, Leo},
+  title   = {Random Forests},
+  journal = {Machine Learning},
+  volume  = {45},
+  number  = {1},
+  pages   = {5--32},
+  year    = {2001},
+  doi     = {10.1023/A:1010933404324}
+}
+
+@inproceedings{bib_chen,
+  author    = {Chen, Tianqi and Guestrin, Carlos},
+  title     = {{XGBoost}: A Scalable Tree Boosting System},
+  booktitle = {Proceedings of the 22nd ACM SIGKDD International Conference on
+               Knowledge Discovery and Data Mining},
+  pages     = {785--794},
+  year      = {2016},
+  doi       = {10.1145/2939672.2939785}
+}
+
+@article{bib_cortes,
+  author  = {Cortes, Corinna and Vapnik, Vladimir},
+  title   = {Support-Vector Networks},
+  journal = {Machine Learning},
+  volume  = {20},
+  number  = {3},
+  pages   = {273--297},
+  year    = {1995},
+  doi     = {10.1007/BF00994018}
+}
+
+% ============================================================
+%  Desbalance de clases
+% ============================================================
+
+@article{bib_smote,
+  author  = {Chawla, Nitesh V. and Bowyer, Kevin W. and Hall, Lawrence O. and
+             Kegelmeyer, W. Philip},
+  title   = {{SMOTE}: Synthetic Minority Over-sampling Technique},
+  journal = {Journal of Artificial Intelligence Research},
+  volume  = {16},
+  pages   = {321--357},
+  year    = {2002},
+  doi     = {10.1613/jair.953}
+}
+
+@inproceedings{bib_adasyn,
+  author    = {He, Haibo and Bai, Yang and Garcia, Edwardo A. and Li, Shutao},
+  title     = {{ADASYN}: Adaptive Synthetic Sampling Approach for Imbalanced
+               Learning},
+  booktitle = {Proceedings of the IEEE International Joint Conference on Neural
+               Networks (IJCNN)},
+  pages     = {1322--1328},
+  year      = {2008},
+  doi       = {10.1109/IJCNN.2008.4633969}
+}
+
+@article{bib_imblearn,
+  author  = {Lema{\^i}tre, Guillaume and Nogueira, Fernando and
+             Aridas, Christos K.},
+  title   = {Imbalanced-learn: A {P}ython Toolbox to Tackle the Curse of
+             Imbalanced Datasets in Machine Learning},
+  journal = {Journal of Machine Learning Research},
+  volume  = {18},
+  number  = {17},
+  pages   = {1--5},
+  year    = {2017}
+}
+
+% ============================================================
+%  Optimización de hiperparámetros
+% ============================================================
+
+@article{bib_bergstra_random,
+  author  = {Bergstra, James and Bengio, Yoshua},
+  title   = {Random Search for Hyper-Parameter Optimization},
+  journal = {Journal of Machine Learning Research},
+  volume  = {13},
+  pages   = {281--305},
+  year    = {2012}
+}
+
+@inproceedings{bib_bergstra_tpe,
+  author    = {Bergstra, James and Bardenet, R{\'e}mi and Bengio, Yoshua and
+               K{\'e}gl, Bal{\'a}zs},
+  title     = {Algorithms for Hyper-Parameter Optimization},
+  booktitle = {Advances in Neural Information Processing Systems 24},
+  pages     = {2546--2554},
+  year      = {2011}
+}
+
+@inproceedings{bib_optuna,
+  author    = {Akiba, Takuya and Sano, Shotaro and Yanase, Toshihiko and
+               Ohta, Takeru and Koyama, Masanori},
+  title     = {{Optuna}: A Next-Generation Hyperparameter Optimization
+               Framework},
+  booktitle = {Proceedings of the 25th ACM SIGKDD International Conference on
+               Knowledge Discovery and Data Mining},
+  pages     = {2623--2631},
+  year      = {2019},
+  doi       = {10.1145/3292500.3330701}
+}
+
+@article{bib_deap,
+  author  = {Fortin, F{\'e}lix-Antoine and De Rainville, Fran{\c{c}}ois-Michel and
+             Gardner, Marc-Andr{\'e} and Parizeau, Marc and Gagn{\'e}, Christian},
+  title   = {{DEAP}: Evolutionary Algorithms Made Easy},
+  journal = {Journal of Machine Learning Research},
+  volume  = {13},
+  pages   = {2171--2175},
+  year    = {2012}
+}
+
+@inproceedings{bib_jamieson,
+  author    = {Jamieson, Kevin and Talwalkar, Ameet},
+  title     = {Non-stochastic Best Arm Identification and Hyperparameter
+               Optimization},
+  booktitle = {Proceedings of the 19th International Conference on Artificial
+               Intelligence and Statistics (AISTATS)},
+  series    = {PMLR},
+  volume    = {51},
+  pages     = {240--248},
+  year      = {2016}
+}
+
+@article{bib_hyperband,
+  author  = {Li, Lisha and Jamieson, Kevin and DeSalvo, Giulia and
+             Rostamizadeh, Afshin and Talwalkar, Ameet},
+  title   = {Hyperband: A Novel Bandit-Based Approach to Hyperparameter
+             Optimization},
+  journal = {Journal of Machine Learning Research},
+  volume  = {18},
+  number  = {185},
+  pages   = {1--52},
+  year    = {2018}
+}
+
+% ============================================================
+%  Validación, sesgo de selección y comparación estadística
+% ============================================================
+
+@article{bib_cawley,
+  author  = {Cawley, Gavin C. and Talbot, Nicola L. C.},
+  title   = {On Over-fitting in Model Selection and Subsequent Selection Bias
+             in Performance Evaluation},
+  journal = {Journal of Machine Learning Research},
+  volume  = {11},
+  pages   = {2079--2107},
+  year    = {2010}
+}
+
+@article{bib_varma,
+  author  = {Varma, Sudhir and Simon, Richard},
+  title   = {Bias in Error Estimation when Using Cross-Validation for Model
+             Selection},
+  journal = {BMC Bioinformatics},
+  volume  = {7},
+  pages   = {91},
+  year    = {2006},
+  doi     = {10.1186/1471-2105-7-91}
+}
+
+@article{bib_friedman,
+  author  = {Friedman, Milton},
+  title   = {The Use of Ranks to Avoid the Assumption of Normality Implicit in
+             the Analysis of Variance},
+  journal = {Journal of the American Statistical Association},
+  volume  = {32},
+  number  = {200},
+  pages   = {675--701},
+  year    = {1937},
+  doi     = {10.1080/01621459.1937.10503522}
+}
+
+@phdthesis{bib_nemenyi,
+  author = {Nemenyi, Peter},
+  title  = {Distribution-free Multiple Comparisons},
+  school = {Princeton University},
+  year   = {1963}
+}
+
+@article{bib_demsar,
+  author  = {Dem{\v{s}}ar, Janez},
+  title   = {Statistical Comparisons of Classifiers over Multiple Data Sets},
+  journal = {Journal of Machine Learning Research},
+  volume  = {7},
+  pages   = {1--30},
+  year    = {2006}
+}
+
+@article{bib_delong,
+  author  = {DeLong, Elizabeth R. and DeLong, David M. and
+             Clarke-Pearson, Daniel L.},
+  title   = {Comparing the Areas under Two or More Correlated Receiver
+             Operating Characteristic Curves: A Nonparametric Approach},
+  journal = {Biometrics},
+  volume  = {44},
+  number  = {3},
+  pages   = {837--845},
+  year    = {1988},
+  doi     = {10.2307/2531595}
+}
+
+@article{bib_holm,
+  author  = {Holm, Sture},
+  title   = {A Simple Sequentially Rejective Multiple Test Procedure},
+  journal = {Scandinavian Journal of Statistics},
+  volume  = {6},
+  number  = {2},
+  pages   = {65--70},
+  year    = {1979}
+}
+
+@article{bib_bh,
+  author  = {Benjamini, Yoav and Hochberg, Yosef},
+  title   = {Controlling the False Discovery Rate: A Practical and Powerful
+             Approach to Multiple Testing},
+  journal = {Journal of the Royal Statistical Society: Series B},
+  volume  = {57},
+  number  = {1},
+  pages   = {289--300},
+  year    = {1995},
+  doi     = {10.1111/j.2517-6161.1995.tb02031.x}
+}
+
+@article{bib_efron,
+  author  = {Efron, Bradley},
+  title   = {Better Bootstrap Confidence Intervals},
+  journal = {Journal of the American Statistical Association},
+  volume  = {82},
+  number  = {397},
+  pages   = {171--185},
+  year    = {1987},
+  doi     = {10.1080/01621459.1987.10478410}
+}
+
+@article{bib_cliff,
+  author  = {Cliff, Norman},
+  title   = {Dominance Statistics: Ordinal Analyses to Answer Ordinal
+             Questions},
+  journal = {Psychological Bulletin},
+  volume  = {114},
+  number  = {3},
+  pages   = {494--509},
+  year    = {1993},
+  doi     = {10.1037/0033-2909.114.3.494}
+}
+
+% ============================================================
+%  Métricas y calibración
+% ============================================================
+
+@article{bib_saito,
+  author  = {Saito, Takaya and Rehmsmeier, Marc},
+  title   = {The Precision-Recall Plot Is More Informative than the {ROC} Plot
+             When Evaluating Binary Classifiers on Imbalanced Datasets},
+  journal = {PLoS ONE},
+  volume  = {10},
+  number  = {3},
+  pages   = {e0118432},
+  year    = {2015},
+  doi     = {10.1371/journal.pone.0118432}
+}
+
+@inproceedings{bib_davis,
+  author    = {Davis, Jesse and Goadrich, Mark},
+  title     = {The Relationship between Precision-Recall and {ROC} Curves},
+  booktitle = {Proceedings of the 23rd International Conference on Machine
+               Learning (ICML)},
+  pages     = {233--240},
+  year      = {2006},
+  doi       = {10.1145/1143844.1143874}
+}
+
+@article{bib_brier,
+  author  = {Brier, Glenn W.},
+  title   = {Verification of Forecasts Expressed in Terms of Probability},
+  journal = {Monthly Weather Review},
+  volume  = {78},
+  number  = {1},
+  pages   = {1--3},
+  year    = {1950},
+  doi     = {10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2}
+}
+
+@incollection{bib_platt,
+  author    = {Platt, John C.},
+  title     = {Probabilistic Outputs for Support Vector Machines and
+               Comparisons to Regularized Likelihood Methods},
+  booktitle = {Advances in Large Margin Classifiers},
+  publisher = {MIT Press},
+  pages     = {61--74},
+  year      = {1999}
+}
+
+@inproceedings{bib_zadrozny,
+  author    = {Zadrozny, Bianca and Elkan, Charles},
+  title     = {Transforming Classifier Scores into Accurate Multiclass
+               Probability Estimates},
+  booktitle = {Proceedings of the 8th ACM SIGKDD International Conference on
+               Knowledge Discovery and Data Mining},
+  pages     = {694--699},
+  year      = {2002},
+  doi       = {10.1145/775047.775151}
+}
+
+@inproceedings{bib_niculescu,
+  author    = {Niculescu-Mizil, Alexandru and Caruana, Rich},
+  title     = {Predicting Good Probabilities with Supervised Learning},
+  booktitle = {Proceedings of the 22nd International Conference on Machine
+               Learning (ICML)},
+  pages     = {625--632},
+  year      = {2005},
+  doi       = {10.1145/1102351.1102430}
+}
+
+% ============================================================
+%  Interpretabilidad
+% ============================================================
+
+@inproceedings{bib_lundberg,
+  author    = {Lundberg, Scott M. and Lee, Su-In},
+  title     = {A Unified Approach to Interpreting Model Predictions},
+  booktitle = {Advances in Neural Information Processing Systems 30},
+  pages     = {4765--4774},
+  year      = {2017}
+}
+
+@inproceedings{bib_ribeiro,
+  author    = {Ribeiro, Marco Tulio and Singh, Sameer and Guestrin, Carlos},
+  title     = {``Why Should {I} Trust You?'': Explaining the Predictions of Any
+               Classifier},
+  booktitle = {Proceedings of the 22nd ACM SIGKDD International Conference on
+               Knowledge Discovery and Data Mining},
+  pages     = {1135--1144},
+  year      = {2016},
+  doi       = {10.1145/2939672.2939778}
+}
+
+% ============================================================
+%  Implementación y cómputo
+% ============================================================
+
+@article{bib_sklearn,
+  author  = {Pedregosa, Fabian and Varoquaux, Ga{\"e}l and Gramfort, Alexandre
+             and Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and
+             Blondel, Mathieu and Prettenhofer, Peter and Weiss, Ron and
+             Dubourg, Vincent and Vanderplas, Jake and Passos, Alexandre and
+             Cournapeau, David and Brucher, Matthieu and Perrot, Matthieu and
+             Duchesnay, {\'E}douard},
+  title   = {Scikit-learn: Machine Learning in {P}ython},
+  journal = {Journal of Machine Learning Research},
+  volume  = {12},
+  pages   = {2825--2830},
+  year    = {2011}
+}
+
+@article{bib_liblinear,
+  author  = {Fan, Rong-En and Chang, Kai-Wei and Hsieh, Cho-Jui and
+             Wang, Xiang-Rui and Lin, Chih-Jen},
+  title   = {{LIBLINEAR}: A Library for Large Linear Classification},
+  journal = {Journal of Machine Learning Research},
+  volume  = {9},
+  pages   = {1871--1874},
+  year    = {2008}
+}
+
+@inproceedings{bib_saga,
+  author    = {Defazio, Aaron and Bach, Francis and
+               Lacoste-Julien, Simon},
+  title     = {{SAGA}: A Fast Incremental Gradient Method with Support for
+               Non-Strongly Convex Composite Objectives},
+  booktitle = {Advances in Neural Information Processing Systems 27},
+  pages     = {1646--1654},
+  year      = {2014}
+}
