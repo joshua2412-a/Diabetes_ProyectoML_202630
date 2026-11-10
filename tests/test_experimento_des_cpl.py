@@ -170,3 +170,12 @@ def test_devuelve_predicciones_alineadas(fold_calculado):
     from sklearn.metrics import average_precision_score
     fila = tabla.set_index("método").loc["DES-CPL"]
     assert average_precision_score(evaluado["y"], pred["DES-CPL"]) == pytest.approx(fila["auc_pr"])
+
+
+def test_variantes_restringe_los_metodos(fold_calculado):
+    *_, seleccion, evaluado, _ = fold_calculado
+    tabla = exd.evaluar_fold(seleccion, evaluado, MODELOS, ks=(3,), taus=(0.01,),
+                             lambdas=(0.0,), podas=(None,), variantes=("DES-CPL",))
+    familias = set(tabla["familia"])
+    assert "Ablación" not in familias and "Versión inicial" not in familias
+    assert "DES-CPL" in set(tabla["método"])

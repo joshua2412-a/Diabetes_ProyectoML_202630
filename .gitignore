@@ -36,6 +36,14 @@ ENV/
 # presupuesto del protocolo.
 results/des_cpl*/*.csv
 !results/des_cpl*/tiempos.csv
+# Lo mismo en los conjuntos adicionales: se versionan evaluacion.csv,
+# configuraciones.json y los tiempos; los datos de UCI se descargan solos.
+results/adicionales/*/seleccion_fold*.csv
+results/adicionales/*/evaluacion_fold*.csv
+data/raw/adicionales/
+# Predicciones intermedias de robustez y semillas (experiments/semillas_robustez.py)
+results/robustez/
+results/semillas/
 mlruns/
 optuna_*.db
 catboost_info/

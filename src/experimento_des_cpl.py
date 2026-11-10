@@ -301,12 +301,16 @@ def _buscar(puntuar, espacio, n_evaluaciones=PRESUPUESTO, semilla=cfg.SEMILLA):
 def evaluar_fold(seleccion, evaluado, modelos=MODELOS, ks=K_REJILLA,
                  taus=TAU_REJILLA, lambdas=LAMBDA_REJILLA, podas=PODA_REJILLA,
                  n_evaluaciones=PRESUPUESTO, semilla=cfg.SEMILLA,
-                 devolver_predicciones=False):
+                 devolver_predicciones=False, variantes=None):
     """Compara todos los métodos en un fold externo.
 
     Devuelve una fila por método con su familia, los hiperparámetros
     elegidos, el AUC-PR en el conjunto de selección con que se eligieron y
     las métricas en el fold de evaluación.
+
+    ``variantes`` restringe las variantes de DES-CPL que se evalúan (por
+    defecto, todas las de :data:`VARIANTES`); los conjuntos adicionales solo
+    usan ``("DES-CPL",)``.
     """
     modelos = list(modelos)
     P_sel = seleccion[[f"oof_{m}" for m in modelos]].to_numpy()
@@ -378,6 +382,8 @@ def evaluar_fold(seleccion, evaluado, modelos=MODELOS, ks=K_REJILLA,
         return espacios[poda]
 
     for nombre, opciones in VARIANTES.items():
+        if variantes is not None and nombre not in variantes:
+            continue
         opciones = dict(opciones)
         taus_v = opciones.pop("taus", taus)
         lambdas_v = opciones.pop("lambdas", lambdas)
