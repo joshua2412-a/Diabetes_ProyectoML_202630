@@ -1,0 +1,222 @@
+/* ========================================================================== *
+   Estilo B+ del dashboard de readmisión.
+   La barra superior y la cabecera de cada página forman una banda continua
+   azul noche, en claro y en oscuro; el contenido debajo sigue el tema.
+   Superficies neutras frías; el color de las dos clases es el único con
+   significado. Los tokens de :root son el único sitio donde se recolorea.
+   ========================================================================== */
+:root {
+  --fondo: #f4f6fa;
+  --tarjeta: #ffffff;
+  --suave: #edf1f7;
+  --tinta: #121c2b;
+  --tinta-suave: #3d4a5d;
+  --tinta-tenue: #647285;            /* 4,9 : 1 sobre blanco */
+  --filete: #dfe6ef;
+  --acento: #1e4e86;
+  --acento-texto: #1e4e86;
+  --clase-0: #2a86b0;
+  --clase-1: #c1443c;
+  --noche: #0b1730;
+  --noche-2: #13294f;
+  --noche-tinta: #eef3f9;
+  --noche-suave: #b9c7de;
+  --noche-acento: #8fb8f2;
+  --noche-filete: rgba(143, 184, 242, 0.16);
+  --lectura: linear-gradient(140deg, #f2f7fd 0%, #e9f0fa 55%, #e4edf9 100%);
+  --radio: 10px;
+  --sombra: 0 1px 2px rgba(15, 30, 51, .06), 0 1px 1px rgba(15, 30, 51, .04);
+  --fuente: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --columna: 1440px;
+}
+
+html { font-size: 15px; }
+html, body, .app-root { background: var(--fondo); color: var(--tinta-suave); font-family: var(--fuente); }
+.app-root { min-height: 100vh; display: flex; flex-direction: column; overflow-x: clip; }
+h1, h2, h3, h4, h5 { color: var(--tinta); font-weight: 600; text-wrap: balance; }
+p, li { text-wrap: pretty; }
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--clase-0) 28%, transparent); }
+.material-symbols-rounded { font-size: 1.2em; vertical-align: -0.2em; }
+
+/* ---- Columna única compartida -------------------------------------------- */
+.barra-contenido, .contenido, .pie-contenido { max-width: var(--columna); margin: 0 auto; padding-left: 32px; padding-right: 32px; }
+.contenido { width: 100%; flex: 1; padding-bottom: 48px; }
+
+/* ---- Barra superior (banda noche, fija) ---------------------------------- */
+.barra { position: sticky; top: 0; z-index: 30; background: var(--noche); border-bottom: 1px solid var(--noche-filete); }
+.barra-contenido { display: flex; align-items: center; gap: 24px; min-height: 60px; }
+.barra-marca { display: flex; flex-direction: column; text-decoration: none; line-height: 1.15; }
+.barra-marca-titulo { color: var(--noche-tinta); font-weight: 700; font-size: 1.05rem; }
+.barra-marca-sub { color: var(--noche-suave); font-size: .78rem; }
+.barra-nav { flex: 1; gap: 4px; }
+.barra-nav .barra-enlace { color: var(--noche-suave); border-radius: 999px; padding: 6px 14px; font-weight: 500; }
+.barra-nav .barra-enlace:hover { color: var(--noche-tinta); background: rgba(255, 255, 255, .06); }
+.barra-nav .barra-enlace.active { color: var(--noche-tinta); background: rgba(143, 184, 242, .16); }
+.barra-acciones { display: flex; gap: 8px; }
+.boton-barra { color: var(--noche-tinta); border: 1px solid var(--noche-filete); border-radius: 999px; padding: 6px 12px;
+  background: transparent; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+.boton-barra:hover { background: rgba(255, 255, 255, .08); color: #fff; }
+.tema-sol { display: none; }
+html[data-tema="oscuro"] .tema-sol { display: inline; }
+html[data-tema="oscuro"] .tema-luna { display: none; }
+
+/* ---- Cabecera de página: continúa la banda a todo el ancho --------------- */
+.banda-pagina {
+  margin: 0 calc(50% - 50vw) 24px; padding: 30px max(32px, calc(50vw - 688px)) 28px;
+  background: linear-gradient(180deg, var(--noche) 0%, var(--noche-2) 100%); color: var(--noche-suave);
+  min-height: 190px;
+}
+.banda-ceja { font-size: .82rem; font-weight: 600; color: var(--noche-acento); margin-bottom: 10px; letter-spacing: .02em; }
+.banda-titulo { color: var(--noche-tinta); font-size: clamp(1.7rem, 3vw, 2.3rem); line-height: 1.12; margin: 0 0 10px; max-width: 780px; }
+.titulo-ligero { font-weight: 400; }
+.banda-texto { max-width: 70ch; margin: 0; color: var(--noche-suave); }
+
+/* ---- Subpestañas ----------------------------------------------------------- */
+.subpestanas { border-bottom: 1px solid var(--filete); margin-bottom: 20px; flex-wrap: nowrap;
+               overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+.subpestanas .nav-link.subpestana { color: var(--tinta-tenue); border: 0; white-space: nowrap; background: none; font-weight: 500; }
+.subpestanas .nav-link.subpestana:hover { color: var(--tinta); }
+.subpestanas .nav-link.subpestana.subpestana-activa,
+.subpestanas .nav-link.subpestana.active { color: var(--tinta); box-shadow: inset 0 -2px 0 var(--acento); background: none; }
+
+/* ---- Tarjetas y piezas ----------------------------------------------------- */
+.tarjeta { background: var(--tarjeta); border: 1px solid var(--filete); border-radius: var(--radio); box-shadow: var(--sombra); height: 100%; }
+.tarjeta.tono-acento, .lectura { background: var(--lectura); }
+.tarjeta.tono-panel { background: var(--suave); }
+.tarjeta-titulo { font-size: 1rem; margin-bottom: 10px; }
+.tarjeta-nota { font-size: .84rem; color: var(--tinta-tenue); margin-top: 6px; }
+.tarjeta-filtros { margin-bottom: 20px; height: auto; }
+.tarjeta-filtros label, .campo label, .columna-fija label { font-size: .82rem; font-weight: 600; color: var(--tinta-suave); margin-bottom: 4px; display: block; }
+.filtros-n { margin-top: 12px; font-size: .86rem; color: var(--tinta-tenue); font-variant-numeric: tabular-nums; }
+.subtitulo-seccion { font-size: 1.1rem; margin: 24px 0 10px; }
+.cuerpo { line-height: 1.6; }
+.lista { padding-left: 1.2rem; line-height: 1.55; }
+.lista li { margin-bottom: 6px; }
+.lectura-lista { padding-left: 1.1rem; margin: 0; }
+.lectura-lista li { margin-bottom: 8px; }
+.etiqueta-mini { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--tinta-tenue); margin: 0 0 4px; font-weight: 600; }
+.nota-fuente { font-size: .8rem; color: var(--tinta-tenue); margin-top: 12px; }
+.enlace-libro { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: var(--acento-texto); font-weight: 600; }
+.tex p { margin: 0; }
+.kpi { position: relative; overflow: hidden; }
+.kpi-franja { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+.kpi-etiqueta { font-size: .82rem; color: var(--tinta-tenue); }
+.kpi-valor { font-size: 1.7rem; font-weight: 600; color: var(--tinta); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.kpi-detalle { font-size: .8rem; color: var(--tinta-tenue); }
+.aviso { border-radius: var(--radio); padding: 14px 18px; margin: 14px 0; background: var(--suave); border-left: 3px solid var(--acento); }
+.aviso-alcance { border-left-color: #9a6b08; }
+.aviso-pendiente { border-left-color: var(--tinta-tenue); border-left-style: dashed; }
+.aviso-titulo { font-weight: 600; color: var(--tinta); margin-bottom: 4px; }
+.tarjeta-pendiente { border-style: dashed; }
+.etiqueta-pendiente { display: inline-flex; align-items: center; font-size: .78rem; font-weight: 600; color: var(--tinta-tenue);
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+.tabla th { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--tinta-tenue); }
+.celda-fuerte { font-weight: 600; color: var(--tinta); }
+.markdown { line-height: 1.6; }
+
+/* ---- Pipeline de la metodología ----------------------------------------- */
+.pipeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; counter-reset: paso; }
+.paso { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: var(--radio); background: var(--tarjeta); border: 1px solid var(--filete); position: relative; }
+.paso-pendiente { border-style: dashed; }
+.paso-icono { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--suave); color: var(--acento-texto); }
+.paso-titulo { font-weight: 600; color: var(--tinta); }
+.paso-texto { font-size: .86rem; color: var(--tinta-tenue); }
+
+/* ---- Predicción ------------------------------------------------------------ */
+.formulario .accordion-button { font-weight: 600; color: var(--tinta); }
+.formulario .rango { font-weight: 400; color: var(--tinta-tenue); }
+.columna-fija { position: sticky; top: 76px; }
+.botones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.boton-principal { background: var(--acento); border: 0; border-radius: 999px; font-weight: 600; padding: 8px 18px; }
+.boton-secundario { background: transparent; color: var(--acento-texto); border: 1px solid var(--filete); border-radius: 999px; font-weight: 600; padding: 8px 18px; }
+.boton-secundario:hover { background: var(--suave); color: var(--acento-texto); }
+.pred-real { margin-top: 12px; font-size: .86rem; color: var(--tinta-suave); }
+button:active:not(:disabled) { transform: scale(.97); }
+
+/* ---- DataTable --------------------------------------------------------- */
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner th,
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td { color: var(--tinta-suave); background: var(--tarjeta); border-color: var(--filete) !important; }
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner th { color: var(--tinta); }
+
+/* ---- Pie ------------------------------------------------------------------- */
+.pie { border-top: 1px solid var(--filete); padding: 18px 0; font-size: .8rem; color: var(--tinta-tenue); }
+.pie-contenido { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+/* ---- Móvil y tableta ------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .columna-fija { position: static; }
+}
+@media (max-width: 767.98px) {
+  .barra-contenido, .contenido, .pie-contenido { padding-left: 16px; padding-right: 16px; }
+  .barra-contenido { flex-wrap: wrap; gap: 8px; padding-top: 8px; padding-bottom: 8px; }
+  .barra-nav { order: 3; width: 100%; flex-wrap: nowrap; overflow-x: auto; }
+  .barra-marca-sub, .solo-escritorio { display: none; }
+  .banda-pagina { padding: 24px 16px; min-height: 0; }
+}
+@media (hover: none) { .tarjeta:hover { transform: none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* ========================================================================== *
+   Modo oscuro: tonos propios, no una inversión del claro.
+   ========================================================================== */
+html[data-tema="oscuro"] {
+  color-scheme: dark;
+  --fondo: #0a111d;
+  --tarjeta: #111a2b;
+  --suave: #172338;
+  --tinta: #e8eef7;
+  --tinta-suave: #c1ccdc;
+  --tinta-tenue: #97a6bd;
+  --filete: #1f2b42;
+  --acento: #3b5fa8;
+  --acento-texto: #8fb8f2;
+  --clase-0: #3f92c4;
+  --clase-1: #d45c49;
+  --lectura: linear-gradient(140deg, #14203a 0%, #172540 100%);
+  --bs-body-bg: #0a111d;
+  --bs-body-color: #c1ccdc;
+  --bs-table-bg: transparent;
+  --bs-table-color: #c1ccdc;
+  --bs-border-color: #1f2b42;
+}
+html.tema-cambiando, html.tema-cambiando * { transition: none !important; }
+html[data-tema="oscuro"] .accordion-item, html[data-tema="oscuro"] .accordion-button,
+html[data-tema="oscuro"] .form-control { background: var(--tarjeta); color: var(--tinta-suave); border-color: var(--filete); }
+/* Controles de Dash 4 (Dropdown, RangeSlider, Input): se tiñen con sus
+   variables --Dash-*, no con clases. El acento interactivo sigue al del
+   proyecto en los dos temas. */
+html[data-tema="claro"] { --Dash-Fill-Interactive-Strong: var(--acento); }
+html[data-tema="oscuro"] {
+  --Dash-Fill-Interactive-Strong: #8fb8f2;
+  --Dash-Fill-Inverse-Strong: var(--tarjeta);
+  --Dash-Text-Strong: var(--tinta);
+  --Dash-Text-Primary: var(--tinta-suave);
+  --Dash-Text-Weak: var(--tinta-tenue);
+  --Dash-Text-Disabled: #6f7d93;
+  --Dash-Stroke-Strong: #3a4a66;
+  --Dash-Stroke-Weak: var(--filete);
+  --Dash-Fill-Primary-Hover: rgba(143, 184, 242, 0.08);
+  --Dash-Fill-Primary-Active: rgba(143, 184, 242, 0.14);
+  --Dash-Fill-Interactive-Weak: rgba(143, 184, 242, 0.06);
+  --Dash-Fill-Disabled: #1a2639;
+}
+html[data-tema="oscuro"] .dash-dropdown, html[data-tema="oscuro"] .dash-dropdown-content,
+html[data-tema="oscuro"] .dash-input-container input { background: var(--tarjeta); color: var(--tinta-suave); border-color: #3a4a66; }
+/* Plotly no se rehace: se cambian sus tintas neutras y los colores de clase
+   por selector de color en línea. Si se añade un color nuevo en tema.py,
+   hay que añadir aquí su regla. */
+html[data-tema="oscuro"] .js-plotly-plot .main-svg { background: transparent !important; }
+html[data-tema="oscuro"] .js-plotly-plot .bg { fill: transparent !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(93, 100, 135)"],
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(59, 66, 102)"],
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(18, 26, 58)"] { fill: #c1ccdc !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(236, 238, 246)"] { stroke: #1f2b42 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(205, 209, 230)"] { stroke: #2e3d5b !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(42, 134, 176)"] { fill: #3f92c4 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(42, 134, 176)"] { stroke: #3f92c4 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(193, 68, 60)"] { fill: #d45c49 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(193, 68, 60)"] { stroke: #d45c49 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(27, 42, 78)"] { fill: #9db5e0 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(27, 42, 78)"] { stroke: #9db5e0 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(255, 255, 255)"] { stroke: #111a2b !important; }

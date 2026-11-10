@@ -1,0 +1,8 @@
+variable,faltantes,porcentaje,decision
+weight,98569,96.85847925633315,Eliminada: el faltante es masivo y no informativo (cap. 2.4)
+medical_specialty,49949,49.08220820313268,Categoría explícita en «especialidad» (cap. 2.6)
+payer_code,40256,39.5574160328597,"Eliminada: identifica al asegurador, no al paciente (cap. 2.4)"
+race,2273,2.2335554114340743,"Categoría explícita, sin imputar: atributo protegido (cap. 2.6.1)"
+diag_3,1423,1.398305917497003,Categoría explícita al agrupar los códigos ICD-9 (cap. 2.5.1)
+diag_2,358,0.3517874339170253,Categoría explícita al agrupar los códigos ICD-9 (cap. 2.5.1)
+diag_1,21,0.020635575732562937,Categoría explícita al agrupar los códigos ICD-9 (cap. 2.5.1)

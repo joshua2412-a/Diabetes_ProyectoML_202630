@@ -8,6 +8,7 @@ documentadas y son auditables.
 """
 
 import json
+import sys
 import time
 import warnings
 from pathlib import Path
@@ -26,6 +27,10 @@ np.random.seed(RANDOM_STATE)
 
 # --- Rutas ----------------------------------------------------------------
 RAIZ = Path.cwd().parent
+# La raíz del repositorio en el path, para que los capítulos nuevos importen
+# los módulos de src/ (from src import ...).
+if str(RAIZ) not in sys.path:
+    sys.path.insert(0, str(RAIZ))
 DATOS_CRUDOS = RAIZ / "data" / "raw"
 DATOS_PROCESADOS = RAIZ / "data" / "processed"
 RESULTADOS = RAIZ / "results"

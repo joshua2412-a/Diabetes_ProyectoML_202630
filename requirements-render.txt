@@ -1,0 +1,26 @@
+# Dependencias de producción del dashboard (Render).
+#
+# Las librerías que reconstruyen los modelos serializados (scikit-learn,
+# xgboost, imbalanced-learn, numpy, pandas, joblib, scipy) van con la MISMA
+# versión exacta que requirements.txt: un pickle de scikit-learn solo se
+# garantiza con la versión que lo creó.
+#
+# dash, dash-bootstrap-components, plotly y gunicorn van con la versión de
+# ml_proyecto. El tablero depende de Dash 4: sus controles se tiñen con las
+# variables --Dash-* de assets/style.css.
+
+dash==4.5.0
+dash-bootstrap-components==2.0.4
+plotly==7.1.0
+gunicorn==26.2.0
+
+joblib==1.6.0
+numpy==2.5.3
+pandas==3.0.5
+pyarrow==25.0.1
+scikit-learn==1.9.1
+scipy==1.18.1
+imbalanced-learn==0.14.2
+sklearn-compat==0.1.6
+xgboost==3.4.1
+threadpoolctl==3.7.0

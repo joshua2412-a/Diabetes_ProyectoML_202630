@@ -1,0 +1,3 @@
+,presupuesto,chi² de Friedman,p-valor,orden por rango medio,p de Nemenyi XGBoost vs. Random Forest
+0,E2 (mejor configuración),28.542857142857144,7.423092467650892e-05,xgboost > random_forest > svm > logistica > knn > arbol > bayes,1.0
+1,Random Search con 60,26.828571428571422,0.000155916194936839,xgboost > random_forest > svm > logistica > knn > arbol > bayes,0.9972342151902647

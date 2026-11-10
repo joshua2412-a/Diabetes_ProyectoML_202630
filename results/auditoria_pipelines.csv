@@ -1,0 +1,28 @@
+modelo,balanceo,etapas,clase,preprocesamiento primero,remuestreo solo al ajustar,remuestreo tras el preprocesador
+knn,ninguno,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+knn,smote,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+knn,adasyn,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+bayes,ninguno,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+bayes,smote,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+bayes,adasyn,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+bayes,class_weight,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+logistica,ninguno,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+logistica,smote,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+logistica,adasyn,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+logistica,class_weight,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+arbol,ninguno,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+arbol,smote,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+arbol,adasyn,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+arbol,class_weight,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+random_forest,ninguno,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+random_forest,smote,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+random_forest,adasyn,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+random_forest,class_weight,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+xgboost,ninguno,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+xgboost,smote,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+xgboost,adasyn,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+xgboost,class_weight,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+svm,ninguno,preprocesamiento > modelo,sklearn.Pipeline,True,True,True
+svm,smote,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+svm,adasyn,preprocesamiento > balanceo > modelo,imblearn.Pipeline,True,True,True
+svm,class_weight,preprocesamiento > modelo,sklearn.Pipeline,True,True,True

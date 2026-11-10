@@ -1,0 +1,500 @@
+{
+  "modelo": "bayes",
+  "balanceo": "ninguno",
+  "optimizador": "random",
+  "semilla": 42,
+  "versiones": {
+    "python": "3.12.13",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1",
+    "imbalanced-learn": "0.14.2",
+    "numpy": "2.5.3",
+    "pandas": "3.0.5",
+    "joblib": "1.6.0"
+  },
+  "hiperparametros": {
+    "modelo__var_smoothing": 0.011763890953837328
+  },
+  "hiperparametros_criterio": "Configuración modal: elegida en 1 de 5 folds externos",
+  "esquema": {
+    "time_in_hospital": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 1.0,
+      "max": 14.0,
+      "mediana": 4.0
+    },
+    "num_lab_procedures": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 1.0,
+      "max": 132.0,
+      "mediana": 44.0
+    },
+    "num_procedures": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 0.0,
+      "max": 6.0,
+      "mediana": 1.0
+    },
+    "num_medications": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 1.0,
+      "max": 81.0,
+      "mediana": 15.0
+    },
+    "number_outpatient": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 0.0,
+      "max": 42.0,
+      "mediana": 0.0
+    },
+    "number_emergency": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 0.0,
+      "max": 76.0,
+      "mediana": 0.0
+    },
+    "number_inpatient": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 0.0,
+      "max": 21.0,
+      "mediana": 0.0
+    },
+    "number_diagnoses": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 1.0,
+      "max": 16.0,
+      "mediana": 8.0
+    },
+    "n_farmacos_activos": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 0.0,
+      "max": 6.0,
+      "mediana": 1.0
+    },
+    "age_ord": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 0.0,
+      "max": 9.0,
+      "mediana": 6.0
+    },
+    "hospitalizacion_previa": {
+      "tipo": "numerica",
+      "entero": true,
+      "min": 0.0,
+      "max": 1.0,
+      "mediana": 0.0
+    },
+    "A1Cresult": {
+      "tipo": "categorica",
+      "niveles": [
+        "No medida",
+        ">8",
+        "Norm",
+        ">7"
+      ],
+      "moda": "No medida"
+    },
+    "acarbose": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "admission_source_id": {
+      "tipo": "categorica",
+      "niveles": [
+        " Emergency Room",
+        " Physician Referral",
+        "NULL",
+        "Transfer from a hospital",
+        " Transfer from another health care facility",
+        "Otro",
+        "Clinic Referral"
+      ],
+      "moda": " Emergency Room"
+    },
+    "admission_type_id": {
+      "tipo": "categorica",
+      "niveles": [
+        "Emergency",
+        "Elective",
+        "Urgent",
+        "NULL",
+        "Not Available",
+        "Otro"
+      ],
+      "moda": "Emergency"
+    },
+    "change": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Ch"
+      ],
+      "moda": "No"
+    },
+    "chlorpropamide": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "diabetesMed": {
+      "tipo": "categorica",
+      "niveles": [
+        "Yes",
+        "No"
+      ],
+      "moda": "Yes"
+    },
+    "diag_1_grupo": {
+      "tipo": "categorica",
+      "niveles": [
+        "Circulatorio",
+        "Respiratorio",
+        "Digestivo",
+        "Diabetes",
+        "Síntomas mal definidos",
+        "Lesiones y envenenamientos",
+        "Musculoesquelético",
+        "Genitourinario",
+        "Neoplasias",
+        "Endocrinas y metabólicas",
+        "Infecciosas",
+        "Piel",
+        "Mentales",
+        "Suplementarios V y E",
+        "Nervioso y sentidos",
+        "Sangre",
+        "Otro"
+      ],
+      "moda": "Circulatorio"
+    },
+    "diag_2_grupo": {
+      "tipo": "categorica",
+      "niveles": [
+        "Circulatorio",
+        "Diabetes",
+        "Respiratorio",
+        "Endocrinas y metabólicas",
+        "Genitourinario",
+        "Síntomas mal definidos",
+        "Digestivo",
+        "Piel",
+        "Sangre",
+        "Mentales",
+        "Suplementarios V y E",
+        "Lesiones y envenenamientos",
+        "Neoplasias",
+        "Infecciosas",
+        "Musculoesquelético",
+        "Nervioso y sentidos",
+        "Otro"
+      ],
+      "moda": "Circulatorio"
+    },
+    "diag_3_grupo": {
+      "tipo": "categorica",
+      "niveles": [
+        "Circulatorio",
+        "Diabetes",
+        "Endocrinas y metabólicas",
+        "Respiratorio",
+        "Genitourinario",
+        "Suplementarios V y E",
+        "Síntomas mal definidos",
+        "Digestivo",
+        "Mentales",
+        "Piel",
+        "Sangre",
+        "Musculoesquelético",
+        "Lesiones y envenenamientos",
+        "Infecciosas",
+        "Neoplasias",
+        "Nervioso y sentidos",
+        "No registrado",
+        "Otro"
+      ],
+      "moda": "Circulatorio"
+    },
+    "discharge_disposition_id": {
+      "tipo": "categorica",
+      "niveles": [
+        "Discharged to home",
+        "Discharged/transferred to SNF",
+        "Discharged/transferred to home with home health service",
+        "NULL",
+        "Otro",
+        "Discharged/transferred to another short term hospital",
+        "Discharged/transferred to another rehab fac including rehab units of a hospital .",
+        "Discharged/transferred to another type of inpatient care institution"
+      ],
+      "moda": "Discharged to home"
+    },
+    "especialidad": {
+      "tipo": "categorica",
+      "niveles": [
+        "No registrada",
+        "InternalMedicine",
+        "Otro",
+        "Emergency/Trauma",
+        "Family/GeneralPractice",
+        "Cardiology",
+        "Surgery-General",
+        "Nephrology",
+        "Orthopedics",
+        "Orthopedics-Reconstructive",
+        "Radiologist"
+      ],
+      "moda": "No registrada"
+    },
+    "gender": {
+      "tipo": "categorica",
+      "niveles": [
+        "Female",
+        "Male"
+      ],
+      "moda": "Female"
+    },
+    "glimepiride": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "glipizide": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "glyburide": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "glyburide-metformin": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "insulin": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Down",
+        "Up"
+      ],
+      "moda": "No"
+    },
+    "max_glu_serum": {
+      "tipo": "categorica",
+      "niveles": [
+        "No medida",
+        "Norm",
+        ">200",
+        ">300"
+      ],
+      "moda": "No medida"
+    },
+    "metformin": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "miglitol": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "nateglinide": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "pioglitazone": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "race": {
+      "tipo": "categorica",
+      "niveles": [
+        "Caucasian",
+        "AfricanAmerican",
+        "No informada",
+        "Hispanic",
+        "Other",
+        "Asian"
+      ],
+      "moda": "Caucasian"
+    },
+    "repaglinide": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "rosiglitazone": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    },
+    "tolazamide": {
+      "tipo": "categorica",
+      "niveles": [
+        "No",
+        "Steady",
+        "Cambio"
+      ],
+      "moda": "No"
+    }
+  },
+  "orden_columnas": [
+    "time_in_hospital",
+    "num_lab_procedures",
+    "num_procedures",
+    "num_medications",
+    "number_outpatient",
+    "number_emergency",
+    "number_inpatient",
+    "number_diagnoses",
+    "n_farmacos_activos",
+    "age_ord",
+    "hospitalizacion_previa",
+    "A1Cresult",
+    "acarbose",
+    "admission_source_id",
+    "admission_type_id",
+    "change",
+    "chlorpropamide",
+    "diabetesMed",
+    "diag_1_grupo",
+    "diag_2_grupo",
+    "diag_3_grupo",
+    "discharge_disposition_id",
+    "especialidad",
+    "gender",
+    "glimepiride",
+    "glipizide",
+    "glyburide",
+    "glyburide-metformin",
+    "insulin",
+    "max_glu_serum",
+    "metformin",
+    "miglitol",
+    "nateglinide",
+    "pioglitazone",
+    "race",
+    "repaglinide",
+    "rosiglitazone",
+    "tolazamide"
+  ],
+  "metricas_bucle_externo": {
+    "auc_pr": {
+      "media": 0.1994571564667641,
+      "sd": 0.0115227156871652
+    },
+    "auc_roc": {
+      "media": 0.647864739173854,
+      "sd": 0.0099527327084134
+    },
+    "brier": {
+      "media": 0.1451390238969223,
+      "sd": 0.0156271874776033
+    },
+    "f1": {
+      "media": 0.2296381588004884,
+      "sd": 0.0254747429961533
+    },
+    "recall": {
+      "media": 0.2327936398497823,
+      "sd": 0.0541656005485711
+    },
+    "precision": {
+      "media": 0.2341366547345408,
+      "sd": 0.0177959005670439
+    }
+  },
+  "metricas_prueba": {
+    "auc_roc": 0.6390201208639462,
+    "auc_pr": 0.19430220571562157,
+    "exactitud": 0.8031408868978709,
+    "precision": 0.21953710006807353,
+    "recall": 0.28501988510826337,
+    "f1": 0.2480292251490098,
+    "exactitud_balanceada": 0.5773826987459063,
+    "brier": 0.16206038452164087
+  },
+  "metricas_prueba_umbral": {
+    "auc_roc": 0.6390201208639462,
+    "auc_pr": 0.19430220571562157,
+    "exactitud": 0.8021341923793225,
+    "precision": 0.22013422818791947,
+    "recall": 0.2898806893504198,
+    "f1": 0.25023841312225825,
+    "exactitud_balanceada": 0.578932619158282,
+    "brier": 0.16206038452164087
+  },
+  "umbral": 0.4913726869027887,
+  "umbral_criterio": "Percentil 85 de las probabilidades en prueba: marca al 15 % de mayor riesgo",
+  "tiempo_ajuste_s": 7.455973499978427,
+  "tiempo_inferencia_ms_por_caso": 0.02778448180307762,
+  "tamano_mb": 0.008063316345214844,
+  "ida_y_vuelta": true,
+  "ida_y_vuelta_diferencia_max": 0.0
+}

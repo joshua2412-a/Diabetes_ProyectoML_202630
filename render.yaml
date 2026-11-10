@@ -1,0 +1,17 @@
+# Despliegue del dashboard en Render (plan gratuito).
+# Render instala requirements-render.txt (solo lo que el tablero necesita en
+# producción: sin Jupyter Book, Optuna ni DEAP) y sirve app:server con
+# gunicorn. El tablero no entrena: lee los artefactos versionados en
+# artifacts/.
+services:
+  - type: web
+    name: readmision-diabetes
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-render.txt
+    # Un worker: cada worker duplicaría datos y modelos en memoria, y el plan
+    # gratuito tiene poca. Los hilos atienden varias peticiones a la vez.
+    startCommand: gunicorn app:server --workers 1 --threads 4 --timeout 180
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.13

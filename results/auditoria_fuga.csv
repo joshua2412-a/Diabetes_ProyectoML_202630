@@ -1,0 +1,5 @@
+,tipo,comprobación,resultado,evidencia
+0,1. Preprocesamiento,Etapas del pipeline en las 27 combinaciones aplicables,Sin fuga,results/auditoria_pipelines.csv; secciones 5.5 y 6.3
+1,2. Variables que codifican la respuesta,"Predictores derivados del desenlace, AUC univariado máximo y altas incompatibles",Sin fuga,"results/ranking_predictores.csv; secciones 2.1, 2.4 y 5.5"
+2,3. Duplicados entre particiones,Pacientes compartidos en prueba y en todas las particiones de la validación anidada,Sin fuga,results/auditoria_particiones.csv; secciones 2.3 y 2.8
+3,4. Mezcla temporal o espacial,Información temporal y de centro disponible; agrupación por paciente,Controlada dentro del paciente; declarada como limitación,Secciones 2.4 y 12.4

@@ -28,12 +28,23 @@ ENV/
 # ── Resultados pesados / modelos ─────────────
 *.pkl
 *.joblib
+# Los modelos del dashboard sí se versionan: Render los lee del repositorio
+!artifacts/*.joblib
+# Predicciones intermedias de DES-CPL (~45 MB por presupuesto): se regeneran
+# con experiments/des_cpl.py. Se versionan las métricas que resumen
+# (results/des_cpl_evaluacion*.csv) y los tiempos, que alimentan la tabla de
+# presupuesto del protocolo.
+results/des_cpl*/*.csv
+!results/des_cpl*/tiempos.csv
 mlruns/
 optuna_*.db
 catboost_info/
 
 # ── Respaldos y temporales ───────────────────
 respaldo_*/
+# Material de trabajo local: guía para el asistente e investigación previa
+CLAUDE.md
+Claude outputs/
 *.tmp
 *.temp
 *.bak

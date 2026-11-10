@@ -1,0 +1,7 @@
+,indicador,valor
+0,Correlación de Spearman entre los dos modelos,0.9055
+1,Encuentros señalados por uno solo (15 % de mayor riesgo),0.0631
+2,AUC-PR de XGBoost,0.2285
+3,AUC-PR de Random Forest,0.2279
+4,AUC-PR del promedio de los dos,0.2324
+5,AUC-PR del oráculo (cota superior),0.3277

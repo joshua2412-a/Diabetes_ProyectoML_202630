@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="437.166" timestamp="2026-11-09T00:02:22.514233-05:00" hostname="vivobook"><testcase classname="tests.test_equivalencia_e2" name="test_src_reproduce_una_corrida_real_de_la_tabla_maestra" time="433.184" /></testsuite></testsuites>

@@ -1,0 +1,14 @@
+,archivo,pruebas,aprobadas,segundos
+0,test_balanceo.py,8,8,1.2
+1,test_des_cpl.py,26,26,0.6
+2,test_equivalencia_e2.py,7,7,488.5
+3,test_espacios.py,10,10,0.0
+4,test_estadistica.py,12,12,0.8
+5,test_experimento_des_cpl.py,9,9,6.1
+6,test_explicacion.py,6,6,0.1
+7,test_formato_tablero.py,3,3,0.0
+8,test_metricas.py,2,2,0.0
+9,test_modelos.py,16,16,3.6
+10,test_optimizacion.py,17,17,24.4
+11,test_preprocesamiento.py,5,5,0.4
+12,test_validacion.py,5,5,2.6

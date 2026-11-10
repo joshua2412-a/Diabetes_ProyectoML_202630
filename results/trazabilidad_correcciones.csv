@@ -1,0 +1,6 @@
+,observación,acción,ubicación,evidencia,estado
+0,Presupuesto de solo 8 a 12 evaluaciones por búsqueda,"Estudio de convergencia: Random Search con 60 configuraciones por fold, prefijos en 8-60, control de reproducción, contraste con Optuna y ranking a 60",Sección 12.2,"results/convergencia_presupuesto.csv, convergencia_reproduccion.csv, convergencia_ranking.csv; figura de la sección 12.2.4",Resuelta
+1,Ausencia de la d de Cohen,"g de Hedges y d_z pareada para los 21 pares de modelos, junto a la delta de Cliff",Sección 12.3,results/tamanos_efecto_cohen.csv,Resuelta
+2,Auditoría de fuga de información (guía del E3),Comprobación automática de los cuatro tipos de fuga,Sección 12.4,"results/auditoria_fuga.csv, auditoria_pipelines.csv, auditoria_particiones.csv",Resuelta
+3,Ausencia de pruebas unitarias,"Pruebas con pytest en tests/, ejecutadas en integración continua; una prueba lenta reproduce una corrida real",Sección 12.5.4,"tests/, results/resumen_pytest.csv, .github/workflows/pruebas.yml",Resuelta
+4,experimento.py concentra demasiada lógica,División en módulos de src/; experimento.py se conserva congelado y se demuestra la equivalencia por código y por resultados,Secciones 12.5.2 y 12.5.3,"src/, results/mapa_modulos_src.csv, equivalencia_refactor.csv",Resuelta

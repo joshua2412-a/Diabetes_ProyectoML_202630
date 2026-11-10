@@ -17,6 +17,16 @@ también describe una rama de regresión (7 modelos × 4 optimizadores); el
 alcance de este proyecto se limitó a clasificación por decisión explícita,
 así que este módulo no la implementa.
 
+Estado: congelado
+-----------------
+Este archivo es el motor que produjo las 112 corridas del Entregable 2 y el
+estudio de convergencia del capítulo 12, y no se modifica: cambiarlo
+rompería la trazabilidad entre el código y esos resultados. Su contenido se
+trasladó sin cambios de lógica a los módulos de ``src/``, que es lo que usan
+los capítulos nuevos; la equivalencia se demuestra en la sección 12.5
+(comparación del código y prueba ``tests/test_equivalencia_e2.py``).
+Cualquier corrección o función nueva va en ``src/``.
+
 Dependencias opcionales
 -----------------------
 xgboost, imbalanced-learn y optuna se importan de forma perezosa. Su

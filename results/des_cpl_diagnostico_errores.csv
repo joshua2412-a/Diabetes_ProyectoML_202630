@@ -1,0 +1,23 @@
+espacio,análisis,tau,valor_seleccion,auc_pr_evaluacion
+perfil,R² de pérdida random_forest − xgboost,,-0.0013902067867788137,
+perfil,R² de pérdida random_forest − logistica,,0.004867825733380515,
+perfil,R² de pérdida random_forest − arbol,,0.004845947883577728,
+perfil,R² de pérdida xgboost − svm,,0.006144370251508713,
+perfil,R² de pérdida logistica − knn,,0.00916274153676433,
+perfil,Competencia aprendida,0.0001,0.21453954792298432,0.24540685045349625
+perfil,Competencia aprendida,0.0003,0.21497005824881082,0.24573385139319753
+perfil,Competencia aprendida,0.001,0.21603906009784868,0.24761972328806212
+perfil,Competencia aprendida,0.003,0.2177850366264465,0.2513119345055098
+perfil,Competencia aprendida,0.01,0.2187628560509927,0.25184328293268476
+perfil,Competencia aprendida,0.03,0.217263816703105,0.2496405492904191
+perfil + variables,R² de pérdida random_forest − xgboost,,0.0007738221178884563,
+perfil + variables,R² de pérdida random_forest − logistica,,0.0006465083401027139,
+perfil + variables,R² de pérdida random_forest − arbol,,0.0021101906681292304,
+perfil + variables,R² de pérdida xgboost − svm,,0.012512824870385075,
+perfil + variables,R² de pérdida logistica − knn,,0.00985458618070989,
+perfil + variables,Competencia aprendida,0.0001,0.20959944454803325,0.2371670754220958
+perfil + variables,Competencia aprendida,0.0003,0.2100305350132825,0.2377684992324333
+perfil + variables,Competencia aprendida,0.001,0.21130543653360281,0.24041391265104706
+perfil + variables,Competencia aprendida,0.003,0.21463256035707834,0.24499209250996218
+perfil + variables,Competencia aprendida,0.01,0.21902944065733962,0.24937979336151622
+perfil + variables,Competencia aprendida,0.03,0.2178145309213161,0.24973338499277517
