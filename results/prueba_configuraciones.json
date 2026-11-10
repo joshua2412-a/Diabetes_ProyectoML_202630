@@ -1,0 +1,53 @@
+{
+  "logistica": {
+    "modelo__C": 0.10145387761357338,
+    "modelo__penalty": "l1"
+  },
+  "bayes": {
+    "modelo__var_smoothing": 0.02009902724690044
+  },
+  "knn": {
+    "modelo__n_neighbors": 267,
+    "modelo__weights": "uniform",
+    "modelo__p": 2
+  },
+  "arbol": {
+    "modelo__max_depth": 16,
+    "modelo__min_samples_leaf": 15,
+    "modelo__criterion": "entropy",
+    "modelo__ccp_alpha": 0.0001369443766500373
+  },
+  "random_forest": {
+    "modelo__n_estimators": 299,
+    "modelo__max_depth": 5,
+    "modelo__min_samples_leaf": 2,
+    "modelo__max_features": 0.42567692428334997
+  },
+  "xgboost": {
+    "modelo__learning_rate": 0.045183153402851416,
+    "modelo__max_depth": 5,
+    "modelo__min_child_weight": 2.4326059918513137,
+    "modelo__subsample": 0.7772923935079175,
+    "modelo__colsample_bytree": 0.5319086280520877
+  },
+  "svm": {
+    "modelo__estimator__C": 0.004691656463312806
+  },
+  "lightgbm": {
+    "modelo__n_estimators": 240,
+    "modelo__learning_rate": 0.016861865121553642,
+    "modelo__num_leaves": 12,
+    "modelo__min_child_samples": 5,
+    "modelo__subsample": 0.5276977045821301,
+    "modelo__colsample_bytree": 0.5873207354679264,
+    "modelo__reg_lambda": 0.0016350375479788264,
+    "modelo__class_weight": null
+  },
+  "catboost": {
+    "modelo__iterations": 343,
+    "modelo__learning_rate": 0.016085381438354866,
+    "modelo__depth": 7,
+    "modelo__l2_leaf_reg": 1.9737341473840961,
+    "modelo__scale_pos_weight": 1.0170967574190222
+  }
+}

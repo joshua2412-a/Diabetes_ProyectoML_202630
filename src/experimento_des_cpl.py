@@ -300,7 +300,8 @@ def _buscar(puntuar, espacio, n_evaluaciones=PRESUPUESTO, semilla=cfg.SEMILLA):
 
 def evaluar_fold(seleccion, evaluado, modelos=MODELOS, ks=K_REJILLA,
                  taus=TAU_REJILLA, lambdas=LAMBDA_REJILLA, podas=PODA_REJILLA,
-                 n_evaluaciones=PRESUPUESTO, semilla=cfg.SEMILLA):
+                 n_evaluaciones=PRESUPUESTO, semilla=cfg.SEMILLA,
+                 devolver_predicciones=False):
     """Compara todos los métodos en un fold externo.
 
     Devuelve una fila por método con su familia, los hiperparámetros
@@ -317,8 +318,11 @@ def evaluar_fold(seleccion, evaluado, modelos=MODELOS, ks=K_REJILLA,
     perfil_sel = perfil(P_sel)
     filas = []
 
+    predicciones = {}
+
     def anotar(metodo, familia, p_ev, puntaje=np.nan, k=np.nan, tau=np.nan,
                lam=np.nan, modelos=""):
+        predicciones[metodo] = np.asarray(p_ev)
         filas.append({"método": metodo, "familia": familia, "k": k, "tau": tau,
                       "lambda": lam, "modelos_combinados": modelos,
                       "auc_pr_seleccion": puntaje, **_metricas(y_ev, p_ev)})
@@ -410,7 +414,15 @@ def evaluar_fold(seleccion, evaluado, modelos=MODELOS, ks=K_REJILLA,
         anotar(nombre, familia, combinar(pesos_softmax(c_ev, tau), e["Pe"]),
                puntaje, k, tau, lam=lam,
                modelos=", ".join(modelos[i] for i in e["activos"]))
-    return pd.DataFrame(filas)
+        if nombre == "DES-CPL" and devolver_predicciones:
+            # Predicción fuera de pliegue del conjunto de selección con la
+            # configuración elegida (cada encuentro sin su paciente): sirve
+            # de conjunto de calibración para la predicción conforme.
+            c_sel = competencias_locales(e["region"], e["vec_sel"], e["Ps"], k,
+                                         encogimiento=lam, **opciones)[0]
+            predicciones["DES-CPL (fuera de pliegue)"] = combinar(pesos_softmax(c_sel, tau), e["Ps"])
+    tabla = pd.DataFrame(filas)
+    return (tabla, predicciones) if devolver_predicciones else tabla
 
 
 def evaluar(carpeta, folds, ruta_resultados, modelos=MODELOS, **kwargs):

@@ -1,0 +1,4 @@
+,prueba,H0,supuestos,estadístico,p crudo,tamaño del efecto,p ajustado (Holm),conclusión
+0,Friedman + Nemenyi (global),Todos los modelos tienen el mismo rango,"Folds pareados; rangos, sin normalidad",χ² = 38.72,1.2959249496362041e-05,rango DES-CPL 2.8 vs xgboost 1.8; CD = 6.06,3.887774848908612e-05,Hay diferencias entre modelos; Nemenyi no separa a DES-CPL del mejor
+1,t de Nadeau-Bengio (unilateral),AUC-PR DES-CPL ≤ xgboost,Diferencias por fold aprox. normales; varianza corregida por solapamiento,t = -0.26 (gl = 4),0.5969323618254974,δ de Cliff = -0.36; g = -0.06,1.0,No rechaza H0
+2,"DeLong (unilateral, prueba)",AUC-ROC DES-CPL ≤ xgboost,Pacientes independientes; AUC correlacionados por las mismas observaciones,z = -0.48,0.6826141833000053,ΔAUC = -0.0003,1.0,No rechaza H0

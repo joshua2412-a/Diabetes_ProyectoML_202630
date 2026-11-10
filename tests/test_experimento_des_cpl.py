@@ -157,3 +157,16 @@ def test_con_presupuesto_elige_la_mejor_interna_entre_las_primeras(mejores, tmp_
     assert tabla.loc["bayes", "auc_pr_por_fold"] == pytest.approx([0.21] * 5)
     with pytest.raises(ValueError):
         exd.con_presupuesto(mejores, tmp_path / "ev.csv", tmp_path / "re.csv", 10)
+
+
+def test_devuelve_predicciones_alineadas(fold_calculado):
+    *_, seleccion, evaluado, _ = fold_calculado
+    tabla, pred = exd.evaluar_fold(seleccion, evaluado, MODELOS, ks=(3,), taus=(0.01,),
+                                   lambdas=(0.0, 1.0), podas=(None,),
+                                   devolver_predicciones=True)
+    assert set(tabla["método"]) <= set(pred)
+    assert len(pred["DES-CPL"]) == len(evaluado)
+    assert len(pred["DES-CPL (fuera de pliegue)"]) == len(seleccion)
+    from sklearn.metrics import average_precision_score
+    fila = tabla.set_index("método").loc["DES-CPL"]
+    assert average_precision_score(evaluado["y"], pred["DES-CPL"]) == pytest.approx(fila["auc_pr"])
