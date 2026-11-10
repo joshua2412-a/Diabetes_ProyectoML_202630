@@ -1,0 +1,41 @@
+,base,cadena,resultados,revisados,relevantes,observación
+0,OpenAlex,C1,0,0,0,Sin resultados
+8,PubMed,C1,0,0,0,Sin resultados
+16,arXiv,C1,0,0,0,Sin resultados
+24,Semantic Scholar,C1,0,0,0,Sin resultados
+32,Google Scholar,C1,29,29,4,"Shi et al. (cirrosis), KPNDS (hepatotoxicidad y readmisión en insuficiencia cardiaca), una tesis con DES como comparador y la selección de pipelines por región de Pote (2026); el resto solo menciona los términos en las referencias"
+1,OpenAlex,C2,0,0,0,Sin resultados
+9,PubMed,C2,0,0,0,Sin resultados
+17,arXiv,C2,0,0,0,Sin resultados
+25,Semantic Scholar,C2,0,0,0,Sin resultados
+33,Google Scholar,C2,5,5,2,Shi et al. y KPNDS; los otros tres son revisiones o estudios de DES que citan trabajos de readmisión
+2,OpenAlex,C3,3,3,2,"Glanz et al. usan DES para diagnóstico de diabetes tipo 2, no readmisión; en el estudio de enfermedad renal la diabetes es solo una variable"
+10,PubMed,C3,0,0,0,Sin resultados en esta base
+18,arXiv,C3,0,0,0,Sin resultados en esta base
+26,Semantic Scholar,C3,4,4,1,"Glanz et al. usan DES para diagnóstico de diabetes tipo 2, no readmisión; en el estudio de enfermedad renal la diabetes es solo una variable"
+34,Google Scholar,C3,466,464,8,"Glanz et al. (diabetes tipo 2, dos versiones) y dos de retinopatía diabética, más los ya hallados en C1; el resto usa Pima como banco de prueba o menciona diabetes en las referencias"
+3,OpenAlex,C4,23,23,1,"Estudios de readmisión en Diabetes 130-US con ensambles estáticos (apilamiento, votación, XGBoost); ninguno con selección dinámica"
+11,PubMed,C4,4,4,0,"Estudios de readmisión en Diabetes 130-US con ensambles estáticos (apilamiento, votación, XGBoost); ninguno con selección dinámica"
+19,arXiv,C4,0,0,0,Sin resultados en esta base
+27,Semantic Scholar,C4,16,16,1,"Estudios de readmisión en Diabetes 130-US con ensambles estáticos (apilamiento, votación, XGBoost); ninguno con selección dinámica"
+35,Google Scholar,C4,1,1,0,"Un estudio de detección de atípicos en Diabetes 130-US que elige dinámicamente parámetros de agrupamiento, no clasificadores"
+4,OpenAlex,C5,0,0,0,Sin resultados en español
+12,PubMed,C5,0,0,0,Sin resultados en español
+20,arXiv,C5,0,0,0,Sin resultados en español
+28,Semantic Scholar,C5,0,0,0,Sin resultados en español
+36,Google Scholar,C5,0,0,0,Sin resultados en español
+5,OpenAlex,C6,2,2,1,Solo Shi et al. (cirrosis); el otro registro es de ortopedia
+13,PubMed,C6,0,0,0,Sin resultados en esta base
+21,arXiv,C6,0,0,0,Sin resultados en esta base
+29,Semantic Scholar,C6,1,1,1,Solo Shi et al. (cirrosis); el otro registro es de ortopedia
+37,Google Scholar,C6,1,1,1,Solo Shi et al. (cirrosis)
+6,OpenAlex,C7,10,10,1,Medidas de competencia del grupo de Kurzynski (familia RRC) en prótesis; ninguno con encogimiento local-global ni Brier estratificado
+14,PubMed,C7,0,0,0,Sin resultados en esta base
+22,arXiv,C7,0,0,0,Sin resultados en esta base
+30,Semantic Scholar,C7,9,9,0,Medidas de competencia del grupo de Kurzynski (familia RRC) en prótesis; ninguno con encogimiento local-global ni Brier estratificado
+38,Google Scholar,C7,12,12,0,"Trabajos de DES que usan el Brier solo como métrica de evaluación, no como competencia; ninguno con encogimiento"
+7,OpenAlex,C8,1,1,1,"Shi et al. (cirrosis), un motor de selección para insuficiencia cardiaca y una mezcla de expertos neuronal; ninguno en diabetes"
+15,PubMed,C8,1,1,1,"Shi et al. (cirrosis), un motor de selección para insuficiencia cardiaca y una mezcla de expertos neuronal; ninguno en diabetes"
+23,arXiv,C8,1,1,1,"Shi et al. (cirrosis), un motor de selección para insuficiencia cardiaca y una mezcla de expertos neuronal; ninguno en diabetes"
+31,Semantic Scholar,C8,2,2,2,"Shi et al. (cirrosis), un motor de selección para insuficiencia cardiaca y una mezcla de expertos neuronal; ninguno en diabetes"
+39,Google Scholar,C8,32,32,4,"Shi et al., KPNDS y la tesis con DES como comparador; selección de pipelines por región en Diabetes Readmission (Pote, 2026); ensamble Rashomon estático evaluado en Diabetes Readmission"

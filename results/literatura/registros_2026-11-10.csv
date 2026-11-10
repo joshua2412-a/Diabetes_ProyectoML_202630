@@ -1,0 +1,78 @@
+fecha,base,cadena,año,título,enlace
+2026-11-10,OpenAlex,C3,2024,DRECQ: Design of an Efficient Model for Enhanced Diabetic Retinopathy Diagnosis Using Ensemble Classifiers and Deep Q Learning Process,https://openalex.org/W7217914907
+2026-11-10,OpenAlex,C3,2022,Development and validation of a type 2 diabetes machine learning classification model for EHR-based diagnostics and clinical decision support,https://doi.org/10.1101/2022.10.08.511400
+2026-11-10,OpenAlex,C3,2022,Exploring Early Prediction of Chronic Kidney Disease Using Machine Learning Algorithms for Small and Imbalanced Datasets,https://doi.org/10.3390/app12073673
+2026-11-10,OpenAlex,C4,2023,A hybrid super ensemble learning model for the early-stage prediction of diabetes risk,https://doi.org/10.1007/s11517-022-02749-z
+2026-11-10,OpenAlex,C4,2021,Chaotic geometric data perturbed and ensemble gradient homomorphic privacy preservation over big healthcare data,https://doi.org/10.1007/s13198-021-01355-w
+2026-11-10,OpenAlex,C4,2025,"Explainable Ensemble Learning Framework with SMOTE, SHAP and LIME for Predicting 30-Day Readmission in Diabetic Patients",https://doi.org/10.29207/resti.v9i5.6977
+2026-11-10,OpenAlex,C4,2025,Stacking Ensemble Approach for Diabetes Patient Readmission Prediction,https://doi.org/10.1109/ecai65401.2025.11095436
+2026-11-10,OpenAlex,C4,2026,Explainable Ensemble XGBoost Model for Diabetic Peripheral Neuropathy Risk Prediction with Android Deployment,https://doi.org/10.58860/jti.v5i3.903
+2026-11-10,OpenAlex,C4,2026,Early-Stage Diabetes Risk Prediction: A Comprehensive Deep Learning Framework with Hybrid Meta Ensemble Learning,https://doi.org/10.1016/j.jer.2026.10.072
+2026-11-10,OpenAlex,C4,2026,Machine Learning-Based Early Prediction of Hospital Readmission Risk Among Chronic Disease Patients Using Electronic Health Records: A Comparative Study of Ensemble Learning Models,https://doi.org/10.37547/medical-fmspj-06-07-01
+2026-11-10,OpenAlex,C4,2023,Diabetes Data Classification using Deep Learning Approach and Feature Selection based on Genetic,https://doi.org/10.21203/rs.3.rs-2855804/v1
+2026-11-10,OpenAlex,C4,2026,Explainability in Forecasting Hospital Readmissions with Machine Learning,https://doi.org/10.1080/00185868.2026.2725165
+2026-11-10,OpenAlex,C4,2026,The Limits of Patient Similarity: Graph Neural Networks versus Tabular Models for 30-Day Hospital Readmission,https://doi.org/10.1109/idap71869.2026.11728008
+2026-11-10,OpenAlex,C4,2026,An Efficient Machine Learning Pipeline for Diabetes Readmission Prediction Using Multi-Phase Feature Optimization,https://doi.org/10.1109/aide69088.2026.11545011
+2026-11-10,OpenAlex,C4,2026,A Machine Learning Approach for Predicting 30-Day Hospital Readmission in Patients with Diabetes,https://doi.org/10.3390/healthcare14091185
+2026-11-10,OpenAlex,C4,2024,Adamic–Adar similarity indexed Wald boost data classification for diabetic disease diagnosis with big data,https://doi.org/10.1016/j.sasc.2024.200175
+2026-11-10,OpenAlex,C4,2026,A Machine Learning Framework for Diabetes Risk Stratification & Complications Prediction,https://doi.org/10.1109/icaiii69475.2026.11521230
+2026-11-10,OpenAlex,C4,2026,Beyond the Black Box: Clinically Engineered Features and a Composite Risk Score for Diabetes Readmission Prediction,https://doi.org/10.5120/ijca07865afa79b1
+2026-11-10,OpenAlex,C4,2015,Multi-label learning in classification of patients’ quasi-identifiers,https://doi.org/10.1007/s13748-015-0064-y
+2026-11-10,OpenAlex,C4,2026,Explainable Federated Learning for Privacy Preserving Type-2 Diabetes Prediction,https://doi.org/10.1145/3797491.3797542
+2026-11-10,OpenAlex,C4,2025,Hybrid Outlier Detection Framework Based on Optimized KMeans and HDBSCAN Using Bat Algorithm and LSTM Autoencoder,https://doi.org/10.19139/soic-2310-5070-2581
+2026-11-10,OpenAlex,C4,2026,Equity Without Utility: An Audit of Whether Synthetic Clinical Data Repairs False-Negative Inequity or Manufactures It,https://doi.org/10.5281/zenodo.22062926
+2026-11-10,OpenAlex,C4,2026,Machine Learning Versus Self-Supervised Transfer Learning for 30-Day Readmission Prediction in Diabetic Patients,https://doi.org/10.21203/rs.3.rs-10560805/v1
+2026-11-10,OpenAlex,C4,2026,Bridging Clinical Prediction and Operational Action: An AI-Driven Framework with a Translation Layer for Enhanced Hospital Information systems,https://doi.org/10.1109/iraset68627.2026.11538491
+2026-11-10,OpenAlex,C4,2025,Predicting 30-Day Hospital Readmission in Patients With Diabetes Using Machine Learning on Electronic Health Record Data,https://doi.org/10.7759/cureus.82437
+2026-11-10,OpenAlex,C4,2026,HARBOUR: A non-neural harmonic learner with exact case-based explanations and calibrated rejection for tabular data,https://doi.org/10.17632/s2rd5s92dh
+2026-11-10,OpenAlex,C6,2025,Predicting Unplanned Readmission Risk in Patients With Cirrhosis: Complication-Aware Dynamic Classifier Selection Approach,https://doi.org/10.2196/63581
+2026-11-10,OpenAlex,C6,2019,Making Omelets without Breaking Eggs,https://doi.org/10.2106/jbjs.19.00740
+2026-11-10,OpenAlex,C7,2018,Several Novel Dynamic Ensemble Selection Algorithms for Time Series Prediction,https://doi.org/10.1007/s11063-018-9957-7
+2026-11-10,OpenAlex,C7,2026,Dynamic ensemble selection via optimization of competence regions,https://doi.org/10.1016/j.asoc.2026.115425
+2026-11-10,OpenAlex,C7,2012,Control System of Bioprosthetic Hand Based on Advanced Analysis of Biosignals and Feedback from the Prosthesis Sensors,https://doi.org/10.1007/978-3-642-31196-3_20
+2026-11-10,OpenAlex,C7,2014,Hetero- and Homogeneous Multiclassifier Systems Based on Competence Measure Applied to the Recognition of Hand Grasping Movements,https://doi.org/10.1007/978-3-319-06596-0_15
+2026-11-10,OpenAlex,C7,2013,On a Two-Level Multiclassifier System with Error Correction Applied to the Control of Bioprosthetic Hand,https://doi.org/10.3233/978-1-61499-289-9-1093
+2026-11-10,OpenAlex,C7,2025,Empirical Analysis of Dynamic Ensembles for Aging-Related Bug Prediction,https://doi.org/10.1007/978-3-032-03072-6_8
+2026-11-10,OpenAlex,C7,2014,Two-Stage Multiclassifier System with Correction of Competence of Base Classifiers Applied to the Control of Bioprosthetic Hand,https://doi.org/10.1109/ictai.2014.98
+2026-11-10,OpenAlex,C7,2014,Control of hand prosthesis using fusion of information from bio-signals and from prosthesis sensors,https://doi.org/10.1109/apcase.2014.6924465
+2026-11-10,OpenAlex,C7,2015,Control of Hand Prosthesis Using Fusion of Biosignals and Information from Prosthesis Sensors,https://doi.org/10.1007/978-3-319-15720-7_19
+2026-11-10,OpenAlex,C7,2024,Improving Alzheimer’s classification using a modified Borda count voting method on dynamic ensemble classifiers,https://doi.org/10.1007/s10115-024-02106-6
+2026-11-10,OpenAlex,C8,2025,Predicting Unplanned Readmission Risk in Patients With Cirrhosis: Complication-Aware Dynamic Classifier Selection Approach,https://doi.org/10.2196/63581
+2026-11-10,PubMed,C4,2026,Explainability in Forecasting Hospital Readmissions with Machine Learning.,https://doi.org/10.1080/00185868.2026.2725165
+2026-11-10,PubMed,C4,2026,A Machine Learning Approach for Predicting 30-Day Hospital Readmission in Patients with Diabetes.,https://doi.org/10.3390/healthcare14091185
+2026-11-10,PubMed,C4,2025,Predicting 30-Day Hospital Readmission in Patients With Diabetes Using Machine Learning on Electronic Health Record Data.,https://doi.org/10.7759/cureus.82437
+2026-11-10,PubMed,C4,2023,A hybrid super ensemble learning model for the early-stage prediction of diabetes risk.,https://doi.org/10.1007/s11517-022-02749-z
+2026-11-10,PubMed,C8,2025,Predicting Unplanned Readmission Risk in Patients With Cirrhosis: Complication-Aware Dynamic Classifier Selection Approach.,https://doi.org/10.2196/63581
+2026-11-10,arXiv,C8,2025,MoE-Health: A Mixture of Experts Framework for Robust Multimodal Healthcare Prediction,http://arxiv.org/abs/2508.21793v1
+2026-11-10,Semantic Scholar,C3,2021,Machine Learning to Early Prediction of Chronic Kidney Disease: Using Imbalanced and Limited Size Data Sets (Preprint),
+2026-11-10,Semantic Scholar,C3,2019,Evaluating the robustness of machine learning algorithm on Human Activity Recognition,
+2026-11-10,Semantic Scholar,C3,2022,Exploring Early Prediction of Chronic Kidney Disease Using Machine Learning Algorithms for Small and Imbalanced Datasets,https://doi.org/10.3390/app12073673
+2026-11-10,Semantic Scholar,C3,2023,Development and validation of a type 2 diabetes machine learning classification model for EHR-based diagnostics and clinical decision support,https://doi.org/10.1101/2022.10.08.511400
+2026-11-10,Semantic Scholar,C4,2025,"Explainable Ensemble Learning Framework with SMOTE, SHAP and LIME for Predicting 30-Day Readmission in Diabetic Patients",https://doi.org/10.29207/resti.v9i5.6977
+2026-11-10,Semantic Scholar,C4,2025,Hybrid Outlier Detection Framework Based on Optimized KMeans and HDBSCAN Using Bat Algorithm and LSTM Autoencoder,https://doi.org/10.19139/soic-2310-5070-2581
+2026-11-10,Semantic Scholar,C4,2026,A Machine Learning Framework for Diabetes Risk Stratification & Complications Prediction,https://doi.org/10.1109/icaiii69475.2026.11521230
+2026-11-10,Semantic Scholar,C4,2026,An Efficient Machine Learning Pipeline for Diabetes Readmission Prediction Using Multi-Phase Feature Optimization,https://doi.org/10.1109/aide69088.2026.11545011
+2026-11-10,Semantic Scholar,C4,2026,Machine Learning-Based Early Prediction of Hospital Readmission Risk Among Chronic Disease Patients Using Electronic Health Records: A Comparative Study of Ensemble Learning Models,https://doi.org/10.37547/medical-fmspj-06-07-01
+2026-11-10,Semantic Scholar,C4,2026,Explainable Federated Learning for Privacy Preserving Type-2 Diabetes Prediction,https://doi.org/10.1145/3797491.3797542
+2026-11-10,Semantic Scholar,C4,2025,Stacking Ensemble Approach for Diabetes Patient Readmission Prediction,https://doi.org/10.1109/ecai65401.2025.11095436
+2026-11-10,Semantic Scholar,C4,2015,Multi-label learning in classification of patients’ quasi-identifiers,https://doi.org/10.1007/s13748-015-0064-y
+2026-11-10,Semantic Scholar,C4,2026,Machine learning prediction of inpatient length of stay in hospitalised patients with diabetes,
+2026-11-10,Semantic Scholar,C4,2025,Predicting 30-Day Hospital Readmission in Patients With Diabetes Using Machine Learning on Electronic Health Record Data,https://doi.org/10.7759/cureus.82437
+2026-11-10,Semantic Scholar,C4,2026,A Machine Learning Approach for Predicting 30-Day Hospital Readmission in Patients with Diabetes,https://doi.org/10.3390/healthcare14091185
+2026-11-10,Semantic Scholar,C4,2026,Explainable Ensemble XGBoost Model for Diabetic Peripheral Neuropathy Risk Prediction with Android Deployment,https://doi.org/10.58860/jti.v5i3.903
+2026-11-10,Semantic Scholar,C4,2023,A hybrid super ensemble learning model for the early-stage prediction of diabetes risk,https://doi.org/10.1007/s11517-022-02749-z
+2026-11-10,Semantic Scholar,C4,2026,Explainability in Forecasting Hospital Readmissions with Machine Learning.,https://doi.org/10.1080/00185868.2026.2725165
+2026-11-10,Semantic Scholar,C4,2026,Bridging Clinical Prediction and Operational Action: An AI-Driven Framework with a Translation Layer for Enhanced Hospital Information systems,https://doi.org/10.1109/iraset68627.2026.11538491
+2026-11-10,Semantic Scholar,C4,2026,The Limits of Patient Similarity: Graph Neural Networks versus Tabular Models for 30-Day Hospital Readmission,https://doi.org/10.1109/idap71869.2026.11728008
+2026-11-10,Semantic Scholar,C6,2024,Predicting Unplanned Readmission Risk in Patients With Cirrhosis: Complication-Aware Dynamic Classifier Selection Approach,https://doi.org/10.2196/63581
+2026-11-10,Semantic Scholar,C7,2018,Several Novel Dynamic Ensemble Selection Algorithms for Time Series Prediction,https://doi.org/10.1007/s11063-018-9957-7
+2026-11-10,Semantic Scholar,C7,2014,Two-Stage Multiclassifier System with Correction of Competence of Base Classifiers Applied to the Control of Bioprosthetic Hand,https://doi.org/10.1109/ictai.2014.98
+2026-11-10,Semantic Scholar,C7,2024,Improving Alzheimer’s classification using a modified Borda count voting method on dynamic ensemble classifiers,https://doi.org/10.1007/s10115-024-02106-6
+2026-11-10,Semantic Scholar,C7,2014,Control of hand prosthesis using fusion of information from bio-signals and from prosthesis sensors,https://doi.org/10.1109/apcase.2014.6924465
+2026-11-10,Semantic Scholar,C7,2014,Hetero- and Homogeneous Multiclassifier Systems Based on Competence Measure Applied to the Recognition of Hand Grasping Movements,https://doi.org/10.1007/978-3-319-06596-0_15
+2026-11-10,Semantic Scholar,C7,2013,Multiclassifier System with Competence and Diversity Measures Applied to the Recognition of Multimodal Biosignals in the Control of Bioprosthetic Hand,
+2026-11-10,Semantic Scholar,C7,2015,Control of Hand Prosthesis Using Fusion of Biosignals and Information from Prosthesis Sensors,https://doi.org/10.1007/978-3-319-15720-7_19
+2026-11-10,Semantic Scholar,C7,2012,Control System of Bioprosthetic Hand Based on Advanced Analysis of Biosignals and Feedback from the Prosthesis Sensors,https://doi.org/10.1007/978-3-642-31196-3_20
+2026-11-10,Semantic Scholar,C7,2013,On a Two-Level Multiclassifier System with Error Correction Applied to the Control of Bioprosthetic Hand,https://doi.org/10.3233/978-1-61499-289-9-1093
+2026-11-10,Semantic Scholar,C8,2015,The development and Validation of a Dynamic Selection Engine to Classify CHF Patient Readmission Risk using Home Telemonitoring Data,
+2026-11-10,Semantic Scholar,C8,2024,Predicting Unplanned Readmission Risk in Patients With Cirrhosis: Complication-Aware Dynamic Classifier Selection Approach,https://doi.org/10.2196/63581
