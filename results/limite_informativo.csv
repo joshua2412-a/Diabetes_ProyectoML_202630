@@ -1,0 +1,36 @@
+fold,variante,auc_pr
+0,Referencia (variables del ETL),0.24150280759930778
+0,+ ICD-9 jerárquico,0.24545053247979098
+0,+ historial del paciente,0.2466941394185635
+0,+ ICD-9 jerárquico + historial,0.2467543686230001
+0,Etiqueta ordinal: tres clases,0.2378049409634835
+0,Etiqueta ordinal: solo «cualquier reingreso»,0.20501376516175487
+0,Etiqueta ordinal: puntaje compartido + corrección,0.2382242262749996
+1,Referencia (variables del ETL),0.2252059057318047
+1,+ ICD-9 jerárquico,0.22321917040092704
+1,+ historial del paciente,0.2190121431958516
+1,+ ICD-9 jerárquico + historial,0.22839866314691598
+1,Etiqueta ordinal: tres clases,0.22181065870173067
+1,Etiqueta ordinal: solo «cualquier reingreso»,0.19613311158241464
+1,Etiqueta ordinal: puntaje compartido + corrección,0.22619453559112387
+2,Referencia (variables del ETL),0.23081224066921863
+2,+ ICD-9 jerárquico,0.23371228233469132
+2,+ historial del paciente,0.2368159663309316
+2,+ ICD-9 jerárquico + historial,0.23992819742830887
+2,Etiqueta ordinal: tres clases,0.23253757102789377
+2,Etiqueta ordinal: solo «cualquier reingreso»,0.19699389930309896
+2,Etiqueta ordinal: puntaje compartido + corrección,0.22989380206197144
+3,Referencia (variables del ETL),0.2359760447306704
+3,+ ICD-9 jerárquico,0.2414881477887451
+3,+ historial del paciente,0.2348502448337241
+3,+ ICD-9 jerárquico + historial,0.24183909477161386
+3,Etiqueta ordinal: tres clases,0.2290249073166511
+3,Etiqueta ordinal: solo «cualquier reingreso»,0.18722927879149354
+3,Etiqueta ordinal: puntaje compartido + corrección,0.2287748240628225
+4,Referencia (variables del ETL),0.21778564633472042
+4,+ ICD-9 jerárquico,0.22169438712152575
+4,+ historial del paciente,0.2234185564733864
+4,+ ICD-9 jerárquico + historial,0.22210242186481632
+4,Etiqueta ordinal: tres clases,0.21990031926094272
+4,Etiqueta ordinal: solo «cualquier reingreso»,0.19337121162090265
+4,Etiqueta ordinal: puntaje compartido + corrección,0.21954017165434675

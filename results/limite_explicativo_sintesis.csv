@@ -1,0 +1,8 @@
+,intento,enfoque,AUC-PR,referencia,diferencia,nota
+0,DES-CPL inicial,Combinar localmente los 7 modelos,0.22441100485396293,0.22895524529023664,-0.0045442404362737165,5 folds vs XGBoost (60)
+1,DES-CPL final,Poda + encogimiento local-global,0.2279243431447174,0.22895524529023664,-0.0010309021455192358,5 folds vs XGBoost (60)
+2,Pesos globales,Combinar globalmente,0.22859294252692783,0.22895524529023664,-0.00036230276330881384,5 folds vs XGBoost (60)
+3,Competencia aprendida,Predecir qué modelo acierta,0.2518432829326847,0.2535,-0.0016567170673152942,fold 0 vs Random Forest (E2)
+4,Extra Trees,Mejor familia de la lista,0.22673429572267598,0.22665842551373044,7.58702089455332e-05,5 folds vs XGBoost (E2)
+5,Etiqueta ordinal: puntaje compartido + corrección,Otra información (estudio aparte),0.2285255119290528,0.23025652901314433,-0.0017310170840915406,5 pliegues vs su referencia
+6,+ ICD-9 jerárquico + historial,Otra información (estudio aparte),0.23580454916693094,0.23025652901314433,0.005548020153786609,5 pliegues vs su referencia

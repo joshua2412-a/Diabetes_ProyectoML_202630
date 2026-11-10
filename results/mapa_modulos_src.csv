@@ -1,14 +1,15 @@
 ,módulo,propósito,líneas,funciones y clases públicas
 0,src/balanceo.py,Estrategias de balanceo y ensamblaje del pipeline completo,89,construir_pipeline
 1,src/configuracion.py,Configuración global compartida por todos los módulos.,65,"CombinacionNoAplicable, requiere"
-2,src/des_cpl.py,DES-CPL: selección dinámica de ensambles por competencia probabilística local.,412,"perfil, pesos_softmax, combinar, competencia_local, RegionCompetencia, competencias_locales, predecir_con_seleccion, DESCPL"
+2,src/des_cpl.py,DES-CPL: selección dinámica de ensambles por competencia probabilística local.,521,"perfil, pesos_softmax, combinar, competencia_local, RegionCompetencia, competencia_global, podar, competencias_locales, predecir_con_seleccion, DESCPL"
 3,src/espacios.py,Espacios de búsqueda de hiperparámetros y presupuesto de cada modelo.,153,"rejilla_hiperparametros, espacio_busqueda, presupuesto_modelo, muestrear, discretizar"
-4,src/estadistica.py,Pruebas estadísticas y tamaños del efecto para comparar modelos.,282,"diferencia_critica, prueba_delong, correccion_holm, bootstrap_bca, delta_cliff, magnitud_cliff, d_cohen, d_pareada, magnitud_cohen, tabla_cohen"
-5,src/experimento_des_cpl.py,Protocolo experimental de DES-CPL (capítulo 13).,332,"mejores_combinaciones, particiones_externas, ejecutar_fold, progreso, evaluar_fold, evaluar"
+4,src/estadistica.py,Pruebas estadísticas y tamaños del efecto para comparar modelos.,311,"diferencia_critica, prueba_delong, correccion_holm, bootstrap_bca, delta_cliff, magnitud_cliff, d_cohen, d_pareada, magnitud_cohen, tabla_cohen, prueba_nadeau_bengio"
+5,src/experimento_des_cpl.py,Protocolo experimental de DES-CPL (capítulo 13).,432,"mejores_combinaciones, con_presupuesto, particiones_externas, ejecutar_fold, progreso, evaluar_fold, evaluar"
 6,src/explicacion.py,"Explicación local con valores de Shapley, sobre las variables originales.",123,"shapley_permutacion, shapley_muestra"
 7,src/metricas.py,Métricas de clasificación para clases desbalanceadas.,49,calcular_metricas
 8,src/modelos.py,"Los siete modelos base, el envoltorio de XGBoost con parada temprana y los",220,"XGBClasificadorParada, crear_modelo"
 9,src/optimizacion.py,"Los cuatro optimizadores de hiperparámetros: Grid Search, Random Search,",303,"puntuar, optimizar"
 10,src/perfilamiento.py,"Medición de tiempo, memoria y desempeño de un ajuste.",63,medir_ajuste
 11,src/preprocesamiento.py,"Preprocesador por bloques de variables, ajustable dentro de cada fold.",96,"construir_preprocesador, nombres_variables"
-12,src/validacion.py,"Validación cruzada anidada y agrupada por paciente, y ejecutor del",328,"Corrida, ejecutar_corrida, ejecutar_experimento"
+12,src/sota.py,"Benchmarks recientes del estado del arte (guía del Entregable 3, sección 6.2).",80,"crear_modelo_sota, construir_pipeline_sota"
+13,src/validacion.py,"Validación cruzada anidada y agrupada por paciente, y ejecutor del",328,"Corrida, ejecutar_corrida, ejecutar_experimento"
