@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "Si usas este código o sus resultados, cítalo así."
+title: "Predicción de readmisión hospitalaria en pacientes diabéticos: DES-CPL, selección dinámica de ensambles por competencia probabilística local"
+authors:
+  - family-names: "Hincapié Llorente"
+    given-names: "Joshua"
+    affiliation: "Universidad del Norte"
+  - family-names: "Cantillo Escorcia"
+    given-names: "Alejandro"
+    affiliation: "Universidad del Norte"
+type: software
+version: "1.0.0"
+date-released: "2026-11-15"
+license: MIT
+repository-code: "https://github.com/joshua2412-a/Diabetes_ProyectoML_202630"
+url: "https://joshua2412-a.github.io/Diabetes_ProyectoML_202630"
+keywords:
+  - "readmisión hospitalaria"
+  - "diabetes"
+  - "selección dinámica de ensambles"
+  - "aprendizaje automático"
+# Al crear el DOI en Zenodo, añadir aquí:
+# identifiers:
+#   - type: doi
+#     value: "10.5281/zenodo.XXXXXXX"
+references:
+  - type: dataset
+    title: "Diabetes 130-US Hospitals for Years 1999-2008"
+    authors:
+      - family-names: "Clore"
+        given-names: "John"
+      - family-names: "Cios"
+        given-names: "Krzysztof"
+      - family-names: "DeShazo"
+        given-names: "Jon"
+      - family-names: "Strack"
+        given-names: "Beata"
+    doi: "10.24432/C5230J"
+    year: 2014
+    publisher:
+      name: "UCI Machine Learning Repository"

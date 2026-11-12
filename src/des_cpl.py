@@ -380,6 +380,16 @@ class DESCPL(ClassifierMixin, BaseEstimator):
         self.n_modelos = n_modelos
         self.semilla = semilla
 
+    def _lista_estimadores(self):
+        """Modelos base que se combinan.
+
+        Es un método, y no un acceso directo al atributo, para que una
+        subclase pueda dar modelos por defecto sin modificar el parámetro
+        ``estimadores`` (scikit-learn exige que ``fit`` no altere los
+        hiperparámetros); lo usa ``src.original_model.ModeloOriginal``.
+        """
+        return self.estimadores
+
     def _particiones(self, X, y, grupos):
         if grupos is None:
             cv = StratifiedKFold(self.n_pliegues, shuffle=True,
@@ -397,7 +407,7 @@ class DESCPL(ClassifierMixin, BaseEstimator):
         de los datos es una etiqueta binaria, tamaños coherentes y
         probabilidades finitas, y lo verifica.
         """
-        if not self.estimadores:
+        if not self._lista_estimadores():
             raise ValueError("estimadores no puede estar vacío")
         if not isinstance(self.k, (int, np.integer)) or self.k < 1:
             raise ValueError(f"k debe ser un entero positivo (recibido {self.k!r})")
@@ -405,7 +415,7 @@ class DESCPL(ClassifierMixin, BaseEstimator):
             raise ValueError(f"tau debe ser >= 0 (recibido {self.tau!r})")
         if not 0.0 <= self.encogimiento <= 1.0:
             raise ValueError("encogimiento debe estar entre 0 y 1")
-        if self.n_modelos is not None and not 1 <= self.n_modelos <= len(self.estimadores):
+        if self.n_modelos is not None and not 1 <= self.n_modelos <= len(self._lista_estimadores()):
             raise ValueError("n_modelos debe estar entre 1 y el número de estimadores")
         if self.competencia not in COMPETENCIAS:
             raise ValueError(f"competencia debe ser una de {COMPETENCIAS}")
@@ -426,14 +436,14 @@ class DESCPL(ClassifierMixin, BaseEstimator):
         """Ajusta modelos de pliegue, conjunto de selección y modelos finales."""
         y = self._validar(X, y, grupos)
         self.classes_ = np.array([0, 1])
-        self.nombres_ = [nombre for nombre, _ in self.estimadores]
-        n, M = len(y), len(self.estimadores)
+        self.nombres_ = [nombre for nombre, _ in self._lista_estimadores()]
+        n, M = len(y), len(self._lista_estimadores())
 
         self.prob_seleccion_ = np.full((n, M), np.nan)
         self.modelos_pliegue_ = []
         for entrenamiento, validacion in self._particiones(X, y, grupos):
             modelos = []
-            for m, (_, estimador) in enumerate(self.estimadores):
+            for m, (_, estimador) in enumerate(self._lista_estimadores()):
                 modelo = clone(estimador).fit(_filas(X, entrenamiento),
                                               y[entrenamiento])
                 self.prob_seleccion_[validacion, m] = (
@@ -449,7 +459,7 @@ class DESCPL(ClassifierMixin, BaseEstimator):
         self.region_ = RegionCompetencia(perfil(self._seleccion()), y,
                                          self.grupos_seleccion_)
         self.modelos_ = [clone(estimador).fit(X, y)
-                         for _, estimador in self.estimadores]
+                         for _, estimador in self._lista_estimadores()]
         return self
 
     def _seleccion(self):
