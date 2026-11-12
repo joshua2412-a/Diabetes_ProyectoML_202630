@@ -37,6 +37,8 @@ colorlog==6.12.0
 comm==0.2.3
 contourpy==1.4.0
 cycler==0.12.1
+dash==4.5.0
+dash-bootstrap-components==2.0.4
 deap==1.4.4
 debugpy==1.8.22
 defusedxml==0.7.1
