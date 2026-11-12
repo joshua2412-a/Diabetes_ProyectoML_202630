@@ -43,6 +43,7 @@ results/adicionales/*/evaluacion_fold*.csv
 data/raw/adicionales/
 # Predicciones intermedias de robustez y semillas (experiments/semillas_robustez.py)
 results/robustez/
+results/adicionales_prueba/
 results/semillas/
 mlruns/
 optuna_*.db

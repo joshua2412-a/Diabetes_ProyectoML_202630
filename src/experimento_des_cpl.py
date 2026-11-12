@@ -33,6 +33,7 @@ siete modelos base. Para cada fold externo hace dos cosas:
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 
@@ -151,6 +152,18 @@ def particiones_externas(X, y, grupos, folds=5, semilla=cfg.SEMILLA):
     return list(externo.split(X, y, groups=grupos))
 
 
+def _escribir(tabla, ruta):
+    """Escribe el CSV en un archivo temporal y lo renombra al terminar.
+
+    Si el equipo se suspende o se apaga a mitad de la escritura, queda el
+    archivo anterior completo (o ninguno) en lugar de uno truncado, que la
+    reanudación no podría usar.
+    """
+    temporal = Path(ruta).with_suffix(".tmp")
+    tabla.to_csv(temporal, index=False, float_format="%.8g")
+    os.replace(temporal, ruta)
+
+
 def _rutas(carpeta, fold):
     carpeta = Path(carpeta)
     return (carpeta / f"seleccion_fold{fold}.csv",
@@ -235,8 +248,8 @@ def ejecutar_fold(fold, particion, X, y, grupos, roles, mejores, carpeta,
         evaluado[f"pliegue_{modelo}"] = de_pliegue
         # Se escribe primero la evaluación: si se interrumpe entre los dos,
         # el modelo se repite (la condición de omisión exige ambos).
-        evaluado.to_csv(ruta_eval, index=False, float_format="%.8g")
-        seleccion.to_csv(ruta_sel, index=False, float_format="%.8g")
+        _escribir(evaluado, ruta_eval)
+        _escribir(seleccion, ruta_sel)
         pd.DataFrame([{"fold": fold, "modelo": modelo,
                        "t_pliegues_s": t_pliegues, "t_final_s": t_final}]).to_csv(
             ruta_tiempos, mode="a", header=not ruta_tiempos.exists(), index=False)

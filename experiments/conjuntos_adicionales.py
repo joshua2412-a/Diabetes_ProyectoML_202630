@@ -9,7 +9,13 @@ Conjuntos (UCI, elegidos antes de conocer el desempeño del modelo):
 2. ``banco``: Bank Marketing (Moro et al., 2014), 45 211 registros, 11,7 %.
    Se elimina ``duration`` (duración de la llamada): solo se conoce después
    de la llamada y determina casi por completo la respuesta, por lo que los
-   autores recomiendan excluirla en un modelo predictivo realista.
+   autores recomiendan excluirla en un modelo predictivo realista. El archivo
+   está ordenado por fecha de la campaña y la prevalencia sube del 4 % en el
+   primer tercio al 25 % en el último; las filas se barajan (semilla 42) antes
+   de partir. Sin ese paso, la calibración interna del SVM (validación de 3
+   pliegues sin barajar) entrenaba y calibraba en épocas distintas y el SVM
+   quedaba por debajo del azar (AUC-PR 0,10; véase el capítulo de evaluación
+   ampliada).
 3. ``cdc``: CDC Diabetes Health Indicators (BRFSS 2015), 253 680 registros,
    13,9 %.
 
@@ -40,7 +46,15 @@ el capítulo de evaluación ampliada):
 
 Uso (raíz del repositorio):
 
-    python experiments/conjuntos_adicionales.py
+    python experiments/conjuntos_adicionales.py            # corrida completa
+    python experiments/conjuntos_adicionales.py --prueba   # ensayo de 5 a 10 minutos
+
+El ensayo descarga los datos y recorre todo el código (los nueve modelos,
+DES-CPL y los dos del estado del arte) con 3 000 registros por conjunto, un
+solo fold y 2 evaluaciones por búsqueda. Escribe en
+``results/adicionales_prueba/`` y no toca los resultados reales: sirve para
+comprobar, antes de dejar la corrida larga, que todas las librerías y
+descargas funcionan.
 
 La primera vez descarga los datos de UCI a ``data/raw/adicionales/``.
 Guarda cada paso al terminarlo en ``results/adicionales/<conjunto>/`` y, si
@@ -50,6 +64,7 @@ autor (4 núcleos), empezando por el conjunto más pequeño.
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 import time
@@ -96,8 +111,15 @@ def descargar(nombre: str) -> Path:
     if not ruta.exists():
         DATOS.mkdir(parents=True, exist_ok=True)
         print(f"Descargando {nombre} de {FUENTES[nombre]}")
-        with urllib.request.urlopen(FUENTES[nombre], timeout=300) as respuesta:
-            ruta.write_bytes(respuesta.read())
+        try:
+            with urllib.request.urlopen(FUENTES[nombre], timeout=300) as respuesta:
+                ruta.write_bytes(respuesta.read())
+        except OSError as error:
+            raise SystemExit(
+                f"\nNo se pudo descargar {nombre} ({error}).\n"
+                f"Descárgalo desde el navegador: {FUENTES[nombre]}\n"
+                f"y guárdalo como {ruta}\n"
+                "Con los tres archivos en esa carpeta, el script ya no intenta descargarlos.") from error
     return ruta
 
 
@@ -124,6 +146,8 @@ def preparar(nombre: str):
                        ordinales=list(pagos.values()), binarias=["sexo_masculino"],
                        categoricas=["educacion", "estado_civil"])
     elif nombre == "banco":
+        # Ordenado por fecha, con la prevalencia creciendo a lo largo del archivo.
+        datos = datos.sample(frac=1, random_state=cfg.SEMILLA).reset_index(drop=True)
         datos = datos.drop(columns="duration")
         for columna in ("default", "housing", "loan"):
             datos[columna] = (datos[columna] == "yes").astype(int)
@@ -151,6 +175,13 @@ def preparar(nombre: str):
 # ---------------------------------------------------------------------------
 # Búsqueda de hiperparámetros
 # ---------------------------------------------------------------------------
+
+# Valores del ensayo (--prueba)
+PRUEBA = {"presupuesto": 2, "tamano_busqueda": 500, "registros": 3_000, "folds": (0,),
+          "evaluaciones_des": 5}
+FOLDS_A_CORRER = tuple(range(FOLDS))
+EVALUACIONES_DES = exd.PRESUPUESTO
+
 
 def buscar(pipeline, espacio, X, y, semilla):
     """Random Search con 60 evaluaciones sobre una submuestra estratificada."""
@@ -203,12 +234,18 @@ def ejecutar_conjunto(nombre, mejores_principal):
     hechos = pd.read_csv(ruta_eval) if ruta_eval.exists() else pd.DataFrame(columns=["fold"])
 
     X, y, roles = preparar(nombre)
+    if RESULTADOS.name.endswith("_prueba") and len(X) > PRUEBA["registros"]:
+        X, _, y, _ = train_test_split(X, y, train_size=PRUEBA["registros"], stratify=y,
+                                      random_state=cfg.SEMILLA)
+        X, y = X.reset_index(drop=True), y.reset_index(drop=True)
     grupos = pd.Series(np.arange(len(X)))          # sin identificador: cada registro es su grupo
     print(f"\n=== {nombre}: {len(X)} registros, {X.shape[1]} variables, "
           f"{y.mean():.1%} de positivos ===")
     particiones = exd.particiones_externas(X, y, grupos, FOLDS, cfg.SEMILLA)
 
     for fold, (entrenamiento, evaluacion) in enumerate(particiones):
+        if fold not in FOLDS_A_CORRER:
+            continue
         if fold in set(hechos["fold"]):
             print(f"[omitido] {nombre}, fold {fold}: ya evaluado")
             continue
@@ -226,7 +263,8 @@ def ejecutar_conjunto(nombre, mejores_principal):
 
         inicio = time.perf_counter()
         tabla = exd.evaluar_fold(seleccion, evaluado, list(mejores.index),
-                                 semilla=cfg.SEMILLA + fold, variantes=("DES-CPL",))
+                                 semilla=cfg.SEMILLA + fold, variantes=("DES-CPL",),
+                                 n_evaluaciones=EVALUACIONES_DES)
         t_des = time.perf_counter() - inicio
 
         filas = []
@@ -249,7 +287,14 @@ def ejecutar_conjunto(nombre, mejores_principal):
     return hechos
 
 
-def main():
+def main(prueba=False):
+    global RESULTADOS, PRESUPUESTO, TAMANO_BUSQUEDA, FOLDS_A_CORRER, EVALUACIONES_DES
+    if prueba:
+        RESULTADOS = RAIZ / "results" / "adicionales_prueba"
+        PRESUPUESTO, TAMANO_BUSQUEDA = PRUEBA["presupuesto"], PRUEBA["tamano_busqueda"]
+        FOLDS_A_CORRER, EVALUACIONES_DES = PRUEBA["folds"], PRUEBA["evaluaciones_des"]
+        print("ENSAYO: 3 000 registros por conjunto, fold 0, 2 evaluaciones por búsqueda")
+    inicio = time.perf_counter()
     cfg.N_JOBS = 4
     maestra = pd.read_csv(RAIZ / "results" / "tabla_maestra_clasificacion.csv")
     mejores = exd.mejores_combinaciones(maestra)[["balanceo"]]
@@ -260,7 +305,13 @@ def main():
     todas.to_csv(RESULTADOS / "evaluacion_conjuntos.csv", index=False)
     print("\nAUC-PR media por conjunto:")
     print(todas.pivot_table(index="método", columns="conjunto", values="auc_pr").round(4))
+    print(f"\nTiempo total: {(time.perf_counter() - inicio) / 60:.1f} min")
+    if prueba:
+        print("El ensayo terminó sin errores: ya puedes lanzar la corrida completa.")
 
 
 if __name__ == "__main__":
-    main()
+    argumentos = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    argumentos.add_argument("--prueba", action="store_true",
+                            help="Ensayo rápido en results/adicionales_prueba/")
+    main(argumentos.parse_args().prueba)
