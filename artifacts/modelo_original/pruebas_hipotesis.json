@@ -1,0 +1,32 @@
+[
+  {
+    "prueba": "Friedman + Nemenyi (global)",
+    "H0": "Todos los modelos tienen el mismo rango",
+    "supuestos": "Folds pareados; rangos, sin normalidad",
+    "estadístico": "χ² = 38.72",
+    "p crudo": "1.30e-05",
+    "tamaño del efecto": "rango DES-CPL 2.8 vs xgboost 1.8; CD = 6.06",
+    "p ajustado (Holm)": "3.89e-05",
+    "conclusión": "Hay diferencias entre modelos; Nemenyi no separa a DES-CPL del mejor"
+  },
+  {
+    "prueba": "t de Nadeau-Bengio (unilateral)",
+    "H0": "AUC-PR DES-CPL ≤ xgboost",
+    "supuestos": "Diferencias por fold aprox. normales; varianza corregida por solapamiento",
+    "estadístico": "t = -0.26 (gl = 4)",
+    "p crudo": "0.597",
+    "tamaño del efecto": "δ de Cliff = -0.36; g = -0.06",
+    "p ajustado (Holm)": "1.000",
+    "conclusión": "No rechaza H0"
+  },
+  {
+    "prueba": "DeLong (unilateral, prueba)",
+    "H0": "AUC-ROC DES-CPL ≤ xgboost",
+    "supuestos": "Pacientes independientes; AUC correlacionados por las mismas observaciones",
+    "estadístico": "z = -0.48",
+    "p crudo": "0.683",
+    "tamaño del efecto": "ΔAUC = -0.0003",
+    "p ajustado (Holm)": "1.000",
+    "conclusión": "No rechaza H0"
+  }
+]

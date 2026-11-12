@@ -1,0 +1,11 @@
+{
+  "evaluaciones": 60,
+  "tiempo_busqueda_s": 486.72132059998694,
+  "n_seleccion": 79473,
+  "modelos": [
+    "arbol",
+    "random_forest",
+    "xgboost",
+    "svm"
+  ]
+}

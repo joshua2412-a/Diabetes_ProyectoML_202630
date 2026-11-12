@@ -45,7 +45,7 @@ CLASES_CORTAS = {0: "No readmitido", 1: "Readmitido"}
 MODELOS = {
     "xgboost": "XGBoost", "random_forest": "Random Forest", "svm": "SVM lineal",
     "logistica": "Regresión logística", "knn": "k-NN", "arbol": "Árbol de decisión",
-    "bayes": "Naive Bayes",
+    "bayes": "Naive Bayes", "des_cpl": "DES-CPL (modelo original)",
 }
 BALANCEOS = {"ninguno": "Sin balanceo", "smote": "SMOTE", "adasyn": "ADASYN",
              "class_weight": "Pesos de clase"}
