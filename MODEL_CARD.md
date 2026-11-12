@@ -47,11 +47,11 @@ DES-CPL (*selección dinámica de ensambles por competencia probabilística loca
 
 ## Riesgos y equidad
 
-- **Atributos sensibles.** `race` y `gender` son predictores. El análisis de equidad del modelo base (capítulo 6) encontró, con el umbral de capacidad, una cobertura de los readmitidos parecida por sexo y entre los grupos raciales más numerosos (relativa de 0.93 a 1.04). En cambio, la cobertura fue mucho menor:
+- **Atributos sensibles.** `race` y `gender` son predictores. El análisis de equidad del modelo base (capítulo 7) encontró, con una capacidad del 10 %, una cobertura de los readmitidos parecida por sexo y entre los grupos raciales más numerosos (relativa de 0.93 a 1.04). En cambio, la cobertura fue mucho menor:
   - en los encuentros sin raza registrada (0.36) y en la categoría «Other» (0.69);
   - en los pacientes de 10 a 20 años (0.27).
 
-  DES-CPL no se ha auditado por subgrupos. Antes de cualquier uso real habría que repetir ese análisis con él y decidir si excluir los atributos sensibles.
+  La sección 16.7 repite ese análisis con DES-CPL y con XGBoost en el conjunto de prueba, con la misma capacidad (`results/equidad_des_cpl_prueba.csv`). Antes de cualquier uso real habría que monitorear la cobertura por grupo y decidir si excluir los atributos sensibles.
 - **Daño por error.** Un falso negativo deja sin seguimiento a un paciente que se readmite. Un falso positivo consume capacidad del equipo. El umbral debe ajustarse a la capacidad real del servicio, no fijarse en 0.5.
 
 ## Usos no recomendados
