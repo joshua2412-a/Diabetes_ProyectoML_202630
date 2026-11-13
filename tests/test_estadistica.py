@@ -111,3 +111,49 @@ def test_nadeau_bengio_calculado_a_mano():
     # La corrección siempre da un t menor que la t pareada ordinaria.
     assert r["t"] < d.mean() / np.sqrt(d.var(ddof=1) / 5)
     assert prueba_nadeau_bengio(-d)["p"] > 0.5
+
+
+def test_mcnemar_cuenta_discordantes_y_es_simetrica():
+    from src.estadistica import prueba_mcnemar_exacta
+    y = np.array([1, 1, 0, 0, 1, 0, 1, 0])
+    a = np.array([1, 1, 0, 0, 0, 0, 1, 1])   # falla en las posiciones 4 y 7
+    b = np.array([1, 0, 0, 1, 1, 0, 1, 0])   # falla en las posiciones 1 y 3
+    r = prueba_mcnemar_exacta(y, a, b)
+    assert (r["n01"], r["n10"]) == (2, 2)
+    assert r["p"] == pytest.approx(1.0)
+    r2 = prueba_mcnemar_exacta(y, b, a)
+    assert (r2["n01"], r2["n10"]) == (2, 2) and r2["p"] == pytest.approx(r["p"])
+
+
+def test_mcnemar_binomial_exacta():
+    from scipy import stats
+    from src.estadistica import prueba_mcnemar_exacta
+    # 10 discordantes, todos a favor de a: p = 2 * 0.5**10.
+    y = np.ones(10, dtype=int)
+    r = prueba_mcnemar_exacta(y, np.ones(10), np.zeros(10))
+    assert (r["n01"], r["n10"]) == (10, 0)
+    assert r["p"] == pytest.approx(2 * 0.5 ** 10)
+    assert r["p"] == pytest.approx(stats.binomtest(0, 10, 0.5).pvalue)
+    # Sin discordantes no hay evidencia.
+    assert prueba_mcnemar_exacta(y, np.ones(10), np.ones(10))["p"] == 1.0
+
+
+def test_t_bayesiana_suma_uno_y_coincide_con_nadeau_bengio():
+    from scipy import stats
+    from src.estadistica import prueba_nadeau_bengio, t_bayesiana_correlacionada
+    d = np.array([0.004, -0.001, 0.006, 0.002, 0.003])
+    r = t_bayesiana_correlacionada(d, rope=0.0)
+    assert r["mejor"] + r["equivalente"] + r["peor"] == pytest.approx(1.0)
+    # Con ROPE nula, P(peor) es el p unilateral de Nadeau-Bengio.
+    assert r["peor"] == pytest.approx(prueba_nadeau_bengio(d)["p"])
+    # Un ROPE más ancho solo puede aumentar la probabilidad de equivalencia.
+    assert (t_bayesiana_correlacionada(d, rope=0.01)["equivalente"]
+            > t_bayesiana_correlacionada(d, rope=0.001)["equivalente"])
+
+
+def test_t_bayesiana_detecta_equivalencia_y_superioridad():
+    from src.estadistica import t_bayesiana_correlacionada
+    casi_cero = np.array([0.0005, -0.0004, 0.0003, -0.0002, 0.0001])
+    assert t_bayesiana_correlacionada(casi_cero, rope=0.005)["equivalente"] > 0.99
+    grande = np.array([0.030, 0.028, 0.031, 0.029, 0.032])
+    assert t_bayesiana_correlacionada(grande, rope=0.005)["mejor"] > 0.99

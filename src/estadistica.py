@@ -309,3 +309,87 @@ def prueba_nadeau_bengio(diferencias, razon_prueba_entrenamiento=0.25,
     else:
         p = float(2 * stats.t.sf(abs(t), k - 1))
     return {"t": float(t), "gl": k - 1, "p": p}
+
+
+# ==========================================================================
+# Pruebas complementarias (añadidas después del protocolo pre-registrado)
+# ==========================================================================
+
+def prueba_mcnemar_exacta(y_real, decision_a, decision_b):
+    """Prueba exacta de McNemar (1947) sobre las decisiones de dos clasificadores.
+
+    Solo cuentan los encuentros *discordantes*: los que un modelo clasifica
+    bien y el otro mal. Si los dos modelos fueran igual de buenos, cada
+    discordante caería de un lado o del otro con probabilidad 1/2, así que
+    el número ``n01`` sigue una binomial(n01 + n10, 1/2). La versión exacta
+    usa esa binomial en lugar de la aproximación chi-cuadrado, que falla
+    con pocos discordantes.
+
+    Parameters
+    ----------
+    y_real : array (n,)
+        Etiquetas 0/1.
+    decision_a, decision_b : array (n,)
+        Clases predichas (0/1 o booleanas) por cada modelo sobre los mismos
+        encuentros.
+
+    Returns
+    -------
+    dict
+        ``n01`` (a acierta y b falla), ``n10`` (a falla y b acierta) y ``p``
+        bilateral.
+    """
+    y = np.asarray(y_real).astype(bool)
+    acierta_a = np.asarray(decision_a).astype(bool) == y
+    acierta_b = np.asarray(decision_b).astype(bool) == y
+    n01 = int((acierta_a & ~acierta_b).sum())
+    n10 = int((~acierta_a & acierta_b).sum())
+    if n01 + n10 == 0:
+        return {"n01": 0, "n10": 0, "p": 1.0}
+    p = stats.binomtest(min(n01, n10), n01 + n10, 0.5).pvalue
+    return {"n01": n01, "n10": n10, "p": float(p)}
+
+
+def t_bayesiana_correlacionada(diferencias, rope=0.005,
+                               razon_prueba_entrenamiento=0.25):
+    """Prueba t bayesiana correlacionada (Corani y Benavoli, 2015).
+
+    Es la versión bayesiana de la t corregida de Nadeau y Bengio: con una
+    priori no informativa, la posterior de la diferencia media es una t de
+    Student con ``k - 1`` grados de libertad, centrada en la media de las
+    diferencias por fold y con escala ``sqrt((1/k + rho/(1-rho)) * s^2)``,
+    donde ``rho/(1-rho)`` corrige la correlación entre folds que comparten
+    entrenamiento (con 5 folds, ``rho = 1/5`` y ``rho/(1-rho) = 1/4``).
+
+    En lugar de un valor p devuelve tres probabilidades posteriores, usando
+    una región de equivalencia práctica (ROPE) de ``±rope``: que el primer
+    modelo sea mejor (diferencia > rope), equivalente (|diferencia| <= rope)
+    o peor (diferencia < -rope).
+
+    Parameters
+    ----------
+    diferencias : array (k,)
+        Métrica del modelo A menos la del modelo B en cada fold.
+    rope : float
+        Mitad del ancho de la región de equivalencia práctica.
+    razon_prueba_entrenamiento : float
+        ``rho / (1 - rho)``; 1/4 con cinco folds.
+
+    Returns
+    -------
+    dict
+        ``mejor``, ``equivalente``, ``peor``, y la media y escala de la
+        posterior.
+    """
+    d = np.asarray(diferencias, dtype=float)
+    k = len(d)
+    escala = np.sqrt((1 / k + razon_prueba_entrenamiento) * d.var(ddof=1))
+    if escala == 0:
+        media = d.mean()
+        return {"mejor": float(media > rope), "equivalente": float(abs(media) <= rope),
+                "peor": float(media < -rope), "media": float(media), "escala": 0.0}
+    posterior = stats.t(k - 1, loc=d.mean(), scale=escala)
+    mejor = float(posterior.sf(rope))
+    peor = float(posterior.cdf(-rope))
+    return {"mejor": mejor, "equivalente": 1.0 - mejor - peor, "peor": peor,
+            "media": float(d.mean()), "escala": float(escala)}
