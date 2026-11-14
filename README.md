@@ -1,5 +1,7 @@
 # Predicción de readmisión hospitalaria en pacientes diabéticos
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24211425.svg)](https://doi.org/10.5281/zenodo.24211425)
+
 Proyecto final del curso de Machine Learning (Universidad del Norte, 2026) de **Joshua Hincapié Llorente** y **Alejandro Cantillo Escorcia**.
 
 Con los datos de *Diabetes 130-US Hospitals* (UCI, 1999-2008), el proyecto predice qué pacientes vuelven al hospital antes de 30 días del alta. Hace tres cosas:
@@ -11,6 +13,7 @@ Con los datos de *Diabetes 130-US Hospitals* (UCI, 1999-2008), el proyecto predi
 |---|---|
 | Libro (Jupyter Book) | `docs/`, publicado en https://joshua2412-a.github.io/Diabetes_ProyectoML_202630 |
 | Dashboard (Dash) | `app.py`, `pages/`, `src/tablero/`; desplegado en Render: *URL pendiente del despliegue* |
+| Archivo versionado (Zenodo) | DOI [10.5281/zenodo.24211425](https://doi.org/10.5281/zenodo.24211425) |
 | Modelo original | `src/original_model.py` (interfaz) y `src/des_cpl.py` (implementación) |
 | Protocolo pre-registrado | `experiments/protocolo.md`, etiqueta de Git `protocolo-v1` |
 | Experimentos | `experiments/` (scripts) y `results/` (resultados en CSV) |
