@@ -12,9 +12,6 @@ Uso (raíz del repositorio): python docs/paper/figuras/generar_resultados_paper.
 """
 from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[3]
-import sys
-sys.path.insert(0, str(RAIZ))
-from src.estadistica import prueba_mcnemar_exacta, t_bayesiana_correlacionada
 
 # ---------- 1. Pruebas y métricas ----------
 import numpy as np, pandas as pd
@@ -44,9 +41,9 @@ ROPE=0.005
 filas=[]
 for b in BENCH:
     d=pf["DES-CPL"]-pf[b]; t,p,s=nb(d); tc=stats.t.ppf(0.975,4)
-    bay=t_bayesiana_correlacionada(d,rope=ROPE)   # misma función que el capítulo 16
+    post=stats.t(4,loc=d.mean(),scale=s)
     filas.append(dict(benchmark=b,dif=d.mean(),ic_inf=d.mean()-tc*s,ic_sup=d.mean()+tc*s,t=t,p=p,
-        P_mejor=bay["mejor"],P_rope=bay["equivalente"],P_peor=bay["peor"],cliff=cliff(pf["DES-CPL"],pf[b]),gana=int((d>0).sum())))
+        P_mejor=post.sf(ROPE),P_rope=post.cdf(ROPE)-post.cdf(-ROPE),P_peor=post.cdf(-ROPE),cliff=cliff(pf["DES-CPL"],pf[b]),gana=int((d>0).sum())))
 sig=pd.DataFrame(filas); sig["p_holm"]=holm(sig.p)
 # test
 pr=pd.read_csv(R+"prueba_predicciones.csv"); y=pr["y"].values
@@ -60,8 +57,10 @@ te=pd.DataFrame(filas2).set_index("método"); print("== prueba umbral 15%"); pri
 mc=[]
 yd=umbral(pr["DES-CPL"].values)
 for b in BENCH:
-    r=prueba_mcnemar_exacta(y,yd,umbral(pr[b].values))   # misma función que el capítulo 16
-    mc.append(dict(benchmark=b,des_bien_b_mal=r["n01"],des_mal_b_bien=r["n10"],p_mcnemar=r["p"]))
+    yb=umbral(pr[b].values); a=(yd==y); c=(yb==y)
+    n01=int((a&~c).sum()); n10=int((~a&c).sum())
+    pval=stats.binomtest(min(n01,n10),n01+n10,0.5).pvalue
+    mc.append(dict(benchmark=b,des_bien_b_mal=n01,des_mal_b_bien=n10,p_mcnemar=pval))
 mc=pd.DataFrame(mc); mc["p_mcnemar_holm"]=holm(mc.p_mcnemar)
 dl=pd.read_csv(R+"../results/prueba_delong.csv") if False else None
 sig=sig.merge(mc,on="benchmark"); print("== significancia"); print(sig.round(4))
@@ -112,7 +111,7 @@ for f in ["lmsans10-regular.otf","lmsans10-bold.otf"]:
     except Exception: pass
 plt.rcParams.update({"font.family":"sans-serif","font.sans-serif":["Latin Modern Sans","DejaVu Sans"],
  "font.size":12,"axes.labelsize":13,"xtick.labelsize":12,"ytick.labelsize":12,"legend.fontsize":12,
- "lines.linewidth":2.0,"axes.grid":True,"grid.alpha":0.3,"pdf.fonttype":42,"savefig.bbox":"tight",
+ "lines.linewidth":2.0,"axes.grid":True,"grid.alpha":0.3,"pdf.fonttype":42,"figure.constrained_layout.use":True,
  "mathtext.fontset":"stixsans","legend.frameon":False,"axes.spines.top":False,"axes.spines.right":False})
 R=RESULTADOS; O=FIGURAS
 DES="#C1443C"; XGB="#2A86B0"; GRIS="#8a8a8a"; NAVY="#1B2A4E"; W=6.3
@@ -166,7 +165,7 @@ for i in range(2):
 a[3].set_xticks([0,1],["Not flagged","Flagged"]); a[3].set_yticks([0,1],["No readm.","Readm."]); a[3].grid(False)
 a[3].set_xlabel("Prediction (top 15%)"); a[3].set_ylabel("Observed")
 for k,l in enumerate("abcd"): a[k].text(-0.30 if k%2==0 else -0.28,1.06,f"({l})",transform=a[k].transAxes,fontsize=13,weight="bold")
-fig.tight_layout(); fig.savefig(O+"fig_prueba_curvas.pdf"); plt.close()
+fig.savefig(O+"fig_prueba_curvas.pdf"); plt.close()
 # 4. ablación
 ab=pd.read_csv(R+"paper_ablacion.csv")
 NOM={"Ablación: Brier balanceado":"Class-balanced Brier","Ablación: competencia por exactitud":"Accuracy competence","Ablación: región sin estratificar":"Unstratified region","Ablación: selección dura (τ = 0)":"Hard selection ($\\tau$ = 0)","Ablación: sin encogimiento (λ = 0)":"No shrinkage ($\\lambda$ = 0)","Ablación: sin excluir al paciente":"Patient not excluded","Ablación: sin poda (7 modelos)":"No pruning (7 models)","DES-CPL inicial (sin poda ni encogimiento)":"Initial version"}

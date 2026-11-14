@@ -10,6 +10,7 @@
 \usepackage{textcomp}
 \usepackage{manyfoot}
 \usepackage{booktabs}
+\usepackage{rotating}
 \usepackage{algorithm}
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
@@ -54,7 +55,7 @@ El objetivo de este trabajo es diseñar, fundamentar teóricamente y evaluar un 
 
 DES-CPL se implementa desde cero, compatible con scikit-learn, sobre las mejores configuraciones del benchmark previo, y se evalúa con exactamente el mismo protocolo que ellas: las mismas particiones externas agrupadas por paciente, la misma semilla y el mismo presupuesto de 60 evaluaciones de hiperparámetros, y se compara además con dos métodos del estado del arte para datos tabulares, LightGBM \cite{bib_ke_2017} y CatBoost \cite{bib_prokhorenkova_2018}, y con tres ensambles estáticos. La superioridad se contrasta con tres pruebas de hipótesis fijadas en un protocolo pre-registrado antes de los experimentos definitivos, entre ellas la de DeLong \cite{bib_demsar, bib_delong}, se replica en tres conjuntos adicionales de clasificación desbalanceada y se complementa con estudios de ablación, sensibilidad, robustez y costo.
 
-El resto del artículo se organiza así. La Sección~\ref{sec:metodologia} describe los datos, la formulación de DES-CPL, sus propiedades teóricas y el protocolo experimental; la Sección~\ref{sec:resultados} presenta los resultados y los discute frente a la literatura, junto con las limitaciones, y la Sección~\ref{sec:conclusiones} resume las conclusiones.
+El resto del artículo se organiza así. La Sección~\ref{sec:metodologia} describe los datos, la formulación de DES-CPL, sus propiedades teóricas y el protocolo experimental; la Sección~\ref{sec:resultados} presenta los resultados y los discute frente a la literatura, junto con las limitaciones y las amenazas a la validez.
 
 \section{Materiales y métodos}\label{sec:metodologia}
 
@@ -101,11 +102,13 @@ $\hat{f}(x)$ & Probabilidad final del ensamble \\
 
 \textbf{Conjunto principal.} Se usa \emph{Diabetes 130-US Hospitals for Years 1999--2008} \cite{bib_strack}, publicado en el repositorio UCI con licencia CC BY 4.0 \cite{bib_uci}. Contiene 101{,}766 encuentros de 71{,}518 pacientes en 130 hospitales estadounidenses, descritos por 50 atributos demográficos, administrativos, diagnósticos CIE-9, de laboratorio y de 23 medicamentos antidiabéticos. La variable \texttt{readmitted} se dicotomiza en reingreso antes de 30 días frente al resto. Se excluyen 2{,}426 encuentros con fallecimiento o cuidados paliativos al alta, en los que no puede observarse un reingreso, y quedan 99{,}340 encuentros. La clase positiva representa el 11.39\%, una razón de desbalance de 1 a 7.8.
 
-\textbf{Preprocesamiento.} Se descartan \texttt{weight}, con un 98.5\% de faltantes, y nueve fármacos casi constantes. La ausencia de \texttt{race} (2.25\%) se conserva como categoría propia, los niveles poco frecuentes se agrupan y los diagnósticos CIE-9 se consolidan en grupos clínicos. Las variables numéricas se escalan con mediana e intervalo intercuartílico, porque todas rechazan la normalidad y tres tienen más del 50\% de ceros. Las categóricas se codifican \emph{one-hot}, lo que deja 152 columnas.
+\textbf{Análisis exploratorio.} Se calculó solo con el conjunto de entrenamiento. Ningún predictor discrimina bien por sí solo: el más informativo, el número de hospitalizaciones del año anterior, tiene un AUC univariado de 0.607 y explica el 2.5\% de la entropía del desenlace, seguido del destino al alta (0.571). Un oráculo que conoce la tasa real de readmisión de cada perfil de los mejores predictores alcanza un AUC-ROC de 0.648, de modo que se espera un techo bajo y compartido por todos los modelos; por eso la propuesta busca combinar mejor los modelos existentes y no un modelo individual más complejo.
+
+\textbf{Preprocesamiento.} Se descartan \texttt{weight}, con un 98.5\% de faltantes, y nueve fármacos casi constantes. La ausencia de \texttt{race} (2.25\%) se conserva como categoría propia, los niveles poco frecuentes se agrupan y los diagnósticos CIE-9 se consolidan en grupos clínicos. Los faltantes restantes se imputan con la mediana en las numéricas y con la moda en las categóricas. Las variables numéricas se escalan con mediana e intervalo intercuartílico, porque todas rechazan la normalidad y tres tienen más del 50\% de ceros. Las categóricas se codifican \emph{one-hot}, lo que deja 152 columnas.
 
 \textbf{Particiones y control de fuga.} El conjunto se divide por paciente en 79{,}473 encuentros de entrenamiento y 19{,}867 de prueba, con intersección de pacientes vacía y prevalencias de 11.389\% y 11.391\%. La partición es por paciente porque los encuentros de un mismo individuo comparten casi por completo sus predictores ($\eta^2=0.99$ en la edad): particionar por filas inflaba el AUC-PR de Random Forest en 0.0127, una cifra del mismo orden que las diferencias que se quieren detectar. Todo ajuste con parámetros aprendidos (imputación, escalado, codificación, remuestreo y las predicciones fuera de pliegue de DES-CPL) se calcula únicamente con los datos de entrenamiento de cada pliegue.
 
-\textbf{Conjuntos adicionales.} Para evaluar si el mecanismo se transfiere a otros problemas de clasificación binaria desbalanceada, DES-CPL y los modelos de referencia se evalúan además en tres conjuntos públicos del repositorio UCI, de naturaleza distinta: \emph{CDC Diabetes Health Indicators} (253{,}680 encuestas, 13.9\% de positivos), \emph{Bank Marketing} (45{,}211 contactos, 11.7\% de positivos) \cite{bib_moro_2014} y \emph{Default of Credit Card Clients} (30{,}000 clientes, 22.1\% de positivos) \cite{bib_yeh_2009}. Ninguno tiene identificador de individuo, de modo que en ellos la partición es estratificada simple; el preprocesamiento es análogo (escalado robusto y codificación \emph{one-hot} ajustados dentro de cada pliegue).
+\textbf{Conjuntos adicionales.} Para evaluar si el mecanismo se transfiere, todos los modelos se evalúan además en tres conjuntos públicos de UCI de otros dominios: \emph{CDC Diabetes Health Indicators} (253{,}680 encuestas, 13.9\% de positivos), \emph{Bank Marketing} (45{,}211 contactos, 11.7\% de positivos) \cite{bib_moro_2014} y \emph{Default of Credit Card Clients} (30{,}000 clientes, 22.1\% de positivos) \cite{bib_yeh_2009}. Ninguno tiene identificador de individuo, de modo que en ellos la partición es estratificada simple; el preprocesamiento es análogo (escalado robusto y codificación \emph{one-hot} ajustados dentro de cada pliegue).
 
 \subsection{Modelo propuesto: DES-CPL}\label{subsec:propuesto}
 
@@ -114,7 +117,7 @@ $\hat{f}(x)$ & Probabilidad final del ensamble \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{fig_descpl_diagrama.pdf}
-\caption{Esquema de DES-CPL. Las predicciones fuera de pliegue de los $M$ modelos base forman el conjunto de selección dinámica. Para cada consulta se buscan $k$ vecinos positivos y $k$ negativos en el espacio de perfiles de salida, excluyendo los encuentros del mismo paciente; con ellos se calcula la puntuación de Brier de cada modelo por clase, que se repondera por la prevalencia local, se encoge hacia la competencia global y se convierte en pesos mediante una softmax con temperatura $\tau$.}
+\caption{Esquema de DES-CPL: a la izquierda, el entrenamiento dentro de cada pliegue externo; a la derecha, la predicción para un paciente nuevo. Las predicciones fuera de pliegue de los $M$ modelos base forman el conjunto de selección dinámica. Para cada consulta se buscan $k$ vecinos positivos y $k$ negativos en el espacio de perfiles de salida, excluyendo los encuentros del mismo paciente; con ellos se calcula la puntuación de Brier de cada modelo por clase, que se repondera por la prevalencia local, se encoge hacia la competencia global y se convierte en pesos mediante una softmax con temperatura $\tau$.}
 \label{fig:descpl}
 \end{figure}
 
@@ -165,11 +168,11 @@ En consecuencia, la pérdida del ensamble nunca supera el promedio ponderado de 
 La Ecuación~\eqref{eq:ambiguedad} es la descomposición de ambigüedad de Krogh y Vedelsby \cite{bib_krogh_1995}, aplicada con pesos que dependen de $x$; DES-CPL da más peso a los modelos con menor pérdida estimada en la zona, de modo que la cota sea pequeña cuando la competencia se estima bien.
 
 \begin{proposicion}[La competencia reponderada es propia; la balanceada no]\label{prop:propia}
-Sea una zona con riesgo $q=P(Y=1\mid\text{zona})$ y un modelo que predice la constante $p$ en ella. La competencia reponderada $C_q(p)=q(1-p)^2+(1-q)p^2$ es el Brier esperado en la zona, se minimiza en $p=q$ y cumple $C_q(p)=q(1-q)+(p-q)^2$. La competencia balanceada $C_{1/2}(p)$ se minimiza en $p=\tfrac{1}{2}$ sea cual sea $q$. Si, además, las pérdidas de los vecinos de cada clase son muestras independientes y $q$ es conocida, el estimador estratificado de la Ecuación~\eqref{eq:competencia} es insesgado para el Brier de la zona.
+Sea una zona con riesgo $q=P(Y=1\mid\text{zona})$ y un modelo que predice la constante $p$ en ella. La competencia reponderada $C_q(p)=q(1-p)^2+(1-q)p^2$ es el Brier esperado en la zona, se minimiza en $p=q$ y cumple $C_q(p)=q(1-q)+(p-q)^2$. La competencia balanceada $C_{1/2}(p)$ se minimiza en $p=\tfrac{1}{2}$ sea cual sea $q$. Además, el estimador estratificado es insesgado (Apéndice~\ref{app:demostraciones}).
 \end{proposicion}
 
 \begin{proposicion}[Consistencia del estimador de competencia]\label{prop:consistencia}
-Suponga que los pacientes son independientes e idénticamente distribuidos, que $\phi$ tiene distribución con densidad dentro de cada clase y que $E[(\tilde{f}_m(X)-Y)^2 \mid \phi(X)=u,\, Y=c]$ es continua en $u$. Si $k\to\infty$ y $k/n_c\to 0$ para cada clase $c$, donde $n_c$ es el número de encuentros de esa clase, entonces $C_m(x)$ converge en probabilidad al riesgo de Brier del modelo $m$ condicionado al perfil $\phi(x)$, $q(x)B_{1,m}(x)+(1-q(x))B_{0,m}(x)$, donde $B_{c,m}(x)$ es su pérdida esperada en la clase $c$.
+Si los pacientes son independientes, $\phi$ tiene densidad dentro de cada clase y la pérdida esperada de cada clase es continua en el perfil, entonces, con $k\to\infty$ y $k/n_c\to 0$ en cada clase, $C_m(x)$ converge en probabilidad al riesgo de Brier de $f_m$ dado $\phi(x)$, $q(x)B_{1,m}(x)+(1-q(x))B_{0,m}(x)$, donde $B_{c,m}$ es su pérdida esperada en la clase $c$.
 \end{proposicion}
 
 La Proposición~\ref{prop:consistencia} se sigue de la consistencia de la regresión por $k$ vecinos \cite{bib_stone_1977}; como la independencia vale entre pacientes y no entre encuentros, exige excluir al propio paciente (Componente~2).
@@ -227,7 +230,7 @@ donde $J_t$ y $w_t$ son el número de hojas y los pesos del árbol $t$; y el SVM
 
 \subsection{Protocolo de evaluación}\label{subsec:evaluacion}
 
-\textbf{Pre-registro.} Las hipótesis, las métricas, las pruebas, la corrección por multiplicidad, los conjuntos adicionales y el presupuesto se fijaron en un protocolo congelado con la etiqueta de Git \texttt{protocolo-v1} el 9 de noviembre de 2026. El diseño de DES-CPL se iteró antes de esa fecha con los mismos pliegues externos y el presupuesto del benchmark previo; esos análisis se declaran exploratorios. El conjunto de prueba no se usó en ninguna decisión de diseño.
+\textbf{Pre-registro.} Las hipótesis, las métricas, las pruebas, la corrección por multiplicidad, los conjuntos adicionales y el presupuesto se fijaron en un protocolo congelado con la etiqueta de Git \texttt{protocolo-v1} el 9 de noviembre de 2026. Los análisis previos de diseño se declaran exploratorios. El conjunto de prueba no se usó en ninguna decisión de diseño.
 
 \textbf{Validación.} Todos los modelos se evalúan con validación cruzada anidada de cinco pliegues externos y tres internos, estratificada y agrupada por paciente, con la semilla 42. Las particiones externas son exactamente las del benchmark previo, y cada modelo aporta cinco estimaciones emparejadas. Se hace una sola repetición del bucle externo por limitaciones de cómputo. La métrica reportada proviene siempre del bucle externo. Después, todos los modelos se reentrenan con todo el entrenamiento y se evalúan una sola vez sobre el conjunto de prueba reservado.
 
@@ -243,7 +246,7 @@ Las comparaciones contra los nueve modelos de referencia se corrigen por multipl
 
 \textbf{Regla de superioridad.} DES-CPL se declararía superior solo si se cumplieran a la vez cuatro condiciones: AUC-PR medio mayor que el de cada benchmark; rechazo de la hipótesis nula en las tres pruebas con $p$ ajustado menor que 0.05; $|\delta|\geq 0.147$ a su favor; y mejor que el mejor benchmark en al menos dos de los tres conjuntos adicionales, sin ser significativamente peor en ninguno.
 
-\textbf{Robustez, calibración e incertidumbre.} Se mide la sensibilidad de DES-CPL a $k$, $\tau$ y $\lambda$ en el pliegue 0, sin reentrenar; su estabilidad frente a diez semillas de la búsqueda y de la partición interna (42, 7, 2026 y de 1 a 6 y 8), junto con la del mejor modelo de referencia; y su comportamiento cuando se invierte el 5\% y el 10\% de las etiquetas de entrenamiento, cuando el entrenamiento se reduce al 25\% y al 50\% de los pacientes y cuando se submuestrean los positivos hasta una prevalencia del 5\%. La calibración se evalúa con curvas de confiabilidad y el error de calibración esperado, y la incertidumbre con conjuntos de predicción conformes de Mondrian \cite{bib_angelopoulos_2023} con $\alpha=0.1$. La interpretabilidad se estudia con valores de Shapley \cite{bib_lundberg} calculados por permutaciones sobre las variables originales.
+\textbf{Robustez, calibración e incertidumbre.} Se mide la sensibilidad de DES-CPL a $k$, $\tau$ y $\lambda$ en el pliegue 0, sin reentrenar; su estabilidad con diez semillas de la búsqueda y de la partición interna, junto con la del mejor modelo de referencia; y su comportamiento cuando se invierte el 5\% y el 10\% de las etiquetas de entrenamiento, cuando el entrenamiento se reduce al 25\% y al 50\% de los pacientes y cuando se submuestrean los positivos hasta una prevalencia del 5\%. La calibración se evalúa con curvas de confiabilidad y el error de calibración esperado, y la incertidumbre con conjuntos de predicción conformes de Mondrian \cite{bib_angelopoulos_2023} con $\alpha=0.1$. La interpretabilidad se estudia con valores de Shapley \cite{bib_lundberg} calculados por permutaciones sobre las variables originales.
 
 \subsection{Diseño del estudio de ablación}\label{subsec:ablacion}
 
@@ -261,7 +264,7 @@ Se reporta además la versión inicial de DES-CPL, sin poda ni encogimiento y co
 
 \subsection{Disponibilidad de código y datos}\label{subsec:disponibilidad}
 
-El código de DES-CPL, implementado desde cero como un clasificador compatible con \texttt{scikit-learn}, sus pruebas unitarias, los cuadernos del experimento y las versiones exactas de las dependencias se publican en \url{https://github.com/joshua2412-a/Diabetes_ProyectoML_202630}. Los cuatro conjuntos de datos son públicos en el repositorio UCI. La semilla principal es 42; las otras nueve se usan solo en el análisis de estabilidad. El protocolo pre-registrado, la tabla maestra de experimentos, los modelos serializados y el código que genera cada tabla y figura de este artículo están en el mismo repositorio.
+El código de DES-CPL y sus pruebas, el protocolo, la tabla maestra de experimentos, los modelos serializados, las versiones exactas de las dependencias y el código que genera cada tabla y figura están en \url{https://github.com/joshua2412-a/Diabetes_ProyectoML_202630}. Los cuatro conjuntos de datos son públicos en el repositorio UCI. La semilla principal es 42; las otras nueve solo se usan en el análisis de estabilidad.
 
 \section{Resultados}\label{sec:resultados}
 
@@ -345,10 +348,10 @@ Pesos globales (Brier) & 0.2307 & \underline{0.6664} & 0.2678 & 0.1609 & 0.5904 
 
 El protocolo fijó tres pruebas confirmatorias: Friedman con Nemenyi sobre los pliegues, la $t$ corregida de Nadeau--Bengio \cite{bib_nadeau_2003} y la de DeLong \cite{bib_delong} sobre el conjunto de prueba. Para cubrir la combinación mínima que se exige en clasificación se añadieron después dos pruebas que el protocolo no incluía, y que se declaran como tales: la prueba exacta de McNemar \cite{bib_mcnemar_1947} sobre las decisiones con el umbral operativo, que sí estaba fijado de antemano, y la prueba $t$ bayesiana correlacionada \cite{bib_corani_2015,bib_benavoli_2017}. Para esta última, la región de equivalencia práctica (ROPE) es $\pm 0.005$ de AUC-PR, el umbral de relevancia que el estudio de convergencia del benchmark previo fijó antes de ver sus resultados. Ninguna de las dos añadidas cambia el veredicto. La Tabla~\ref{tab:pruebas} reúne los resultados frente a cada uno de los nueve benchmarks, y la Figura~\ref{fig:diferencias} muestra las diferencias con su intervalo.
 
-\begin{table}[h]
+\begin{sidewaystable}
 \caption{Pruebas de significancia de DES-CPL frente a cada benchmark. $\Delta$: diferencia media de AUC-PR sobre los cinco pliegues externos (positiva si DES-CPL es mejor), con su IC del 95\% según la varianza corregida de Nadeau--Bengio. $\Delta$AUC: diferencia de AUC-ROC en el conjunto de prueba. McNemar: encuentros que DES-CPL clasifica bien y el benchmark mal / al revés, con el umbral del 15\%. Bayes: probabilidades posteriores de que DES-CPL sea mejor / equivalente (ROPE $\pm 0.005$) / peor. $\delta$: delta de Cliff sobre los pliegues. Los $p$ están ajustados con Holm por separado en cada prueba ($m = 9$).}\label{tab:pruebas}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lcccccccccc@{}}
+\footnotesize
+\begin{tabular*}{\textheight}{@{\extracolsep\fill}lcccccccccc@{}}
 \toprule
  & \multicolumn{4}{c}{Nadeau--Bengio (pliegues)} & \multicolumn{2}{c}{DeLong (prueba)} & \multicolumn{2}{c}{McNemar (prueba)} & Bayes & \\
 \cmidrule(lr){2-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
@@ -364,8 +367,8 @@ SVM lineal & +0.0135 & [+0.0023, +0.0247] & 3.34 & 0.072 & +0.0086 & 1.1e-4 & 43
 LightGBM & +0.0026 & [$-$0.0081, +0.0133] & 0.68 & 0.802 & +0.0011 & 0.580 & 266/246 & 1.000 & 0.28 / 0.66 / 0.06 & +0.12 \\
 CatBoost & $-$0.0005 & [$-$0.0075, +0.0064] & $-$0.22 & 1.000 & +0.0000 & 0.978 & 303/291 & 1.000 & 0.05 / 0.88 / 0.07 & $-$0.12 \\
 \botrule
-\end{tabular}}
-\end{table}
+\end{tabular*}
+\end{sidewaystable}
 
 \begin{figure}[h]
 \centering
@@ -471,24 +474,7 @@ El resultado central es negativo y coherente con la literatura de selección din
 
 Las amenazas a la validez son cuatro. \emph{Potencia}: una sola repetición de cinco pliegues da a las pruebas pareadas poca resolución, y una diferencia de 0.001 no podría detectarse aunque fuera real. \emph{Pruebas añadidas}: McNemar y la prueba bayesiana no estaban en el protocolo; se reportan como complemento, y ninguna cambia el veredicto. \emph{Análisis exploratorios}: la sensibilidad se midió en un pliegue, y la robustez no reajustó los hiperparámetros de los modelos base. \emph{Validez externa}: los datos son de 1999 a 2008, con ICD-9, y la partición separa pacientes pero no épocas, de modo que la validación temporal queda pendiente. Con esa evidencia, lo que puede afirmarse es que DES-CPL \emph{empata} con los mejores benchmarks y es más estable que XGBoost, no que los supere.
 
-\section{Conclusiones}\label{sec:conclusiones}
-
-Se propuso DES-CPL, un ensamble dinámico cuya competencia es una regla propia para el riesgo local, que se estima con vecindarios estratificados que respetan la agrupación por paciente y se encoge hacia la competencia global. Según la revisión realizada, es la primera aplicación de la selección dinámica de ensambles a la readmisión de pacientes diabéticos. Evaluado con un protocolo pre-registrado y el mismo presupuesto que nueve modelos de referencia, DES-CPL empata con los mejores (XGBoost, CatBoost y LightGBM) y supera a los modelos más simples, pero no supera de forma significativa al mejor benchmark en ninguna de las tres pruebas fijadas, de modo que la hipótesis de superioridad se refuta. Es, en cambio, más estable que XGBoost frente a la semilla y a perturbaciones de los datos, y en cuatro dominios queda siempre cerca del mejor método, una propiedad que comparte con los ensambles estáticos.
-
-El hallazgo principal es la explicación de ese empate: en estos registros no es predecible qué modelo acierta en cada paciente, y la propia búsqueda de DES-CPL lo detecta al llevar el encogimiento casi a la competencia global. El parámetro $\lambda$ funciona así como una prueba previa barata de si la selección dinámica tiene margen en un problema. Como trabajo futuro, la vía más prometedora no es otro combinador sino más información: un análisis exploratorio con los códigos diagnósticos completos y el historial del paciente mejoró el AUC-PR más que cualquier diferencia entre modelos de este estudio. Le siguen la validación temporal y externa, con datos codificados en CIE-10, y más repeticiones del bucle externo para dar potencia a las pruebas pareadas.
-
 \backmatter
-
-\section*{Declaraciones}
-
-\begin{itemize}
-\item \textbf{Disponibilidad de datos:} los cuatro conjuntos son públicos en el repositorio UCI; \emph{Diabetes 130-US Hospitals for Years 1999--2008} tiene el DOI 10.24432/C5230J.
-\item \textbf{Disponibilidad de código:} \url{https://github.com/joshua2412-a/Diabetes_ProyectoML_202630}. [Añadir el DOI de Zenodo de la versión entregada.]
-\item \textbf{Contribución de los autores:} [Completar por los autores.]
-\item \textbf{Uso de herramientas de inteligencia artificial:} [Completar por los autores, de forma coherente con la declaración del capítulo 17 del libro.]
-\item \textbf{Conflicto de intereses:} los autores declaran no tener conflictos de interés.
-\end{itemize}
-
 
 \begin{appendices}
 
