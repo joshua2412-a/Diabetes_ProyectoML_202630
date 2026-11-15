@@ -444,7 +444,7 @@ document.write(`
 </section>
 <section id="diccionario-de-variables">
 <h2>1.2. Diccionario de variables<a class="headerlink" href="#diccionario-de-variables" title="Link to this heading">#</a></h2>
-<p>El dataset contiene variables de distinta naturaleza que permiten caracterizar a los pacientes, sus antecedentes, las condiciones clínicas y el desarrollo de la hospitalización. Para organizar estas variables, se clasifican según su <strong>bloque temático o naturaleza</strong> y su función dentro del problema de aprendizaje supervisado: <strong>variables predictoras</strong> y <strong>variable objetivo</strong>.</p>
+<p>El dataset contiene variables de distinta naturaleza que permiten caracterizar a los pacientes, sus antecedentes, las condiciones clínicas y el desarrollo de la hospitalización. Para organizar estas variables, se clasifican según su bloque temático o naturaleza y su función dentro del problema de aprendizaje supervisado: variables predictoras y variable objetivo.</p>
 <p>Las variables predictoras corresponden a las características utilizadas como entradas potenciales del modelo para identificar patrones asociados al reingreso hospitalario. La variable objetivo, por su parte, representa el desenlace que se busca predecir: la readmisión del paciente dentro de los 30 días posteriores al alta.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -630,8 +630,8 @@ y_i = \begin{cases}
 <h2>2. Lectura de datos faltantes<a class="headerlink" href="#lectura-de-datos-faltantes" title="Link to this heading">#</a></h2>
 <p>El archivo usa dos convenciones distintas:</p>
 <ol class="arabic simple">
-<li><p>El carácter <code class="docutils literal notranslate"><span class="pre">?</span></code> indica un <strong>dato ausente</strong>. Se convierte a <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p></li>
-<li><p>El valor <code class="docutils literal notranslate"><span class="pre">None</span></code> en <code class="docutils literal notranslate"><span class="pre">A1Cresult</span></code> y <code class="docutils literal notranslate"><span class="pre">max_glu_serum</span></code> indica que <strong>la prueba no se realizó</strong>. No es un dato perdido: es una decisión clínica, y como tal es informativa. Se conserva como categoría.</p></li>
+<li><p>El carácter <code class="docutils literal notranslate"><span class="pre">?</span></code> indica un dato ausente. Se convierte a <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p></li>
+<li><p>El valor <code class="docutils literal notranslate"><span class="pre">None</span></code> en <code class="docutils literal notranslate"><span class="pre">A1Cresult</span></code> y <code class="docutils literal notranslate"><span class="pre">max_glu_serum</span></code> indica que la prueba no se realizó. No es un dato perdido: es una decisión clínica, y como tal es informativa. Se conserva como categoría.</p></li>
 </ol>
 <p>Por defecto <code class="docutils literal notranslate"><span class="pre">pandas</span></code> interpreta la cadena <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code> como nulo, lo que borraría esa distinción. Se desactiva ese comportamiento con <code class="docutils literal notranslate"><span class="pre">keep_default_na=False</span></code> y se declara <code class="docutils literal notranslate"><span class="pre">?</span></code> como único código de faltante.</p>
 <div class="cell docutils container">
@@ -4075,7 +4075,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>

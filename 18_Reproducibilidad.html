@@ -416,7 +416,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="reproducibilidad-y-bibliografia">
 <h1>18. Reproducibilidad y bibliografía<a class="headerlink" href="#reproducibilidad-y-bibliografia" title="Link to this heading">#</a></h1>
-<p>Este capítulo reúne lo necesario para reconstruir los resultados del libro. La guía (sección 9.2) pide una lista de verificación que cubra:</p>
+<p>Este capítulo reúne lo necesario para reconstruir los resultados del libro. Incluye una lista de verificación que cubre:</p>
 <ul class="simple">
 <li><p>las versiones del software y el hardware;</p></li>
 <li><p>las semillas;</p></li>
@@ -718,7 +718,7 @@ document.write(`
 <td><p>42, 7, 2026, 1, 2, 3, 4, 5, 6 y 8</p></td>
 <td><p>16</p></td>
 </tr>
-<tr class="row-even"><td><p>Variación por semilla del Entregable 2</p></td>
+<tr class="row-even"><td><p>Variación por semilla del experimento original</p></td>
 <td><p>42, 7 y 2026</p></td>
 <td><p>11</p></td>
 </tr>
@@ -760,7 +760,7 @@ document.write(`
 </tbody>
 </table>
 </div>
-<p>El Entregable 2 usó además una rejilla gruesa de 8 a 12 puntos para Grid Search. Desde el capítulo 12, todos los modelos se comparan con 60 evaluaciones.</p>
+<p>El experimento original usó además una rejilla gruesa de 8 a 12 puntos para Grid Search. Desde el capítulo 12, todos los modelos se comparan con 60 evaluaciones.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">src</span><span class="w"> </span><span class="kn">import</span> <span class="n">espacios</span><span class="p">,</span> <span class="n">sota</span>
@@ -1044,14 +1044,14 @@ document.write(`
 </section>
 <section id="tabla-maestra-de-experimentos">
 <h2>18.4. Tabla maestra de experimentos<a class="headerlink" href="#tabla-maestra-de-experimentos" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">results/tabla_maestra_unificada.csv</span></code>, que genera <code class="docutils literal notranslate"><span class="pre">experiments/tabla_maestra_unificada.py</span></code>, reúne en un solo archivo todo lo evaluado en el bucle externo de los dos entregables:</p>
+<p><code class="docutils literal notranslate"><span class="pre">results/tabla_maestra_unificada.csv</span></code>, que genera <code class="docutils literal notranslate"><span class="pre">experiments/tabla_maestra_unificada.py</span></code>, reúne en un solo archivo todo lo evaluado en el bucle externo:</p>
 <ul class="simple">
-<li><p>las 112 combinaciones del Entregable 2: 108 ejecutadas y 4 no aplicables (k-NN no admite <code class="docutils literal notranslate"><span class="pre">class_weight</span></code>);</p></li>
+<li><p>las 112 combinaciones del experimento original: 108 ejecutadas y 4 no aplicables (k-NN no admite <code class="docutils literal notranslate"><span class="pre">class_weight</span></code>);</p></li>
 <li><p>los modelos con presupuesto de 60 evaluaciones;</p></li>
 <li><p>el estado del arte, los ensambles estáticos, DES-CPL y sus ablaciones;</p></li>
 <li><p>los conjuntos adicionales, las semillas y los escenarios de robustez.</p></li>
 </ul>
-<p>Cada fila es un método en un conjunto de datos, con los datos de sus 5 folds externos: la media y la desviación del AUC-PR, el valor de cada fold, el presupuesto, la semilla y, cuando se registró, el tiempo. La guía hablaba de 140 combinaciones en el Entregable 2. Este proyecto tiene 112, porque los autores decidieron limitarlo a la rama de clasificación.</p>
+<p>Cada fila es un método en un conjunto de datos, con los datos de sus 5 folds externos: la media y la desviación del AUC-PR, el valor de cada fold, el presupuesto, la semilla y, cuando se registró, el tiempo. El trabajo se limita a la rama de clasificación.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">maestra</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"tabla_maestra_unificada.csv"</span><span class="p">)</span>
@@ -1249,7 +1249,7 @@ document.write(`
 </div>
 <p><strong>Número de ejecuciones y dispersión.</strong></p>
 <ul class="simple">
-<li><p>Cada fila se evaluó en los <strong>5 folds externos</strong>, con una sola repetición del bucle; el protocolo declara la desviación respecto al 5 × 5 que recomienda la guía.</p></li>
+<li><p>Cada fila se evaluó en los <strong>5 folds externos</strong>, con una sola repetición del bucle; el protocolo declara la desviación respecto al 5 × 5 recomendable.</p></li>
 <li><p>Como medida de dispersión se reportan la <strong>desviación estándar entre folds</strong> (columna <code class="docutils literal notranslate"><span class="pre">auc_pr_sd</span></code>) y, en el conjunto de prueba, los <strong>intervalos BCa</strong> remuestreando pacientes (capítulos 11 y 13).</p></li>
 <li><p>La <strong>varianza por semilla</strong> se midió con diez semillas para DES-CPL y XGBoost (capítulo 16).</p></li>
 </ul>
@@ -1367,7 +1367,7 @@ document.write(`
 </div>
 </div>
 </div>
-<p>El grueso del cómputo se fue en el experimento combinatorio del Entregable 2 (unas 23 horas). La comparación del Entregable 3 reutiliza las predicciones fuera de pliegue de cada modelo base. Por eso todas las variantes de DES-CPL, las ablaciones y los ensambles estáticos se evalúan sin reentrenar nada.</p>
+<p>El grueso del cómputo se fue en el experimento combinatorio (unas 23 horas). La comparación con el modelo original reutiliza las predicciones fuera de pliegue de cada modelo base. Por eso todas las variantes de DES-CPL, las ablaciones y los ensambles estáticos se evalúan sin reentrenar nada.</p>
 </section>
 <section id="como-reproducir-los-resultados">
 <h2>18.6. Cómo reproducir los resultados<a class="headerlink" href="#como-reproducir-los-resultados" title="Link to this heading">#</a></h2>
@@ -1379,8 +1379,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">"not lento"</span><span class="w">            </span><span class="c1"># pruebas rápidas (las mismas de GitHub Actions)</span>
 pytest<span class="w"> </span>-m<span class="w"> </span>lento<span class="w">                  </span><span class="c1"># reproduce una corrida de la tabla maestra (~7 min)</span>
 
-<span class="c1"># Entregable 2: ejecutar los notebooks 01 a 11 desde docs/ (el 08 corre el experimento, ~23 h).</span>
-<span class="c1"># Entregable 3, en este orden:</span>
+<span class="c1"># Experimento original: ejecutar los notebooks 01 a 11 desde docs/ (el 08 corre el experimento, ~23 h).</span>
+<span class="c1"># Modelo original y evaluación ampliada, en este orden:</span>
 python<span class="w"> </span>experiments/benchmarks_sota.py<span class="w">          </span><span class="c1"># LightGBM y CatBoost</span>
 python<span class="w"> </span>experiments/des_cpl.py<span class="w"> </span>--folds<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="m">4</span><span class="w">   </span><span class="c1"># DES-CPL, presupuesto 60</span>
 python<span class="w"> </span>experiments/evaluacion_prueba.py<span class="w">        </span><span class="c1"># conjunto de prueba (cap. 13.8)</span>
@@ -1398,7 +1398,7 @@ python<span class="w"> </span>../app.py<span class="w">                         
 </pre></div>
 </div>
 <p><strong>Reanudación.</strong> Cada script reanuda donde quedó: guarda un punto de control por fold o por lote y, al volver a correrlo, solo calcula lo que falta. Para rehacer una parte, basta con borrar su archivo de <code class="docutils literal notranslate"><span class="pre">results/</span></code>.</p>
-<p><strong>Exactitud de la reproducción.</strong> Seis de los siete modelos base reproducen el Entregable 2 sin diferencias. Bayes difiere hasta en 0.0008 por fold (sección 13.3.1). La prueba lenta reproduce fold a fold una corrida de la tabla maestra.</p>
+<p><strong>Exactitud de la reproducción.</strong> Seis de los siete modelos base reproducen el estudio de convergencia del capítulo 12 sin diferencias. Bayes difiere hasta en 0.0008 por fold (sección 13.3.1). La prueba lenta reproduce fold a fold una corrida de la tabla maestra.</p>
 </section>
 <section id="lista-de-verificacion-de-reproducibilidad">
 <h2>18.7. Lista de verificación de reproducibilidad<a class="headerlink" href="#lista-de-verificacion-de-reproducibilidad" title="Link to this heading">#</a></h2>
@@ -1966,7 +1966,7 @@ python<span class="w"> </span>../app.py<span class="w">                         
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>

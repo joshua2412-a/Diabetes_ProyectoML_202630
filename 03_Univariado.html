@@ -547,7 +547,7 @@ Razón de desbalance          : 1 a 7.8
 </section>
 <section id="estructura-de-dependencia-entre-encuentros">
 <h2>3.2. Estructura de dependencia entre encuentros<a class="headerlink" href="#estructura-de-dependencia-entre-encuentros" title="Link to this heading">#</a></h2>
-<p>Esta sección no existía en la primera entrega y es la consecuencia directa de haber adoptado la cohorte completa de episodios. Si un mismo paciente aporta varias filas, las observaciones están <strong>agrupadas</strong> y hay que responder dos preguntas antes de seguir.</p>
+<p>Esta sección no existía en la primera versión del análisis y es la consecuencia directa de haber adoptado la cohorte completa de episodios. Si un mismo paciente aporta varias filas, las observaciones están <strong>agrupadas</strong> y hay que responder dos preguntas antes de seguir.</p>
 <ol class="arabic simple">
 <li><p><strong>¿Cuánta información nueva aporta cada fila?</strong> Los contrastes del capítulo 4 suponen independencia. Con datos agrupados el número de observaciones que aportan información nueva es menor que el número de filas y los valores p salen artificialmente pequeños. Se cuantifica con el <strong>efecto de diseño</strong>, estimado aquí sin supuestos mediante un <em>bootstrap</em> por paciente: se compara el error estándar de la prevalencia cuando se remuestrean pacientes completos con el que tendría bajo muestreo independiente de filas. El cociente al cuadrado es el efecto de diseño y <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">/</span> <span class="pre">deff</span></code> es el tamaño de muestra efectivo.</p></li>
 <li><p><strong>¿Se parecen entre sí los encuentros de un mismo paciente?</strong> Esta es la pregunta que decide el esquema de validación cruzada. Se mide variable por variable y se contrasta contra una <strong>referencia por permutación</strong>: se rompe al azar la correspondencia entre filas y pacientes y se recalcula la misma medida. La diferencia entre el valor observado y el permutado es la similitud atribuible a la identidad del paciente, ya descontado el sesgo que introducen los grupos pequeños.</p></li>
@@ -2237,7 +2237,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </section>
 <section id="auditoria-de-niveles-poco-frecuentes">
 <h2>3.5. Auditoría de niveles poco frecuentes<a class="headerlink" href="#auditoria-de-niveles-poco-frecuentes" title="Link to this heading">#</a></h2>
-<p>Esta sección tampoco existía en la primera entrega y responde a un problema concreto del pipeline. La codificación one-hot del capítulo 6 agrupa las categorías con frecuencia inferior al 1 % dentro de <strong>cada fold</strong> de la validación cruzada. Conviene comprobar aquí dos cosas antes de llegar allí:</p>
+<p>Esta sección tampoco existía en la primera versión del análisis y responde a un problema concreto del pipeline. La codificación one-hot del capítulo 6 agrupa las categorías con frecuencia inferior al 1 % dentro de <strong>cada fold</strong> de la validación cruzada. Conviene comprobar aquí dos cosas antes de llegar allí:</p>
 <ol class="arabic simple">
 <li><p>Que el agrupamiento del capítulo 2 dejó pocos niveles por debajo de ese umbral, de modo que el agrupamiento por fold sea una salvaguarda y no una transformación sustantiva que cambie las variables entre folds.</p></li>
 <li><p>Que ningún nivel retenido tenga tan pocos casos positivos como para que su tasa de readmisión sea ruido puro. Un nivel con tres positivos produce una estimación inútil y, en los modelos lineales, un coeficiente grande y sin sentido.</p></li>
@@ -2769,7 +2769,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>

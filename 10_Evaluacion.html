@@ -575,7 +575,7 @@ random_forest (ninguno): {'modelo__max_depth': 18, 'modelo__max_features': 0.196
 <h2>10.2. Métricas en el conjunto de prueba<a class="headerlink" href="#metricas-en-el-conjunto-de-prueba" title="Link to this heading">#</a></h2>
 <section id="justificacion-de-la-metrica-principal">
 <h3>10.2.1. Justificación de la métrica principal<a class="headerlink" href="#justificacion-de-la-metrica-principal" title="Link to this heading">#</a></h3>
-<p>La guía exige declarar explícitamente qué métrica gobierna la validación y por qué. En este problema:</p>
+<p>Hay que declarar explícitamente qué métrica gobierna la validación y por qué. En este problema:</p>
 <p><strong>La métrica de selección es el AUC-PR.</strong> Mide la capacidad de ordenar pacientes por riesgo concentrándose en la clase minoritaria, que es la de interés, y no depende del umbral. Con una prevalencia del 11.4 %, el AUC-ROC premia en exceso el acierto sobre la clase mayoritaria: un modelo puede tener un AUC-ROC respetable y ser inútil para priorizar seguimiento.</p>
 <p><strong>La métrica operativa es el recall, sujeto a una restricción de precisión.</strong> El costo clínico es asimétrico: un falso negativo es un paciente que reingresa sin haber recibido seguimiento reforzado, con el costo sanitario y humano que eso implica; un falso positivo es una llamada de seguimiento o una cita adicional innecesaria, comparativamente barato. Esa asimetría favorece maximizar el recall.</p>
 <p>Pero el recall no puede maximizarse sin límite: un modelo que marque a todos los pacientes tiene recall perfecto y es inservible, porque el hospital no puede dar seguimiento intensivo a todos. La formulación realista es <strong>maximizar el recall sujeto a la capacidad de seguimiento disponible</strong>, lo que se traduce en fijar el umbral de forma que el número de pacientes marcados sea el que el servicio puede atender. La sección 10.3 lo hace explícito.</p>
@@ -1420,7 +1420,7 @@ Caso con error    : probabilidad 0.037, real 1
 </section>
 <section id="comparacion-con-lime-sobre-xgboost">
 <h2>10.6. Comparación con LIME sobre XGBoost<a class="headerlink" href="#comparacion-con-lime-sobre-xgboost" title="Link to this heading">#</a></h2>
-<p>La guía pide explicar XGBoost también con LIME y discutir en qué difieren ambos métodos. Las diferencias son metodológicas y anticipan cuándo pueden divergir:</p>
+<p>XGBoost se explica también con LIME, para discutir en qué difieren ambos métodos. Las diferencias son metodológicas y anticipan cuándo pueden divergir:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Aspecto</p></th>
@@ -2081,7 +2081,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>

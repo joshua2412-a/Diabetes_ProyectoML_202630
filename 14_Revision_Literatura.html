@@ -416,7 +416,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="revision-de-literatura-y-declaracion-de-novedad">
 <h1>14. Revisión de literatura y declaración de novedad<a class="headerlink" href="#revision-de-literatura-y-declaracion-de-novedad" title="Link to this heading">#</a></h1>
-<p>La guía del Entregable 3 exige que la novedad del modelo original <strong>se demuestre</strong> con una revisión documentada (sección 5.2): al menos tres bases de datos, al menos cinco cadenas de búsqueda con su fecha, una matriz de novedad, búsqueda por citación hacia atrás y hacia adelante, revisión de repositorios de código y una declaración de novedad que nombre los trabajos más cercanos y en qué se diferencia la propuesta.</p>
+<p>La novedad del modelo original no se declara: <strong>se demuestra</strong> con una revisión documentada, que aquí cumple estos mínimos: al menos tres bases de datos, al menos cinco cadenas de búsqueda con su fecha, una matriz de novedad, búsqueda por citación hacia atrás y hacia adelante, revisión de repositorios de código y una declaración de novedad que nombre los trabajos más cercanos y en qué se diferencia la propuesta.</p>
 <p>Este capítulo documenta esa revisión para <strong>DES-CPL</strong> (capítulo 13), en cinco bases:</p>
 <ul class="simple">
 <li><p><strong>Cuatro con API pública.</strong> <code class="docutils literal notranslate"><span class="pre">experiments/revision_literatura.py</span></code> ejecuta las mismas cadenas contra ellas y guarda los resultados con la fecha de la consulta en <code class="docutils literal notranslate"><span class="pre">results/literatura/</span></code>.</p></li>
@@ -488,7 +488,7 @@ Google Scholar: {'C1': '2026-11-15', 'C2': '2026-11-15', 'C3': '2026-11-15', 'C4
 </tbody>
 </table>
 </div>
-<p><strong>Exclusiones.</strong> Redes neuronales como modelo propuesto (la guía las excluye del modelo original), aunque se registran si cumplen el criterio A. El conjunto «diabetes» de los bancos de prueba de selección dinámica (Pima) es de <em>diagnóstico</em> de diabetes, no de readmisión, y cuenta como criterio B solo si el trabajo lo plantea como aplicación clínica.</p>
+<p><strong>Exclusiones.</strong> Redes neuronales como modelo propuesto (quedan fuera del alcance del modelo original, que se restringió a métodos no neuronales), aunque se registran si cumplen el criterio A. El conjunto «diabetes» de los bancos de prueba de selección dinámica (Pima) es de <em>diagnóstico</em> de diabetes, no de readmisión, y cuenta como criterio B solo si el trabajo lo plantea como aplicación clínica.</p>
 <p><strong>Proceso de revisión.</strong> Se leyeron el título de todos los registros devueltos y el resumen de los que no se descartaron por título. Se consultó el texto completo, cuando era de acceso abierto, de los trabajos marcados como relevantes.</p>
 </section>
 <section id="bases-y-cadenas-de-busqueda">
@@ -622,7 +622,7 @@ Google Scholar: {'C1': '2026-11-15', 'C2': '2026-11-15', 'C3': '2026-11-15', 'C4
 </section>
 <section id="matriz-de-novedad">
 <h2>14.3. Matriz de novedad<a class="headerlink" href="#matriz-de-novedad" title="Link to this heading">#</a></h2>
-<p>La matriz sigue la plantilla de la guía (Tabla 2): para cada base y cadena, el número de resultados, cuántos se revisaron, cuántos resultaron relevantes según los criterios de 14.1 y una observación. Los registros relevantes se identificaron leyendo título y resumen; su lista está en la celda siguiente, con el criterio que cumplen.</p>
+<p>La matriz registra, para cada base y cadena, el número de resultados, cuántos se revisaron, cuántos resultaron relevantes según los criterios de 14.1 y una observación. Los registros relevantes se identificaron leyendo título y resumen; su lista está en la celda siguiente, con el criterio que cumplen.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">normalizar</span><span class="p">(</span><span class="n">titulo</span><span class="p">):</span>
@@ -1685,7 +1685,7 @@ Google Scholar: {'C1': '2026-11-15', 'C2': '2026-11-15', 'C3': '2026-11-15', 'C4
 <tr class="row-even"><td><p>MoE-Health (2025), arXiv</p></td>
 <td><p>Predicción clínica multimodal, incluida la readmisión</p></td>
 <td><p>Mezcla de expertos neuronales con compuerta dinámica</p></td>
-<td><p>Red neuronal, excluida por la guía como modelo original. La compuerta se aprende por gradiente, no se estima a partir de la competencia local</p></td>
+<td><p>Red neuronal, fuera del alcance de este trabajo. La compuerta se aprende por gradiente, no se estima a partir de la competencia local</p></td>
 </tr>
 <tr class="row-odd"><td><p>Selección por optimización de regiones de competencia (2026), <em>Appl. Soft Comput.</em></p></td>
 <td><p>Bancos de prueba generales</p></td>
@@ -1731,17 +1731,17 @@ Google Scholar: {'C1': '2026-11-15', 'C2': '2026-11-15', 'C3': '2026-11-15', 'C4
 <p><strong>Alcance de la afirmación.</strong></p>
 <ul class="simple">
 <li><p>La novedad es de <strong>aplicación y de combinación</strong>, no de familia: la selección dinámica de ensambles existe desde hace más de veinte años.</p></li>
-<li><p>El capítulo 13 muestra que DES-CPL no supera al mejor benchmark. La novedad no depende del resultado, pero el resultado limita la nota al tope de 4.0 (sección 13.8).</p></li>
+<li><p>El capítulo 13 muestra que DES-CPL no supera al mejor benchmark. La novedad no depende del resultado (sección 13.8).</p></li>
 </ul>
 </section>
 <section id="limitaciones-de-la-revision-y-repeticion">
 <h2>14.9. Limitaciones de la revisión y repetición<a class="headerlink" href="#limitaciones-de-la-revision-y-repeticion" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><strong>Google Scholar</strong> se consultó a mano y se cribó con un filtro automático sobre título y fragmento. Un trabajo cuyo fragmento visible no mencione a la vez la selección dinámica y el problema pudo pasar el filtro sin ser detectado. En las cadenas C1, C2, C4, C6, C7 y C8 se revisaron todos los registros; en C3 se copiaron 462 de los 464 resultados (15 de noviembre).</p></li>
+<li><p><strong>Google Scholar</strong> se consultó a mano y se cribó con un filtro automático sobre título y fragmento. Un trabajo cuyo fragmento visible no mencione a la vez la selección dinámica y el problema pudo quedar fuera del filtro y no revisarse a mano. En las cadenas C1, C2, C4, C6, C7 y C8 se revisaron todos los registros; en C3 se copiaron 462 de los 464 resultados (15 de noviembre).</p></li>
 <li><p><strong>Web of Science y Scopus</strong> se usaron en la búsqueda por problema, pero no con las ocho cadenas del modelo. OpenAlex, Semantic Scholar y Google Scholar indexan buena parte de esas colecciones.</p></li>
 <li><p><strong>Revisión por título y resumen.</strong> Algunos trabajos se compararon solo por título, fuente y fragmento: los que no tienen resumen accesible (el motor de 2015 y el de regiones de competencia de 2026) y la tesis de 2022.</p></li>
 <li><p><strong>Literatura gris.</strong> Las búsquedas cubren artículos, preprints y repositorios, pero no tesis ni informes técnicos no indexados.</p></li>
-<li><p><strong>Repetición.</strong> La guía pide repetir la búsqueda antes de la entrega final:</p>
+<li><p><strong>Repetición.</strong> La literatura se actualiza de forma continua, así que la búsqueda se repite antes de cerrar el trabajo:</p>
 <ul>
 <li><p>Para las cuatro bases con API basta con correr <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">experiments/revision_literatura.py</span></code>. Guarda los archivos con la fecha del día sin borrar los anteriores.</p></li>
 <li><p>Para Google Scholar se vuelven a copiar las páginas de resultados; las de la consulta anterior se conservan en <code class="docutils literal notranslate"><span class="pre">google_scholar_&lt;fecha&gt;/</span></code>.</p></li>
@@ -2031,7 +2031,7 @@ Google Scholar: {'C1': '2026-11-15', 'C2': '2026-11-15', 'C3': '2026-11-15', 'C4
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>

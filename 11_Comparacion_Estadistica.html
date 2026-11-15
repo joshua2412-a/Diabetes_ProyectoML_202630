@@ -425,7 +425,7 @@ document.write(`
 <section id="el-problema-de-escala">
 <h2>11.1. El problema de escala<a class="headerlink" href="#el-problema-de-escala" title="Link to this heading">#</a></h2>
 <p>El diseño del experimento contempla 112 combinaciones, de las cuales 108 son ejecutables: las cuatro de k-NN con <code class="docutils literal notranslate"><span class="pre">class_weight</span></code> no tienen equivalente y quedan documentadas como inviables en la sección 8.1.1. El número de comparaciones por pares posibles entre esas 108 es 108 × 107 / 2 = 5,778. Ejecutar esa cantidad de pruebas con un nivel de significancia de 0.05 y sin ningún control produciría alrededor de 289 resultados significativos solo por azar.</p>
-<p>Por eso la comparación no puede reducirse a aplicar pruebas por pares. Se sigue la secuencia jerárquica que exige la guía:</p>
+<p>Por eso la comparación no puede reducirse a aplicar pruebas por pares. Se sigue la secuencia jerárquica habitual <span class="bibtex-citation" id="id1">[<a class="reference internal" href="18_Reproducibilidad.html#id27" title="Janez Demšar. Statistical comparisons of classifiers over multiple data sets. Journal of Machine Learning Research, 7:1–30, 2006.">Demšar, 2006</a>]</span>:</p>
 <ol class="arabic simple">
 <li><p><strong>Prueba ómnibus (Friedman)</strong> sobre los rangos de los modelos en los folds del bucle externo. Si no rechaza, no hay evidencia de que ningún modelo supere a los demás y el análisis se detiene.</p></li>
 <li><p><strong>Post-hoc (Nemenyi) y diagrama de diferencia crítica</strong>, que compara todos contra todos controlando el error familiar de forma conjunta.</p></li>
@@ -734,7 +734,7 @@ CD = q_{\alpha} \sqrt{\frac{k(k+1)}{6n}}
 <section id="comparaciones-dirigidas-prueba-de-delong">
 <h2>11.4. Comparaciones dirigidas: prueba de DeLong<a class="headerlink" href="#comparaciones-dirigidas-prueba-de-delong" title="Link to this heading">#</a></h2>
 <p>DeLong contrasta la igualdad de dos AUC calculadas sobre las <strong>mismas observaciones</strong>, lo que la hace apropiada aquí: los tres finalistas se evaluaron sobre el mismo conjunto de prueba, así que sus errores están correlacionados y una prueba que ignore esa correlación sería demasiado conservadora.</p>
-<p>Se reserva para el subconjunto reducido de los tres finalistas del capítulo 10, tal como exige la guía, y sus valores p se ajustan por comparaciones múltiples.</p>
+<p>Se reserva para el subconjunto reducido de los tres finalistas del capítulo 10, y sus valores p se ajustan por comparaciones múltiples.</p>
 <section id="robustez-frente-a-la-regla-de-seleccion-del-representante">
 <h3>11.3.1. Robustez frente a la regla de selección del representante<a class="headerlink" href="#robustez-frente-a-la-regla-de-seleccion-del-representante" title="Link to this heading">#</a></h3>
 <p>La sección 11.2 advirtió que elegir el representante de cada modelo por su
@@ -1080,7 +1080,7 @@ desempeño antes de elegir.</p>
 </table>
 </div></div></div>
 </div>
-<p>Se reportan el valor p crudo y los dos ajustados, como pide la guía. La diferencia entre Holm y Benjamini-Hochberg es el criterio que controlan: Holm controla la probabilidad de cometer <strong>al menos un</strong> falso positivo en la familia de comparaciones, más estricto; Benjamini-Hochberg controla la <strong>proporción esperada</strong> de falsos positivos entre los rechazos, más permisivo y preferible cuando el objetivo es explorar y no confirmar.</p>
+<p>Se reportan el valor p crudo y los dos ajustados. La diferencia entre Holm y Benjamini-Hochberg es el criterio que controlan: Holm controla la probabilidad de cometer <strong>al menos un</strong> falso positivo en la familia de comparaciones, más estricto; Benjamini-Hochberg controla la <strong>proporción esperada</strong> de falsos positivos entre los rechazos, más permisivo y preferible cuando el objetivo es explorar y no confirmar.</p>
 </section>
 </section>
 <section id="tamano-del-efecto">
@@ -1651,7 +1651,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>

@@ -451,7 +451,7 @@ document.write(`
 <li><p>Un <strong>esquema de validación cruzada anidada y agrupada por paciente</strong>, con el bucle interno para seleccionar hiperparámetros y el externo para estimar desempeño.</p></li>
 <li><p>Una <strong>primera estimación</strong> con regresión logística, que fija la expectativa realista de desempeño. El capítulo 7 la retoma y la desarrolla como modelo base del proyecto.</p></li>
 <li><p>Los <strong>espacios de búsqueda</strong> de los cuatro optimizadores, diseñados para que la comparación entre ellos sea a igual presupuesto.</p></li>
-<li><p>El <strong>análisis de optimización computacional</strong> que exige la guía: complejidad teórica frente a tiempo medido, comparación entre la versión estándar y la optimizada de cada modelo, paralelización y perfilamiento. Del resultado se deriva el presupuesto del experimento completo.</p></li>
+<li><p>El <strong>análisis de optimización computacional</strong>: complejidad teórica frente a tiempo medido, comparación entre la versión estándar y la optimizada de cada modelo, paralelización y perfilamiento. Del resultado se deriva el presupuesto del experimento completo.</p></li>
 </ol>
 <p>El código de este motor (preprocesador, fábricas de modelos, optimizadores y el ejecutor con validación anidada) vive en <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> y no en este notebook. La razón es la misma que llevó las utilidades del capítulo 1 a <code class="docutils literal notranslate"><span class="pre">config.py</span></code>: los capítulos 6 a 10 comparten esta infraestructura, y duplicarla en cada uno arriesgaría que una corrección se aplique en un notebook y se olvide en otro.</p>
 <div class="cell docutils container">
@@ -3163,13 +3163,13 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </section>
 <section id="multi-fidelidad-successive-halving-en-optuna">
 <h3>6.5.3. Multi-fidelidad: Successive Halving en Optuna<a class="headerlink" href="#multi-fidelidad-successive-halving-en-optuna" title="Link to this heading">#</a></h3>
-<p>La guía recomienda al menos un método de eliminación sucesiva de configuraciones poco prometedoras. Se implementa <strong>Successive Halving</strong> dentro de la optimización bayesiana, con el número de folds internos evaluados como <strong>fidelidad</strong>: tras el primer fold, cada configuración informa su puntaje parcial, y solo continúa si está en el tercio superior de las que llegaron a ese punto (<strong>factor de reducción η = 3</strong>). Las configuraciones descartadas consumen un fold en lugar de tres.</p>
+<p>Conviene contar con al menos un método de eliminación sucesiva de configuraciones poco prometedoras. Se implementa <strong>Successive Halving</strong> dentro de la optimización bayesiana, con el número de folds internos evaluados como <strong>fidelidad</strong>: tras el primer fold, cada configuración informa su puntaje parcial, y solo continúa si está en el tercio superior de las que llegaron a ese punto (<strong>factor de reducción η = 3</strong>). Las configuraciones descartadas consumen un fold en lugar de tres.</p>
 <p>La fidelidad por folds se elige porque es una estimación no sesgada del mismo objetivo con menor precisión, a diferencia de reducir árboles o épocas, que cambia el modelo evaluado. El factor η = 3 coincide con el número de folds internos: con tres niveles de fidelidad, un único corte intermedio es todo lo que cabe. El riesgo es descartar una configuración buena por un primer fold desfavorable; con desviaciones estándar entre folds del orden de 0.01 en AUC-PR, solo afecta a configuraciones que ya están cerca del umbral. La tabla maestra registra cuántos ajustes consumió cada corrida, lo que permite medir el ahorro en el capítulo 9.</p>
 </section>
 </section>
 <section id="complejidad-algoritmica">
 <h2>6.6. Complejidad algorítmica<a class="headerlink" href="#complejidad-algoritmica" title="Link to this heading">#</a></h2>
-<p>La guía exige reportar la complejidad asintótica de cada modelo, en entrenamiento y en inferencia, y contrastarla con el tiempo medido. Notación: n observaciones, p columnas tras la codificación (152), nnz entradas no nulas de la matriz dispersa (≈ 0.22·n·p), s iteraciones del solver, T árboles, d profundidad, m variables candidatas por división, k vecinos, n_sv vectores de soporte.</p>
+<p>Se reporta la complejidad asintótica de cada modelo, en entrenamiento y en inferencia, y se contrasta con el tiempo medido. Notación: n observaciones, p columnas tras la codificación (152), nnz entradas no nulas de la matriz dispersa (≈ 0.22·n·p), s iteraciones del solver, T árboles, d profundidad, m variables candidatas por división, k vecinos, n_sv vectores de soporte.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Modelo</p></th>
@@ -3196,7 +3196,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <td><p><code class="docutils literal notranslate"><span class="pre">liblinear</span></code> sobre matriz dispersa</p></td>
 <td><p>O(s·nnz)</p></td>
 <td><p>O(p)</p></td>
-<td><p>Mismo orden por iteración que SAGA, el solver que la guía cita para modelos lineales a gran escala; converge en muchas menos iteraciones a esta escala</p></td>
+<td><p>Mismo orden por iteración que SAGA, el solver habitual para modelos lineales a gran escala; converge en muchas menos iteraciones a esta escala</p></td>
 </tr>
 <tr class="row-odd"><td><p>Árbol de decisión</p></td>
 <td><p>CART, matriz densa</p></td>
@@ -3389,7 +3389,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </section>
 <section id="modelo-estandar-frente-a-optimizado">
 <h2>6.7. Modelo estándar frente a optimizado<a class="headerlink" href="#modelo-estandar-frente-a-optimizado" title="Link to this heading">#</a></h2>
-<p>La guía pide una tabla comparativa entre la versión estándar y la optimizada de cada modelo, con tiempo de entrenamiento, tiempo de inferencia, memoria y variación del desempeño. Se mide sobre el primer fold externo: el modelo se ajusta en sus ~63,600 encuentros de entrenamiento y se evalúa en los ~15,900 de validación. El tiempo se mide sin perfilador de memoria, porque <code class="docutils literal notranslate"><span class="pre">tracemalloc</span></code> ralentiza de forma desigual las operaciones con muchas asignaciones pequeñas y añadiría un piso común de decenas de segundos a todos los modelos, aplastando las diferencias que se quieren medir. La memoria pico se mide en un segundo ajuste independiente con <code class="docutils literal notranslate"><span class="pre">tracemalloc</span></code>; cubre las asignaciones de Python y numpy del proceso principal, así que en XGBoost (memoria interna en C++) y en los modelos paralelos (procesos hijos) es una cota inferior.</p>
+<p>La tabla siguiente compara la versión estándar y la optimizada de cada modelo, con tiempo de entrenamiento, tiempo de inferencia, memoria y variación del desempeño. Se mide sobre el primer fold externo: el modelo se ajusta en sus ~63,600 encuentros de entrenamiento y se evalúa en los ~15,900 de validación. El tiempo se mide sin perfilador de memoria, porque <code class="docutils literal notranslate"><span class="pre">tracemalloc</span></code> ralentiza de forma desigual las operaciones con muchas asignaciones pequeñas y añadiría un piso común de decenas de segundos a todos los modelos, aplastando las diferencias que se quieren medir. La memoria pico se mide en un segundo ajuste independiente con <code class="docutils literal notranslate"><span class="pre">tracemalloc</span></code>; cubre las asignaciones de Python y numpy del proceso principal, así que en XGBoost (memoria interna en C++) y en los modelos paralelos (procesos hijos) es una cota inferior.</p>
 <p>El SVM con kernel no puede ajustarse sobre el fold completo en un tiempo razonable (justamente lo que motiva su sustitución), así que ese par se compara sobre una submuestra de 5,000 encuentros de entrenamiento.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3756,7 +3756,7 @@ SVM (submuestra 5,000)           optimizado: LinearSVC calibrado             0.8
 <p>La comparación documenta cuatro decisiones del motor, y la columna de Δ AUC-PR comprueba en cada una que la ganancia de velocidad no cuesta desempeño. Los factores son de pipeline completo: incluyen el preprocesamiento, que cuesta lo mismo en las dos versiones de cada par y por tanto comprime el cociente. La mejora del modelo aislado es mayor que la que muestra la tabla.</p>
 <ul class="simple">
 <li><p><strong>Logística: <code class="docutils literal notranslate"><span class="pre">liblinear</span></code> en lugar de SAGA.</strong> El ajuste pasa de 55.6 a 8.3 segundos (×6.7), con el mismo AUC-PR hasta la cuarta cifra decimal. Descontando el preprocesamiento, común a ambos, el solver mejora en torno a un orden de magnitud. Los dos resuelven el mismo problema convexo, así que llegan al mismo óptimo; la diferencia está en cuántas iteraciones necesitan para llegar.</p></li>
-<li><p><strong>Árbol, Random Forest y k-NN: matriz densa.</strong> El árbol ajusta 2.4 veces más rápido y Random Forest 3.6. En k-NN el ajuste no cambia, porque solo almacena los datos, pero <strong>la inferencia es 6.3 veces más rápida</strong>, que es donde ese modelo gasta su tiempo. El desempeño es idéntico (Δ AUC-PR de 0.000 en los tres) porque el algoritmo es el mismo; lo que cambia es la estructura de datos que recorre. El costo es la memoria: un 10 % más de pico medido, ya que la matriz densa guarda también el 78 % de ceros que la dispersa omite. Es el compromiso velocidad-memoria que la guía pide discutir, y aquí se resuelve a favor de la velocidad porque esa memoria cabe holgadamente en cualquier equipo actual.</p></li>
+<li><p><strong>Árbol, Random Forest y k-NN: matriz densa.</strong> El árbol ajusta 2.4 veces más rápido y Random Forest 3.6. En k-NN el ajuste no cambia, porque solo almacena los datos, pero <strong>la inferencia es 6.3 veces más rápida</strong>, que es donde ese modelo gasta su tiempo. El desempeño es idéntico (Δ AUC-PR de 0.000 en los tres) porque el algoritmo es el mismo; lo que cambia es la estructura de datos que recorre. El costo es la memoria: un 10 % más de pico medido, ya que la matriz densa guarda también el 78 % de ceros que la dispersa omite. Es el compromiso velocidad-memoria, y aquí se resuelve a favor de la velocidad porque esa memoria cabe holgadamente en cualquier equipo actual.</p></li>
 <li><p><strong>XGBoost: histogramas y parada temprana.</strong> El método <code class="docutils literal notranslate"><span class="pre">hist</span></code> discretiza cada variable una sola vez y evita ordenar en cada división: casi duplica la velocidad (×1.9). La parada temprana no solo recorta árboles: <strong>mejora el AUC-PR en 0.010</strong> respecto al mismo modelo sin parada, porque detiene el boosting antes de que empiece a sobreajustar. Es una optimización que gana en las dos dimensiones, con una salvedad que conviene declarar: el envoltorio separa la validación interna <strong>después</strong> del remuestreo, así que en las combinaciones con SMOTE o ADASYN ese conjunto contiene observaciones sintéticas. Al ser interpolaciones resultan más fáciles de ajustar, de modo que la parada dispara algo más tarde de lo que haría sobre datos reales y el modelo queda un poco sobredimensionado. No contamina la estimación del desempeño, porque todo ocurre dentro del fold de entrenamiento, y el efecto está acotado: la mejor corrida de XGBoost con remuestreo alcanza 0.2267 de AUC-PR frente a 0.2243 de la mejor sin remuestreo, una distancia de 0.0024 que es la mitad del ruido por semilla. El docstring de <code class="docutils literal notranslate"><span class="pre">XGBClasificadorParada</span></code> lo detalla.</p></li>
 <li><p><strong>SVM: <code class="docutils literal notranslate"><span class="pre">LinearSVC</span></code> en lugar del kernel.</strong> Sobre la misma submuestra de 5,000 encuentros ajusta 10.3 veces más rápido, <strong>infiere 63 veces más rápido y da mejor AUC-PR (+0.008)</strong>: el kernel tiene que comparar cada observación nueva con todos sus vectores de soporte, y el modelo lineal solo calcula un producto escalar. Con el exponente de escalamiento de la sección 6.6, llevar el kernel al tamaño real de los folds sería inviable, y además no aportaría desempeño.</p></li>
 </ul>
@@ -4326,7 +4326,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 <li><p><strong>Optuna es secuencial.</strong> Cada propuesta depende de las anteriores, y con la poda activa los folds internos también se evalúan en serie; no aprovecha los núcleos que Grid usa en paralelo.</p></li>
 <li><p><strong>El espacio continuo lo lleva a zonas caras.</strong> Al explorar valores de <code class="docutils literal notranslate"><span class="pre">C</span></code> fuera de la rejilla, Optuna visita configuraciones con L1 y <code class="docutils literal notranslate"><span class="pre">C</span></code> alto, las más lentas de ajustar.</p></li>
 </ul>
-<p>Successive Halving reduce el número de ajustes, no necesariamente el tiempo de pared. Por eso la comparación entre optimizadores del capítulo 9 debe hacerse a la vez por calidad alcanzada, por número de evaluaciones y por tiempo, como exige la guía.</p>
+<p>Successive Halving reduce el número de ajustes, no necesariamente el tiempo de pared. Por eso la comparación entre optimizadores del capítulo 9 debe hacerse a la vez por calidad alcanzada, por número de evaluaciones y por tiempo.</p>
 <p>Las columnas de la tabla maestra son:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -4350,7 +4350,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
 </tbody>
 </table>
 </div>
-<p>Las métricas por fold permiten aplicar las pruebas no paramétricas del capítulo 11 sobre las distribuciones y no solo sobre promedios; las curvas <em>anytime</em> (mejor puntaje tras cada evaluación) y el número de evaluaciones permiten comparar los optimizadores por calidad alcanzada por unidad de presupuesto, como exige la guía.</p>
+<p>Las métricas por fold permiten aplicar las pruebas no paramétricas del capítulo 11 sobre las distribuciones y no solo sobre promedios; las curvas <em>anytime</em> (mejor puntaje tras cada evaluación) y el número de evaluaciones permiten comparar los optimizadores por calidad alcanzada por unidad de presupuesto.</p>
 </section>
 <section id="sintesis-del-capitulo">
 <h2>6.11. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h2>
@@ -4509,7 +4509,7 @@ width="64" viewBox="0 0 500 400" style="font-family: 'Droid Sans', sans-serif;">
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>

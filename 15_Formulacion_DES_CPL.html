@@ -420,7 +420,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="des-cpl-formulacion-propiedades-y-complejidad">
 <h1>15. DES-CPL: formulación, propiedades y complejidad<a class="headerlink" href="#des-cpl-formulacion-propiedades-y-complejidad" title="Link to this heading">#</a></h1>
-<p>La guía del Entregable 3 (sección 5.4) pide, para el modelo original:</p>
+<p>Para que el modelo original pueda evaluarse y reproducirse hacen falta:</p>
 <ul class="simple">
 <li><p>la formulación matemática completa, con notación definida y supuestos explícitos;</p></li>
 <li><p>un pseudocódigo formal con entradas, salidas y pasos;</p></li>
@@ -467,11 +467,10 @@ Configuración elegida: k = 30, τ = 0.0001, λ = 1.0, modelos = logistica, rand
 <li><p><span class="math notranslate nohighlight">\(\pi = \frac1n \sum_i y_i\)</span>: prevalencia global.</p></li>
 <li><p><span class="math notranslate nohighlight">\(f_1, \dots, f_M\)</span>: clasificadores base probabilísticos, <span class="math notranslate nohighlight">\(f_m(x) \in (0, 1)\)</span>.</p></li>
 </ul>
-<p><strong>1. Conjunto de selección fuera de pliegue.</strong> Se parte <span class="math notranslate nohighlight">\(\mathcal D\)</span> en <span class="math notranslate nohighlight">\(L = 3\)</span> pliegues agrupados por paciente, <span class="math notranslate nohighlight">\(\mathcal D_1, \dots, \mathcal D_L\)</span>. Para el encuentro <span class="math notranslate nohighlight">\(i \in \mathcal D_\ell\)</span>,
-$<span class="math notranslate nohighlight">\(
-\tilde f_m(x_i) = f_m^{(-\ell)}(x_i),
-\)</span><span class="math notranslate nohighlight">\( (eq-fuera-de-pliegue)
-donde \)</span>f_m^{(-\ell)}<span class="math notranslate nohighlight">\( se ajustó sin \)</span>\mathcal D_\ell<span class="math notranslate nohighlight">\(. Para predecir encuentros nuevos se usa \)</span>f_m<span class="math notranslate nohighlight">\(, ajustado con todo \)</span>\mathcal D$.</p>
+<p><strong>1. Conjunto de selección fuera de pliegue.</strong> Se parte <span class="math notranslate nohighlight">\(\mathcal D\)</span> en <span class="math notranslate nohighlight">\(L = 3\)</span> pliegues agrupados por paciente, <span class="math notranslate nohighlight">\(\mathcal D_1, \dots, \mathcal D_L\)</span>. Para el encuentro <span class="math notranslate nohighlight">\(i \in \mathcal D_\ell\)</span>,</p>
+<div class="math notranslate nohighlight" id="equation-eq-fuera-de-pliegue">
+<span class="eqno">(4)<a class="headerlink" href="#equation-eq-fuera-de-pliegue" title="Link to this equation">#</a></span>\[\tilde f_m(x_i) = f_m^{(-\ell)}(x_i),\]</div>
+<p>donde <span class="math notranslate nohighlight">\(f_m^{(-\ell)}\)</span> se ajustó sin <span class="math notranslate nohighlight">\(\mathcal D_\ell\)</span>. Para predecir encuentros nuevos se usa <span class="math notranslate nohighlight">\(f_m\)</span>, ajustado con todo <span class="math notranslate nohighlight">\(\mathcal D\)</span>.</p>
 <p><strong>2. Poda.</strong> <span class="math notranslate nohighlight">\(\mathcal A \subseteq \{1, \dots, M\}\)</span> son los <span class="math notranslate nohighlight">\(M' \in \{4, M\}\)</span> modelos de mayor AUC-PR de <span class="math notranslate nohighlight">\(\tilde f_m\)</span> en <span class="math notranslate nohighlight">\(\mathcal D\)</span>. A partir de aquí, <span class="math notranslate nohighlight">\(m\)</span> recorre solo <span class="math notranslate nohighlight">\(\mathcal A\)</span>.</p>
 <p><strong>3. Perfil de salida.</strong> <span class="math notranslate nohighlight">\(\phi(x) = \big(\operatorname{logit} f_m(x)\big)_{m \in \mathcal A} \in \mathbb R^{M'}\)</span>, con las probabilidades recortadas a <span class="math notranslate nohighlight">\([10^{-6}, 1 - 10^{-6}]\)</span>. Para los encuentros de selección se usa <span class="math notranslate nohighlight">\(\tilde f_m\)</span> en lugar de <span class="math notranslate nohighlight">\(f_m\)</span>. Para una consulta nueva, el perfil se calcula con el promedio de los <span class="math notranslate nohighlight">\(L\)</span> modelos de pliegue, <span class="math notranslate nohighlight">\(\bar f_m(x) = \frac1L \sum_\ell f_m^{(-\ell)}(x)\)</span>, que se entrenaron con el mismo tamaño de muestra que produjo el conjunto de selección; <span class="math notranslate nohighlight">\(f_m\)</span> se reserva para la combinación del paso 9.</p>
 <p><strong>4. Región de competencia.</strong> Para una consulta <span class="math notranslate nohighlight">\(x\)</span> (con paciente <span class="math notranslate nohighlight">\(g\)</span> si pertenece a <span class="math notranslate nohighlight">\(\mathcal D\)</span>):</p>
@@ -479,27 +478,22 @@ donde \)</span>f_m^{(-\ell)}<span class="math notranslate nohighlight">\( se aju
 <li><p><span class="math notranslate nohighlight">\(\mathcal N_k^{c}(x)\)</span>, con <span class="math notranslate nohighlight">\(c \in \{0, 1\}\)</span>: los <span class="math notranslate nohighlight">\(k\)</span> encuentros de clase <span class="math notranslate nohighlight">\(c\)</span> más cercanos a <span class="math notranslate nohighlight">\(\phi(x)\)</span> en distancia euclídea, entre los que no son del paciente <span class="math notranslate nohighlight">\(g\)</span>;</p></li>
 <li><p><span class="math notranslate nohighlight">\(\mathcal N_{2k}(x)\)</span>: los <span class="math notranslate nohighlight">\(2k\)</span> más cercanos sin distinguir clase, con la misma exclusión.</p></li>
 </ul>
-<p><strong>5. Prevalencia local suavizada</strong>, con <span class="math notranslate nohighlight">\(s = 10\)</span> pseudo-observaciones:
-$<span class="math notranslate nohighlight">\(
-\hat q(x) = \frac{\sum_{i \in \mathcal N_{2k}(x)} y_i + s\,\pi}{2k + s}.
-\)</span>$ (eq-prevalencia-local)</p>
-<p><strong>6. Competencia local</strong>: estimador estratificado del Brier del modelo <span class="math notranslate nohighlight">\(m\)</span> en la zona.
-$<span class="math notranslate nohighlight">\(
-\hat C_m^{\text{loc}}(x) = \hat q(x)\,\frac1k \sum_{i \in \mathcal N_k^{1}(x)} \big(\tilde f_m(x_i) - 1\big)^2 + \big(1 - \hat q(x)\big)\,\frac1k \sum_{i \in \mathcal N_k^{0}(x)} \tilde f_m(x_i)^2.
-\)</span>$ (eq-competencia-local)</p>
-<p><strong>7. Competencia global</strong> (la misma medida, en todo el conjunto):
-$<span class="math notranslate nohighlight">\(
-C_m^{\text{glob}} = \pi\,\overline{(\tilde f_m - 1)^2}\big|_{y=1} + (1 - \pi)\,\overline{\tilde f_m^{\,2}}\big|_{y=0} = \frac1n\sum_i \big(\tilde f_m(x_i) - y_i\big)^2.
-\)</span>$ (eq-competencia-global)</p>
-<p><strong>8. Encogimiento</strong>, con <span class="math notranslate nohighlight">\(\lambda \in [0, 1]\)</span>:
-$<span class="math notranslate nohighlight">\(
-\hat C_m(x) = (1 - \lambda)\,\hat C_m^{\text{loc}}(x) + \lambda\, C_m^{\text{glob}}.
-\)</span>$ (eq-encogimiento)</p>
-<p><strong>9. Pesos y predicción</strong>, con temperatura <span class="math notranslate nohighlight">\(\tau \ge 0\)</span>:
-$<span class="math notranslate nohighlight">\(
-w_m(x) = \frac{\exp\!\big(-\hat C_m(x)/\tau\big)}{\sum_{j \in \mathcal A} \exp\!\big(-\hat C_j(x)/\tau\big)}, \qquad \hat p(x) = \sum_{m \in \mathcal A} w_m(x)\, f_m(x).
-\)</span><span class="math notranslate nohighlight">\( (eq-pesos-prediccion)
-El caso \)</span>\tau = 0$ se define como el límite: todo el peso, repartido por igual, va a los modelos de competencia mínima.</p>
+<p><strong>5. Prevalencia local suavizada</strong>, con <span class="math notranslate nohighlight">\(s = 10\)</span> pseudo-observaciones:</p>
+<div class="math notranslate nohighlight" id="equation-eq-prevalencia-local">
+<span class="eqno">(5)<a class="headerlink" href="#equation-eq-prevalencia-local" title="Link to this equation">#</a></span>\[\hat q(x) = \frac{\sum_{i \in \mathcal N_{2k}(x)} y_i + s\,\pi}{2k + s}.\]</div>
+<p><strong>6. Competencia local</strong>: estimador estratificado del Brier del modelo <span class="math notranslate nohighlight">\(m\)</span> en la zona.</p>
+<div class="math notranslate nohighlight" id="equation-eq-competencia-local">
+<span class="eqno">(6)<a class="headerlink" href="#equation-eq-competencia-local" title="Link to this equation">#</a></span>\[\hat C_m^{\text{loc}}(x) = \hat q(x)\,\frac1k \sum_{i \in \mathcal N_k^{1}(x)} \big(\tilde f_m(x_i) - 1\big)^2 + \big(1 - \hat q(x)\big)\,\frac1k \sum_{i \in \mathcal N_k^{0}(x)} \tilde f_m(x_i)^2.\]</div>
+<p><strong>7. Competencia global</strong> (la misma medida, en todo el conjunto):</p>
+<div class="math notranslate nohighlight" id="equation-eq-competencia-global">
+<span class="eqno">(7)<a class="headerlink" href="#equation-eq-competencia-global" title="Link to this equation">#</a></span>\[C_m^{\text{glob}} = \pi\,\overline{(\tilde f_m - 1)^2}\big|_{y=1} + (1 - \pi)\,\overline{\tilde f_m^{\,2}}\big|_{y=0} = \frac1n\sum_i \big(\tilde f_m(x_i) - y_i\big)^2.\]</div>
+<p><strong>8. Encogimiento</strong>, con <span class="math notranslate nohighlight">\(\lambda \in [0, 1]\)</span>:</p>
+<div class="math notranslate nohighlight" id="equation-eq-encogimiento">
+<span class="eqno">(8)<a class="headerlink" href="#equation-eq-encogimiento" title="Link to this equation">#</a></span>\[\hat C_m(x) = (1 - \lambda)\,\hat C_m^{\text{loc}}(x) + \lambda\, C_m^{\text{glob}}.\]</div>
+<p><strong>9. Pesos y predicción</strong>, con temperatura <span class="math notranslate nohighlight">\(\tau \ge 0\)</span>:</p>
+<div class="math notranslate nohighlight" id="equation-eq-pesos-prediccion">
+<span class="eqno">(9)<a class="headerlink" href="#equation-eq-pesos-prediccion" title="Link to this equation">#</a></span>\[w_m(x) = \frac{\exp\!\big(-\hat C_m(x)/\tau\big)}{\sum_{j \in \mathcal A} \exp\!\big(-\hat C_j(x)/\tau\big)}, \qquad \hat p(x) = \sum_{m \in \mathcal A} w_m(x)\, f_m(x).\]</div>
+<p>El caso <span class="math notranslate nohighlight">\(\tau = 0\)</span> se define como el límite: todo el peso, repartido por igual, va a los modelos de competencia mínima.</p>
 <p><strong>Hiperparámetros.</strong> <span class="math notranslate nohighlight">\(\theta = (M', k, \lambda, \tau)\)</span> se eligen maximizando el AUC-PR de <span class="math notranslate nohighlight">\(\hat p\)</span> sobre el propio conjunto de selección. En esa búsqueda la región de cada encuentro excluye a su paciente, y se usan 60 evaluaciones de Optuna (TPE) sobre la rejilla del protocolo.</p>
 <p><strong>Supuestos.</strong></p>
 <ul class="simple">
@@ -552,17 +546,15 @@ El caso \)</span>\tau = 0$ se define como el límite: todo el peso, repartido po
 <h2>15.3. Propiedades<a class="headerlink" href="#propiedades" title="Link to this heading">#</a></h2>
 <section id="proposicion-1-descomposicion-de-ambiguedad-del-brier">
 <h3>Proposición 1 (descomposición de ambigüedad del Brier)<a class="headerlink" href="#proposicion-1-descomposicion-de-ambiguedad-del-brier" title="Link to this heading">#</a></h3>
-<p>Para cualquier <span class="math notranslate nohighlight">\(x\)</span> y cualquier <span class="math notranslate nohighlight">\(y \in \{0, 1\}\)</span>, si <span class="math notranslate nohighlight">\(\hat p = \sum_m w_m p_m\)</span> con <span class="math notranslate nohighlight">\(w_m \ge 0\)</span> y <span class="math notranslate nohighlight">\(\sum_m w_m = 1\)</span>:
-$<span class="math notranslate nohighlight">\(
-(\hat p - y)^2 = \sum_m w_m (p_m - y)^2 - \sum_m w_m (p_m - \hat p)^2.
-\)</span>$ (eq-ambiguedad)
-En consecuencia, el Brier de DES-CPL en cada encuentro nunca supera el promedio ponderado (con sus propios pesos) del Brier de los modelos que combina. Solo lo iguala cuando todos los modelos dan la misma probabilidad.</p>
-<p><em>Demostración.</em> Se escribe <span class="math notranslate nohighlight">\(p_m - y = (p_m - \hat p) + (\hat p - y)\)</span> y se eleva al cuadrado:
-$<span class="math notranslate nohighlight">\(
-\sum_m w_m (p_m - y)^2 = \sum_m w_m (p_m - \hat p)^2 + 2(\hat p - y)\sum_m w_m (p_m - \hat p) + (\hat p - y)^2 \sum_m w_m.
-\)</span><span class="math notranslate nohighlight">\( (eq-ambiguedad-desarrollo)
-El término cruzado se anula porque \)</span>\sum_m w_m p_m = \hat p<span class="math notranslate nohighlight">\( y \)</span>\sum_m w_m = 1<span class="math notranslate nohighlight">\(. Despejando se obtiene la identidad. El segundo término es no negativo y vale cero si y solo si \)</span>p_m = \hat p<span class="math notranslate nohighlight">\( para todo \)</span>m<span class="math notranslate nohighlight">\( con \)</span>w_m &gt; 0<span class="math notranslate nohighlight">\(. \)</span>\blacksquare$</p>
-<p><strong>Alcance.</strong> La identidad <code class="xref eq docutils literal notranslate"><span class="pre">eq-ambiguedad</span></code> <span class="bibtex-citation" id="id1">[<a class="reference internal" href="18_Reproducibilidad.html#id84" title="Anders Krogh and Jesper Vedelsby. Neural network ensembles, cross validation, and active learning. In Advances in Neural Information Processing Systems 7, 231–238. Cambridge, MA, 1995. MIT Press.">Krogh and Vedelsby, 1995</a>]</span> vale para cualquier combinación convexa, así que no distingue a DES-CPL de un promedio. Lo que DES-CPL añade es la forma de elegir <span class="math notranslate nohighlight">\(w\)</span>: da más peso a los modelos con menor Brier estimado <em>en la zona de</em> <span class="math notranslate nohighlight">\(x\)</span>. Por eso la cota <span class="math notranslate nohighlight">\(\sum_m w_m (p_m - y)^2\)</span> es, en esperanza local, menor que la del promedio simple cuando la competencia local se estima bien. Que se estime bien es justamente lo que estudian las proposiciones 2 a 4.</p>
+<p>Para cualquier <span class="math notranslate nohighlight">\(x\)</span> y cualquier <span class="math notranslate nohighlight">\(y \in \{0, 1\}\)</span>, si <span class="math notranslate nohighlight">\(\hat p = \sum_m w_m p_m\)</span> con <span class="math notranslate nohighlight">\(w_m \ge 0\)</span> y <span class="math notranslate nohighlight">\(\sum_m w_m = 1\)</span>:</p>
+<div class="math notranslate nohighlight" id="equation-eq-ambiguedad">
+<span class="eqno">(10)<a class="headerlink" href="#equation-eq-ambiguedad" title="Link to this equation">#</a></span>\[(\hat p - y)^2 = \sum_m w_m (p_m - y)^2 - \sum_m w_m (p_m - \hat p)^2.\]</div>
+<p>En consecuencia, el Brier de DES-CPL en cada encuentro nunca supera el promedio ponderado (con sus propios pesos) del Brier de los modelos que combina. Solo lo iguala cuando todos los modelos dan la misma probabilidad.</p>
+<p><em>Demostración.</em> Se escribe <span class="math notranslate nohighlight">\(p_m - y = (p_m - \hat p) + (\hat p - y)\)</span> y se eleva al cuadrado:</p>
+<div class="math notranslate nohighlight" id="equation-eq-ambiguedad-desarrollo">
+<span class="eqno">(11)<a class="headerlink" href="#equation-eq-ambiguedad-desarrollo" title="Link to this equation">#</a></span>\[\sum_m w_m (p_m - y)^2 = \sum_m w_m (p_m - \hat p)^2 + 2(\hat p - y)\sum_m w_m (p_m - \hat p) + (\hat p - y)^2 \sum_m w_m.\]</div>
+<p>El término cruzado se anula porque <span class="math notranslate nohighlight">\(\sum_m w_m p_m = \hat p\)</span> y <span class="math notranslate nohighlight">\(\sum_m w_m = 1\)</span>. Despejando se obtiene la identidad. El segundo término es no negativo y vale cero si y solo si <span class="math notranslate nohighlight">\(p_m = \hat p\)</span> para todo <span class="math notranslate nohighlight">\(m\)</span> con <span class="math notranslate nohighlight">\(w_m &gt; 0\)</span>. <span class="math notranslate nohighlight">\(\blacksquare\)</span></p>
+<p><strong>Alcance.</strong> La identidad <a class="reference internal" href="#equation-eq-ambiguedad">(10)</a> <span class="bibtex-citation" id="id1">[<a class="reference internal" href="18_Reproducibilidad.html#id84" title="Anders Krogh and Jesper Vedelsby. Neural network ensembles, cross validation, and active learning. In Advances in Neural Information Processing Systems 7, 231–238. Cambridge, MA, 1995. MIT Press.">Krogh and Vedelsby, 1995</a>]</span> vale para cualquier combinación convexa, así que no distingue a DES-CPL de un promedio. Lo que DES-CPL añade es la forma de elegir <span class="math notranslate nohighlight">\(w\)</span>: da más peso a los modelos con menor Brier estimado <em>en la zona de</em> <span class="math notranslate nohighlight">\(x\)</span>. Por eso la cota <span class="math notranslate nohighlight">\(\sum_m w_m (p_m - y)^2\)</span> es, en esperanza local, menor que la del promedio simple cuando la competencia local se estima bien. Que se estime bien es justamente lo que estudian las proposiciones 2 a 4.</p>
 </section>
 <section id="proposicion-2-la-competencia-por-prevalencia-es-propia-la-balanceada-no">
 <h3>Proposición 2 (la competencia por prevalencia es propia; la balanceada no)<a class="headerlink" href="#proposicion-2-la-competencia-por-prevalencia-es-propia-la-balanceada-no" title="Link to this heading">#</a></h3>
@@ -570,12 +562,11 @@ El término cruzado se anula porque \)</span>\sum_m w_m p_m = \hat p<span class=
 <ul class="simple">
 <li><p><strong>(a)</strong> La competencia reponderada por la prevalencia, <span class="math notranslate nohighlight">\(C_q(p) = q(1 - p)^2 + (1 - q)p^2\)</span>, es el Brier esperado en la zona y se minimiza en <span class="math notranslate nohighlight">\(p = q\)</span>: premia al modelo calibrado.</p></li>
 <li><p><strong>(b)</strong> La competencia balanceada, <span class="math notranslate nohighlight">\(C_{1/2}(p) = \tfrac12(1 - p)^2 + \tfrac12 p^2\)</span>, se minimiza en <span class="math notranslate nohighlight">\(p = 1/2\)</span> sea cual sea <span class="math notranslate nohighlight">\(q\)</span>.</p></li>
-<li><p><strong>(c)</strong> Si, dentro de la zona, <span class="math notranslate nohighlight">\(\{\tilde f_m(x_i)\}_{i \in \mathcal N_k^1}\)</span> y <span class="math notranslate nohighlight">\(\{\tilde f_m(x_i)\}_{i \in \mathcal N_k^0}\)</span> son muestras independientes de las distribuciones condicionales a cada clase, y <span class="math notranslate nohighlight">\(q\)</span> es conocida, entonces el estimador estratificado <span class="math notranslate nohighlight">\(\hat C_m^{\text{loc}}\)</span> (con <span class="math notranslate nohighlight">\(q\)</span> en lugar de <span class="math notranslate nohighlight">\(\hat q\)</span>) es insesgado para el Brier de la zona:
-$<span class="math notranslate nohighlight">\(
-\mathbb E\big[\hat C_m^{\text{loc}}\big] = q\,B_1 + (1 - q)\,B_0 = \mathbb E\big[(f_m(X) - Y)^2 \mid \text{zona}\big], \quad B_c = \mathbb E\big[(f_m - c)^2 \mid Y = c, \text{zona}\big].
-\)</span><span class="math notranslate nohighlight">\( (eq-insesgado)
-Su varianza es \)</span>\big(q^2 \sigma_1^2 + (1 - q)^2 \sigma_0^2\big)/k<span class="math notranslate nohighlight">\(, donde \)</span>\sigma_c^2<span class="math notranslate nohighlight">\( es la varianza de la pérdida dentro de la clase \)</span>c$.</p></li>
+<li><p><strong>(c)</strong> Si, dentro de la zona, <span class="math notranslate nohighlight">\(\{\tilde f_m(x_i)\}_{i \in \mathcal N_k^1}\)</span> y <span class="math notranslate nohighlight">\(\{\tilde f_m(x_i)\}_{i \in \mathcal N_k^0}\)</span> son muestras independientes de las distribuciones condicionales a cada clase, y <span class="math notranslate nohighlight">\(q\)</span> es conocida, entonces el estimador estratificado <span class="math notranslate nohighlight">\(\hat C_m^{\text{loc}}\)</span> (con <span class="math notranslate nohighlight">\(q\)</span> en lugar de <span class="math notranslate nohighlight">\(\hat q\)</span>) es insesgado para el Brier de la zona:</p></li>
 </ul>
+<div class="math notranslate nohighlight" id="equation-eq-insesgado">
+<span class="eqno">(12)<a class="headerlink" href="#equation-eq-insesgado" title="Link to this equation">#</a></span>\[\mathbb E\big[\hat C_m^{\text{loc}}\big] = q\,B_1 + (1 - q)\,B_0 = \mathbb E\big[(f_m(X) - Y)^2 \mid \text{zona}\big], \quad B_c = \mathbb E\big[(f_m - c)^2 \mid Y = c, \text{zona}\big].\]</div>
+<p>Su varianza es <span class="math notranslate nohighlight">\(\big(q^2 \sigma_1^2 + (1 - q)^2 \sigma_0^2\big)/k\)</span>, donde <span class="math notranslate nohighlight">\(\sigma_c^2\)</span> es la varianza de la pérdida dentro de la clase <span class="math notranslate nohighlight">\(c\)</span>.</p>
 <p><em>Demostración.</em></p>
 <ul class="simple">
 <li><p><strong>(a)</strong> <span class="math notranslate nohighlight">\(C_q'(p) = -2q(1 - p) + 2(1 - q)p = 2(p - q)\)</span>, que se anula en <span class="math notranslate nohighlight">\(p = q\)</span>. Como <span class="math notranslate nohighlight">\(C_q''(p) = 2 &gt; 0\)</span>, es un mínimo. Además <span class="math notranslate nohighlight">\(C_q(p) = q(1 - q) + (p - q)^2\)</span>, así que el exceso de pérdida es exactamente el error cuadrático de calibración.</p></li>
@@ -588,11 +579,10 @@ Su varianza es \)</span>\big(q^2 \sigma_1^2 + (1 - q)^2 \sigma_0^2\big)/k<span c
 </section>
 <section id="proposicion-3-consistencia-de-la-competencia-local-resultado-referenciado">
 <h3>Proposición 3 (consistencia de la competencia local; resultado referenciado)<a class="headerlink" href="#proposicion-3-consistencia-de-la-competencia-local-resultado-referenciado" title="Link to this heading">#</a></h3>
-<p>Bajo los supuestos (S1)-(S3), si el número de vecinos por clase cumple <span class="math notranslate nohighlight">\(k \to \infty\)</span> y <span class="math notranslate nohighlight">\(k/n_c \to 0\)</span> (<span class="math notranslate nohighlight">\(n_c\)</span> es el número de encuentros de selección de la clase <span class="math notranslate nohighlight">\(c\)</span>), entonces, para casi todo <span class="math notranslate nohighlight">\(x\)</span>:
-$<span class="math notranslate nohighlight">\(
-\hat C_m^{\text{loc}}(x) \xrightarrow{\;P\;} C_m(x) = q(x)\,B_{1,m}(x) + \big(1 - q(x)\big)\,B_{0,m}(x),
-\)</span><span class="math notranslate nohighlight">\( (eq-consistencia)
-el Brier del modelo \)</span>m<span class="math notranslate nohighlight">\( condicionado al perfil \)</span>\phi(x)$.</p>
+<p>Bajo los supuestos (S1)-(S3), si el número de vecinos por clase cumple <span class="math notranslate nohighlight">\(k \to \infty\)</span> y <span class="math notranslate nohighlight">\(k/n_c \to 0\)</span> (<span class="math notranslate nohighlight">\(n_c\)</span> es el número de encuentros de selección de la clase <span class="math notranslate nohighlight">\(c\)</span>), entonces, para casi todo <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<div class="math notranslate nohighlight" id="equation-eq-consistencia">
+<span class="eqno">(13)<a class="headerlink" href="#equation-eq-consistencia" title="Link to this equation">#</a></span>\[\hat C_m^{\text{loc}}(x) \xrightarrow{\;P\;} C_m(x) = q(x)\,B_{1,m}(x) + \big(1 - q(x)\big)\,B_{0,m}(x),\]</div>
+<p>el Brier del modelo <span class="math notranslate nohighlight">\(m\)</span> condicionado al perfil <span class="math notranslate nohighlight">\(\phi(x)\)</span>.</p>
 <p><em>Justificación.</em> Es el teorema de consistencia de los estimadores de vecinos más cercanos (teorema 1 de <span class="bibtex-citation" id="id2">Stone [<a class="reference internal" href="18_Reproducibilidad.html#id59" title="Charles J. Stone. Consistent nonparametric regression. The Annals of Statistics, 5(4):595–620, 1977. doi:10.1214/aos/1176343886.">1977</a>]</span>; capítulo 6 de <span class="bibtex-citation" id="id3">Devroye <em>et al.</em> [<a class="reference internal" href="18_Reproducibilidad.html#id86" title="Luc Devroye, László Györfi, and Gábor Lugosi. A Probabilistic Theory of Pattern Recognition. Springer, New York, 1996.">1996</a>]</span>), aplicado tres veces:</p>
 <ul class="simple">
 <li><p>a la media de <span class="math notranslate nohighlight">\((\tilde f_m - 1)^2\)</span> entre los positivos, que converge a <span class="math notranslate nohighlight">\(B_{1,m}(x)\)</span>;</p></li>
@@ -609,21 +599,19 @@ el Brier del modelo \)</span>m<span class="math notranslate nohighlight">\( cond
 </section>
 <section id="proposicion-4-encogimiento-optimo-hacia-la-competencia-global">
 <h3>Proposición 4 (encogimiento óptimo hacia la competencia global)<a class="headerlink" href="#proposicion-4-encogimiento-optimo-hacia-la-competencia-global" title="Link to this heading">#</a></h3>
-<p>Los pesos softmax no cambian si se suma la misma constante a las competencias de todos los modelos en <span class="math notranslate nohighlight">\(x\)</span>. Lo que cuenta, entonces, es la <strong>competencia relativa</strong>: <span class="math notranslate nohighlight">\(\Delta_m(x) = C_m(x) - \frac{1}{M'}\sum_j C_j(x)\)</span>. Como el encogimiento <code class="xref eq docutils literal notranslate"><span class="pre">eq-encogimiento</span></code> es lineal, <span class="math notranslate nohighlight">\(\hat\Delta_\lambda = (1 - \lambda)\hat\Delta^{\text{loc}} + \lambda\Delta^{\text{glob}}\)</span>.</p>
+<p>Los pesos softmax no cambian si se suma la misma constante a las competencias de todos los modelos en <span class="math notranslate nohighlight">\(x\)</span>. Lo que cuenta, entonces, es la <strong>competencia relativa</strong>: <span class="math notranslate nohighlight">\(\Delta_m(x) = C_m(x) - \frac{1}{M'}\sum_j C_j(x)\)</span>. Como el encogimiento <a class="reference internal" href="#equation-eq-encogimiento">(8)</a> es lineal, <span class="math notranslate nohighlight">\(\hat\Delta_\lambda = (1 - \lambda)\hat\Delta^{\text{loc}} + \lambda\Delta^{\text{glob}}\)</span>.</p>
 <p>Se fija <span class="math notranslate nohighlight">\(x\)</span> y un modelo <span class="math notranslate nohighlight">\(m\)</span>, y se escribe <span class="math notranslate nohighlight">\(C = \Delta_m(x)\)</span> para la competencia relativa verdadera, <span class="math notranslate nohighlight">\(\hat C^{\text{loc}}\)</span> para su estimación local y <span class="math notranslate nohighlight">\(C^{\text{glob}}\)</span> para la global. Se supone que:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(\hat C^{\text{loc}}\)</span> es (asintóticamente) insesgado, <span class="math notranslate nohighlight">\(\mathbb E[\hat C^{\text{loc}}] = C\)</span>, con varianza <span class="math notranslate nohighlight">\(v\)</span>;</p></li>
 <li><p><span class="math notranslate nohighlight">\(C^{\text{glob}}\)</span> es constante: se calcula con todo el conjunto, así que su varianza es despreciable frente a <span class="math notranslate nohighlight">\(v\)</span>;</p></li>
 <li><p><span class="math notranslate nohighlight">\(b = C^{\text{glob}} - C\)</span> es el sesgo de usar la competencia global en la zona de <span class="math notranslate nohighlight">\(x\)</span>, es decir, la heterogeneidad local.</p></li>
 </ul>
-<p>Entonces el error cuadrático medio de <span class="math notranslate nohighlight">\(\hat C_\lambda = (1 - \lambda)\hat C^{\text{loc}} + \lambda C^{\text{glob}}\)</span> es
-$<span class="math notranslate nohighlight">\(
-\operatorname{ECM}(\lambda) = (1 - \lambda)^2\, v + \lambda^2\, b^2,
-\)</span><span class="math notranslate nohighlight">\( (eq-ecm)
-y se minimiza en
-\)</span><span class="math notranslate nohighlight">\(
-\lambda^\star = \frac{v}{v + b^2}.
-\)</span>$ (eq-lambda-optimo)</p>
+<p>Entonces el error cuadrático medio de <span class="math notranslate nohighlight">\(\hat C_\lambda = (1 - \lambda)\hat C^{\text{loc}} + \lambda C^{\text{glob}}\)</span> es</p>
+<div class="math notranslate nohighlight" id="equation-eq-ecm">
+<span class="eqno">(14)<a class="headerlink" href="#equation-eq-ecm" title="Link to this equation">#</a></span>\[\operatorname{ECM}(\lambda) = (1 - \lambda)^2\, v + \lambda^2\, b^2,\]</div>
+<p>y se minimiza en</p>
+<div class="math notranslate nohighlight" id="equation-eq-lambda-optimo">
+<span class="eqno">(15)<a class="headerlink" href="#equation-eq-lambda-optimo" title="Link to this equation">#</a></span>\[\lambda^\star = \frac{v}{v + b^2}.\]</div>
 <p><em>Demostración.</em> <span class="math notranslate nohighlight">\(\hat C_\lambda - C = (1 - \lambda)(\hat C^{\text{loc}} - C) + \lambda b\)</span>. Al tomar esperanza del cuadrado, el término cruzado <span class="math notranslate nohighlight">\(2\lambda(1 - \lambda)\, b\, \mathbb E[\hat C^{\text{loc}} - C]\)</span> se anula por el insesgamiento. Queda <span class="math notranslate nohighlight">\((1 - \lambda)^2 v + \lambda^2 b^2\)</span>, una parábola convexa en <span class="math notranslate nohighlight">\(\lambda\)</span>. Su derivada, <span class="math notranslate nohighlight">\(-2(1 - \lambda)v + 2\lambda b^2\)</span>, se anula en <span class="math notranslate nohighlight">\(\lambda^\star = v/(v + b^2) \in [0, 1]\)</span>. <span class="math notranslate nohighlight">\(\blacksquare\)</span></p>
 <p><strong>Lectura.</strong> Es el razonamiento del estimador de James-Stein <span class="bibtex-citation" id="id4">[<a class="reference internal" href="18_Reproducibilidad.html#id87" title="Bradley Efron and Carl Morris. Stein's estimation rule and its competitors—an empirical Bayes approach. Journal of the American Statistical Association, 68(341):117–130, 1973.">Efron and Morris, 1973</a>]</span>: se encoge hacia la media global en la medida en que el ruido local, <span class="math notranslate nohighlight">\(v\)</span>, domina sobre la heterogeneidad real, <span class="math notranslate nohighlight">\(b^2\)</span>.</p>
 <p>La celda siguiente estima <span class="math notranslate nohighlight">\(v\)</span> y <span class="math notranslate nohighlight">\(b^2\)</span> en el fold 0 por el método de los momentos:</p>
@@ -800,7 +788,7 @@ y se minimiza en
 </div>
 </div>
 </div>
-<p><strong>Lectura.</strong> En el fold 0, el <span class="math notranslate nohighlight">\(\lambda^\star\)</span> de <code class="xref eq docutils literal notranslate"><span class="pre">eq-lambda-optimo</span></code>, que minimiza el error de estimación, es pequeño (del orden de 0.05 con 4 modelos y casi 0 con 7). Esto ocurre en todo <span class="math notranslate nohighlight">\(k\)</span>: la heterogeneidad <span class="math notranslate nohighlight">\(b^2\)</span> supera en un orden de magnitud a la varianza <span class="math notranslate nohighlight">\(v\)</span>. Es decir, <strong>la competencia relativa de los modelos sí cambia de una zona a otra</strong>, y <span class="math notranslate nohighlight">\(k\)</span> vecinos bastan para estimarla con precisión. Sin embargo, la búsqueda, que maximiza el AUC-PR, eligió <span class="math notranslate nohighlight">\(\lambda\)</span> cercano a 1 en cuatro de los cinco folds.</p>
+<p><strong>Lectura.</strong> En el fold 0, el <span class="math notranslate nohighlight">\(\lambda^\star\)</span> de <a class="reference internal" href="#equation-eq-lambda-optimo">(15)</a>, que minimiza el error de estimación, es pequeño (del orden de 0.05 con 4 modelos y casi 0 con 7). Esto ocurre en todo <span class="math notranslate nohighlight">\(k\)</span>: la heterogeneidad <span class="math notranslate nohighlight">\(b^2\)</span> supera en un orden de magnitud a la varianza <span class="math notranslate nohighlight">\(v\)</span>. Es decir, <strong>la competencia relativa de los modelos sí cambia de una zona a otra</strong>, y <span class="math notranslate nohighlight">\(k\)</span> vecinos bastan para estimarla con precisión. Sin embargo, la búsqueda, que maximiza el AUC-PR, eligió <span class="math notranslate nohighlight">\(\lambda\)</span> cercano a 1 en cuatro de los cinco folds.</p>
 <p>Las dos cosas son compatibles. El Brier local mide la calidad de la probabilidad <em>dentro</em> de cada zona: qué modelo está mejor calibrado para pacientes de ese perfil. El AUC-PR, en cambio, mide el <strong>orden entre pacientes de zonas distintas</strong>. Usar pesos distintos en cada zona mejora el ajuste local, pero cambia la escala de <span class="math notranslate nohighlight">\(\hat p\)</span> de una zona a otra, y eso puede desordenar pacientes que el promedio global ordenaba bien. La proposición 1 respalda esta lectura: lo que la ponderación local garantiza reducir es el Brier, no el ordenamiento.</p>
 <p>Es el límite explicativo del capítulo 13 visto desde la teoría: hay diferencias locales entre los modelos, pero son diferencias de calibración, no de qué pacientes identifican como de mayor riesgo.</p>
 </section>
@@ -811,10 +799,9 @@ y se minimiza en
 <li><p>si <span class="math notranslate nohighlight">\(\tau \to \infty\)</span>, entonces <span class="math notranslate nohighlight">\(w_m(x) \to 1/M'\)</span> y <span class="math notranslate nohighlight">\(\hat p(x)\)</span> tiende al promedio simple de los modelos podados;</p></li>
 <li><p>si <span class="math notranslate nohighlight">\(\tau \to 0^+\)</span>, entonces <span class="math notranslate nohighlight">\(w(x)\)</span> tiende al reparto uniforme entre los modelos de competencia mínima: selección dinámica dura.</p></li>
 </ul>
-<p><em>Demostración.</em> Al multiplicar numerador y denominador por <span class="math notranslate nohighlight">\(\exp(\min_j \hat C_j/\tau)\)</span> queda
-$<span class="math notranslate nohighlight">\(
-w_m = \frac{\exp\big(-(\hat C_m - \min_j \hat C_j)/\tau\big)}{\sum_j \exp\big(-(\hat C_j - \min_i \hat C_i)/\tau\big)}.
-\)</span>$ (eq-softmax-desplazada)</p>
+<p><em>Demostración.</em> Al multiplicar numerador y denominador por <span class="math notranslate nohighlight">\(\exp(\min_j \hat C_j/\tau)\)</span> queda</p>
+<div class="math notranslate nohighlight" id="equation-eq-softmax-desplazada">
+<span class="eqno">(16)<a class="headerlink" href="#equation-eq-softmax-desplazada" title="Link to this equation">#</a></span>\[w_m = \frac{\exp\big(-(\hat C_m - \min_j \hat C_j)/\tau\big)}{\sum_j \exp\big(-(\hat C_j - \min_i \hat C_i)/\tau\big)}.\]</div>
 <ul class="simple">
 <li><p>Con <span class="math notranslate nohighlight">\(\tau \to \infty\)</span>, cada exponente tiende a 0 y cada exponencial a 1.</p></li>
 <li><p>Con <span class="math notranslate nohighlight">\(\tau \to 0^+\)</span>, la exponencial vale 1 para los minimizadores y tiende a 0 para los demás.</p></li>
@@ -1244,7 +1231,7 @@ Costo medio por fold de los modelos base (pliegues + final): 5.3 min; vecindario
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>

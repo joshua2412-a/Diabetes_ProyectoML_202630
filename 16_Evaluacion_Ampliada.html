@@ -405,7 +405,10 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#varianza-por-semilla">16.4. Varianza por semilla</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensibilidad-a-los-hiperparametros">16.5. Sensibilidad a los hiperparámetros</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretabilidad-shap-de-des-cpl-comparado-con-xgboost">16.6. Interpretabilidad: SHAP de DES-CPL comparado con XGBoost</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equidad-de-des-cpl-por-subgrupo">16.7. Equidad de DES-CPL por subgrupo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equidad-de-des-cpl-por-subgrupo">16.7. Equidad de DES-CPL por subgrupo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-errores-donde-se-equivoca-des-cpl">16.7.1. Análisis de errores: dónde se equivoca DES-CPL</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#presupuesto-y-tiempos">16.8. Presupuesto y tiempos</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pruebas-complementarias-mcnemar-y-t-bayesiana">16.9. Pruebas complementarias: McNemar y t bayesiana</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-de-la-evaluacion-ampliada">16.10. Síntesis de la evaluación ampliada</a></li>
@@ -422,14 +425,14 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="evaluacion-ampliada-otros-conjuntos-robustez-semillas-sensibilidad-interpretabilidad-equidad-y-costo">
 <h1>16. Evaluación ampliada: otros conjuntos, robustez, semillas, sensibilidad, interpretabilidad, equidad y costo<a class="headerlink" href="#evaluacion-ampliada-otros-conjuntos-robustez-semillas-sensibilidad-interpretabilidad-equidad-y-costo" title="Link to this heading">#</a></h1>
-<p>El capítulo 13 evaluó DES-CPL en el problema principal. La guía pide además, en sus secciones 6.2, 6.3 y 6.6:</p>
+<p>El capítulo 13 evaluó DES-CPL en el problema principal. Para sostener o refutar ese resultado hace falta además:</p>
 <ul class="simple">
 <li><p>evaluar el modelo y los benchmarks en al menos <strong>tres conjuntos de datos adicionales</strong>, con una prueba entre conjuntos;</p></li>
 <li><p>reportar la <strong>varianza por semilla</strong> con al menos diez semillas;</p></li>
 <li><p>estudiar la <strong>robustez</strong> frente a ruido, desbalance y tamaño de muestra;</p></li>
 <li><p>estudiar la <strong>sensibilidad</strong> a los hiperparámetros;</p></li>
-<li><p>aplicar <strong>SHAP</strong> al modelo original, auditar su <strong>equidad</strong> por subgrupo y reportar el <strong>presupuesto y los tiempos</strong> de cada modelo;</p></li>
-<li><p>completar las pruebas de hipótesis con la <strong>prueba exacta de McNemar</strong> y la <strong>t bayesiana correlacionada</strong>, que pide la guía de redacción del artículo.</p></li>
+<li><p>aplicar <strong>SHAP</strong> al modelo original, auditar su <strong>equidad</strong> por subgrupo, <strong>analizar sus errores</strong> y reportar el <strong>presupuesto y los tiempos</strong> de cada modelo;</p></li>
+<li><p>completar las pruebas de hipótesis con la <strong>prueba exacta de McNemar</strong> y la <strong>t bayesiana correlacionada</strong>, habituales en la comparación de clasificadores.</p></li>
 </ul>
 <p>Todo sigue el protocolo pre-registrado (<code class="docutils literal notranslate"><span class="pre">experiments/protocolo.md</span></code>, etiqueta <code class="docutils literal notranslate"><span class="pre">protocolo-v1</span></code>). Las desviaciones están declaradas en 16.1.</p>
 <p>Los resultados se calcularon con dos scripts, y este capítulo solo los lee:</p>
@@ -1020,6 +1023,7 @@ Nemenyi: diferencia crítica = 9.12 rangos; rango medio de DES-CPL = 3.75
 <li><p><strong>Frente a cada mejor benchmark.</strong> DES-CPL supera al mejor benchmark solo en CDC (+0.0009 sobre LightGBM). En crédito (Random Forest) y en Bank Marketing (LightGBM) queda por debajo. Ninguna diferencia es significativa (Nadeau-Bengio, <span class="math notranslate nohighlight">\(p \ge 0.40\)</span>).</p></li>
 <li><p><strong>Frente a XGBoost.</strong> DES-CPL supera a XGBoost en los tres conjuntos adicionales. XGBoost es el mejor benchmark del problema principal, pero en los otros conjuntos queda muy atrás de los ensambles: hasta 0.035 por debajo del mejor en Bank Marketing.</p></li>
 </ul>
+<p><strong>Sobre la δ de Cliff de la tabla.</strong> Compara los AUC-PR de dos métodos como si fueran muestras independientes. Entre conjuntos tan distintos (de 0.21 a 0.56 de AUC-PR) mide sobre todo la diferencia entre conjuntos, no entre métodos, así que es poco informativa aquí. Con datos pareados por conjunto, lo que importa son las victorias (columna «gana en conjuntos») y la diferencia media.</p>
 <p><strong>Condición 4 de superioridad del protocolo.</strong> Pide ser mejor que el mejor benchmark en al menos dos de los tres conjuntos adicionales y no significativamente peor en ninguno. <strong>No se cumple:</strong> DES-CPL es mejor en uno de tres, aunque no es significativamente peor en ninguno. El veredicto de R3 sigue siendo negativo.</p>
 <p>La lectura que sí sostienen los datos es otra: <strong>combinar modelos es más estable entre dominios que elegir uno</strong>. El mejor modelo individual cambia de un conjunto a otro (XGBoost, Random Forest, LightGBM), mientras que DES-CPL y los ensambles estáticos quedan siempre cerca de la cabeza. Ninguno de los tres combinadores se distingue de los otros. Para Nemenyi, la diferencia crítica es de 9.1 rangos con 4 conjuntos, así que solo separa los extremos.</p>
 </section>
@@ -1494,9 +1498,9 @@ Nemenyi: diferencia crítica = 9.12 rangos; rango medio de DES-CPL = 3.75
 </div>
 <p><strong>Lectura.</strong></p>
 <ul class="simple">
-<li><p><strong>XGBoost es el más sensible.</strong> En los cinco escenarios, DES-CPL queda por encima de XGBoost. La ventaja es mayor donde la perturbación es más fuerte: con el 25 % de los pacientes gana en los 5 folds, por más de 0.01 en promedio, y con el 10 % de etiquetas invertidas gana en 4 de 5. XGBoost, el mejor benchmark con los datos completos, pierde en cada escenario entre 1.5 y 2 veces lo que pierde DES-CPL.</p></li>
+<li><p><strong>XGBoost es el más sensible.</strong> En los cinco escenarios, DES-CPL queda por encima de XGBoost. La ventaja es mayor donde la perturbación es más fuerte: con el 25 % de los pacientes gana en los 5 folds, por más de 0.01 en promedio, y con el 10 % de etiquetas invertidas gana en 4 de 5. XGBoost, el mejor benchmark con los datos completos, pierde en cada escenario entre 1.6 y 1.9 veces lo que pierde DES-CPL.</p></li>
 <li><p><strong>Los modelos de menor varianza pierden todavía menos.</strong> Random Forest y la regresión logística se degradan menos que DES-CPL. Su desempeño de partida es menor, pero la perturbación los afecta menos. DES-CPL queda en un punto intermedio: hereda parte de la estabilidad de los modelos que combina.</p></li>
-<li><p><strong>Por qué combinar ayuda.</strong> Combinar promedia errores que no están perfectamente correlacionados, y ese beneficio crece cuando cada modelo se vuelve más inestable por tener menos datos o datos más ruidosos (proposición 1 del capítulo 15, ecuación <code class="xref eq docutils literal notranslate"><span class="pre">eq-ambiguedad</span></code>).</p></li>
+<li><p><strong>Por qué combinar ayuda.</strong> Combinar promedia errores que no están perfectamente correlacionados, y ese beneficio crece cuando cada modelo se vuelve más inestable por tener menos datos o datos más ruidosos (proposición 1 del capítulo 15, ecuación <a class="reference internal" href="15_Formulacion_DES_CPL.html#equation-eq-ambiguedad">(10)</a>).</p></li>
 <li><p><strong>Los combinadores entre sí.</strong> DES-CPL, los pesos globales y el apilamiento se degradan casi igual, y entre ellos las diferencias siguen siendo de milésimas.</p></li>
 </ul>
 <p>Las pruebas de Nadeau-Bengio se corrigen con Holm sobre los cinco escenarios. Son exploratorias: el protocolo no las fija como confirmatorias, y los hiperparámetros de los modelos base no se reajustaron a cada escenario.</p>
@@ -1791,7 +1795,7 @@ Con la semilla 42 (la del protocolo): DES-CPL 0.2279, XGBoost 0.2290
 </section>
 <section id="interpretabilidad-shap-de-des-cpl-comparado-con-xgboost">
 <h2>16.6. Interpretabilidad: SHAP de DES-CPL comparado con XGBoost<a class="headerlink" href="#interpretabilidad-shap-de-des-cpl-comparado-con-xgboost" title="Link to this heading">#</a></h2>
-<p>La guía pide aplicar SHAP al modelo original. Se usan los valores de Shapley por permutaciones antitéticas de <code class="docutils literal notranslate"><span class="pre">src/explicacion.py</span></code>, sobre las 38 variables <strong>originales</strong>, con:</p>
+<p>Se aplica SHAP al modelo original. Se usan los valores de Shapley por permutaciones antitéticas de <code class="docutils literal notranslate"><span class="pre">src/explicacion.py</span></code>, sobre las 38 variables <strong>originales</strong>, con:</p>
 <ul class="simple">
 <li><p>los mismos 150 casos de prueba para todos los modelos;</p></li>
 <li><p>el mismo conjunto de fondo de 20 encuentros;</p></li>
@@ -2166,7 +2170,9 @@ Parte de la importancia total en las 5 primeras: des_cpl 58%, xgboost 51%, rando
   </tbody>
 </table>
 </div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mayor diferencia de cobertura relativa entre DES-CPL y XGBoost: 0.59 (age_ord / [10-20))
-Menor cobertura relativa de des_cpl: 0.34 (race / No informada)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Menor cobertura relativa de des_cpl: 0.34 (race / No informada)
 Menor cobertura relativa de xgboost: 0.38 (race / Asian)
 </pre></div>
 </div>
@@ -2180,10 +2186,276 @@ Menor cobertura relativa de xgboost: 0.38 (race / Asian)
 <li><p><strong>Las diferencias entre modelos son de pocos casos.</strong> La mayor diferencia está en los pacientes de 10 a 20 años: 0.60 con DES-CPL y 1.19 con XGBoost. Pero ese grupo tiene 114 encuentros y, con la prevalencia del 11 %, poco más de una decena de readmisiones, así que la brecha equivale a muy pocos pacientes. Lo mismo pasa en sentido contrario de 90 a 100 años (0.75 contra 0.49). Con ese tamaño no se puede afirmar que un modelo trate mejor a esos grupos que el otro.</p></li>
 <li><p><strong>Veredicto.</strong> DES-CPL no introduce sesgos nuevos ni corrige los existentes: hereda las brechas de los datos. Para un uso real se mantiene la recomendación de la ficha del modelo: monitorear la cobertura por grupo, sobre todo en los encuentros sin raza registrada, y revisar el umbral.</p></li>
 </ul>
+<section id="analisis-de-errores-donde-se-equivoca-des-cpl">
+<h3>16.7.1. Análisis de errores: dónde se equivoca DES-CPL<a class="headerlink" href="#analisis-de-errores-donde-se-equivoca-des-cpl" title="Link to this heading">#</a></h3>
+<p>La equidad mide si los errores se reparten igual entre grupos. Esta subsección mira los errores mismos, en el conjunto de prueba y con el umbral operativo del capítulo 10 (se marca al 15 % de mayor riesgo):</p>
+<ul class="simple">
+<li><p><strong>cuántos</strong> son, de cada tipo, con DES-CPL y con XGBoost;</p></li>
+<li><p><strong>si son los mismos pacientes</strong> para los dos modelos: si lo son, los errores vienen de la información disponible y no de cómo se combinan los modelos;</p></li>
+<li><p><strong>cómo son</strong> los readmitidos que no se detectan y las falsas alarmas, frente a los aciertos, en las variables de utilización previa y del ingreso;</p></li>
+<li><p><strong>qué tan lejos del umbral</strong> quedan los readmitidos no detectados, es decir, si bajarlo un poco los recuperaría.</p></li>
+</ul>
+<p>Usa las predicciones de los artefactos (las mismas de la sección 16.7) y no reentrena nada. La lectura se calcula en la propia celda a partir de las tablas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CAPACIDAD_OPERATIVA</span> <span class="o">=</span> <span class="mf">0.15</span>   <span class="c1"># umbral del capítulo 10: se marca al 15 % de mayor riesgo</span>
+<span class="n">MODELOS_ERRORES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"des_cpl"</span><span class="p">:</span> <span class="s2">"DES-CPL"</span><span class="p">,</span> <span class="s2">"xgboost"</span><span class="p">:</span> <span class="s2">"XGBoost"</span><span class="p">}</span>
+
+<span class="n">marcado</span> <span class="o">=</span> <span class="p">{</span><span class="n">m</span><span class="p">:</span> <span class="n">pred</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">pred</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">CAPACIDAD_OPERATIVA</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">MODELOS_ERRORES</span><span class="p">}</span>
+<span class="n">umbral</span> <span class="o">=</span> <span class="p">{</span><span class="n">m</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">pred</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">CAPACIDAD_OPERATIVA</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">MODELOS_ERRORES</span><span class="p">}</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">objetivo</span> <span class="o">==</span> <span class="mi">1</span>
+
+<span class="c1"># 1. Matriz de errores con el umbral operativo.</span>
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">nombre</span> <span class="ow">in</span> <span class="n">MODELOS_ERRORES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">marcado</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"modelo"</span><span class="p">:</span> <span class="n">nombre</span><span class="p">,</span> <span class="s2">"umbral"</span><span class="p">:</span> <span class="n">umbral</span><span class="p">[</span><span class="n">m</span><span class="p">],</span>
+                  <span class="s2">"readmitidos detectados (VP)"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="n">s</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+                  <span class="s2">"readmitidos no detectados (FN)"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="o">~</span><span class="n">s</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+                  <span class="s2">"marcados sin readmisión (FP)"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="n">s</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+                  <span class="s2">"no marcados sin readmisión (VN)"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="o">~</span><span class="n">s</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+                  <span class="s2">"sensibilidad (%)"</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+                  <span class="s2">"precisión (%)"</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">s</span><span class="o">.</span><span class="n">sum</span><span class="p">()})</span>
+<span class="n">matriz_errores</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">matriz_errores</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="c1"># 2. ¿Se equivocan en los mismos pacientes?</span>
+<span class="n">fn</span> <span class="o">=</span> <span class="p">{</span><span class="n">m</span><span class="p">:</span> <span class="o">~</span><span class="n">marcado</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">y</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">MODELOS_ERRORES</span><span class="p">}</span>
+<span class="n">fp</span> <span class="o">=</span> <span class="p">{</span><span class="n">m</span><span class="p">:</span> <span class="n">marcado</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">MODELOS_ERRORES</span><span class="p">}</span>
+<span class="n">fn_comunes</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">fn</span><span class="p">[</span><span class="s2">"xgboost"</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">fp_comunes</span> <span class="o">=</span> <span class="p">(</span><span class="n">fp</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">fp</span><span class="p">[</span><span class="s2">"xgboost"</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">solo_des</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">fn</span><span class="p">[</span><span class="s2">"xgboost"</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">solo_xgb</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="s2">"xgboost"</span><span class="p">]</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">fn</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="c1"># 3. Perfil de los readmitidos que DES-CPL no detecta, frente a los que sí detecta.</span>
+<span class="n">VARIABLES_PERFIL</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"number_inpatient"</span><span class="p">:</span> <span class="s2">"hospitalizaciones previas"</span><span class="p">,</span>
+    <span class="s2">"number_emergency"</span><span class="p">:</span> <span class="s2">"urgencias previas"</span><span class="p">,</span>
+    <span class="s2">"number_outpatient"</span><span class="p">:</span> <span class="s2">"consultas externas previas"</span><span class="p">,</span>
+    <span class="s2">"time_in_hospital"</span><span class="p">:</span> <span class="s2">"días de hospitalización"</span><span class="p">,</span>
+    <span class="s2">"num_medications"</span><span class="p">:</span> <span class="s2">"medicamentos distintos"</span><span class="p">,</span>
+    <span class="s2">"number_diagnoses"</span><span class="p">:</span> <span class="s2">"diagnósticos registrados"</span><span class="p">,</span>
+    <span class="s2">"age_ord"</span><span class="p">:</span> <span class="s2">"edad (decenio, ordinal)"</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">detectados</span> <span class="o">=</span> <span class="n">marcado</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">y</span>
+<span class="n">perdidos</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]</span>
+<span class="n">falsas_alarmas</span> <span class="o">=</span> <span class="n">fp</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]</span>
+<span class="n">no_marcados_sanos</span> <span class="o">=</span> <span class="o">~</span><span class="n">marcado</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y</span>
+<span class="n">perfil</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">"readmitidos detectados"</span><span class="p">:</span> <span class="p">[</span><span class="n">prueba</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">detectados</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">VARIABLES_PERFIL</span><span class="p">],</span>
+    <span class="s2">"readmitidos no detectados"</span><span class="p">:</span> <span class="p">[</span><span class="n">prueba</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">perdidos</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">VARIABLES_PERFIL</span><span class="p">],</span>
+    <span class="s2">"marcados sin readmisión"</span><span class="p">:</span> <span class="p">[</span><span class="n">prueba</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">falsas_alarmas</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">VARIABLES_PERFIL</span><span class="p">],</span>
+    <span class="s2">"no marcados sin readmisión"</span><span class="p">:</span> <span class="p">[</span><span class="n">prueba</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">no_marcados_sanos</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">VARIABLES_PERFIL</span><span class="p">],</span>
+<span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">VARIABLES_PERFIL</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+<span class="n">perfil</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"con hospitalización previa (%)"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">prueba</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">g</span><span class="p">,</span> <span class="s2">"number_inpatient"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                                                 <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="p">(</span><span class="n">detectados</span><span class="p">,</span> <span class="n">perdidos</span><span class="p">,</span> <span class="n">falsas_alarmas</span><span class="p">,</span> <span class="n">no_marcados_sanos</span><span class="p">)]</span>
+<span class="n">alta_casa</span> <span class="o">=</span> <span class="n">prueba</span><span class="p">[</span><span class="s2">"discharge_disposition_id"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"Discharged to home"</span>
+<span class="n">perfil</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"alta a casa (%)"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span> <span class="o">*</span> <span class="n">alta_casa</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                                 <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="p">(</span><span class="n">detectados</span><span class="p">,</span> <span class="n">perdidos</span><span class="p">,</span> <span class="n">falsas_alarmas</span><span class="p">,</span> <span class="n">no_marcados_sanos</span><span class="p">)]</span>
+<span class="n">display</span><span class="p">(</span><span class="n">perfil</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="c1"># 4. ¿Qué tan lejos del umbral quedan los readmitidos no detectados?</span>
+<span class="n">p_des</span> <span class="o">=</span> <span class="n">pred</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">cerca</span> <span class="o">=</span> <span class="p">(</span><span class="n">p_des</span><span class="p">[</span><span class="n">perdidos</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">umbral</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">lejos</span> <span class="o">=</span> <span class="p">(</span><span class="n">p_des</span><span class="p">[</span><span class="n">perdidos</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">umbral</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="c1"># Lectura calculada: las cifras y el sentido de cada frase salen de las tablas anteriores.</span>
+<span class="n">d</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">matriz_errores</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"DES-CPL"</span><span class="p">],</span> <span class="n">matriz_errores</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"XGBoost"</span><span class="p">]</span>
+<span class="n">previas</span> <span class="o">=</span> <span class="n">perfil</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"hospitalizaciones previas"</span><span class="p">]</span>
+<span class="n">con_previa</span> <span class="o">=</span> <span class="n">perfil</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"con hospitalización previa (%)"</span><span class="p">]</span>
+<span class="n">comunes</span> <span class="o">=</span> <span class="n">fn_comunes</span> <span class="o">/</span> <span class="n">fn</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Lectura"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"- Con el umbral operativo, DES-CPL detecta </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">'readmitidos detectados (VP)'</span><span class="p">])</span><span class="si">}</span><span class="s2"> de "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="si">}</span><span class="s2"> readmisiones (</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="s1">'sensibilidad (%)'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %) y XGBoost "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">'readmitidos detectados (VP)'</span><span class="p">])</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="s1">'sensibilidad (%)'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %)."</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"- </span><span class="si">{</span><span class="s1">'Los dos modelos fallan casi en los mismos pacientes'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">comunes</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">0.7</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'Los dos modelos comparten parte de sus errores'</span><span class="si">}</span><span class="s2">: "</span>
+      <span class="sa">f</span><span class="s2">"de los </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="s1">'des_cpl'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="si">}</span><span class="s2"> readmitidos que DES-CPL no detecta, </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">fn_comunes</span><span class="p">)</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">comunes</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %) tampoco los detecta XGBoost; </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">solo_des</span><span class="p">)</span><span class="si">}</span><span class="s2"> se le escapan solo a DES-CPL "</span>
+      <span class="sa">f</span><span class="s2">"y </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">solo_xgb</span><span class="p">)</span><span class="si">}</span><span class="s2"> solo a XGBoost. De las falsas alarmas de DES-CPL, el "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fp_comunes</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">fp</span><span class="p">[</span><span class="s1">'des_cpl'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> % son también de XGBoost."</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"- Los readmitidos no detectados tienen en promedio </span><span class="si">{</span><span class="n">previas</span><span class="p">[</span><span class="s1">'readmitidos no detectados'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"hospitalizaciones previas, frente a </span><span class="si">{</span><span class="n">previas</span><span class="p">[</span><span class="s1">'readmitidos detectados'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> de los detectados; "</span>
+      <span class="sa">f</span><span class="s2">"tuvieron alguna hospitalización previa el </span><span class="si">{</span><span class="n">con_previa</span><span class="p">[</span><span class="s1">'readmitidos no detectados'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> % frente al "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">con_previa</span><span class="p">[</span><span class="s1">'readmitidos detectados'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %."</span><span class="p">)</span>
+<span class="n">parecido</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">previas</span><span class="p">[</span><span class="s2">"marcados sin readmisión"</span><span class="p">]</span> <span class="o">-</span> <span class="n">previas</span><span class="p">[</span><span class="s2">"readmitidos detectados"</span><span class="p">])</span> <span class="o">&lt;</span> \
+           <span class="nb">abs</span><span class="p">(</span><span class="n">previas</span><span class="p">[</span><span class="s2">"marcados sin readmisión"</span><span class="p">]</span> <span class="o">-</span> <span class="n">previas</span><span class="p">[</span><span class="s2">"no marcados sin readmisión"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"- Las falsas alarmas tienen </span><span class="si">{</span><span class="n">previas</span><span class="p">[</span><span class="s1">'marcados sin readmisión'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> hospitalizaciones previas en promedio, "</span>
+      <span class="o">+</span> <span class="p">(</span><span class="s2">"más cerca de los readmitidos detectados que de los no marcados: el modelo las marca por el mismo perfil "</span>
+         <span class="s2">"de utilización, y esos pacientes no volvieron."</span> <span class="k">if</span> <span class="n">parecido</span> <span class="k">else</span>
+         <span class="s2">"más cerca de los no marcados que de los readmitidos detectados."</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"- De los readmitidos no detectados, el </span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cerca</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> % queda cerca del umbral (al menos el 80 % de él) "</span>
+      <span class="sa">f</span><span class="s2">"y el </span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">lejos</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> % por debajo de la mitad"</span>
+      <span class="o">+</span> <span class="p">(</span><span class="s2">": la mayoría no se recuperaría bajando un poco el umbral."</span> <span class="k">if</span> <span class="n">cerca</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="k">else</span>
+         <span class="s2">": bajar un poco el umbral recuperaría una parte importante, a costa de más falsas alarmas."</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>umbral</th>
+      <th>readmitidos detectados (VP)</th>
+      <th>readmitidos no detectados (FN)</th>
+      <th>marcados sin readmisión (FP)</th>
+      <th>no marcados sin readmisión (VN)</th>
+      <th>sensibilidad (%)</th>
+      <th>precisión (%)</th>
+    </tr>
+    <tr>
+      <th>modelo</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>DES-CPL</th>
+      <td>0.168</td>
+      <td>700</td>
+      <td>1563</td>
+      <td>2280</td>
+      <td>15324</td>
+      <td>30.932</td>
+      <td>23.490</td>
+    </tr>
+    <tr>
+      <th>XGBoost</th>
+      <td>0.172</td>
+      <td>719</td>
+      <td>1544</td>
+      <td>2261</td>
+      <td>15343</td>
+      <td>31.772</td>
+      <td>24.128</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>readmitidos detectados</th>
+      <th>readmitidos no detectados</th>
+      <th>marcados sin readmisión</th>
+      <th>no marcados sin readmisión</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>hospitalizaciones previas</th>
+      <td>3.00</td>
+      <td>0.39</td>
+      <td>2.51</td>
+      <td>0.26</td>
+    </tr>
+    <tr>
+      <th>urgencias previas</th>
+      <td>0.77</td>
+      <td>0.15</td>
+      <td>0.61</td>
+      <td>0.12</td>
+    </tr>
+    <tr>
+      <th>consultas externas previas</th>
+      <td>0.56</td>
+      <td>0.36</td>
+      <td>0.62</td>
+      <td>0.33</td>
+    </tr>
+    <tr>
+      <th>días de hospitalización</th>
+      <td>5.35</td>
+      <td>4.52</td>
+      <td>5.18</td>
+      <td>4.19</td>
+    </tr>
+    <tr>
+      <th>medicamentos distintos</th>
+      <td>19.28</td>
+      <td>16.62</td>
+      <td>18.14</td>
+      <td>15.53</td>
+    </tr>
+    <tr>
+      <th>diagnósticos registrados</th>
+      <td>7.98</td>
+      <td>7.67</td>
+      <td>8.02</td>
+      <td>7.29</td>
+    </tr>
+    <tr>
+      <th>edad (decenio, ordinal)</th>
+      <td>6.01</td>
+      <td>6.35</td>
+      <td>6.15</td>
+      <td>6.05</td>
+    </tr>
+    <tr>
+      <th>con hospitalización previa (%)</th>
+      <td>87.29</td>
+      <td>33.59</td>
+      <td>87.81</td>
+      <td>23.18</td>
+    </tr>
+    <tr>
+      <th>alta a casa (%)</th>
+      <td>34.86</td>
+      <td>56.11</td>
+      <td>36.36</td>
+      <td>65.52</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Lectura
+- Con el umbral operativo, DES-CPL detecta 700 de 2263 readmisiones (30.9 %) y XGBoost 719 (31.8 %).
+- Los dos modelos fallan casi en los mismos pacientes: de los 1563 readmitidos que DES-CPL no detecta, 1475 (94.4 %) tampoco los detecta XGBoost; 88 se le escapan solo a DES-CPL y 69 solo a XGBoost. De las falsas alarmas de DES-CPL, el 82.2 % son también de XGBoost.
+- Los readmitidos no detectados tienen en promedio 0.39 hospitalizaciones previas, frente a 3.00 de los detectados; tuvieron alguna hospitalización previa el 33.6 % frente al 87.3 %.
+- Las falsas alarmas tienen 2.51 hospitalizaciones previas en promedio, más cerca de los readmitidos detectados que de los no marcados: el modelo las marca por el mismo perfil de utilización, y esos pacientes no volvieron.
+- De los readmitidos no detectados, el 20.7 % queda cerca del umbral (al menos el 80 % de él) y el 28.9 % por debajo de la mitad: la mayoría no se recuperaría bajando un poco el umbral.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="presupuesto-y-tiempos">
 <h2>16.8. Presupuesto y tiempos<a class="headerlink" href="#presupuesto-y-tiempos" title="Link to this heading">#</a></h2>
-<p>La guía (sección 6.2) pide reportar el hardware, el tiempo de entrenamiento y de inferencia, y la memoria de cada modelo. Todos los tiempos son de un mismo equipo: 4 núcleos físicos y 8 lógicos, sin GPU, con <code class="docutils literal notranslate"><span class="pre">N_JOBS</span> <span class="pre">=</span> <span class="pre">4</span></code>. Los produce <code class="docutils literal notranslate"><span class="pre">experiments/artefacto_des_cpl.py</span></code> a partir de los registros de cada experimento.</p>
+<p>Una comparación justa exige reportar el hardware, el tiempo de entrenamiento y de inferencia, y la memoria de cada modelo. Todos los tiempos son de un mismo equipo: 4 núcleos físicos y 8 lógicos, sin GPU, con <code class="docutils literal notranslate"><span class="pre">N_JOBS</span> <span class="pre">=</span> <span class="pre">4</span></code>. Los produce <code class="docutils literal notranslate"><span class="pre">experiments/artefacto_des_cpl.py</span></code> a partir de los registros de cada experimento.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Columna</p></th>
@@ -2377,7 +2649,7 @@ Menor cobertura relativa de xgboost: 0.38 (race / Asian)
 </section>
 <section id="pruebas-complementarias-mcnemar-y-t-bayesiana">
 <h2>16.9. Pruebas complementarias: McNemar y t bayesiana<a class="headerlink" href="#pruebas-complementarias-mcnemar-y-t-bayesiana" title="Link to this heading">#</a></h2>
-<p>El protocolo fijó tres pruebas confirmatorias: Friedman con Nemenyi, Nadeau-Bengio y DeLong (capítulo 13). La guía de redacción del artículo pide además, para clasificación, la prueba exacta de McNemar y una prueba bayesiana con región de equivalencia práctica. Se añadieron <strong>después</strong> de congelar el protocolo, así que son <strong>complementarias</strong>: no pueden sustentar R3 por sí solas (guía, sección 6.1). Se calculan aquí con las mismas predicciones y los mismos pliegues, sin entrenar nada; las funciones están en <code class="docutils literal notranslate"><span class="pre">src/estadistica.py</span></code>, con sus pruebas en <code class="docutils literal notranslate"><span class="pre">tests/test_estadistica.py</span></code>.</p>
+<p>El protocolo fijó tres pruebas confirmatorias: Friedman con Nemenyi, Nadeau-Bengio y DeLong (capítulo 13). En clasificación son habituales además la prueba exacta de McNemar y una prueba bayesiana con región de equivalencia práctica. Se añadieron <strong>después</strong> de congelar el protocolo, así que son <strong>complementarias</strong>: no pueden sustentar R3 por sí solas. Se calculan aquí con las mismas predicciones y los mismos pliegues, sin entrenar nada; las funciones están en <code class="docutils literal notranslate"><span class="pre">src/estadistica.py</span></code>, con sus pruebas en <code class="docutils literal notranslate"><span class="pre">tests/test_estadistica.py</span></code>.</p>
 <p><strong>McNemar exacta (conjunto de prueba).</strong> Compara las <em>decisiones</em> de dos modelos con el umbral operativo, que marca al 15 % de mayor riesgo de cada uno. Solo cuentan los encuentros discordantes:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(n_{01}\)</span>: DES-CPL acierta y el benchmark falla;</p></li>
@@ -2588,7 +2860,7 @@ Mayor probabilidad posterior de 'equivalente': random_forest, xgboost, lightgbm,
 <td><p>Solo en CDC, y sin significancia. La condición 4 del protocolo no se cumple.</p></td>
 </tr>
 <tr class="row-even"><td><p>¿Es robusto?</p></td>
-<td><p>Más que XGBoost, que pierde entre 1.5 y 2 veces más con ruido en las etiquetas, menos prevalencia y menos datos. Random Forest y la regresión logística pierden aún menos, desde un punto de partida más bajo.</p></td>
+<td><p>Más que XGBoost, que pierde entre 1.6 y 1.9 veces lo que DES-CPL con ruido en las etiquetas, menos prevalencia y menos datos. Random Forest y la regresión logística pierden aún menos, desde un punto de partida más bajo.</p></td>
 </tr>
 <tr class="row-odd"><td><p>¿Y ante un cambio de distribución?</p></td>
 <td><p>Los datos no traen fechas ni hospital, así que no se puede apartar un bloque temporal o espacial. Se evalúa con lo disponible: el conjunto de prueba, fuera de toda decisión de diseño (sección 13.8), y el escenario de menor prevalencia (sección 16.3). La mezcla entre épocas queda como limitación (sección 17.3).</p></td>
@@ -2605,16 +2877,19 @@ Mayor probabilidad posterior de 'equivalente': random_forest, xgboost, lightgbm,
 <tr class="row-odd"><td><p>¿Trata distinto a algún grupo?</p></td>
 <td><p>No más que XGBoost. Hay paridad por sexo; las brechas en los encuentros sin raza registrada, «Other» y «Asian» son las del capítulo 7 y vienen de los datos (sección 16.7).</p></td>
 </tr>
-<tr class="row-even"><td><p>¿Cambian el veredicto McNemar y la <span class="math notranslate nohighlight">\(t\)</span> bayesiana?</p></td>
+<tr class="row-even"><td><p>¿Dónde se equivoca?</p></td>
+<td><p>En los mismos pacientes que XGBoost: el 94.4 % de los readmitidos que DES-CPL no detecta tampoco los detecta XGBoost. Son pacientes con poca utilización previa (0.39 hospitalizaciones previas en promedio, frente a 3.00 de los detectados), y solo el 20.7 % queda cerca del umbral. Los errores vienen de la información disponible, no de cómo se combinan los modelos (sección 16.7.1).</p></td>
+</tr>
+<tr class="row-odd"><td><p>¿Cambian el veredicto McNemar y la <span class="math notranslate nohighlight">\(t\)</span> bayesiana?</p></td>
 <td><p>No. Frente a XGBoost, CatBoost y LightGBM, McNemar no encuentra diferencias y la prueba bayesiana da como lo más probable la equivalencia práctica (sección 16.9).</p></td>
 </tr>
-<tr class="row-odd"><td><p>¿Cuánto cuesta?</p></td>
+<tr class="row-even"><td><p>¿Cuánto cuesta?</p></td>
 <td><p>Su búsqueda es más barata que la de los modelos de árboles; el costo está en el conjunto de selección (4 ajustes por modelo base) y en una inferencia unas 13 veces más lenta que la de XGBoost, aún por debajo de 1 ms por caso.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><strong>Veredicto.</strong> La evaluación ampliada no cambia el de R3: DES-CPL no supera de forma significativa al mejor benchmark, y el tope de nota sigue en 4.0. Sí cambia la caracterización del modelo: es un combinador <strong>robusto y estable</strong>, que en ningún conjunto queda lejos del mejor método y que nunca depende de acertar cuál es el mejor modelo individual, que cambia de un dominio a otro.</p>
+<p><strong>Veredicto.</strong> La evaluación ampliada no cambia el de R3: DES-CPL no supera de forma significativa al mejor benchmark. Sí cambia la caracterización del modelo: es un combinador <strong>robusto y estable</strong>, que en ningún conjunto queda lejos del mejor método y que nunca depende de acertar cuál es el mejor modelo individual, que cambia de un dominio a otro.</p>
 </section>
 </section>
 
@@ -2691,7 +2966,10 @@ Mayor probabilidad posterior de 'equivalente': random_forest, xgboost, lightgbm,
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#varianza-por-semilla">16.4. Varianza por semilla</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensibilidad-a-los-hiperparametros">16.5. Sensibilidad a los hiperparámetros</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretabilidad-shap-de-des-cpl-comparado-con-xgboost">16.6. Interpretabilidad: SHAP de DES-CPL comparado con XGBoost</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equidad-de-des-cpl-por-subgrupo">16.7. Equidad de DES-CPL por subgrupo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equidad-de-des-cpl-por-subgrupo">16.7. Equidad de DES-CPL por subgrupo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-errores-donde-se-equivoca-des-cpl">16.7.1. Análisis de errores: dónde se equivoca DES-CPL</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#presupuesto-y-tiempos">16.8. Presupuesto y tiempos</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pruebas-complementarias-mcnemar-y-t-bayesiana">16.9. Pruebas complementarias: McNemar y t bayesiana</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-de-la-evaluacion-ampliada">16.10. Síntesis de la evaluación ampliada</a></li>
@@ -2709,7 +2987,7 @@ Mayor probabilidad posterior de 'equivalente': random_forest, xgboost, lightgbm,
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>

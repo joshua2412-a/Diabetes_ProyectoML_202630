@@ -1334,15 +1334,11 @@ Corridas completadas del Entregable 2: 108
 <p>El capítulo 11 midió el tamaño del efecto entre modelos con la delta de Cliff, que es ordinal: cuenta en qué proporción de pares de folds un modelo supera al otro. Es coherente con Friedman y Nemenyi, que también trabajan con rangos, pero se satura en <span class="math notranslate nohighlight">\(\pm 1\)</span> en cuanto las dos muestras no se solapan, y desde ahí deja de distinguir una separación pequeña de una enorme. La d de Cohen complementa esa lectura: expresa la diferencia de medias en unidades de desviación estándar.</p>
 <p>Se reportan dos versiones, porque responden preguntas distintas:</p>
 <div class="math notranslate nohighlight" id="equation-eq-hedges-g">
-<span class="eqno">(1)<a class="headerlink" href="#equation-eq-hedges-g" title="Link to this equation">#</a></span>\[
-g = \frac{\bar a - \bar b}{s_p}\left(1 - \frac{3}{4(n_a + n_b) - 9}\right),
+<span class="eqno">(1)<a class="headerlink" href="#equation-eq-hedges-g" title="Link to this equation">#</a></span>\[g = \frac{\bar a - \bar b}{s_p}\left(1 - \frac{3}{4(n_a + n_b) - 9}\right),
 \qquad
-s_p = \sqrt{\frac{(n_a - 1)s_a^2 + (n_b - 1)s_b^2}{n_a + n_b - 2}}
-\]</div>
+s_p = \sqrt{\frac{(n_a - 1)s_a^2 + (n_b - 1)s_b^2}{n_a + n_b - 2}}\]</div>
 <div class="math notranslate nohighlight" id="equation-eq-dz-pareada">
-<span class="eqno">(2)<a class="headerlink" href="#equation-eq-dz-pareada" title="Link to this equation">#</a></span>\[
-d_z = \frac{\bar\Delta}{s_\Delta}, \qquad \Delta_i = a_i - b_i
-\]</div>
+<span class="eqno">(2)<a class="headerlink" href="#equation-eq-dz-pareada" title="Link to this equation">#</a></span>\[d_z = \frac{\bar\Delta}{s_\Delta}, \qquad \Delta_i = a_i - b_i\]</div>
 <ul class="simple">
 <li><p><strong><span class="math notranslate nohighlight">\(g\)</span> (d de Cohen con la corrección de Hedges)</strong> trata las dos muestras como independientes, igual que la delta de Cliff del capítulo 11, y por eso es la que se compara con ella. Con cinco valores por modelo, la d sin corregir sobrestima el efecto; el factor entre paréntesis lo corrige.</p></li>
 <li><p><strong><span class="math notranslate nohighlight">\(d_z\)</span> (pareada)</strong> usa las diferencias fold a fold. Es la versión coherente con el diseño, porque todos los modelos se evaluaron sobre los mismos cinco folds externos y la variabilidad común a un fold se cancela en la diferencia. Por esa misma razón suele ser mucho mayor que <span class="math notranslate nohighlight">\(g\)</span>.</p></li>
@@ -2944,7 +2940,7 @@ Pruebas: 173 | fallidas: 0 | errores: 0 | omitidas: 0 | tiempo total: 9.8 min
 </tbody>
 </table>
 </div>
-<p>Ninguna corrección cambia una conclusión del Entregable 2, y la tabla maestra se conserva como resultado del benchmark. Lo que sí cambia es lo que respalda esas conclusiones: el empate entre los finalistas ya no puede atribuirse a una búsqueda insuficiente, porque sobrevive a un presupuesto entre cinco y siete veces mayor y a un optimizador guiado. La comparación con el modelo original del Entregable 3 usará el presupuesto de 60 configuraciones validado en este capítulo.</p>
+<p>Ninguna corrección cambia una conclusión del Entregable 2, y la tabla maestra se conserva como resultado del benchmark. Lo que sí cambia es lo que respalda esas conclusiones: el empate entre los finalistas ya no puede atribuirse a una búsqueda insuficiente, porque sobrevive a un presupuesto entre cinco y siete veces mayor y a un optimizador guiado. La comparación con el modelo original (capítulo 13) usa el presupuesto de 60 configuraciones validado en este capítulo.</p>
 </section>
 </section>
 
@@ -3048,7 +3044,7 @@ Pruebas: 173 | fallidas: 0 | errores: 0 | omitidas: 0 | tiempo total: 9.8 min
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>

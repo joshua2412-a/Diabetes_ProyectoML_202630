@@ -415,18 +415,18 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="conclusiones-limitaciones-y-declaracion-de-autoria">
 <h1>17. Conclusiones, limitaciones y declaración de autoría<a class="headerlink" href="#conclusiones-limitaciones-y-declaracion-de-autoria" title="Link to this heading">#</a></h1>
-<p>Este capítulo cierra el Entregable 3. Reúne:</p>
+<p>Este capítulo cierra el trabajo. Reúne:</p>
 <ul class="simple">
 <li><p>los hallazgos principales;</p></li>
 <li><p>el veredicto sobre las tres condiciones del modelo original (R1, R2 y R3), con las cifras leídas de los resultados;</p></li>
 <li><p>las limitaciones y los riesgos;</p></li>
 <li><p>el trabajo futuro;</p></li>
-<li><p>la declaración de autoría y de uso de herramientas, incluidas las de inteligencia artificial, que la guía pide en el último capítulo del libro.</p></li>
+<li><p>la declaración de autoría y de uso de herramientas, incluidas las de inteligencia artificial.</p></li>
 </ul>
 <p>No calcula nada nuevo: la única celda de código relee los resultados de los capítulos 13 y 16 para comprobar las condiciones del protocolo.</p>
 <section id="hallazgos">
 <h2>17.1. Hallazgos<a class="headerlink" href="#hallazgos" title="Link to this heading">#</a></h2>
-<p>La guía (sección 15) enumera cinco capacidades que el entregable debe demostrar. Los hallazgos se ordenan con ellas.</p>
+<p>Los hallazgos se ordenan en cinco frentes.</p>
 <p><strong>1. Corregir el propio trabajo (capítulo 12).</strong> Las cuatro observaciones del Entregable 2 tienen una corrección con evidencia:</p>
 <ul class="simple">
 <li><p><strong>Presupuesto de búsqueda.</strong> El estudio de convergencia con 60 configuraciones por fold muestra que el presupuesto de 8 a 12 era suficiente. La mayor ganancia fue de 0.0023 en AUC-PR, por debajo del umbral de 0.005 fijado antes de ver los resultados.</p></li>
@@ -434,8 +434,8 @@ document.write(`
 <li><p><strong>Fuga de información.</strong> La auditoría no la encontró: ningún paciente ni perfil se comparte entre particiones.</p></li>
 <li><p><strong>Pruebas y módulos.</strong> <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> se dividió en los módulos de <code class="docutils literal notranslate"><span class="pre">src/</span></code>, y la equivalencia se demostró con pruebas.</p></li>
 </ul>
-<p>Ninguna corrección cambió una conclusión del Entregable 2. Lo que sí cambió es su respaldo: el empate entre XGBoost y Random Forest ya no puede atribuirse a una búsqueda corta.</p>
-<p><strong>2. Llevar los modelos a un producto.</strong> Los siete modelos del Entregable 2 y DES-CPL están serializados en <code class="docutils literal notranslate"><span class="pre">artifacts/</span></code>, cada uno con su <code class="docutils literal notranslate"><span class="pre">metadata.json</span></code> y una prueba de ida y vuelta. El dashboard Dash de tres páginas (contexto, EDA y modelos) ofrece:</p>
+<p>Ninguna corrección cambió una conclusión del experimento original. Lo que sí cambió es su respaldo: el empate entre XGBoost y Random Forest ya no puede atribuirse a una búsqueda corta.</p>
+<p><strong>2. Llevar los modelos a un producto.</strong> Los siete modelos del experimento original y DES-CPL están serializados en <code class="docutils literal notranslate"><span class="pre">artifacts/</span></code>, cada uno con su <code class="docutils literal notranslate"><span class="pre">metadata.json</span></code> y una prueba de ida y vuelta. El dashboard Dash de tres páginas (contexto, EDA y modelos) ofrece:</p>
 <ul class="simple">
 <li><p>predicción en vivo con explicación SHAP local;</p></li>
 <li><p>incertidumbre conforme;</p></li>
@@ -483,7 +483,7 @@ document.write(`
 </tbody>
 </table>
 </div>
-<p><strong>Tope de la calificación: 4.0</strong> (guía, sección 12: R1 sí, R2 sí, R3 no).</p>
+<p><strong>Veredicto: el modelo es original (R1 y R2), pero no superior (R3).</strong></p>
 <p>La celda siguiente comprueba las cuatro condiciones del protocolo (<code class="docutils literal notranslate"><span class="pre">experiments/protocolo.md</span></code>, sección 5) con los resultados guardados.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -539,8 +539,8 @@ document.write(`
 <span class="p">})</span>
 <span class="n">display</span><span class="p">(</span><span class="n">veredicto</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">conjuntos</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"R3:"</span><span class="p">,</span> <span class="s2">"se cumple"</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">veredicto</span><span class="p">[</span><span class="s2">"se cumple"</span><span class="p">])</span> <span class="k">else</span> <span class="s2">"NO se cumple"</span><span class="p">,</span> <span class="s2">"→ tope de la nota"</span><span class="p">,</span>
-      <span class="s2">"5.0"</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">veredicto</span><span class="p">[</span><span class="s2">"se cumple"</span><span class="p">])</span> <span class="k">else</span> <span class="s2">"4.0"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"R3:"</span><span class="p">,</span> <span class="s2">"se cumple"</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">veredicto</span><span class="p">[</span><span class="s2">"se cumple"</span><span class="p">])</span> <span class="k">else</span> <span class="s2">"NO se cumple"</span><span class="p">,</span> <span class="s2">"→"</span><span class="p">,</span>
+      <span class="s2">"el modelo es original y superior"</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">veredicto</span><span class="p">[</span><span class="s2">"se cumple"</span><span class="p">])</span> <span class="k">else</span> <span class="s2">"el modelo es original, pero no superior"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -655,7 +655,7 @@ document.write(`
     </tr>
   </tbody>
 </table>
-</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R3: NO se cumple → tope de la nota 4.0
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R3: NO se cumple → el modelo es original, pero no superior
 </pre></div>
 </div>
 </div>
@@ -667,14 +667,16 @@ document.write(`
 <li><p><strong>Condición 3.</strong> La δ de Cliff va en contra de DES-CPL: en la mayoría de los folds, XGBoost queda por encima.</p></li>
 <li><p><strong>Condición 4.</strong> DES-CPL solo supera al mejor benchmark en CDC, aunque en ningún conjunto es significativamente peor.</p></li>
 </ul>
-<p>La hipótesis se refuta con las tres pruebas fijadas en el protocolo, sin cambiar particiones, semillas ni métricas después de ver los resultados. Las ventajas de la evaluación ampliada (estabilidad y robustez) son exploratorias y no sustentan R3 por sí solas (guía, sección 6.1).</p>
+<p>La hipótesis se refuta con las tres pruebas fijadas en el protocolo, sin cambiar particiones, semillas ni métricas después de ver los resultados. Las ventajas de la evaluación ampliada (estabilidad y robustez) son exploratorias y no sustentan R3 por sí solas: el protocolo no las fijó como confirmatorias.</p>
 </section>
 <section id="limitaciones">
 <h2>17.3. Limitaciones<a class="headerlink" href="#limitaciones" title="Link to this heading">#</a></h2>
 <p><strong>Del diseño experimental.</strong></p>
 <ul class="simple">
-<li><p><strong>Una sola repetición del bucle externo.</strong> La guía recomienda 5 × 5; el protocolo fijó 1 × 5 por el costo de cómputo, y así lo declaró. Con cinco diferencias pareadas, una prueba de Nadeau-Bengio solo detecta ventajas grandes frente a la variación entre folds.</p></li>
+<li><p><strong>Una sola repetición del bucle externo.</strong> Lo recomendable es repetir el bucle (por ejemplo, 5 × 5); el protocolo fijó 1 × 5 por el costo de cómputo, y así lo declaró. Con cinco diferencias pareadas, una prueba de Nadeau-Bengio solo detecta ventajas grandes frente a la variación entre folds.</p></li>
 <li><p><strong>Una semilla en la comparación confirmatoria.</strong> El estudio de diez semillas (sección 16.4) mostró que la semilla 42 fue la mejor de XGBoost. El resultado confirmatorio se mantiene, porque la semilla se fijó antes, pero no representa el desempeño medio.</p></li>
+<li><p><strong>Diseño iterado sobre las mismas particiones.</strong> Las versiones exploratorias de DES-CPL (la formulación inicial y la de poda y encogimiento por rejilla) se evaluaron en los mismos cinco folds externos que la comparación definitiva, como declara el protocolo. Esa reutilización favorece a DES-CPL en el bucle externo, así que no debilita la conclusión: aun con esa ventaja, no supera a XGBoost.</p></li>
+<li><p><strong>Uso previo del conjunto de prueba.</strong> El capítulo 10 lo usó para evaluar a los finalistas del experimento original, y la sección 13.1 retomó esas predicciones para motivar el modelo. Ningún componente ni hiperparámetro de DES-CPL se eligió con él (sección 13.8), pero la prueba ya no es completamente ciega para el problema.</p></li>
 <li><p><strong>Análisis exploratorios en un solo fold.</strong> La sensibilidad a los hiperparámetros se midió en el fold 0. En los escenarios de robustez no se reajustaron los hiperparámetros de los modelos base.</p></li>
 <li><p><strong>Conjuntos adicionales sin identificador de individuo.</strong> Su partición es estratificada simple, no agrupada. Su búsqueda usó una submuestra de 5 000 filas, y CDC una submuestra de 100 000 registros (sección 16.1).</p></li>
 </ul>
@@ -714,7 +716,7 @@ document.write(`
 <section id="declaracion-de-autoria-y-uso-de-herramientas">
 <h2>17.6. Declaración de autoría y uso de herramientas<a class="headerlink" href="#declaracion-de-autoria-y-uso-de-herramientas" title="Link to this heading">#</a></h2>
 <p><strong>Autores.</strong> Joshua Hincapié Llorente y Alejandro Cantillo Escorcia, Universidad del Norte.</p>
-<p><strong>Contribución de los autores.</strong> Ambos autores participaron en todas las etapas del proyecto y definieron juntos el problema y el diseño general del estudio. Dentro de ese trabajo conjunto, Joshua Hincapié Llorente lideró la parte de modelado: el ETL y el preprocesamiento, el experimento combinatorio del Entregable 2, las correcciones del capítulo 12, el modelo original DES-CPL (formulación, implementación, pruebas unitarias y protocolo), la evaluación ampliada y las pruebas estadísticas. Alejandro Cantillo Escorcia lideró el análisis exploratorio de los datos (capítulos 3 a 5), el dashboard y su despliegue, y la redacción del libro y del artículo. Ambos revisaron los resultados y aprobaron la versión final.</p>
+<p><strong>Contribución de los autores.</strong> Ambos autores participaron en todas las etapas del proyecto y definieron juntos el problema y el diseño general del estudio. Dentro de ese trabajo conjunto, Joshua Hincapié Llorente lideró la parte de modelado: el ETL y el preprocesamiento, el experimento combinatorio, las correcciones del capítulo 12, el modelo original DES-CPL (formulación, implementación, pruebas unitarias y protocolo), la evaluación ampliada y las pruebas estadísticas. Alejandro Cantillo Escorcia lideró el análisis exploratorio de los datos (capítulos 3 a 5), el dashboard y su despliegue, y la redacción del libro y del artículo. Ambos revisaron los resultados y aprobaron la versión final.</p>
 <p><strong>Herramientas de inteligencia artificial.</strong> Se usó Claude (Anthropic), un asistente de IA generativa, a lo largo del proyecto, para:</p>
 <ul class="simple">
 <li><p><strong>Código.</strong> Redactar y refactorizar código. También para depurar errores, como el del SVM con datos ordenados por fecha (sección 16.2).</p></li>
@@ -834,7 +836,7 @@ document.write(`
   <div class="footer-item">
     
 <p class="component-author">
-By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+By Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 </p>
 
   </div>
