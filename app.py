@@ -13,7 +13,6 @@ Render:   gunicorn app:server      (ver render.yaml)
 
 from __future__ import annotations
 
-import threading
 
 import dash
 import dash_bootstrap_components as dbc
@@ -74,7 +73,12 @@ def _precalentar() -> None:
         print(f"[arranque] No se pudieron precargar los datos: {error}")
 
 
-threading.Thread(target=_precalentar, daemon=True).start()
+# En el arranque y en el hilo principal, no en un hilo aparte: en Render la
+# precarga en paralelo coincidía con la primera petición y pyarrow quedaba
+# importado a medias en los dos hilos («partially initialized module»). Así el
+# servidor tarda unos segundos más en arrancar, pero nunca hay dos importaciones
+# simultáneas.
+_precalentar()
 
 
 def barra() -> html.Div:

@@ -21,6 +21,7 @@ import pandas as pd
 # hilos (precarga y primera petición), queda a medio inicializar y toda lectura
 # de parquet falla con «cannot access submodule 'parquet' ... circular import».
 # Pasó en Render (CPU más lenta); en local la carga terminaba antes.
+import pyarrow.dataset  # noqa: F401  (pyarrow.parquet lo importa en la primera lectura)
 import pyarrow.parquet  # noqa: F401
 
 from . import config as C
