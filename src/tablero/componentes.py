@@ -11,8 +11,10 @@ from __future__ import annotations
 from typing import Iterable, Sequence
 
 import dash_bootstrap_components as dbc
+import numpy as np
 from dash import dcc, html
 
+from .formato import num, pct
 from .tema import COLOR_MARCA, TINTA_TENUE
 
 
@@ -50,18 +52,28 @@ def subtitulo(texto: str) -> html.H3:
 
 
 # ---- Cabecera de página (banda azul noche del estilo B+) ----------------- #
-def encabezado(ceja: str, titulo: str, texto: str) -> html.Div:
-    """«Antes: después» se compone en dos pesos (fino y negrita)."""
+def encabezado(ceja: str, titulo: str, texto: str, ilustracion: str | None = None) -> html.Div:
+    """«Antes: después» se compone en dos pesos (fino y negrita).
+
+    ``ilustracion`` es el nombre de un SVG de assets/ que se coloca a la
+    derecha de la banda (solo en pantallas anchas).
+    """
     if ": " in titulo:
         antes, despues = titulo.split(": ", 1)
         partes = [html.Span(antes + ":", className="titulo-ligero"), html.Br(), despues]
     else:
         partes = [titulo]
-    return html.Div([
+    texto_banda = html.Div([
         html.Div(ceja, className="banda-ceja"),
         html.H1(partes, className="banda-titulo"),
         html.P(texto, className="banda-texto"),
-    ], className="banda-pagina")
+    ])
+    if ilustracion is None:
+        return html.Div(texto_banda, className="banda-pagina")
+    return html.Div(html.Div([
+        texto_banda,
+        html.Img(src=f"/assets/{ilustracion}", className="banda-ilustracion", alt=""),
+    ], className="banda-con-ilustracion"), className="banda-pagina")
 
 
 def subpestanas(pestanas: Sequence[tuple], id_: str) -> dbc.Tabs:
@@ -119,8 +131,9 @@ def tarjeta_grafico(figura, titulo: str, nota: str = "", id_: str | None = None,
     """Gráfico con título y nota. La altura de la figura pasa al contenedor."""
     alto = alto or getattr(getattr(figura, "layout", None), "height", None)
     extra = {"id": id_} if id_ else {}
-    grafico = dcc.Graph(figure=figura, config={"displaylogo": False, "responsive": True},
-                        style={"height": f"{int(alto)}px"} if alto else None, **extra)
+    if alto:  # nunca style=None: dcc.Graph lee style.height y fallaría
+        extra["style"] = {"height": f"{int(alto)}px"}
+    grafico = dcc.Graph(figure=figura, config={"displaylogo": False, "responsive": True}, **extra)
     cuerpo = [html.H4(titulo, className="tarjeta-titulo"), grafico]
     if nota:
         cuerpo.append(html.Div(con_formulas(nota), className="tarjeta-nota",
@@ -149,3 +162,86 @@ def falta_artefacto(que: str) -> html.Div:
         f"Falta {que}. Ejecuta `python experiments/entrenar_artefactos.py` desde la "
         "raíz del repositorio: el dashboard no entrena modelos, solo lee artifacts/.",
         "Artefactos sin generar", "pendiente")
+
+
+# ---- Matriz de personas (comunicación de riesgo) ------------------------- #
+def matriz_personas(grupos: Sequence[dict], descripcion: str, columnas: int = 10) -> html.Div:
+    """Matriz de iconos de persona: «de cada 100 pacientes, 11 vuelven».
+
+    Es el formato que recomienda la literatura de comunicación de riesgo para
+    público no experto: una frecuencia natural se entiende mejor que un
+    porcentaje. Cada grupo es un dict con ``n`` (iconos), ``clase`` (CSS: la
+    clase da el color), ``etiqueta`` (leyenda) y, opcionalmente,
+    ``relleno`` (icono lleno o de contorno). La forma del icono y la
+    leyenda repiten lo que dice el color, y ``descripcion`` es el texto
+    alternativo de la figura entera.
+    """
+    iconos, leyenda = [], []
+    for g in grupos:
+        estilo = f"persona {g['clase']}" + (" relleno" if g.get("relleno", True) else "")
+        iconos += [html.Span(g.get("icono", "person"), className=f"material-symbols-rounded {estilo}",
+                             **{"aria-hidden": "true"}) for _ in range(int(g["n"]))]
+        if g.get("etiqueta"):
+            leyenda.append(html.Span([
+                html.Span(g.get("icono", "person"), className=f"material-symbols-rounded {estilo}",
+                          **{"aria-hidden": "true"}),
+                html.Strong(f"{int(g['n'])} "), g["etiqueta"]], className="persona-leyenda"))
+    return html.Div([
+        html.Div(iconos, className="matriz-personas", role="img", **{"aria-label": descripcion},
+                 style={"gridTemplateColumns": f"repeat({columnas}, 1fr)"}),
+        html.Div(leyenda, className="personas-leyenda"),
+    ])
+
+
+def semaforo(estado: str, titulo: str, texto, icono_nombre: str) -> html.Div:
+    """Estado con icono, título y texto. ``estado``: bien, aviso, critico o neutro.
+
+    El color nunca va solo: el icono y el título dicen lo mismo.
+    """
+    return html.Div([
+        html.Span(icono_nombre, className="material-symbols-rounded semaforo-icono", **{"aria-hidden": "true"}),
+        html.Div([html.Div(titulo, className="semaforo-titulo"),
+                  html.Div(con_formulas(texto), className="semaforo-texto")]),
+    ], className=f"semaforo semaforo-{estado}")
+
+
+# ---- Glucómetro de riesgo (predicción en vivo) --------------------------- #
+def glucometro(p: float, umbral: float, decision: bool, percentil: float | None) -> html.Div:
+    """La probabilidad predicha, leída en un glucómetro.
+
+    Es el aparato que cualquier persona con diabetes reconoce: la pantalla
+    muestra la cifra y, debajo, una escala con el umbral operativo y una
+    marca que se desliza hasta el valor del paciente. No añade información
+    nueva: la presenta en un objeto familiar. Los colores son los de las
+    clases (azul: seguimiento habitual; ámbar: priorizar).
+    """
+    tope = max(0.4, min(1.0, float(np.ceil(max(p, umbral) * 1.4 * 10) / 10)))
+    posicion, corte = 100 * min(p, tope) / tope, 100 * umbral / tope
+    estado = "Priorizar seguimiento" if decision else "Seguimiento habitual"
+    clase = "gluco-alto" if decision else "gluco-bajo"
+    return html.Div([
+        html.Div(html.Span(className="gluco-gota"), className="gluco-tira", **{"aria-hidden": "true"}),
+        html.Div([
+            html.Div([
+                html.Div("Riesgo de readmisión · 30 días", className="gluco-etiqueta"),
+                html.Div(pct(100 * p), className="gluco-numero"),
+                html.Div([html.Span(className="gluco-led"), estado], className="gluco-estado"),
+            ], className="gluco-pantalla"),
+            html.Div([
+                html.Div([
+                    html.Div(className="gluco-umbral", style={"left": f"{corte:.1f}%"},
+                             title=f"Umbral operativo: {pct(100 * umbral)}"),
+                    html.Div(className="gluco-marcador", style={"left": f"{posicion:.1f}%"}),
+                ], className="gluco-pista"),
+                html.Div([html.Span("0 %"), html.Span(f"umbral {pct(100 * umbral)}", className="gluco-txt-umbral",
+                                                       style={"left": f"{corte:.1f}%"}),
+                          html.Span(pct(100 * tope, 0))], className="gluco-ejes"),
+            ], className="gluco-escala"),
+            html.Div([html.Span(className="gluco-boton"), html.Span(className="gluco-boton")],
+                     className="gluco-botones", **{"aria-hidden": "true"}),
+        ], className="gluco-cuerpo"),
+        html.Div(f"Percentil {num(percentil, 0)} de riesgo entre los pacientes de prueba"
+                 if percentil is not None else "", className="gluco-pie"),
+    ], className=f"glucometro {clase}", role="img",
+        **{"aria-label": f"Probabilidad de readmisión en menos de 30 días: {pct(100 * p)}. "
+                         f"Umbral operativo {pct(100 * umbral)}. Decisión: {estado.lower()}."})

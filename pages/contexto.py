@@ -20,7 +20,7 @@ from src.tablero.componentes import (aviso, encabezado, fila_kpi, icono, lista,
 from src.tablero.formato import miles, pct
 from src.tablero.tema import CLASE
 
-dash.register_page(__name__, path="/", name="Contexto", order=0,
+dash.register_page(__name__, path="/contexto", name="Contexto", order=0,
                    title="Contexto · Readmisión temprana")
 
 FUENTE_CIFRA = ("Rubin, D. J. et al. (2023). Hospital Readmission Risk and Risk Factors of "
@@ -116,6 +116,7 @@ def _datos(c):
                               "agrupada por paciente (80/20, semilla 42)"],
             ]), titulo="Ficha técnica"), lg=5),
             dbc.Col(tarjeta([
+                html.Div("Qué se hizo", className="subtitulo-tarjeta mt-0"),
                 lista([
                     "Se excluyen las altas por fallecimiento u hospicio: esos pacientes no pueden reingresar.",
                     "Se conservan todos los encuentros, pero toda validación se agrupa por paciente: los "
@@ -124,23 +125,50 @@ def _datos(c):
                     "como categoría explícita.",
                     "Las categorías con menos del 1 % se agrupan, salvo la raza (atributo protegido).",
                 ]),
+                html.Div("Cuántos registros quedan en cada paso", className="subtitulo-tarjeta"),
+                _embudo(c),
                 html.A([icono("menu_book", "me-1"), "Detalle en el capítulo 2 del Jupyter Book"],
                        href=C.URL_LIBRO, target="_blank", className="enlace-libro"),
             ], titulo="Decisiones del ETL", tono="panel"), lg=7),
         ], className="g-4"),
         subtitulo("Diccionario de variables"),
-        dash_table.DataTable(
+        html.Div(dash_table.DataTable(
             data=filas, columns=[{"name": k, "id": k} for k in ["Variable", "Columna", "Tipo", "Descripción"]],
             filter_action="native", sort_action="native", page_size=12,
             style_as_list_view=True, style_table={"overflowX": "auto"},
-            style_cell={"textAlign": "left", "whiteSpace": "normal", "height": "auto",
-                        "fontFamily": "inherit", "fontSize": "0.9rem", "padding": "8px"},
-            style_header={"fontWeight": 600}, css=[{"selector": ".dash-filter input",
-                                                   "rule": "font-family: inherit"}],
+            style_cell={"textAlign": "left", "whiteSpace": "normal", "height": "auto"},
             filter_options={"placeholder_text": "Filtrar..."},
             id="diccionario",
-        ),
+        ), className="tabla-datos"),
     ])
+
+
+CRUDOS = 101_766   # encuentros del CSV original (UCI), antes del ETL
+
+
+def _embudo(c):
+    """Registros que sobreviven a cada paso del ETL, como barras proporcionales.
+
+    Hace visible la trazabilidad del capítulo 2 sin abrir el libro: cuánto
+    se pierde al excluir y cómo queda la partición agrupada por paciente.
+    """
+    def paso(etiqueta, valor, barras):
+        return html.Div([
+            html.Div([html.Strong(miles(valor)), etiqueta], className="embudo-etiqueta"),
+            html.Div([html.Div(texto, className=f"embudo-barra {clase}", style={"width": f"{ancho:.2f}%"},
+                               title=texto) for ancho, clase, texto in barras], className="embudo-pista"),
+        ], className="embudo-paso")
+    excluidos = CRUDOS - c["total"]
+    return html.Div([
+        paso("encuentros en el CSV original", CRUDOS, [(100, "", "100 %")]),
+        paso(f"tras excluir {miles(excluidos)} altas por fallecimiento u hospicio y sexo inválido", c["total"],
+             [(100 * c["total"] / CRUDOS, "azur", pct(100 * c["total"] / CRUDOS))]),
+        paso("entrenamiento y prueba, sin pacientes compartidos", c["total"],
+             [(100 * c["train"] / CRUDOS, "", f"entrenamiento {pct(100 * c['train'] / c['total'], 0)}"),
+              (100 * c["prueba"] / CRUDOS, "claro", f"prueba {pct(100 * c['prueba'] / c['total'], 0)}")]),
+    ], className="embudo", role="img",
+        **{"aria-label": f"De {miles(CRUDOS)} encuentros crudos quedan {miles(c['total'])} tras el ETL: "
+                         f"{miles(c['train'])} de entrenamiento y {miles(c['prueba'])} de prueba."})
 
 
 PASOS = [
@@ -150,7 +178,7 @@ PASOS = [
     ("grid_view", "112 combinaciones", "7 modelos × 4 balanceos × 4 optimizadores"),
     ("repeat", "Validación anidada", "5 folds externos × 3 internos, agrupados por paciente"),
     ("functions", "Comparación estadística", "Friedman, Nemenyi, DeLong con Holm, Cliff y Cohen"),
-    ("science", "Modelo original", "Propuesta propia contrastada con los benchmarks"),
+    ("science", "Modelo original", "DES-CPL: selección dinámica de ensambles por competencia local"),
     ("verified", "Evaluación ampliada", "Datos adicionales, robustez, calibración e incertidumbre"),
     ("dashboard", "Dashboard", "Contexto, EDA y modelos en vivo"),
 ]
@@ -166,7 +194,7 @@ def _metodologia():
         ], className="paso" + (" paso-pendiente" if titulo in ("Modelo original", "Evaluación ampliada") else "")))
     return html.Div([
         html.Div(pasos, className="pipeline", role="list", **{"aria-label": "Etapas del proyecto"}),
-        html.P("Las etapas con borde discontinuo corresponden al Entregable 3 y están en curso.",
+        html.P("Las etapas con borde discontinuo corresponden al Entregable 3.",
                className="nota-fuente"),
         dbc.Row([
             dbc.Col(tarjeta(lista([
@@ -178,7 +206,9 @@ def _metodologia():
                 "El umbral de decisión se fija por capacidad de seguimiento: marcar al 15 % de mayor riesgo.",
             ]), titulo="Reglas que dan validez a los resultados"), lg=6),
             dbc.Col(tarjeta(lista([
-                "Friedman y Nemenyi comparan los 7 modelos sobre los mismos folds.",
+                "Friedman y Nemenyi comparan los modelos sobre los mismos folds: los 7 del Entregable 2 y, "
+                "para el modelo original, los 7 con 60 evaluaciones más LightGBM y CatBoost.",
+                "La t de Nadeau-Bengio compara DES-CPL con cada benchmark fold a fold, con corrección de Holm.",
                 "DeLong compara AUC sobre el conjunto de prueba, con corrección de Holm.",
                 "Delta de Cliff y d de Cohen miden el tamaño del efecto.",
                 "Intervalos BCa remuestreando pacientes completos.",
@@ -229,7 +259,8 @@ def layout():
     return html.Div([
         encabezado("01 · Contexto", "Readmisión temprana: el problema y los datos",
                    f"{miles(c['total'])} encuentros de pacientes diabéticos en 130 hospitales de EE. UU. "
-                   "¿Quién volverá al hospital antes de 30 días?"),
+                   "¿Quién volverá al hospital antes de 30 días?",
+                   ilustracion="ilustracion-diabetes.svg"),
         subpestanas([
             ("ctx-problema", "El problema", _problema(c)),
             ("ctx-datos", "Los datos", _datos(c)),

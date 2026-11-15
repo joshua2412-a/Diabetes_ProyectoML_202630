@@ -46,7 +46,22 @@ MODELOS = {
     "xgboost": "XGBoost", "random_forest": "Random Forest", "svm": "SVM lineal",
     "logistica": "Regresión logística", "knn": "k-NN", "arbol": "Árbol de decisión",
     "bayes": "Naive Bayes", "des_cpl": "DES-CPL (modelo original)",
+    # Benchmarks del estado del arte: solo aparecen en la comparación del
+    # protocolo (no tienen artefacto serializado en el dashboard).
+    "lightgbm": "LightGBM", "catboost": "CatBoost",
 }
+#: Clave del modelo original del Entregable 3. Las vistas la usan para
+#: destacarlo y para no mezclarlo con los benchmarks del Entregable 2, que se
+#: buscaron con otro presupuesto (ver «Comparación estadística»).
+MODELO_ORIGINAL = "des_cpl"
+#: Nombres para frases y rótulos: sin «(modelo original)», que ya dice el
+#: contexto y que dejaba paréntesis dobles («DES-CPL (modelo original) (2,80)»).
+MODELOS_CORTOS = {**MODELOS, MODELO_ORIGINAL: "DES-CPL"}
+
+
+def nombre_modelo(clave: str) -> str:
+    """Nombre corto y legible de un modelo (o la clave tal cual)."""
+    return MODELOS_CORTOS.get(clave, clave)
 BALANCEOS = {"ninguno": "Sin balanceo", "smote": "SMOTE", "adasyn": "ADASYN",
              "class_weight": "Pesos de clase"}
 OPTIMIZADORES = {"grid": "Grid Search", "random": "Random Search",
@@ -121,6 +136,63 @@ SECCIONES_FORMULARIO = [
                               "repaglinide", "nateglinide", "chlorpropamide",
                               "acarbose", "miglitol", "tolazamide"]),
 ]
+
+
+# --------------------------------------------------------------------------- #
+# Niveles legibles. Los datos conservan los códigos originales (en inglés y,
+# en algunos casos, con un espacio inicial); la interfaz los traduce aquí.
+# --------------------------------------------------------------------------- #
+_ESTADOS_FARMACO = {"No": "No prescrito", "Steady": "Dosis estable", "Up": "Dosis sube",
+                    "Down": "Dosis baja", "Cambio": "Dosis cambia"}
+
+NIVELES = {
+    "admission_type_id": {"Emergency": "Emergencia", "Elective": "Electiva", "Urgent": "Urgente",
+                          "NULL": "Sin dato", "Not Available": "No disponible", "Otro": "Otro"},
+    "admission_source_id": {"Emergency Room": "Sala de urgencias", "Physician Referral": "Remisión médica",
+                            "NULL": "Sin dato", "Transfer from a hospital": "Traslado de otro hospital",
+                            "Transfer from another health care facility": "Traslado de otro centro",
+                            "Clinic Referral": "Remisión de clínica", "Otro": "Otro"},
+    "discharge_disposition_id": {
+        "Discharged to home": "Casa",
+        "Discharged/transferred to SNF": "Centro de enfermería",
+        "Discharged/transferred to home with home health service": "Casa con atención domiciliaria",
+        "Discharged/transferred to another short term hospital": "Otro hospital",
+        "Discharged/transferred to another rehab fac including rehab units of a hospital .":
+            "Centro de rehabilitación",
+        "Discharged/transferred to another type of inpatient care institution": "Otra institución",
+        "NULL": "Sin dato", "Otro": "Otro"},
+    "gender": {"Female": "Mujer", "Male": "Hombre"},
+    "race": {"Caucasian": "Caucásico", "AfricanAmerican": "Afroamericano", "Hispanic": "Hispano",
+             "Asian": "Asiático", "Other": "Otro", "No informada": "No informada"},
+    "A1Cresult": {"No medida": "No medida", "Norm": "Normal", ">7": "> 7 %", ">8": "> 8 %"},
+    "max_glu_serum": {"No medida": "No medida", "Norm": "Normal", ">200": "> 200 mg/dL",
+                      ">300": "> 300 mg/dL"},
+    "change": {"No": "Sin cambio", "Ch": "Con cambio"},
+    "diabetesMed": {"Yes": "Sí", "No": "No"},
+}
+
+
+def nivel(variable: str, valor) -> str:
+    """Nivel legible de una variable categórica (o el valor tal cual)."""
+    texto = str(valor)
+    tabla = NIVELES.get(variable)
+    if tabla is None and variable in _FARMACOS:
+        tabla = _ESTADOS_FARMACO
+    if tabla is None:
+        return texto.strip()
+    return tabla.get(texto, tabla.get(texto.strip(), texto.strip()))
+
+
+_FARMACOS = {"metformin", "repaglinide", "nateglinide", "chlorpropamide", "glimepiride",
+             "glipizide", "glyburide", "pioglitazone", "rosiglitazone", "acarbose", "miglitol",
+             "tolazamide", "insulin", "glyburide-metformin"}
+ESTADOS_FARMACO = _ESTADOS_FARMACO
+
+#: Referencia del artículo que presentó el conjunto de datos; su análisis
+#: central es justamente la medición de la HbA1c y la readmisión.
+FUENTE_HBA1C = ("Strack, B. et al. (2014). Impact of HbA1c Measurement on Hospital Readmission "
+                "Rates: Analysis of 70,000 Clinical Database Patient Records. BioMed Research "
+                "International, 2014, 781670.")
 
 
 def nombre(variable: str) -> str:

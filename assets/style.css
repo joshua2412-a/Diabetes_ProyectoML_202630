@@ -1,5 +1,7 @@
 /* ========================================================================== *
-   Estilo B+ del dashboard de readmisión.
+   Estilo B+ del dashboard de readmisión, con la paleta del proyecto:
+   Golden Sand #e8c766, Amber Blaze #e8af2e, Azure Crest #3462ac,
+   Deep Midnight #223164 y Shadow Abyss #0e2043 (ver src/tablero/tema.py).
    La barra superior y la cabecera de cada página forman una banda continua
    azul noche, en claro y en oscuro; el contenido debajo sigue el tema.
    Superficies neutras frías; el color de las dos clases es el único con
@@ -9,28 +11,43 @@
   --fondo: #f4f6fa;
   --tarjeta: #ffffff;
   --suave: #edf1f7;
-  --tinta: #121c2b;
+  --tinta: #0e2043;
   --tinta-suave: #3d4a5d;
   --tinta-tenue: #647285;            /* 4,9 : 1 sobre blanco */
   --filete: #dfe6ef;
-  --acento: #1e4e86;
-  --acento-texto: #1e4e86;
-  --clase-0: #2a86b0;
-  --clase-1: #c1443c;
-  --noche: #0b1730;
-  --noche-2: #13294f;
-  --noche-tinta: #eef3f9;
-  --noche-suave: #b9c7de;
-  --noche-acento: #8fb8f2;
-  --noche-filete: rgba(143, 184, 242, 0.16);
-  --lectura: linear-gradient(140deg, #f2f7fd 0%, #e9f0fa 55%, #e4edf9 100%);
+  --acento: #3462ac;
+  --acento-texto: #2d5598;
+  --clase-0: #3462ac;
+  --clase-1: #b97c0c;
+  --arena: #e8c766;
+  --ambar: #e8af2e;
+  --azur: #3462ac;
+  --medianoche: #223164;
+  --abismo: #0e2043;
+  --neutro-icono: #c9cfdf;
+  --noche: #0e2043;
+  --noche-2: #223164;
+  --noche-tinta: #f3f5fb;
+  --noche-suave: #c3cce3;
+  --noche-acento: #e8c766;
+  --noche-filete: rgba(232, 199, 102, 0.18);
+  --lectura: linear-gradient(140deg, #f4f6fc 0%, #edf1fa 55%, #e8eef9 100%);
   --radio: 10px;
   --sombra: 0 1px 2px rgba(15, 30, 51, .06), 0 1px 1px rgba(15, 30, 51, .04);
   --fuente: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --columna: 1440px;
+  /* Movimiento: escala de transitions.dev. Las aperturas usan ease-out
+     suave; los cierres van más rápidos que las aperturas. */
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-micro: 80ms;
+  --dur-rapida: 150ms;
+  --dur-media: 250ms;
+  --dur-lenta: 400ms;
+  /* Elevación con sombras en capas y un anillo de 1 px en lugar de borde. */
+  --anillo: 0 0 0 1px rgba(14, 32, 67, .08);
 }
 
-html { font-size: 15px; }
+html { font-size: 15px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 html, body, .app-root { background: var(--fondo); color: var(--tinta-suave); font-family: var(--fuente); }
 .app-root { min-height: 100vh; display: flex; flex-direction: column; overflow-x: clip; }
 h1, h2, h3, h4, h5 { color: var(--tinta); font-weight: 600; text-wrap: balance; }
@@ -50,13 +67,15 @@ p, li { text-wrap: pretty; }
 .barra-marca-titulo { color: var(--noche-tinta); font-weight: 700; font-size: 1.05rem; }
 .barra-marca-sub { color: var(--noche-suave); font-size: .78rem; }
 .barra-nav { flex: 1; gap: 4px; }
-.barra-nav .barra-enlace { color: var(--noche-suave); border-radius: 999px; padding: 6px 14px; font-weight: 500; }
-.barra-nav .barra-enlace:hover { color: var(--noche-tinta); background: rgba(255, 255, 255, .06); }
-.barra-nav .barra-enlace.active { color: var(--noche-tinta); background: rgba(143, 184, 242, .16); }
+.barra-nav .barra-enlace { color: var(--noche-suave); border-radius: 999px; padding: 8px 14px; font-weight: 500;
+  transition: color var(--dur-rapida) var(--ease-salida), background-color var(--dur-rapida) var(--ease-salida); }
+.barra-nav .barra-enlace.active { color: var(--noche-tinta); background: rgba(232, 199, 102, .14);
+  box-shadow: inset 0 -2px 0 var(--arena); }
 .barra-acciones { display: flex; gap: 8px; }
 .boton-barra { color: var(--noche-tinta); border: 1px solid var(--noche-filete); border-radius: 999px; padding: 6px 12px;
-  background: transparent; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
-.boton-barra:hover { background: rgba(255, 255, 255, .08); color: #fff; }
+  min-height: 40px; min-width: 40px; justify-content: center;
+  background: transparent; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+  transition: background-color var(--dur-rapida) var(--ease-salida), color var(--dur-rapida) var(--ease-salida); }
 .tema-sol { display: none; }
 html[data-tema="oscuro"] .tema-sol { display: inline; }
 html[data-tema="oscuro"] .tema-luna { display: none; }
@@ -64,9 +83,15 @@ html[data-tema="oscuro"] .tema-luna { display: none; }
 /* ---- Cabecera de página: continúa la banda a todo el ancho --------------- */
 .banda-pagina {
   margin: 0 calc(50% - 50vw) 24px; padding: 30px max(32px, calc(50vw - 688px)) 28px;
-  background: linear-gradient(180deg, var(--noche) 0%, var(--noche-2) 100%); color: var(--noche-suave);
-  min-height: 190px;
+  background: url("fondo-medico.svg") right -40px top -30px / 420px 260px repeat,
+              linear-gradient(180deg, var(--noche) 0%, var(--noche-2) 100%);
+  color: var(--noche-suave); min-height: 190px; position: relative; overflow: hidden;
 }
+/* La ilustración de la portada vive a la derecha de la banda; en pantallas
+   estrechas se oculta para no robar espacio al texto. */
+.banda-con-ilustracion { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; }
+.banda-ilustracion { width: min(360px, 32vw); height: auto; filter: drop-shadow(0 12px 24px rgba(0, 0, 0, .25)); }
+@media (max-width: 991.98px) { .banda-ilustracion { display: none; } .banda-con-ilustracion { display: block; } }
 .banda-ceja { font-size: .82rem; font-weight: 600; color: var(--noche-acento); margin-bottom: 10px; letter-spacing: .02em; }
 .banda-titulo { color: var(--noche-tinta); font-size: clamp(1.7rem, 3vw, 2.3rem); line-height: 1.12; margin: 0 0 10px; max-width: 780px; }
 .titulo-ligero { font-weight: 400; }
@@ -75,14 +100,20 @@ html[data-tema="oscuro"] .tema-luna { display: none; }
 /* ---- Subpestañas ----------------------------------------------------------- */
 .subpestanas { border-bottom: 1px solid var(--filete); margin-bottom: 20px; flex-wrap: nowrap;
                overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
-.subpestanas .nav-link.subpestana { color: var(--tinta-tenue); border: 0; white-space: nowrap; background: none; font-weight: 500; }
-.subpestanas .nav-link.subpestana:hover { color: var(--tinta); }
+.subpestanas .nav-link.subpestana { color: var(--tinta-tenue); border: 0; white-space: nowrap; background: none; font-weight: 500;
+  transition: color var(--dur-rapida) var(--ease-salida), box-shadow var(--dur-media) var(--ease-salida); }
 .subpestanas .nav-link.subpestana.subpestana-activa,
-.subpestanas .nav-link.subpestana.active { color: var(--tinta); box-shadow: inset 0 -2px 0 var(--acento); background: none; }
+.subpestanas .nav-link.subpestana.active { color: var(--tinta); box-shadow: inset 0 -3px 0 var(--ambar); background: none; }
 
 /* ---- Tarjetas y piezas ----------------------------------------------------- */
-.tarjeta { background: var(--tarjeta); border: 1px solid var(--filete); border-radius: var(--radio); box-shadow: var(--sombra); height: 100%; }
+.tarjeta { background: var(--tarjeta); border: 0; border-radius: var(--radio); box-shadow: var(--anillo), var(--sombra); }
+/* Altura igual entre columnas solo cuando la tarjeta es lo único de su
+   columna. Si comparte columna con un subtítulo, un 100 % la haría medir lo
+   que la columna entera y desbordaría sobre lo que viene debajo. */
+.row > [class*="col"] > .tarjeta:only-child,
+.row > [class*="col"] > .lectura:only-child { height: 100%; }
 .tarjeta.tono-acento, .lectura { background: var(--lectura); }
+.lectura { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--arena) 45%, transparent), var(--sombra); }
 .tarjeta.tono-panel { background: var(--suave); }
 .tarjeta-titulo { font-size: 1rem; margin-bottom: 10px; }
 .tarjeta-nota { font-size: .84rem; color: var(--tinta-tenue); margin-top: 6px; }
@@ -102,16 +133,23 @@ html[data-tema="oscuro"] .tema-luna { display: none; }
 .kpi { position: relative; overflow: hidden; }
 .kpi-franja { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
 .kpi-etiqueta { font-size: .82rem; color: var(--tinta-tenue); }
-.kpi-valor { font-size: 1.7rem; font-weight: 600; color: var(--tinta); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.kpi-valor { font-size: clamp(1.3rem, 1.55vw, 1.7rem); font-weight: 600; color: var(--tinta); font-variant-numeric: tabular-nums;
+  line-height: 1.2; text-wrap: balance; }
 .kpi-detalle { font-size: .8rem; color: var(--tinta-tenue); }
-.aviso { border-radius: var(--radio); padding: 14px 18px; margin: 14px 0; background: var(--suave); border-left: 3px solid var(--acento); }
-.aviso-alcance { border-left-color: #9a6b08; }
-.aviso-pendiente { border-left-color: var(--tinta-tenue); border-left-style: dashed; }
+.aviso { border-radius: var(--radio); padding: 14px 18px; margin: 14px 0; border: 1px solid color-mix(in srgb, var(--acento) 35%, transparent);
+  background: color-mix(in srgb, var(--acento) 7%, var(--tarjeta)); }
+.aviso-alcance { border-color: color-mix(in srgb, #9a6b08 40%, transparent); background: color-mix(in srgb, #e8af2e 9%, var(--tarjeta)); }
+.aviso-pendiente { border-color: var(--filete); border-style: dashed; background: var(--suave); }
+/* En oscuro el ámbar de texto (#9a6b08) se apaga sobre la noche: se usa el ámbar vivo. */
+html[data-tema="oscuro"] .aviso { border-color: color-mix(in srgb, var(--acento-texto) 35%, transparent);
+  background: color-mix(in srgb, var(--acento-texto) 8%, var(--tarjeta)); }
+html[data-tema="oscuro"] .aviso-alcance { border-color: color-mix(in srgb, var(--ambar) 45%, transparent);
+  background: color-mix(in srgb, var(--ambar) 10%, var(--tarjeta)); }
 .aviso-titulo { font-weight: 600; color: var(--tinta); margin-bottom: 4px; }
 .tarjeta-pendiente { border-style: dashed; }
 .etiqueta-pendiente { display: inline-flex; align-items: center; font-size: .78rem; font-weight: 600; color: var(--tinta-tenue);
   text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
-.tabla th { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--tinta-tenue); }
+.tabla th { font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--tinta-tenue); }
 .celda-fuerte { font-weight: 600; color: var(--tinta); }
 .markdown { line-height: 1.6; }
 
@@ -130,14 +168,59 @@ html[data-tema="oscuro"] .tema-luna { display: none; }
 .botones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .boton-principal { background: var(--acento); border: 0; border-radius: 999px; font-weight: 600; padding: 8px 18px; }
 .boton-secundario { background: transparent; color: var(--acento-texto); border: 1px solid var(--filete); border-radius: 999px; font-weight: 600; padding: 8px 18px; }
-.boton-secundario:hover { background: var(--suave); color: var(--acento-texto); }
-.pred-real { margin-top: 12px; font-size: .86rem; color: var(--tinta-suave); }
-button:active:not(:disabled) { transform: scale(.97); }
 
-/* ---- DataTable --------------------------------------------------------- */
+.pred-real { margin-top: 12px; font-size: .86rem; color: var(--tinta-suave); }
+button { transition: transform var(--dur-rapida) var(--ease-salida), background-color var(--dur-rapida) var(--ease-salida),
+  color var(--dur-rapida) var(--ease-salida), border-color var(--dur-rapida) var(--ease-salida); }
+button:active:not(:disabled) { transform: scale(.96); }
+
+/* ---- DataTable ------------------------------------------------------------
+   La tabla de Dash trae su propia hoja (fondo blanco, letra monoespaciada,
+   bordes grises en línea); se reemplaza con !important para que siga al tema. */
+.tabla-datos { background: var(--tarjeta); border: 1px solid var(--filete); border-radius: var(--radio);
+  box-shadow: var(--sombra); padding: 6px 6px 10px; overflow: hidden; }
 .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner th,
-.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td { color: var(--tinta-suave); background: var(--tarjeta); border-color: var(--filete) !important; }
-.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner th { color: var(--tinta); }
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td {
+  font-family: var(--fuente) !important; font-size: .88rem !important; color: var(--tinta-suave) !important;
+  background: transparent !important; border-top: 0 !important; border-left: 0 !important; border-right: 0 !important;
+  border-bottom: 1px solid var(--filete) !important; padding: 10px 12px !important; }
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner th.dash-header {
+  color: var(--tinta-tenue) !important; font-size: .74rem !important; font-weight: 700 !important;
+  text-transform: uppercase; letter-spacing: .05em; background: var(--suave) !important; white-space: normal !important;
+  line-height: 1.3; vertical-align: bottom; }
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td.dash-cell.column-0 { color: var(--tinta) !important; font-weight: 600; }
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner tr:hover td { background: var(--suave) !important; }
+/* Flechas de orden: discretas y del color de la tinta tenue, no el icono gris por defecto. */
+.dash-table-container .column-header--sort { color: var(--tinta-tenue); opacity: .55; margin-right: 6px; cursor: pointer; }
+.dash-table-container .column-header--sort:hover { opacity: 1; color: var(--acento-texto); }
+.dash-table-container .column-header--sort svg { width: 9px; height: 12px; vertical-align: -1px; }
+/* Fila de filtros: un campo de búsqueda limpio; sin el botón «Aa» de mayúsculas. */
+.dash-table-container .dash-spreadsheet-inner th.dash-filter { background: var(--tarjeta) !important; padding: 6px 8px !important; }
+.dash-table-container .dash-filter input[type="text"] { font-family: var(--fuente) !important; font-size: .82rem !important;
+  color: var(--tinta-suave) !important; background: var(--suave) !important; border: 1px solid var(--filete) !important;
+  border-radius: 8px !important; padding: 5px 9px !important; width: 100% !important; text-align: left !important; height: auto !important; }
+.dash-table-container .dash-filter input[type="text"]::placeholder { color: var(--tinta-tenue); opacity: .8; }
+.dash-table-container .dash-filter input[type="text"]:focus { outline: 2px solid var(--acento); outline-offset: 0; }
+.dash-table-container .dash-filter--case { display: none !important; }
+#diccionario .dash-spreadsheet-inner td.dash-cell.column-1 { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace !important;
+  font-size: .8rem !important; color: var(--tinta-tenue) !important; }
+/* Paginación */
+.dash-table-container .previous-next-container { font-family: var(--fuente); color: var(--tinta-tenue); margin-top: 10px; padding-right: 6px; }
+.dash-table-container .previous-next-container button { background: transparent; border: 1px solid var(--filete);
+  border-radius: 8px; color: var(--tinta-suave); min-width: 32px; height: 30px; margin: 0 2px; }
+.dash-table-container .previous-next-container button:hover:not(:disabled) { background: var(--suave); color: var(--acento-texto); }
+.dash-table-container .previous-next-container button:disabled { opacity: .35; }
+.dash-table-container .current-page-container input { font-family: var(--fuente) !important; color: var(--tinta) !important;
+  background: transparent !important; border: 0 !important; }
+.dash-table-container .dash-table-tooltip { font-family: var(--fuente); background: var(--tarjeta) !important;
+  color: var(--tinta-suave) !important; border: 1px solid var(--filete) !important; border-radius: 8px; box-shadow: var(--sombra); }
+/* Tablas simples (dbc.Table) */
+.tabla { margin-bottom: 0; --bs-table-bg: transparent; }
+.tabla th { border-bottom: 1px solid var(--filete) !important; padding: 8px 10px; white-space: nowrap; }
+.tabla td { border-bottom: 1px solid var(--filete); padding: 9px 10px; vertical-align: top; color: var(--tinta-suave);
+  font-variant-numeric: tabular-nums; }
+.dash-table-container .dash-cell { font-variant-numeric: tabular-nums; }
+.tabla tr:last-child td { border-bottom: 0; }
 
 /* ---- Pie ------------------------------------------------------------------- */
 .pie { border-top: 1px solid var(--filete); padding: 18px 0; font-size: .8rem; color: var(--tinta-tenue); }
@@ -150,35 +233,52 @@ button:active:not(:disabled) { transform: scale(.97); }
 @media (max-width: 767.98px) {
   .barra-contenido, .contenido, .pie-contenido { padding-left: 16px; padding-right: 16px; }
   .barra-contenido { flex-wrap: wrap; gap: 8px; padding-top: 8px; padding-bottom: 8px; }
-  .barra-nav { order: 3; width: 100%; flex-wrap: nowrap; overflow-x: auto; }
+  /* flex-basis 100 %: con el «flex: 1 1 0%» general la navegación se quedaba en la fila del
+     título y EDA y Modelos quedaban fuera de la pantalla a 390 px. */
+  .barra-nav { order: 3; flex: 1 1 100%; width: 100%; flex-wrap: nowrap; overflow-x: auto; }
   .barra-marca-sub, .solo-escritorio { display: none; }
   .banda-pagina { padding: 24px 16px; min-height: 0; }
 }
-@media (hover: none) { .tarjeta:hover { transform: none; } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+/* Hover solo con puntero fino: en pantallas táctiles el estado se quedaba
+   puesto tras tocar. */
+@media (hover: hover) and (pointer: fine) {
+  .barra-nav .barra-enlace:hover { color: var(--noche-tinta); background: rgba(255, 255, 255, .06); }
+  .boton-barra:hover { background: rgba(255, 255, 255, .08); color: #fff; }
+  .subpestanas .nav-link.subpestana:hover { color: var(--tinta); }
+  .boton-secundario:hover { background: var(--suave); color: var(--acento-texto); }
+  .boton-terciario:hover { text-decoration: underline; }
+  .boton-icono:hover { border-color: var(--acento); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; }
+  button:active:not(:disabled) { transform: none; }
+  .tip-flotante { scale: 1 !important; }
+}
 
 /* ========================================================================== *
    Modo oscuro: tonos propios, no una inversión del claro.
    ========================================================================== */
 html[data-tema="oscuro"] {
   color-scheme: dark;
-  --fondo: #0a111d;
-  --tarjeta: #111a2b;
-  --suave: #172338;
-  --tinta: #e8eef7;
-  --tinta-suave: #c1ccdc;
-  --tinta-tenue: #97a6bd;
-  --filete: #1f2b42;
-  --acento: #3b5fa8;
-  --acento-texto: #8fb8f2;
-  --clase-0: #3f92c4;
-  --clase-1: #d45c49;
-  --lectura: linear-gradient(140deg, #14203a 0%, #172540 100%);
-  --bs-body-bg: #0a111d;
-  --bs-body-color: #c1ccdc;
+  --anillo: 0 0 0 1px rgba(255, 255, 255, .07);
+  --fondo: #08142c;
+  --tarjeta: #0e2043;
+  --suave: #15295a;
+  --tinta: #eef2fa;
+  --tinta-suave: #c6d0e4;
+  --tinta-tenue: #9aa8c4;
+  --filete: #223164;
+  --acento: #3462ac;
+  --acento-texto: #9dbcf0;
+  --clase-0: #5a8fd8;
+  --clase-1: #c2850c;
+  --neutro-icono: #50638f;
+  --lectura: linear-gradient(140deg, #13285a 0%, #16295c 100%);
+  --bs-body-bg: #08142c;
+  --bs-body-color: #c6d0e4;
   --bs-table-bg: transparent;
-  --bs-table-color: #c1ccdc;
-  --bs-border-color: #1f2b42;
+  --bs-table-color: #c6d0e4;
+  --bs-border-color: #223164;
 }
 html.tema-cambiando, html.tema-cambiando * { transition: none !important; }
 html[data-tema="oscuro"] .accordion-item, html[data-tema="oscuro"] .accordion-button,
@@ -188,21 +288,21 @@ html[data-tema="oscuro"] .form-control { background: var(--tarjeta); color: var(
    proyecto en los dos temas. */
 html[data-tema="claro"] { --Dash-Fill-Interactive-Strong: var(--acento); }
 html[data-tema="oscuro"] {
-  --Dash-Fill-Interactive-Strong: #8fb8f2;
+  --Dash-Fill-Interactive-Strong: #9dbcf0;
   --Dash-Fill-Inverse-Strong: var(--tarjeta);
   --Dash-Text-Strong: var(--tinta);
   --Dash-Text-Primary: var(--tinta-suave);
   --Dash-Text-Weak: var(--tinta-tenue);
   --Dash-Text-Disabled: #6f7d93;
-  --Dash-Stroke-Strong: #3a4a66;
+  --Dash-Stroke-Strong: #34477e;
   --Dash-Stroke-Weak: var(--filete);
   --Dash-Fill-Primary-Hover: rgba(143, 184, 242, 0.08);
   --Dash-Fill-Primary-Active: rgba(143, 184, 242, 0.14);
   --Dash-Fill-Interactive-Weak: rgba(143, 184, 242, 0.06);
-  --Dash-Fill-Disabled: #1a2639;
+  --Dash-Fill-Disabled: #15295a;
 }
 html[data-tema="oscuro"] .dash-dropdown, html[data-tema="oscuro"] .dash-dropdown-content,
-html[data-tema="oscuro"] .dash-input-container input { background: var(--tarjeta); color: var(--tinta-suave); border-color: #3a4a66; }
+html[data-tema="oscuro"] .dash-input-container input { background: var(--tarjeta); color: var(--tinta-suave); border-color: #34477e; }
 /* Plotly no se rehace: se cambian sus tintas neutras y los colores de clase
    por selector de color en línea. Si se añade un color nuevo en tema.py,
    hay que añadir aquí su regla. */
@@ -210,13 +310,214 @@ html[data-tema="oscuro"] .js-plotly-plot .main-svg { background: transparent !im
 html[data-tema="oscuro"] .js-plotly-plot .bg { fill: transparent !important; }
 html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(93, 100, 135)"],
 html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(59, 66, 102)"],
-html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(18, 26, 58)"] { fill: #c1ccdc !important; }
-html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(236, 238, 246)"] { stroke: #1f2b42 !important; }
-html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(205, 209, 230)"] { stroke: #2e3d5b !important; }
-html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(42, 134, 176)"] { fill: #3f92c4 !important; }
-html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(42, 134, 176)"] { stroke: #3f92c4 !important; }
-html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(193, 68, 60)"] { fill: #d45c49 !important; }
-html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(193, 68, 60)"] { stroke: #d45c49 !important; }
-html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(27, 42, 78)"] { fill: #9db5e0 !important; }
-html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(27, 42, 78)"] { stroke: #9db5e0 !important; }
-html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(255, 255, 255)"] { stroke: #111a2b !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(14, 32, 67)"] { fill: #c6d0e4 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(14, 32, 67)"] { stroke: #c6d0e4 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(236, 238, 246)"] { stroke: #223164 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(205, 209, 230)"] { stroke: #34477e !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(52, 98, 172)"] { fill: #5a8fd8 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(52, 98, 172)"] { stroke: #5a8fd8 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(185, 124, 12)"] { fill: #c2850c !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(185, 124, 12)"] { stroke: #c2850c !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(34, 49, 100)"] { fill: #a9c1ec !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(34, 49, 100)"] { stroke: #a9c1ec !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(255, 255, 255)"] { stroke: #0e2043 !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(241, 244, 250)"] { fill: #15295a !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(127, 160, 214)"] { fill: #4d6fae !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(127, 160, 214)"] { stroke: #4d6fae !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="fill: rgb(174, 181, 204)"] { fill: #3d4f7c !important; }
+html[data-tema="oscuro"] .js-plotly-plot [style*="stroke: rgb(174, 181, 204)"] { stroke: #3d4f7c !important; }
+html[data-tema="oscuro"] .js-plotly-plot .sankey-node text, html[data-tema="oscuro"] .js-plotly-plot .slicetext,
+html[data-tema="oscuro"] .js-plotly-plot .parcats text { text-shadow: none !important; }
+
+/* ========================================================================== *
+   Piezas de comunicación de riesgo (matriz de personas, semáforo, simulador)
+   ========================================================================== */
+.matriz-personas { display: grid; gap: 2px 4px; max-width: 420px; margin: 4px 0 10px; }
+.persona { font-size: 26px; line-height: 1; text-align: center; color: var(--neutro-icono);
+  font-variation-settings: "FILL" 0, "wght" 400; transition: color var(--dur-media) var(--ease-salida); }
+.persona.relleno { font-variation-settings: "FILL" 1, "wght" 500; }
+.persona.p-readmitido { color: var(--clase-1); }
+.persona.p-no { color: var(--clase-0); }
+.persona.p-neutro { color: var(--neutro-icono); }
+.persona.p-perdido { color: var(--clase-1); }
+.persona.p-falsa { color: var(--clase-0); }
+.personas-leyenda { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .84rem; color: var(--tinta-suave); }
+.persona-leyenda { display: inline-flex; align-items: center; gap: 4px; }
+.persona-leyenda .persona { font-size: 20px; }
+.cifra-grande { font-size: 2.4rem; font-weight: 700; color: var(--tinta); line-height: 1.05; font-variant-numeric: tabular-nums; }
+.cifra-grande small { font-size: 1rem; font-weight: 500; color: var(--tinta-tenue); }
+.tarjeta-personas { background: linear-gradient(135deg, var(--tarjeta) 0%, var(--suave) 100%); }
+.tarjeta-personas .matriz-personas { max-width: 360px; }
+
+.semaforo { display: flex; gap: 12px; align-items: flex-start; border-radius: var(--radio); padding: 14px 16px;
+  border: 1px solid var(--filete); background: var(--tarjeta); margin-top: 12px; }
+.semaforo-icono { font-size: 30px; flex: none; }
+.semaforo-titulo { font-weight: 700; color: var(--tinta); }
+.semaforo-texto { font-size: .86rem; color: var(--tinta-tenue); }
+.semaforo-bien { border-color: color-mix(in srgb, #1f7a43 45%, transparent); background: color-mix(in srgb, #1f7a43 7%, var(--tarjeta)); } .semaforo-bien .semaforo-icono { color: #1f7a43; }
+.semaforo-aviso { border-color: color-mix(in srgb, var(--ambar) 45%, transparent); background: color-mix(in srgb, var(--ambar) 7%, var(--tarjeta)); } .semaforo-aviso .semaforo-icono { color: #9a6b08; }
+.semaforo-critico { border-color: color-mix(in srgb, #b3261e 45%, transparent); background: color-mix(in srgb, #b3261e 7%, var(--tarjeta)); } .semaforo-critico .semaforo-icono { color: #b3261e; }
+.semaforo-neutro { border-color: color-mix(in srgb, var(--tinta-tenue) 45%, transparent); background: color-mix(in srgb, var(--tinta-tenue) 7%, var(--tarjeta)); } .semaforo-neutro .semaforo-icono { color: var(--tinta-tenue); }
+html[data-tema="oscuro"] .semaforo-bien .semaforo-icono { color: #5cc287; }
+html[data-tema="oscuro"] .semaforo-aviso .semaforo-icono { color: var(--ambar); }
+html[data-tema="oscuro"] .semaforo-critico .semaforo-icono { color: #f08a80; }
+
+.control-simulador { padding: 6px 4px 0; }
+.control-simulador .rc-slider-track, .control-simulador .dash-slider-track { background: var(--ambar); }
+.kpi-mini { border-radius: var(--radio); background: var(--suave); padding: 12px 14px; height: 100%; }
+.kpi-mini-valor { font-size: 1.5rem; font-weight: 700; color: var(--tinta); font-variant-numeric: tabular-nums; }
+.kpi-mini-etiqueta { font-size: .8rem; color: var(--tinta-tenue); }
+.grupo-perfil { border-top: 4px solid var(--medianoche); }
+.grupo-perfil-b { border-top: 4px solid #7fa0d6; }
+.boton-terciario { background: transparent; border: 0; color: var(--acento-texto); font-weight: 600; padding: 10px 0; }
+@media (max-width: 767.98px) { .persona { font-size: 22px; } .cifra-grande { font-size: 2rem; } }
+
+/* ========================================================================== *
+   Portada a pantalla completa (pages/portada.py)
+   ========================================================================== */
+.portada-marco { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; z-index: 50; background: var(--fondo); }
+
+/* ========================================================================== *
+   Animación de entrada: la misma subida suave de la portada. Solo al montar
+   la página y solo si el sistema no pide reducir el movimiento.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  /* Entrada de página (poco frecuente): 400 ms, 8 px y escalonado de 60 ms. */
+  .banda-ceja, .banda-titulo, .banda-texto { animation: subir var(--dur-lenta) var(--ease-salida) backwards; }
+  .banda-titulo { animation-delay: 60ms; }
+  .banda-texto { animation-delay: 120ms; }
+  .banda-ilustracion { animation: aparecer 500ms var(--ease-salida) 80ms backwards; }
+  .pagina > .tarjeta-filtros, .pagina > .tarjeta-personas, .pagina > .subpestanas { animation: subir var(--dur-lenta) var(--ease-salida) backwards; }
+  .pagina > .tarjeta-personas { animation-delay: 60ms; }
+  /* Cambio de subpestaña (frecuente): un fundido corto, sin escalonado,
+     para que la respuesta se sienta inmediata. */
+  .tab-pane.active > * { animation: aparecer var(--dur-rapida) var(--ease-salida) backwards; }
+  /* La matriz de personas NO se anima: se redibuja con cada movimiento del
+     simulador y el fundido repetido parpadeaba; su color ya cambia con transición. */
+}
+@keyframes subir { from { opacity: 0; transform: translateY(8px); } }
+@keyframes aparecer { from { opacity: 0; } }
+
+/* ========================================================================== *
+   Embudo de registros del ETL (Contexto → Los datos)
+   ========================================================================== */
+.embudo { display: flex; flex-direction: column; gap: 10px; margin: 6px 0 4px; }
+.embudo-paso { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 12px; align-items: center; }
+.embudo-etiqueta { font-size: .82rem; color: var(--tinta-suave); line-height: 1.3; }
+.embudo-etiqueta strong { display: block; color: var(--tinta); font-size: 1rem; font-variant-numeric: tabular-nums; }
+.embudo-pista { height: 26px; border-radius: 6px; background: var(--suave); overflow: hidden; display: flex; }
+.embudo-barra { height: 100%; background: var(--medianoche); display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 8px; color: #fff; font-size: .74rem; font-weight: 600; white-space: nowrap; }
+.embudo-barra.azur { background: var(--azur); }
+.embudo-barra.claro { background: #85a4d6; color: var(--abismo); }
+html[data-tema="oscuro"] .embudo-barra { background: #3462ac; }
+html[data-tema="oscuro"] .embudo-barra.azur { background: #5a8fd8; color: var(--abismo); }
+html[data-tema="oscuro"] .embudo-barra.claro { background: #a9c1ec; }
+.subtitulo-tarjeta { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--tinta-tenue); margin: 16px 0 8px; }
+
+/* ========================================================================== *
+   Panel flotante y foco al pasar el mouse (assets/interaccion.js)
+   ========================================================================== */
+/* El cuadro de Plotly queda invisible: su texto lo muestra el panel propio. */
+.tip-propio .hoverlayer .hovertext { opacity: 0 !important; }
+.tip-flotante {
+  position: fixed; left: 0; top: 0; z-index: 1000; pointer-events: none;
+  min-width: 150px; max-width: 320px; padding: 10px 12px; border-radius: 12px;
+  background: color-mix(in srgb, var(--tarjeta) 92%, transparent); color: var(--tinta-suave);
+  border: 1px solid var(--filete); box-shadow: 0 10px 30px rgba(14, 32, 67, .18), 0 2px 6px rgba(14, 32, 67, .08);
+  backdrop-filter: blur(8px); font: 500 .8rem/1.45 var(--fuente);
+  opacity: 0; scale: .98; transition: opacity var(--dur-micro) ease-out, scale var(--dur-micro) ease-out; will-change: transform;
+}
+.tip-flotante.visible { opacity: 1; scale: 1; transition-duration: var(--dur-rapida); }
+.tip-bloque { display: flex; gap: 9px; align-items: flex-start; }
+.tip-bloque + .tip-bloque { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--filete); }
+.tip-marca { flex: none; width: 10px; height: 10px; border-radius: 3px; margin-top: 4px; box-shadow: 0 0 0 2px var(--tarjeta); }
+.tip-linea strong { color: var(--tinta); font-weight: 700; }
+.tip-primera { color: var(--tinta); font-weight: 600; margin-bottom: 2px; }
+.tip-extra { color: var(--tinta-tenue); font-size: .74rem; }
+html[data-tema="oscuro"] .tip-flotante { box-shadow: 0 12px 34px rgba(0, 0, 0, .45); border-color: #34477e; }
+
+/* Foco: el elemento bajo el cursor se ilumina y el resto se atenúa. */
+.js-plotly-plot .barlayer .point path, .js-plotly-plot .scatterlayer .points path {
+  transition: opacity var(--dur-rapida) ease-out, filter var(--dur-rapida) ease-out; }
+.con-foco .barlayer .point path { opacity: .42; }
+.con-foco .barlayer .point.punto-activo path { opacity: 1; filter: brightness(1.12) saturate(1.1) drop-shadow(0 0 7px rgba(232, 175, 46, .45)); }
+.con-foco .scatterlayer .points path { opacity: .55; }
+.con-foco .scatterlayer .points .point.punto-activo { opacity: 1; filter: drop-shadow(0 0 6px rgba(232, 175, 46, .7)); }
+html[data-tema="oscuro"] .con-foco .barlayer .point.punto-activo path { filter: brightness(1.25) drop-shadow(0 0 9px rgba(232, 199, 102, .45)); }
+
+/* ========================================================================== *
+   Recorrido del paciente (EDA)
+   ========================================================================== */
+.recorrido .etapa { padding: 14px 14px 8px; height: 100%; position: relative; }
+.etapa-cabeza { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.etapa-icono { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-size: 24px;
+  background: var(--suave); color: var(--acento-texto); flex: none; }
+.etapa-paso { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--tinta-tenue); }
+.etapa-titulo { font-weight: 700; color: var(--tinta); }
+.etapa-chip { margin-left: auto; }
+.chip { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 10px; font-size: .76rem; font-weight: 600; }
+.chip .material-symbols-rounded { font-size: 1rem; }
+.chip-vacio { color: var(--tinta-tenue); border: 1px dashed var(--filete); }
+.chip-activo { color: var(--abismo); background: var(--arena); animation: aparecer var(--dur-rapida) var(--ease-salida); }
+.recorrido .js-plotly-plot .nsewdrag, .diag-clic .js-plotly-plot .nsewdrag { cursor: pointer !important; }
+/* Flecha entre etapas (solo en escritorio, donde van en fila). */
+@media (min-width: 992px) {
+  .recorrido .etapa-col:not(:last-child) .etapa::after {
+    content: "arrow_forward"; font-family: "Material Symbols Rounded"; position: absolute; right: -19px; top: 22px;
+    width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; z-index: 2; font-size: 16px;
+    background: var(--ambar); color: var(--abismo); box-shadow: 0 0 0 4px var(--fondo); }
+}
+.camino { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 8px; }
+.camino-paso { background: var(--suave); border: 1px solid var(--filete); color: var(--tinta); font-weight: 600;
+  font-size: .82rem; border-radius: 8px; padding: 3px 9px; }
+.camino-libre { color: var(--tinta-tenue); font-weight: 500; border-style: dashed; background: transparent; }
+.camino-flecha { color: var(--ambar); display: inline-flex; }
+.boton-icono { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--filete); background: var(--suave);
+  color: var(--acento-texto); display: grid; place-items: center; }
+
+.titulo-ligero { font-weight: 400; }
+
+/* ========================================================================== *
+   Glucómetro de riesgo (Modelos → Predicción en vivo)
+   ========================================================================== */
+.glucometro { --tono: var(--clase-0); display: flex; flex-direction: column; align-items: center; padding: 4px 0 2px; }
+.glucometro.gluco-alto { --tono: var(--clase-1); }
+.gluco-tira { width: 44px; height: 30px; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, #f1f4fa, #d6e0f2);
+  border: 1px solid var(--filete); border-bottom: 0; display: grid; place-items: center; position: relative; }
+.gluco-gota { width: 14px; height: 14px; background: var(--ambar); border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+  margin-top: 4px; box-shadow: inset -2px -2px 0 rgba(0, 0, 0, .12); }
+@media (prefers-reduced-motion: no-preference) {
+  .gluco-gota { animation: latido 1.2s ease-in-out 2; }
+  .gluco-marcador { animation: deslizar 600ms var(--ease-salida) 120ms backwards; }
+  .gluco-led { animation: led 900ms ease-in-out 2; }
+}
+@keyframes latido { 0%, 100% { scale: 1; } 50% { scale: 1.12; } }
+@keyframes deslizar { from { left: 0; } }
+@keyframes led { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+.gluco-cuerpo { width: min(100%, 330px); border-radius: 32px; padding: 16px 16px 14px;
+  background: linear-gradient(160deg, var(--medianoche) 0%, var(--abismo) 100%);
+  box-shadow: 0 14px 30px rgba(14, 32, 67, .28), inset 0 1px 0 rgba(255, 255, 255, .08); }
+html[data-tema="oscuro"] .gluco-cuerpo { border: 1px solid #34477e;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .5), 0 0 0 4px rgba(232, 199, 102, .06), inset 0 1px 0 rgba(255, 255, 255, .08); }
+html[data-tema="oscuro"] .gluco-tira { border-color: #34477e; }
+.gluco-pantalla { border-radius: 16px; padding: 12px 14px 10px; text-align: center;
+  background: linear-gradient(180deg, #f6f8fc, #e6ecf6); box-shadow: inset 0 2px 6px rgba(14, 32, 67, .18); color: var(--abismo); }
+.gluco-etiqueta { font-size: .66rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5d6487; }
+.gluco-numero { font-size: 2.7rem; font-weight: 800; line-height: 1.1; color: var(--abismo); font-variant-numeric: tabular-nums; }
+.gluco-estado { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 700; color: var(--abismo); }
+.gluco-led { width: 9px; height: 9px; border-radius: 50%; background: var(--tono); box-shadow: 0 0 8px var(--tono); }
+.gluco-escala { margin: 14px 4px 4px; }
+.gluco-pista { position: relative; height: 10px; border-radius: 999px;
+  background: linear-gradient(90deg, #5a85c4 0%, #b2c5e8 45%, #e8c766 70%, #c2850c 100%); }
+.gluco-umbral { position: absolute; top: -4px; bottom: -4px; width: 2px; background: #fff; border-radius: 2px; translate: -1px 0; }
+.gluco-marcador { position: absolute; top: 50%; width: 18px; height: 18px; border-radius: 50%; translate: -50% -50%;
+  background: #fff; border: 4px solid var(--tono); box-shadow: 0 2px 8px rgba(0, 0, 0, .35); }
+.gluco-ejes { position: relative; display: flex; justify-content: space-between; margin-top: 6px;
+  font-size: .68rem; color: #c3cce3; font-variant-numeric: tabular-nums; }
+.gluco-txt-umbral { position: absolute; translate: -50% 0; white-space: nowrap; color: #e8c766; font-weight: 600; }
+.gluco-botones { display: flex; justify-content: center; gap: 18px; margin-top: 12px; }
+.gluco-boton { width: 30px; height: 12px; border-radius: 999px; background: rgba(255, 255, 255, .12);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .35); }
+.gluco-pie { margin-top: 10px; font-size: .8rem; color: var(--tinta-tenue); text-align: center; }

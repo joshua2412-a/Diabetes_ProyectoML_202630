@@ -1,10 +1,11 @@
 """
 Dashboard predictivo de readmisión temprana en pacientes diabéticos.
 
-Aplicación multipágina (Dash pages) con las tres secciones que exige el
-Entregable 3: Contexto, EDA y Modelos. Este archivo solo crea la aplicación,
-la barra de navegación y el pie; el contenido vive en pages/*.py y la lógica
-en src/tablero/*.py. El dashboard no entrena: lee artifacts/.
+Aplicación multipágina (Dash pages) con una portada animada (/) y las tres
+secciones que exige el Entregable 3: Contexto (/contexto), EDA y Modelos.
+Este archivo solo crea la aplicación, la barra de navegación y el pie; el
+contenido vive en pages/*.py y la lógica en src/tablero/*.py. El dashboard
+no entrena: lee artifacts/.
 
 Local:    python app.py            -> http://127.0.0.1:8050
 Render:   gunicorn app:server      (ver render.yaml)
@@ -78,7 +79,7 @@ threading.Thread(target=_precalentar, daemon=True).start()
 
 def barra() -> html.Div:
     enlaces = [dbc.NavLink([icono(i, "me-2"), n], href=r, active="exact", className="barra-enlace")
-               for n, r, i in [("Contexto", "/", "public"), ("EDA", "/eda", "bar_chart"),
+               for n, r, i in [("Contexto", "/contexto", "public"), ("EDA", "/eda", "bar_chart"),
                                ("Modelos", "/modelos", "account_tree")]]
     return html.Div(dbc.Container([
         html.A([html.Span("Readmisión temprana", className="barra-marca-titulo"),

@@ -92,6 +92,27 @@ ghp-import -n -p -f docs/_build/html
   - el capítulo 2 genera `data/processed/`;
   - los conjuntos adicionales los descarga `experiments/conjuntos_adicionales.py`.
 
+## Dashboard
+
+Tablero en Dash con una portada animada (`/`) y tres secciones:
+
+- **Contexto** (`/contexto`): el problema, los datos y la metodología.
+- **EDA** (`/eda`): recorrido del paciente, diagnósticos, matriz de riesgo y tratamiento, con filtros globales.
+- **Modelos** (`/modelos`): tabla de líderes, simulador de capacidad del servicio, predicción en vivo (termómetro de riesgo, conjunto conforme, SHAP local, «¿qué pasaría si...?», consenso de los modelos y pacientes parecidos), diagnóstico, interpretabilidad global, comparación estadística, equidad, el modelo original DES-CPL y su ficha.
+
+La comparación estadística usa la matriz del protocolo (todos los modelos con 60 evaluaciones, más LightGBM y CatBoost), la misma del capítulo 13.5. La tabla de líderes conserva las cifras del Entregable 2 e indica el presupuesto de cada fila.
+
+Para probarlo solo con las dependencias de producción, en un entorno aparte con Python 3.12 (los artefactos se serializaron con esas versiones exactas):
+
+```bash
+conda create -n tablero python=3.12 -y
+conda activate tablero
+pip install --no-cache-dir -r requirements-render.txt
+python app.py            # http://127.0.0.1:8050
+```
+
+La primera carga de cada página tarda unos segundos.
+
 ## Despliegue
 
 `render.yaml` define un servicio web gratuito en Render: `gunicorn app:server --workers 1 --threads 4`. El tablero no entrena nada; solo carga los artefactos de `artifacts/`. Los pasos:

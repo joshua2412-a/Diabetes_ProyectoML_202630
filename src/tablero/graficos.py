@@ -49,6 +49,14 @@ def _etiqueta_valor(variable, valor):
     return str(valor)
 
 
+def figura_inicial():
+    """Figura en blanco (sin ejes) para un gráfico que todavía se está calculando."""
+    fig = go.Figure()
+    fig.update_xaxes(visible=False)
+    fig.update_yaxes(visible=False)
+    return tematizar(fig, alto=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+
+
 def _vacio(mensaje="No hay encuentros con estos filtros."):
     fig = go.Figure()
     fig.add_annotation(text=mensaje, showarrow=False, font=dict(color=TINTA_TENUE, size=13))
@@ -479,7 +487,7 @@ def fig_diferencia_critica(matriz: pd.DataFrame, cd: float, destacado: str | Non
     """Diagrama de diferencia crítica de Nemenyi: modelos unidos por una barra
     no se distinguen estadísticamente."""
     rangos = matriz.rank(axis=1, ascending=False).mean().sort_values()
-    nombres = [C.MODELOS.get(m, m) for m in rangos.index]
+    nombres = [C.nombre_modelo(m) for m in rangos.index]
     fig = go.Figure(go.Scatter(
         x=rangos.values, y=[0] * len(rangos), mode="markers",
         marker=dict(size=12, color=[TINTA if m == destacado else COLOR_MARCA for m in rangos.index],

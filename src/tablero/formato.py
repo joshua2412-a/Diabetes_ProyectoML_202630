@@ -8,6 +8,7 @@ no pasan por aquí: lo resuelve ``separators=",."`` en la plantilla.
 from __future__ import annotations
 
 import math
+import re
 
 
 def _nulo(valor) -> bool:
@@ -50,3 +51,22 @@ def lista_y(elementos) -> str:
     if len(partes) <= 1:
         return "".join(partes)
     return ", ".join(partes[:-1]) + " y " + partes[-1]
+
+
+#: Número con punto decimal que no forma parte de una ruta, un DOI ni una
+#: lista de versiones (1.2.3), y que no es un número de sección o de versión.
+#: Puede ir seguido de un punto final o de un exponente (1.30e-05).
+_DECIMAL = re.compile(r"(?<![\w/.])(?<!sección )(?<!capítulo )(?<!Versión:\*\* )(\d+)\.(\d+)(?=$|[^\w/.]|\.(?!\d)|e[-+]?\d)")
+
+
+def decimales_es(texto: str) -> str:
+    """Pasa a coma decimal un texto escrito con punto (Markdown del libro o
+    de artifacts/, que siguen la convención del libro).
+
+    Dentro de las fórmulas ($...$) escribe {,} para que MathJax no deje el
+    hueco que pone tras una coma. No toca números de sección ni la versión.
+    """
+    partes = texto.split("$")
+    for i, parte in enumerate(partes):
+        partes[i] = _DECIMAL.sub(r"\1{,}\2" if i % 2 else r"\1,\2", parte)
+    return "$".join(partes)

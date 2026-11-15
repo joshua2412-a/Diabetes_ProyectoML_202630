@@ -162,6 +162,34 @@ def por_fold_mejores() -> pd.DataFrame:
     return matriz
 
 
+#: Nombre del modelo original en results/des_cpl_evaluacion_60.csv.
+_METODO_ORIGINAL = "DES-CPL"
+
+
+@lru_cache(maxsize=1)
+def por_fold_protocolo() -> pd.DataFrame | None:
+    """AUC-PR por fold externo con el presupuesto del protocolo (60).
+
+    Es la matriz de la comparación definitiva (capítulo 13.5, protocolo-v1):
+    los 7 modelos base con Random Search a 60 evaluaciones (capítulo 12),
+    LightGBM y CatBoost con el mismo presupuesto y DES-CPL con Optuna a 60.
+    No se usa la matriz del Entregable 2 (8-16 evaluaciones) porque mezclar
+    presupuestos favorecería al modelo original. Devuelve None si faltan los
+    archivos; la página vuelve entonces a la del Entregable 2.
+    """
+    ruta_des, ruta_sota = C.RESULTADOS / "des_cpl_evaluacion_60.csv", C.RESULTADOS / "benchmarks_sota.csv"
+    if not (ruta_des.exists() and ruta_sota.exists()):
+        return None
+    evaluacion = pd.read_csv(ruta_des)
+    base = [m for m in C.MODELOS if m in set(evaluacion["método"])]
+    elegidos = evaluacion[evaluacion["método"].isin(base + [_METODO_ORIGINAL])]
+    matriz = elegidos.pivot(index="fold", columns="método", values="auc_pr")
+    matriz = matriz.rename(columns={_METODO_ORIGINAL: C.MODELO_ORIGINAL})
+    sota = pd.read_csv(ruta_sota).query("presupuesto == 60")
+    matriz = matriz.join(sota.pivot(index="fold", columns="modelo", values="auc_pr"))
+    return matriz.sort_index().reset_index(drop=True)
+
+
 @lru_cache(maxsize=1)
 def tamanos_efecto() -> pd.DataFrame | None:
     ruta = C.RESULTADOS / "tamanos_efecto_cohen.csv"
