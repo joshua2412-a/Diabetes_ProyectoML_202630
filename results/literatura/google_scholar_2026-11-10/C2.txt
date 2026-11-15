@@ -1,0 +1,56 @@
+
+"dynamic classifier selection" readmission diabetes
+Joshua Alessandro
+
+
+
+
+Artículos
+5 resultados (0,15 s)
+Cualquier momento
+Desde 2026
+Desde 2025
+Desde 2022
+Intervalo específico...
+Ordenar por relevancia
+Ordenar por fecha
+Cualquier idioma
+Buscar solo páginas en español
+Cualquier tipo
+Artículos de revisión
+[HTML] mdpi.com
+Lectura rápida
+[HTML] An overview on the advancements of support vector machine models in healthcare applications: a review
+R Guido, S Ferrisi, D Lofaro, D Conforti - Information, 2024 - mdpi.com
+… -Mass, Diabetic-Retinopathy, and Dermatology datasets using stratified ten-fold CV. The
+results outperformed the state of the art in dynamic classifier selection techniques. For example, …
+Guardar Citar Citado por 624 Artículos relacionados Las 5 versiones 
+[HTML] mdpi.com
+Lectura rápida
+[HTML] Experimental study and comparison of imbalance ensemble classifiers with dynamic selection strategy
+D Zhao, X Wang, Y Mu, L Wang - Entropy, 2021 - mdpi.com
+… Imbalanced learning for hospital readmission prediction using national readmission
+database. In Proceedings of the 2020 IEEE International Conference on Knowledge Graph (ICKG), …
+Guardar Citar Citado por 20 Artículos relacionados Las 9 versiones 
+[HTML] jmir.org
+Lectura rápida
+[HTML] Predicting Unplanned Readmission Risk in Patients With Cirrhosis: Complication-Aware Dynamic Classifier Selection Approach
+Z Shi, L Huang, X Xu, K Pu, Q Zhang… - JMIR Medical …, 2025 - medinform.jmir.org
+… The fundamental theory of dynamic classifier selection postulates that not every classifier in
+a … However, by using the dynamic classifier selection strategy, we are able to extract diverse …
+Guardar Citar Artículos relacionados Las 9 versiones 
+Knowledge-Augmented Patient Network Embedding-Based Dynamic Model Selection for Predictive Analysis of Pediatric Drug-Induced Liver Injury
+L Huang, Z Shi, F Tang, H Wang - IEEE Transactions on …, 2025 - ieeexplore.ieee.org
+… Additionally, we introduce a dynamic classifier selection approach to identify the similarities
+among patients and dynamically select a tailored subset of models for each individual patient…
+Guardar Citar Citado por 2 Artículos relacionados Las 4 versiones
+[HTML] mdpi.com
+Lectura rápida
+[HTML] An adaptive deep ensemble learning method for dynamic evolving diagnostic task scenarios
+K Su, J Wu, D Gu, S Yang, S Deng, AK Khakimova - Diagnostics, 2021 - mdpi.com
+… For instance, Brun [31] proposed a dynamic classifier selection framework and … Previous
+studies have proved that dynamic classifier selection and the combination can improve the …
+Guardar Citar Citado por 9 Artículos relacionados Las 11 versiones 
+Búsquedas relacionadas
+clustering analysis dynamic classifier selectionunplanned readmission risk classifier selection approachclassifier selection complications of cirrhosisdynamic selection strategydynamic model selectionfeature selection multiple classifier systemliver injury dynamic classifier selectionclassifier selection data generationpatients with cirrhosis classifier selection approachpredictive modeling dynamic classifier selection
+PrivacidadTérminosAyuda

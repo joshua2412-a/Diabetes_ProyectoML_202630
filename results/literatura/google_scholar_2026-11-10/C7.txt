@@ -1,0 +1,98 @@
+
+"dynamic ensemble selection" shrinkage "Brier score"
+Joshua Alessandro
+
+
+
+
+Artículos
+12 resultados (0,16 s)
+Cualquier momento
+Desde 2026
+Desde 2025
+Desde 2022
+Intervalo específico...
+Ordenar por relevancia
+Ordenar por fecha
+Cualquier idioma
+Buscar solo páginas en español
+Cualquier tipo
+Artículos de revisión
+[HTML] mdpi.com
+Lectura rápida
+[HTML] UCRG: Reliability-Gated Multi-Source Prediction Integration for Forest Point Cloud Semantic Segmentation Across Sensing Platforms
+L Liu, Y Li, Q Zhou, H Zou, X Zhang, X Chen, B Xie - Remote Sensing, 2026 - mdpi.com
+… [31], dynamic ensemble selection estimates local classifier … [31], while dynamic ensemble
+selection typically estimates local or … using ECE, the multiclass Brier score, and NLL on the …
+Guardar Citar Artículos relacionados 
+Bayesian sequential ensemble learning
+NG Pour, S Shemehsavar - International journal of data science and …, 2026 - Springer
+… • A dynamic ensemble selection method is developed in the prediction phase based on …
+The tree-based methods are compared based on the integrated Brier score in Table 6. It can be …
+Guardar Citar Artículos relacionados Las 3 versiones
+Dynamic Ensemble Selection for Early Detection of Deep Vein Thrombosis in Fracture Patients
+J Li, S Cheng, S Zhang, S Zhou, H Jin, Q Du… - Journal of Medical …, 2026 - Springer
+… recall, accuracy, precision, f1-score, and the Area Under the Receiver Operating Characteristic
+Curve (AUC); while calibration was assessed using reliability plots and the brier score. …
+Guardar Citar Artículos relacionados Las 3 versiones
+[PDF] scholaris.ca
+Lectura rápida
+Sample-based error rate assessment through predictive confidence in biomedical applications
+X Guo - 2026 - stfx.scholaris.ca
+… To achieve this, we use a statistical measure known as the Brier score as we mentioned in
+Section 2.1.4. Specifically, if the predicted error probability for a particular sample is denoted …
+Guardar Citar Artículos relacionados Las 2 versiones
+[PDF] arxiv.org
+Lectura rápida
+An Optimised Greedy-Weighted Ensemble Framework for Financial Loan Default Prediction
+ENN Nortey, J Asante-Koranteng, M Atemkeng… - arXiv preprint arXiv …, 2026 - arxiv.org
+… Calibration analysis further shows that tree-based ensembles such as Extra Trees and
+Gradient Boosting provide the most reliable probability estimates (Brier score 0.18), while the …
+Guardar Citar Artículos relacionados Las 2 versiones 
+A multiple criteria ensemble pruning method for binary classification based on DS theory of evidence
+J Qiu, Z Xiao, B Zhong - International Journal of Machine Learning and …, 2023 - Springer
+… performance measures are also considered, such as Brier score (BS), the area under the …
+for boosting the performance of dynamic ensemble selection. Inform Process Manag 56(4):…
+Guardar Citar Citado por 4 Artículos relacionados Las 2 versiones
+[PDF] sagepub.com
+Lectura rápida
+Full View
+Machine learning-based screening of risk factors and prediction of deep vein thrombosis and pulmonary embolism after hip arthroplasty
+R Ding, Y Ding, D Zheng, X Huang… - Clinical and Applied …, 2023 - journals.sagepub.com
+Prophylactic anticoagulation is a standard strategy for patients undergoing total hip arthroplasty
+(THA) to prevent deep venous thromboembolism (DVT) and pulmonary embolism (PE). …
+Guardar Citar Citado por 37 Artículos relacionados Las 8 versiones
+[HTML] mdpi.com
+Lectura rápida
+[HTML] Explainable mortality prediction model for congestive heart failure with nature-based feature selection method
+N Tasnim, S Al Mamun, M Shahidul Islam, MS Kaiser… - Applied Sciences, 2023 - mdpi.com
+… the best accuracy and discrimination, as evaluated by Brier score and AUROC. Li et al. [35] …
+, bagging, and RF; and dynamic ensemble selection approaches in terms of AUROC and …
+Guardar Citar Citado por 35 Artículos relacionados Las 5 versiones 
+Application of Machine Learning for Hematological Diagnosis
+MÂAG dos Santos - 2024 - search.proquest.com
+A análise de sangue impulsiona a tomada de decisão clínica em cerca de 70% dos atos
+médicos, influenciando o diagnóstico, prognóstico e tratamentos, segundo critérios …
+Guardar Citar Artículos relacionados
+[PDF] frontiersin.org
+Lectura rápida
+Artificial intelligence in routine blood tests
+MA Santos-Silva, N Sousa, JC Sousa - Frontiers in Medical …, 2024 - frontiersin.org
+… Wu et al. also achieved similar internal classification values using a slightly larger cohort (n=603)
+and a novel dynamic ensemble selection method, first approached with data …
+Guardar Citar Citado por 31 Artículos relacionados Las 2 versiones 
+Comparative performance analysis of feature selection for mortality prediction in ICU with explainable artificial intelligence
+N Tasnim, S Al Mamun - 2023 International Conference on …, 2023 - ieeexplore.ieee.org
+… and discrimination, as evaluated by Brier score and Area Under the Receiver Operating … ,
+and random forest, and dynamic ensemble selection approaches in terms of AUROC and Area …
+Guardar Citar Citado por 6 Artículos relacionados Las 2 versiones
+[HTML] mdpi.com
+Lectura rápida
+[HTML] An ensemble learning model for COVID-19 detection from blood test samples
+OO Abayomi-Alli, R Damaševičius, R Maskeliūnas… - Sensors, 2022 - mdpi.com
+… [43], to identify COVID-19 from a complete blood count, a mixed dynamic ensemble
+selection (DES) approach for unbalanced data is suggested. This approach combines data …
+Guardar Citar Citado por 58 Artículos relacionados Las 11 versiones 
+Búsquedas relacionadas
+fracture patients dynamic ensemble selectiondeep vein thrombosis dynamic ensemble selectionearly detection dynamic ensemble selectionclustering analysis dynamic classifier selectionpredictive modeling dynamic classifier selectionliver injury dynamic classifier selectiondynamic model selectiondynamic selection strategyfeature selection technique explainable ensemble modelfeature selection ensemble classification algorithmfeature selection explainable ensemble framework
+PrivacidadTérminosAyuda

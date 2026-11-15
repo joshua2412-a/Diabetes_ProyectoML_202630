@@ -3,10 +3,8 @@
 Joshua Alessandro
 
 
-
-
 Artículos
-Aproximadamente 42 resultados (0,26 s)
+Aproximadamente 43 resultados (0,26 s)
 Cualquier momento
 Desde 2026
 Desde 2025
@@ -43,7 +41,7 @@ Lectura rápida
 R Guido, S Ferrisi, D Lofaro, D Conforti - Information, 2024 - mdpi.com
 … The results outperformed the state of the art in dynamic classifier selection techniques. For
 example, the highest accuracy achieved on WBCD was 98.24%, which was achieved by a …
-Guardar Citar Citado por 624 Artículos relacionados Las 5 versiones 
+Guardar Citar Citado por 627 Artículos relacionados Las 5 versiones 
 [HTML] mdpi.com
 Lectura rápida
 [HTML] An adaptive deep ensemble learning method for dynamic evolving diagnostic task scenarios
@@ -78,11 +76,11 @@ Vasopressors administration in intensive care units is a risky surgical procedur
 associated with infections, especially if done urgently such as in the case of unexpected …
 Guardar Citar Citado por 37 Artículos relacionados Las 4 versiones
 [PDF] ajaronline.com
-Artificial Intelligence-Driven Digital Twin for Disease Progression Prediction: A Comprehensive Review
+[PDF] Artificial Intelligence-Driven Digital Twin for Disease Progression Prediction: A Comprehensive Review
 ZN Nemer - AFRICAN JOURNAL OF APPLIED RESEARCH, 2026 - ajaronline.com
 Purpose: This study aims to integrate machine learning and deep learning techniques with
 Digital Twin technology to improve the accuracy of disease progression prediction and …
-Guardar Citar Artículos relacionados Las 2 versiones 
+Guardar Citar Artículos relacionados Las 3 versiones 
 Resampling for mitigating bias in predictive model for substance use disorder treatment completion
 MM Lucas, CH Chang, CC Yang - 2023 IEEE 11th International …, 2023 - ieeexplore.ieee.org
 … Successful completion of treatment for substance use disorder (SUD) has been shown to
@@ -153,10 +151,8 @@ PrivacidadTérminosAyuda
 Joshua Alessandro
 
 
-
-
 Artículos
-Página 2 de 32 resultados (0,08 s)
+Página 2 de 33 resultados (0,07 s)
 Cualquier momento
 Desde 2026
 Desde 2025
@@ -190,6 +186,11 @@ J Sürmeli, S Yilmaz - … Symposium on Leveraging Applications of Formal …, 2
 An ensemble consists of individual actors that dynamically collaborate to fulfill a common
 goal. Successful collaboration requires a certain degree of knowledge and trust regarding the …
 Guardar Citar Artículos relacionados Las 2 versiones
+Emotionally-Aware Explainable AI for Mental Health Diagnostics: Comparative Analysis of XGBoost and LightGBM with SHAP Explainability
+R Bhakal, AK Bairwa - 2026 Second International Conference …, 2026 - ieeexplore.ieee.org
+Mental health disorders affects around one billion individuals all over the world and require
+reliable, interpretable and scalable predictive systems to support early prevention and …
+Guardar Citar Artículos relacionados
 [PDF] uwaterloo.ca
 Designing for Trust: A Multi-Factor Investigation of Optometrists' Perspectives on AI-Based Glaucoma Screening Systems
 A Karim - 2025 - uwspace.uwaterloo.ca
@@ -213,17 +214,17 @@ C Lancho, M Cuesta, IM De Diego, V Aceña… - Pattern Analysis and …, 2025 - 
 Data characteristics that reveal the complexity of the dataset, such as overlap, lack of density,
 the presence of noisy points, etc. are key factors for the deterioration of the classification …
 Guardar Citar Citado por 5 Artículos relacionados Las 4 versiones
-On supervised class-imbalanced learning: An updated perspective and some key challenges
-S Das, SS Mullick, I Zelinka - IEEE Transactions on Artificial …, 2022 - ieeexplore.ieee.org
-The problem of class imbalance has always been considered as a significant challenge to
-traditional machine learning and the emerging deep learning research communities. A …
-Guardar Citar Citado por 147 Artículos relacionados Las 4 versiones
 [PDF] ox.ac.uk
 Frailty and other factors associated with early outcomes in middle-to older age trauma patients: a prospective cohort study
 TS Yeh, JH Kang, TJ Littlejohns, CC Wu… - The American Journal …, 2024 - ajgponline.org
 … Moreover, patients with frailty often have multiple comorbidities and medication use,49 these
 factors further increase the risk of unplanned readmission. Lumbar spine fracture, which in …
 Guardar Citar Citado por 5 Artículos relacionados Las 9 versiones
+On supervised class-imbalanced learning: An updated perspective and some key challenges
+S Das, SS Mullick, I Zelinka - IEEE Transactions on Artificial …, 2022 - ieeexplore.ieee.org
+The problem of class imbalance has always been considered as a significant challenge to
+traditional machine learning and the emerging deep learning research communities. A …
+Guardar Citar Citado por 148 Artículos relacionados Las 4 versiones
 [PDF] arxiv.org
 SuperCon: Supervised contrastive learning for imbalanced skin lesion classification
 K Chen, D Zhuang, JM Chang - arXiv preprint arXiv:2202.05685, 2022 - arxiv.org

@@ -1,0 +1,225 @@
+
+"dynamic ensemble selection" readmission
+Joshua Alessandro
+
+
+
+
+Artículos
+Aproximadamente 39 resultados (0,08 s)
+Cualquier momento
+Desde 2026
+Desde 2025
+Desde 2022
+Intervalo específico...
+Ordenar por relevancia
+Ordenar por fecha
+Cualquier idioma
+Buscar solo páginas en español
+Cualquier tipo
+Artículos de revisión
+[HTML] jmir.org
+Lectura rápida
+[HTML] Predicting Unplanned Readmission Risk in Patients With Cirrhosis: Complication-Aware Dynamic Classifier Selection Approach
+Z Shi, L Huang, X Xu, K Pu, Q Zhang… - JMIR Medical …, 2025 - medinform.jmir.org
+… the risk of readmission in vulnerable patient populations [15]. … Multiple classifier systems [18]
+with dynamic ensemble selection … The META-DES (dynamic ensemble selection using meta-…
+Guardar Citar Artículos relacionados Las 9 versiones 
+[HTML] mdpi.com
+Lectura rápida
+[HTML] Experimental study and comparison of imbalance ensemble classifiers with dynamic selection strategy
+D Zhao, X Wang, Y Mu, L Wang - Entropy, 2021 - mdpi.com
+… extension of decomposition algorithms to dynamic ensemble selection strategies. Woloszynski
+et al. [… Imbalanced learning for hospital readmission prediction using national readmission …
+Guardar Citar Citado por 20 Artículos relacionados Las 9 versiones 
+Knowledge-Augmented Patient Network Embedding-Based Dynamic Model Selection for Predictive Analysis of Pediatric Drug-Induced Liver Injury
+L Huang, Z Shi, F Tang, H Wang - IEEE Transactions on …, 2025 - ieeexplore.ieee.org
+… common baseline models and dynamic ensemble selection methods. Conclusion: The …
+Table III presents the performance of KPNDS in predicting 28-day readmission among heart …
+Guardar Citar Citado por 2 Artículos relacionados Las 4 versiones
+[PDF] arxiv.org
+Lectura rápida
+RareLens: Towards End-to-End Rare Disease Care via Aligning Divergent Large Language Model Reasoning
+X Chen, H Zhou, S Feng, H Zhou, H Yi, R Wang… - arXiv preprint arXiv …, 2026 - arxiv.org
+… Model development compared multiple ensemble strategies, including majority voting,
+weighted voting, calibrated confidence aggregation, dynamic ensemble selection, linear stacking, …
+Guardar Citar Artículos relacionados Las 2 versiones 
+Matching Expectations in Ensembles: Connecting Verifiable Credentials and the Semantic Web
+J Sürmeli, S Yilmaz - … Symposium on Leveraging Applications of Formal …, 2024 - Springer
+… be valid in certain timeframes or invalidated through certain events: In our running example,
+once Paloma and NuRo have entered the radiology, it might be desirable to deny re-entry. …
+Guardar Citar Artículos relacionados Las 2 versiones
+[HTML] acm.org
+Lectura rápida - arxiv.org
+“A 6 or a 9?”: Ensemble Learning through the Multiplicity of Performant Models and Explanations
+G Zuin, A Veloso - ACM Transactions on Knowledge Discovery from Data, 2025 - dl.acm.org
+… Diabetes Readmission. This dataset was submitted on behalf of the Center for Clinical and
+… a binary classification task to predict whether a given patient will be readmitted to a hospital. …
+Guardar Citar Citado por 1 Artículos relacionados Las 3 versiones
+[PDF] scholaris.ca
+Lectura rápida
+[LIBRO] Rim-Decay: A Deep Learning Method for Clinical Prediction
+SK Basnet - 2022 - search.proquest.com
+… The objective is to predict 30-day hospital readmission at … The network is then fine-tuned to
+predict hospital readmission using … RF), and dynamic ensemble selection approaches in mor…
+Guardar Citar Artículos relacionados Las 4 versiones
+Direction of the Difference Between Bayesian Model Averaging and the Best-Fit Model on Scarce-Data Low-Correlation Churn Prediction
+PJ Darwen - Asian Conference on Intelligent Information and …, 2023 - Springer
+… Albuquerque, RAS, Costa, AFJ, dos Santos, EM: A decision-based dynamic ensemble
+selection … Discriminant analysis and feature selection for emergency department readmission …
+Guardar Citar Artículos relacionados Las 3 versiones
+Resampling for mitigating bias in predictive model for substance use disorder treatment completion
+MM Lucas, CH Chang, CC Yang - 2023 IEEE 11th International …, 2023 - ieeexplore.ieee.org
+… predictor of multiple outcomes, including reduced readmission rates, lower likelihood of future
+… -Based Data Sampling and Improved Dynamic Ensemble Selection for Imbalanced Med- …
+Guardar Citar Citado por 4 Artículos relacionados Las 4 versiones
+[HTML] mdpi.com
+Lectura rápida
+[HTML] An adaptive deep ensemble learning method for dynamic evolving diagnostic task scenarios
+K Su, J Wu, D Gu, S Yang, S Deng, AK Khakimova - Diagnostics, 2021 - mdpi.com
+Increasingly, machine learning methods have been applied to aid in diagnosis with good
+results. However, some complex models can confuse physicians because they are difficult to …
+Guardar Citar Citado por 9 Artículos relacionados Las 11 versiones 
+[PDF] ajaronline.com
+Artificial Intelligence-Driven Digital Twin for Disease Progression Prediction: A Comprehensive Review
+ZN Nemer - AFRICAN JOURNAL OF APPLIED RESEARCH, 2026 - ajaronline.com
+… Economic evaluations suggest that DT technology could reduce hospital readmission rates
+… incorporated temporal clinical data and dynamic ensemble selection, reporting the KNOP …
+Guardar Citar Artículos relacionados Las 2 versiones 
+[PDF] purdue.edu
+Lectura rápida
+[PDF] Historical Segmentation for Budgeted Preprocessing Pipeline Selection under Distribution Shift
+OA Pote - 2026 - hammer.purdue.edu
+… This occurs on a Diabetes Readmission distribution where it reaches 84.0% held-out …
+Diabetes Readmission. Under the 96-candidate search space evaluated for Diabetes Readmission…
+Guardar Citar Artículos relacionados Las 2 versiones 
+[PDF] sagepub.com
+Lectura rápida
+Full View
+Current applications of machine learning in spine: from clinical view
+GR Ren, K Yu, ZY Xie, PY Wang… - Global Spine …, 2022 - journals.sagepub.com
+… readmission and prolonged length of stay (LOS) will bear a great burden to the healthcare
+system. ML improved understanding of predicting readmission … more readmission risk than …
+Guardar Citar Citado por 51 Artículos relacionados Las 8 versiones
+[PDF] springer.com
+Lectura rápida
+AI-powered in silico twins: Redefining precision medicine through simulation, personalization, and predictive healthcare
+S Alharthi - Saudi Pharmaceutical Journal, 2026 - Springer
+In silico twins (ISTs) are emerging as a transformative paradigm in precision medicine, offering
+dynamic, high-fidelity representations of individual patients through real-time integration …
+Guardar Citar Citado por 43 Artículos relacionados Las 5 versiones
+[PDF] nih.gov
+Lectura rápida
+A narrative review of machine learning as promising revolution in clinical practice of scoliosis
+K Chen, X Zhai, K Sun, H Wang… - Annals of Translational …, 2021 - pmc.ncbi.nlm.nih.gov
+… to nonhome facility and early unplanned readmissions following spinal fusion? Analysis
+of a … Dynamic ensemble selection of learn-er-descriptor classifiers to assess curve types in …
+Guardar Citar Citado por 75 Artículos relacionados Las 9 versiones
+Multiclass ICU Length-of-Stay Prediction Using Tree-Based Machine Learning Techniques
+M Mohammadian, S Afrasiabi - 2025 32nd National and 10th …, 2025 - ieeexplore.ieee.org
+… ICU readmission risk at discharge, with a primary focus on early readmissions within 48 hours…
+a dynamic ensemble selection mechanism," Physiological Measurement, vol. 41, no. 11, p. …
+Guardar Citar Citado por 1 Artículos relacionados
+[PDF] researchgate.net
+Lectura rápida
+Comparative Evaluation of Feature Selection Techniques for Six-Month Mortality Prediction in Heart Failure Patients
+P Haghighatgoo, S Afrasiabi - 2025 32nd National and 10th …, 2025 - ieeexplore.ieee.org
+… , including short-term readmission and mortality, with encouraging results … [7] developed
+models for readmission and six-month … features and a dynamic ensemble selection mechanism," …
+Guardar Citar Citado por 1 Artículos relacionados
+Explainable Ensemble Framework for Imbalanced Credit Card Fraud Detection with Feature Selection
+J Syambabu, K Doppalapudi, TS Rao… - 2026 5th …, 2026 - ieeexplore.ieee.org
+… [2] utilized stacking ensemble learning to predict emergency readmission in patients with …
+of SMOTE-ENN and advanced dynamic ensemble selection, resulting in increased sensitivity …
+Guardar Citar Citado por 2 Artículos relacionados
+Multi-view Representation Induced Kernel Ensemble Support Vector Machine: E. Quayson et al.
+E Quayson, ED Ganaa, Q Zhu, XJ Shen - Neural Processing Letters, 2023 - Springer
+… [62] proposed two collaboration representation (CR)-based dynamic ensemble selection (DES)
+methods. To achieve computational efficiency as well as end-to -end inferencing, Song …
+Guardar Citar Citado por 2 Artículos relacionados Las 3 versiones
+[PDF] wordpress.com
+Diabetes prediction in machine learning using feature selection: A comparative analysis based on sampling techniques
+Z Asy'Ari, SC Hidayati, R Sarno - 2024 7th International …, 2024 - ieeexplore.ieee.org
+… Dendani, and NE Benzebouchi, “Smote–enn-based data sampling and improved dynamic
+ensemble selection for imbalanced medical data classification,” in Proc. International …
+Guardar Citar Citado por 1 Artículos relacionados Las 4 versiones
+Búsquedas relacionadas
+dynamic selection strategydynamic classifier selectiondynamic model selectionunplanned readmission risk classifier selection approachfeature selection technique explainable ensemble modelfeature selection ensemble classification algorithmfeature selection explainable ensemble framework
+1	2	
+Siguiente
+PrivacidadTérminosAyuda
+
+"dynamic ensemble selection" readmission
+Joshua Alessandro
+
+
+
+
+Artículos
+Página 2 de 29 resultados (0,07 s)
+Cualquier momento
+Desde 2026
+Desde 2025
+Desde 2022
+Intervalo específico...
+Ordenar por relevancia
+Ordenar por fecha
+Cualquier idioma
+Buscar solo páginas en español
+Cualquier tipo
+Artículos de revisión
+[PDF] researchgate.net
+[PDF] Survey on highly imbalanced multi-class data
+MHA Hamid, M Yusoff, A Mohamed - International Journal of …, 2022 - researchgate.net
+… Several examples of real-world cases involving highly imbalanced data are like hospital
+readmission [… Li, “A novel dynamic ensemble selection classifier for an imbalanced data set: An …
+Guardar Citar Citado por 39 Artículos relacionados Las 3 versiones 
+[PDF] researchgate.net
+Selecting sampling ratios in imbalanced datasets through class complexity
+C Lancho, M Cuesta, IM De Diego, V Aceña… - Pattern Analysis and …, 2025 - Springer
+Data characteristics that reveal the complexity of the dataset, such as overlap, lack of density,
+the presence of noisy points, etc. are key factors for the deterioration of the classification …
+Guardar Citar Citado por 5 Artículos relacionados Las 4 versiones
+On supervised class-imbalanced learning: An updated perspective and some key challenges
+S Das, SS Mullick, I Zelinka - IEEE Transactions on Artificial …, 2022 - ieeexplore.ieee.org
+… Herrera, “Dynamic ensemble selection for multi-class imbalanced datasets,” Inf. Sci., vol. …
+Li, “Learning from class-imbalance and heterogeneous data for 30-day hospital readmission,” …
+Guardar Citar Citado por 147 Artículos relacionados Las 4 versiones
+[PDF] researchgate.net
+[PDF] ARTIFICIAL INTELLIGENCE IN LUNG CANCER DETECTION: THE FUTURE IS NOW
+IA Marhana - " Innovations and Integrated Approach of Thoracic …, 2025 - researchgate.net
+… Likewise, dynamic ensemble selection (DES) methods that integrate smoking history and
+routine clinical data have demonstrated superior sensitivity compared to pulmonologists in risk …
+Guardar Citar Artículos relacionados Las 2 versiones 
+[PDF] uwaterloo.ca
+Designing for Trust: A Multi-Factor Investigation of Optometrists' Perspectives on AI-Based Glaucoma Screening Systems
+A Karim - 2025 - uwspace.uwaterloo.ca
+Although glaucoma screening AI models show strong performance, their integration into
+clinical practice remains limited. Clinicians often face barriers rooted in technological …
+Guardar Citar Artículos relacionados 
+[PDF] ox.ac.uk
+Frailty and other factors associated with early outcomes in middle-to older age trauma patients: a prospective cohort study
+TS Yeh, JH Kang, TJ Littlejohns, CC Wu… - The American Journal …, 2024 - ajgponline.org
+… Moreover, patients with frailty often have multiple comorbidities and medication use,49 these
+factors further increase the risk of unplanned readmission. Lumbar spine fracture, which in …
+Guardar Citar Citado por 5 Artículos relacionados Las 9 versiones
+Beyond Explainability: What Drives Optometrists' Trust in AI Glaucoma Screening
+A Karim, F Ghaffar, W Xu, N Furtado… - … Conference on Human …, 2026 - Springer
+… Segmentation technique and dynamic ensemble selection to enhance glaucoma severity …
+support tool to reduce the risk of readmission of patients with heart failure. JMIR Form. Res. …
+Guardar Citar Artículos relacionados Las 2 versiones
+[PDF] arxiv.org
+SuperCon: Supervised contrastive learning for imbalanced skin lesion classification
+K Chen, D Zhuang, JM Chang - arXiv preprint arXiv:2202.05685, 2022 - arxiv.org
+Convolutional neural networks (CNNs) have achieved great success in skin lesion classification.
+A balanced dataset is required to train a good model. However, due to the appearance …
+Guardar Citar Citado por 11 Artículos relacionados Las 3 versiones 
+[HTML] mdpi.com
+[HTML] Damage Evolution Mechanism of Sandstone in the Tarangole Mining Area Under Varying Freeze–Thaw Cycles and Freezing Temperatures
+J Li, Z Li, S Wang, Y Luo, X Tan - Applied Sciences, 2026 - mdpi.com
+Freeze–thaw cycles cause mechanical deterioration and instability of slope rock masses in
+open-pit coal mines located in the cold regions of Northwest China. In this study, the research …
+Guardar Citar Artículos relacionados Las 2 versiones 
+Anterior
+1	2	
+PrivacidadTérminosAyuda

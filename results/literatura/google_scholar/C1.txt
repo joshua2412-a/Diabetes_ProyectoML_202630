@@ -3,10 +3,8 @@
 Joshua Alessandro
 
 
-
-
 Artículos
-Aproximadamente 39 resultados (0,08 s)
+Aproximadamente 40 resultados (0,19 s)
 Cualquier momento
 Desde 2026
 Desde 2025
@@ -81,11 +79,11 @@ Increasingly, machine learning methods have been applied to aid in diagnosis wit
 results. However, some complex models can confuse physicians because they are difficult to …
 Guardar Citar Citado por 9 Artículos relacionados Las 11 versiones 
 [PDF] ajaronline.com
-Artificial Intelligence-Driven Digital Twin for Disease Progression Prediction: A Comprehensive Review
+[PDF] Artificial Intelligence-Driven Digital Twin for Disease Progression Prediction: A Comprehensive Review
 ZN Nemer - AFRICAN JOURNAL OF APPLIED RESEARCH, 2026 - ajaronline.com
 … Economic evaluations suggest that DT technology could reduce hospital readmission rates
 … incorporated temporal clinical data and dynamic ensemble selection, reporting the KNOP …
-Guardar Citar Artículos relacionados Las 2 versiones 
+Guardar Citar Artículos relacionados Las 3 versiones 
 [PDF] purdue.edu
 Lectura rápida
 [PDF] Historical Segmentation for Budgeted Preprocessing Pipeline Selection under Distribution Shift
@@ -144,7 +142,7 @@ Z Asy'Ari, SC Hidayati, R Sarno - 2024 7th International …, 2024 - ieeexplore.
 ensemble selection for imbalanced medical data classification,” in Proc. International …
 Guardar Citar Citado por 1 Artículos relacionados Las 4 versiones
 Búsquedas relacionadas
-dynamic selection strategydynamic classifier selectiondynamic model selectionunplanned readmission risk classifier selection approachfeature selection technique explainable ensemble modelfeature selection ensemble classification algorithmfeature selection explainable ensemble framework
+dynamic selection strategydynamic classifier selectiondynamic model selectionunplanned readmission risk classifier selection approachfeature selection technique explainable ensemble modelfeature selection ensemble classification algorithmfeature selection explainable ensemble frameworkfracture patients dynamic ensemble selectiondeep vein thrombosis dynamic ensemble selectionearly detection dynamic ensemble selection
 1	2	
 Siguiente
 PrivacidadTérminosAyuda
@@ -153,10 +151,8 @@ PrivacidadTérminosAyuda
 Joshua Alessandro
 
 
-
-
 Artículos
-Página 2 de 29 resultados (0,07 s)
+Página 2 de 30 resultados (0,07 s)
 Cualquier momento
 Desde 2026
 Desde 2025
@@ -184,13 +180,18 @@ On supervised class-imbalanced learning: An updated perspective and some key cha
 S Das, SS Mullick, I Zelinka - IEEE Transactions on Artificial …, 2022 - ieeexplore.ieee.org
 … Herrera, “Dynamic ensemble selection for multi-class imbalanced datasets,” Inf. Sci., vol. …
 Li, “Learning from class-imbalance and heterogeneous data for 30-day hospital readmission,” …
-Guardar Citar Citado por 147 Artículos relacionados Las 4 versiones
+Guardar Citar Citado por 148 Artículos relacionados Las 4 versiones
 [PDF] researchgate.net
 [PDF] ARTIFICIAL INTELLIGENCE IN LUNG CANCER DETECTION: THE FUTURE IS NOW
 IA Marhana - " Innovations and Integrated Approach of Thoracic …, 2025 - researchgate.net
 … Likewise, dynamic ensemble selection (DES) methods that integrate smoking history and
 routine clinical data have demonstrated superior sensitivity compared to pulmonologists in risk …
 Guardar Citar Artículos relacionados Las 2 versiones 
+Emotionally-Aware Explainable AI for Mental Health Diagnostics: Comparative Analysis of XGBoost and LightGBM with SHAP Explainability
+R Bhakal, AK Bairwa - 2026 Second International Conference …, 2026 - ieeexplore.ieee.org
+Mental health disorders affects around one billion individuals all over the world and require
+reliable, interpretable and scalable predictive systems to support early prevention and …
+Guardar Citar Artículos relacionados
 [PDF] uwaterloo.ca
 Designing for Trust: A Multi-Factor Investigation of Optometrists' Perspectives on AI-Based Glaucoma Screening Systems
 A Karim - 2025 - uwspace.uwaterloo.ca
