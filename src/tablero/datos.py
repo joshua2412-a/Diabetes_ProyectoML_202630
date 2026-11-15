@@ -16,6 +16,12 @@ from functools import lru_cache
 
 import numpy as np
 import pandas as pd
+# Se importa aquí, en el hilo principal y antes de que app.py lance el hilo de
+# precarga: si la primera importación de pyarrow.parquet ocurre a la vez en dos
+# hilos (precarga y primera petición), queda a medio inicializar y toda lectura
+# de parquet falla con «cannot access submodule 'parquet' ... circular import».
+# Pasó en Render (CPU más lenta); en local la carga terminaba antes.
+import pyarrow.parquet  # noqa: F401
 
 from . import config as C
 
