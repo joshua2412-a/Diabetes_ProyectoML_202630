@@ -29,8 +29,8 @@ artículo, ``sn-article.tex``):
    Con ``tau`` muy grande es el promedio simple; con ``tau`` cero, la
    selección del modelo localmente mejor.
 
-Dos componentes se añadieron después del piloto (capítulo 13), porque el
-diagnóstico mostró que la competencia local es una estimación ruidosa:
+Dos componentes se añadieron después del piloto (capítulo 13), porque la
+competencia local no mejoró el orden de los pacientes (sección 15.3):
 
 5. **Encogimiento hacia la competencia global.** ``(1 - λ) C_local + λ
    C_global``, con λ elegido en el conjunto de selección. λ = 0 es la
@@ -46,8 +46,8 @@ búsqueda de ``k`` y ``tau`` evalúa cada configuración sobre las
 predicciones fuera de pliegue sin reentrenar los modelos base, y el estudio
 de ablación cambia un componente con un argumento.
 
-Implementación propia: solo se usan de scikit-learn la búsqueda de vecinos
-(``StratifiedGroupKFold`` y ``clone``) y scipy para el índice de vecinos
+Implementación propia: de scikit-learn solo se usan las particiones
+(``StratifiedGroupKFold``) y ``clone``, y de scipy el índice de vecinos
 (``cKDTree``). El mecanismo (competencia, encogimiento, poda y
 combinación) está programado con numpy.
 """

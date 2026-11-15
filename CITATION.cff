@@ -9,7 +9,7 @@ authors:
     given-names: "Alejandro"
     affiliation: "Universidad del Norte"
 type: software
-version: "1.0.0"
+version: "1.1.0"
 date-released: "2026-11-15"
 license: MIT
 repository-code: "https://github.com/joshua2412-a/Diabetes_ProyectoML_202630"

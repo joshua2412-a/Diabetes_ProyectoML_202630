@@ -33,7 +33,7 @@ URL_DATOS = ("https://archive.ics.uci.edu/dataset/296/"
 DOI_DATOS = "https://doi.org/10.24432/C5230J"
 AUTORES = ["Joshua Hincapié Llorente", "Alejandro Cantillo Escorcia"]
 INSTITUCION = "Universidad del Norte · Machine Learning"
-VERSION = "0.1.0"
+VERSION = "1.1.0"
 FECHA_ACTUALIZACION = "noviembre de 2026"
 
 # --------------------------------------------------------------------------- #

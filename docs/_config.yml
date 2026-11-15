@@ -2,7 +2,7 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: Machine Learning - Diabetes
-author: Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+author: Joshua Hincapié Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
 copyright: "2026"
 logo: logo1.png
 
@@ -31,3 +31,8 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+
+# Citas en el texto como (Autor, año) en lugar de etiquetas
+sphinx:
+  config:
+    bibtex_reference_style: author_year

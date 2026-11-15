@@ -17,7 +17,8 @@ Con los datos de *Diabetes 130-US Hospitals* (UCI, 1999-2008), el proyecto predi
 | Modelo original | `src/original_model.py` (interfaz) y `src/des_cpl.py` (implementación) |
 | Protocolo pre-registrado | `experiments/protocolo.md`, etiqueta de Git `protocolo-v1` |
 | Experimentos | `experiments/` (scripts) y `results/` (resultados en CSV) |
-| Modelos serializados | `artifacts/` (joblib + `metadata.json`) |
+| Modelos serializados | `artifacts/` (joblib + `metadata.json`); selección, prueba de ida y vuelta y tamaños en el capítulo 19 del libro |
+| Capturas del dashboard | `docs/capturas/` (las muestra el capítulo 19) |
 | Pruebas | `tests/` (pytest; se ejecutan en GitHub Actions) |
 | Ficha del modelo y declaración de los datos | `MODEL_CARD.md`, `DATA_STATEMENT.md` |
 
@@ -112,6 +113,8 @@ python app.py            # http://127.0.0.1:8050
 ```
 
 La primera carga de cada página tarda unos segundos.
+
+El capítulo 19 del libro (`docs/19_Artefactos_Dashboard.ipynb`) documenta la arquitectura, las decisiones de diseño, el despliegue y la ficha del modelo, con capturas de pantalla.
 
 ## Despliegue
 

@@ -228,8 +228,8 @@ def integrar_dashboard(prob):
         "texto": ("DES-CPL es original (no se encontró selección dinámica de ensambles en la "
                   "readmisión de pacientes con diabetes; capítulo 14) y está implementado por los "
                   "autores (src/des_cpl.py). Empata con el mejor benchmark, pero no lo supera de "
-                  "forma significativa en ninguna de las tres pruebas (capítulos 13 y 16): el tope "
-                  "de la nota es 4.0. Es más estable que XGBoost frente a la semilla y a "
+                  "forma significativa en ninguna de las tres pruebas (capítulos 13 y 16). "
+                  "Es más estable que XGBoost frente a la semilla y a "
                   "perturbaciones de los datos."),
         "superior": False}, ensure_ascii=False, indent=2), encoding="utf-8")
 
