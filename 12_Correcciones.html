@@ -1,0 +1,3023 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>12. Correcciones del Entregable 2 &#8212; Machine Learning - Diabetes</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '12_Correcciones';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="13. Modelo original: DES-CPL" href="13_Modelo_Original.html" />
+    <link rel="prev" title="11. Comparación estadística de los modelos" href="11_Comparacion_Estadistica.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo1.png" class="logo__image only-light" alt="Machine Learning - Diabetes - Home"/>
+    <script>document.write(`<img src="_static/logo1.png" class="logo__image only-dark" alt="Machine Learning - Diabetes - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Predicción de Readmisión Hospitalaria en Pacientes Diabéticos
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Datos.html">1. Dataset y Estructura</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_ETL.html">2. Depuración, ingeniería de características y partición</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_Univariado.html">3. Análisis univariado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_Bivariado.html">4. Análisis bivariado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_Sintesis.html">5. Redundancia, fuga de información y techo de desempeño</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Preprocesamiento.html">6. Preprocesamiento y validación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_ModeloBase.html">7. Modelo base: regresión logística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Clasificacion.html">8. Experimento combinatorio de clasificación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Optimizadores.html">9. Comparación de optimizadores y optimización computacional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Evaluacion.html">10. Evaluación del modelo final, calibración e interpretabilidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Comparacion_Estadistica.html">11. Comparación estadística de los modelos</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">12. Correcciones del Entregable 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Modelo_Original.html">13. Modelo original: DES-CPL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Revision_Literatura.html">14. Revisión de literatura y declaración de novedad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Formulacion_DES_CPL.html">15. DES-CPL: formulación, propiedades y complejidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Evaluacion_Ampliada.html">16. Evaluación ampliada: otros conjuntos, robustez, semillas, sensibilidad, interpretabilidad, equidad y costo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Conclusiones.html">17. Conclusiones, limitaciones y declaración de autoría</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Reproducibilidad.html">18. Reproducibilidad y bibliografía</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/joshua2412-a/Diabetes_ProyectoML_202630" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/joshua2412-a/Diabetes_ProyectoML_202630/issues/new?title=Issue%20on%20page%20%2F12_Correcciones.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/12_Correcciones.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>12. Correcciones del Entregable 2</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#presupuesto-de-busqueda">12.2. Presupuesto de búsqueda</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#que-se-cuestiona-y-como-se-contrasta">12.2.1. Qué se cuestiona y cómo se contrasta</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ejecucion">12.2.2. Ejecución</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#control-el-corte-del-entregable-2-reproduce-sus-resultados">12.2.3. Control: el corte del Entregable 2 reproduce sus resultados</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#curvas-de-convergencia">12.2.4. Curvas de convergencia</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicacion-de-la-regla-de-decision">12.2.5. Aplicación de la regla de decisión</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#contraste-con-optuna-y-estabilidad-del-ranking">12.2.6. Contraste con Optuna y estabilidad del ranking</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lectura">12.2.7. Lectura</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-del-efecto-parametrico-d-de-cohen">12.3. Tamaño del efecto paramétrico: d de Cohen</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#auditoria-de-fuga-de-informacion">12.4. Auditoría de fuga de información</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pruebas-unitarias-y-modularizacion">12.5. Pruebas unitarias y modularización</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#que-se-corrigio-y-por-que-de-esta-forma">12.5.1. Qué se corrigió y por qué de esta forma</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapa-de-modulos">12.5.2. Mapa de módulos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalencia-del-codigo">12.5.3. Equivalencia del código</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pruebas-automaticas">12.5.4. Pruebas automáticas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">12.5.5. Lectura</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabla-de-trazabilidad-de-correcciones">12.6. Tabla de trazabilidad de correcciones</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">12.7. Síntesis del capítulo</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="correcciones-del-entregable-2">
+<h1>12. Correcciones del Entregable 2<a class="headerlink" href="#correcciones-del-entregable-2" title="Link to this heading">#</a></h1>
+<p>La retroalimentación del Entregable 2 señaló cuatro aspectos por mejorar: el presupuesto de solo 8 a 12 evaluaciones por búsqueda de hiperparámetros, la ausencia de la d de Cohen entre los tamaños del efecto, la ausencia de pruebas automáticas y la concentración de demasiada lógica en <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code>. La guía del Entregable 3 añade dos exigencias para este bloque: una auditoría explícita de fuga de información y el recálculo de todo resultado que una corrección modifique, reportando los cambios aunque sean desfavorables.</p>
+<p>Este capítulo atiende cada observación y cierra con la tabla de trazabilidad (sección 12.6), que vincula cada una con la acción realizada, su ubicación y la evidencia que la respalda.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Observación</p></th>
+<th class="head"><p>Origen</p></th>
+<th class="head"><p>Sección</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Presupuesto de 8 a 12 evaluaciones por búsqueda</p></td>
+<td><p>Docente</p></td>
+<td><p>12.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ausencia de la d de Cohen</p></td>
+<td><p>Docente</p></td>
+<td><p>12.3</p></td>
+</tr>
+<tr class="row-even"><td><p>Auditoría de fuga de información</p></td>
+<td><p>Guía del Entregable 3</p></td>
+<td><p>12.4</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ausencia de pruebas unitarias</p></td>
+<td><p>Docente</p></td>
+<td><p>12.5</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> concentra demasiada lógica</p></td>
+<td><p>Docente</p></td>
+<td><p>12.5</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Cómo se ejecuta este capítulo.</strong> No hay nada que configurar. Los cálculos costosos escriben sus resultados en <code class="docutils literal notranslate"><span class="pre">results/</span></code> a medida que avanzan, y cada celda lee primero lo que ya está en disco y calcula solo lo que falta: si todo está calculado, el capítulo solo lee y se ejecuta en segundos; si una ejecución se interrumpió, la siguiente continúa donde quedó. Para recalcular una parte desde cero basta con borrar su archivo de resultados. El código vive en <code class="docutils literal notranslate"><span class="pre">correcciones.py</span></code>, que reutiliza el motor del experimento sin modificarlo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">experimento</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ex</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">correcciones</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cor</span>
+
+<span class="c1"># 4 procesos, el número de núcleos físicos del equipo, igual que en el</span>
+<span class="c1"># experimento del capítulo 8 (sección 7.2).</span>
+<span class="n">ex</span><span class="o">.</span><span class="n">N_JOBS</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="c1"># --- Archivos de resultados del capítulo ------------------------------------</span>
+<span class="c1"># Cada cálculo lee primero su archivo y solo calcula lo que falta en él. Para</span>
+<span class="c1"># rehacer una parte desde cero, borra su archivo.</span>
+<span class="n">RUTA_EVALUACIONES</span> <span class="o">=</span> <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"convergencia_evaluaciones.csv"</span>
+<span class="n">RUTA_REAJUSTES</span> <span class="o">=</span> <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"convergencia_reajustes.csv"</span>
+<span class="n">RUTA_OPTUNA</span> <span class="o">=</span> <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"convergencia_optuna.csv"</span>
+
+<span class="c1"># --- Datos, con la misma construcción que el capítulo 8 ---------------------</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">leer_tabla</span><span class="p">(</span><span class="s2">"diabetes_train"</span><span class="p">)</span>
+<span class="n">roles</span> <span class="o">=</span> <span class="n">roles_variables</span><span class="p">()</span>
+
+<span class="n">OBJETIVO</span> <span class="o">=</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"objetivo"</span><span class="p">]</span>
+<span class="n">IDENTIFICADOR</span> <span class="o">=</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"identificador"</span><span class="p">]</span>
+<span class="n">PREDICTORES</span> <span class="o">=</span> <span class="p">(</span><span class="n">roles</span><span class="p">[</span><span class="s2">"numericas"</span><span class="p">]</span> <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"ordinales"</span><span class="p">]</span>
+               <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"binarias"</span><span class="p">]</span> <span class="o">+</span> <span class="n">roles</span><span class="p">[</span><span class="s2">"categoricas"</span><span class="p">])</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">PREDICTORES</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">OBJETIVO</span><span class="p">]</span>
+<span class="n">grupos</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">]</span>
+<span class="n">RAZON_DESBALANCE</span> <span class="o">=</span> <span class="nb">float</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="c1"># --- Resultados del Entregable 2 --------------------------------------------</span>
+<span class="n">maestra</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"tabla_maestra_clasificacion.csv"</span><span class="p">)</span>
+<span class="n">completadas</span> <span class="o">=</span> <span class="n">maestra</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"estado == 'completada'"</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># La mejor configuración de cada modelo, con la misma regla del capítulo 11.</span>
+<span class="n">mejores</span> <span class="o">=</span> <span class="p">(</span><span class="n">completadas</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">completadas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)[</span><span class="s2">"auc_pr_media"</span><span class="p">]</span>
+                           <span class="o">.</span><span class="n">idxmax</span><span class="p">()]</span>
+           <span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Entrenamiento: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> encuentros de </span><span class="si">{</span><span class="n">grupos</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> pacientes"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Corridas completadas del Entregable 2: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">completadas</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entrenamiento: 79,473 encuentros de 56,036 pacientes
+Corridas completadas del Entregable 2: 108
+</pre></div>
+</div>
+</div>
+</div>
+<section id="presupuesto-de-busqueda">
+<h2>12.2. Presupuesto de búsqueda<a class="headerlink" href="#presupuesto-de-busqueda" title="Link to this heading">#</a></h2>
+<section id="que-se-cuestiona-y-como-se-contrasta">
+<h3>12.2.1. Qué se cuestiona y cómo se contrasta<a class="headerlink" href="#que-se-cuestiona-y-como-se-contrasta" title="Link to this heading">#</a></h3>
+<p>Cada búsqueda del Entregable 2 evaluó entre 8 y 12 configuraciones por fold externo, porque el presupuesto se fijó en el tamaño de la rejilla de cada modelo (sección 8.2). Una <strong>evaluación</strong> es una configuración de hiperparámetros puntuada con la validación interna de tres folds; tras agotar el presupuesto, la mejor se reajusta con todo el fold externo de entrenamiento y se mide una sola vez en su fold de evaluación.</p>
+<p>El riesgo de ese presupuesto no es igual para todos los modelos. En Naive Bayes y SVM el espacio de búsqueda tiene una sola dimensión y doce puntos lo cubren bien; en Random Forest y XGBoost tiene cuatro y cinco dimensiones, y ocho puntos apenas lo exploran. Que los dos finalistas sean justamente los modelos con el espacio más grande impide despachar la crítica sin evidencia: si un presupuesto mayor los mejorara de forma desigual, el empate entre ellos podría ser un artefacto de la búsqueda y no una propiedad del problema.</p>
+<p>Repetir las 112 corridas con más presupuesto costaría del orden de cien horas de cómputo y no respondería mejor la pregunta. Se contrasta directamente si el presupuesto limitó el desempeño, con un <strong>estudio de convergencia</strong> sobre la mejor estrategia de balanceo de cada modelo:</p>
+<ol class="arabic simple">
+<li><p><strong>Random Search con 60 configuraciones por fold externo.</strong> Con 60 muestras independientes, la probabilidad de que al menos una caiga en el 5 % mejor del espacio de búsqueda es <span class="math notranslate nohighlight">\(1 - 0.95^{60} \approx 0.95\)</span>, sin importar cuántas dimensiones tenga el espacio (Bergstra y Bengio, 2012). Es el menor presupuesto con esa garantía, y equivale a entre cinco y siete veces el del Entregable 2.</p></li>
+<li><p><strong>Los presupuestos menores son prefijos de la misma secuencia.</strong> El motor genera las configuraciones de Random Search una tras otra con un generador de semilla fija por fold, de modo que las 8 o 12 primeras de la secuencia de 60 son exactamente las que evaluó el Entregable 2. Cortar la secuencia en 8, 12, 20, 30, 45 y 60 da una curva de desempeño frente a presupuesto en la que todos los puntos comparten folds, semilla y configuraciones: la única diferencia entre ellos es cuántas configuraciones se evaluaron. El corte que coincide con el Entregable 2 sirve además de control, porque debe reproducir sus métricas (sección 12.2.3).</p></li>
+<li><p><strong>Mismo protocolo que el Entregable 2:</strong> el mismo código (<code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> sin modificar), las mismas particiones externas e internas agrupadas por paciente, la misma semilla, la misma métrica de búsqueda (AUC-PR) y la misma fracción de búsqueda (un cuarto de los pacientes en k-NN, Random Forest y XGBoost; sección 8.2).</p></li>
+<li><p><strong>Contraste con un optimizador que aprende de lo evaluado.</strong> Random Search no usa la información de las configuraciones anteriores. Para descartar que un optimizador guiado encuentre lo que el muestreo aleatorio no encuentra, los dos finalistas se buscan también con Optuna a 60 configuraciones.</p></li>
+</ol>
+<p><strong>Regla de decisión, fijada antes de ver los resultados.</strong> La cantidad de interés es la ganancia de AUC-PR en el bucle externo al pasar del presupuesto del Entregable 2 a 60 configuraciones, promediada sobre los cinco folds. El presupuesto original se considera <strong>suficiente</strong> para un modelo si esa ganancia media no supera <strong>0.005</strong>. El umbral es la mitad de la menor desviación entre folds de la mejor configuración de cada modelo en el Entregable 2 (0.0106, árbol de decisión), y es entre tres y cincuenta veces mayor que las diferencias que decidieron la mejor configuración de cada modelo (0.0001 a 0.0014): una ganancia por debajo de él no cambia ninguna decisión del Entregable 2. Si algún modelo lo supera, se reporta y se analiza si el cambio altera el ranking o el empate entre los finalistas (sección 12.2.6).</p>
+<p>La tabla siguiente resume el plan y estima su costo a partir de los tiempos medidos en el Entregable 2.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">combinaciones</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">modelo</span><span class="p">,</span> <span class="n">fila</span> <span class="ow">in</span> <span class="n">mejores</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">balanceo</span> <span class="o">=</span> <span class="n">fila</span><span class="p">[</span><span class="s2">"balanceo"</span><span class="p">]</span>
+    <span class="n">combinaciones</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">modelo</span><span class="p">,</span> <span class="n">balanceo</span><span class="p">))</span>
+
+    <span class="c1"># Tiempos por evaluación y por ajuste de la corrida random equivalente.</span>
+    <span class="n">referencia</span> <span class="o">=</span> <span class="n">completadas</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+        <span class="s2">"modelo == @modelo and balanceo == @balanceo "</span>
+        <span class="s2">"and optimizador == 'random'"</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">t_evaluacion</span> <span class="o">=</span> <span class="n">referencia</span><span class="p">[</span><span class="s2">"tiempo_busqueda_s"</span><span class="p">]</span> <span class="o">/</span> <span class="n">referencia</span><span class="p">[</span><span class="s2">"n_evaluaciones"</span><span class="p">]</span>
+    <span class="n">t_ajuste</span> <span class="o">=</span> <span class="n">referencia</span><span class="p">[</span><span class="s2">"tiempo_ajuste_s"</span><span class="p">]</span> <span class="o">/</span> <span class="n">referencia</span><span class="p">[</span><span class="s2">"folds_externos"</span><span class="p">]</span>
+    <span class="n">n_evaluaciones</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">PRESUPUESTO_MAXIMO</span> <span class="o">*</span> <span class="mi">5</span>
+    <span class="c1"># Como mucho un reajuste por corte y fold (seis cortes, cinco folds).</span>
+    <span class="n">horas</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_evaluaciones</span> <span class="o">*</span> <span class="n">t_evaluacion</span>
+             <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">cor</span><span class="o">.</span><span class="n">CORTES</span><span class="p">)</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">t_ajuste</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3600</span>
+
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">"modelo"</span><span class="p">:</span> <span class="n">modelo</span><span class="p">,</span>
+        <span class="s2">"balanceo"</span><span class="p">:</span> <span class="n">balanceo</span><span class="p">,</span>
+        <span class="s2">"mejor optimizador en E2"</span><span class="p">:</span> <span class="n">fila</span><span class="p">[</span><span class="s2">"optimizador"</span><span class="p">],</span>
+        <span class="s2">"presupuesto E2"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">"presupuesto"</span><span class="p">]),</span>
+        <span class="s2">"fracción de búsqueda"</span><span class="p">:</span> <span class="n">fila</span><span class="p">[</span><span class="s2">"fraccion_busqueda"</span><span class="p">],</span>
+        <span class="s2">"configuraciones por fold"</span><span class="p">:</span> <span class="n">cor</span><span class="o">.</span><span class="n">PRESUPUESTO_MAXIMO</span><span class="p">,</span>
+        <span class="s2">"evaluaciones totales"</span><span class="p">:</span> <span class="n">n_evaluaciones</span><span class="p">,</span>
+        <span class="s2">"horas estimadas (máx.)"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">horas</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="p">})</span>
+
+<span class="n">plan</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span>
+<span class="n">REFERENCIA_E2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">plan</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">],</span> <span class="n">plan</span><span class="p">[</span><span class="s2">"presupuesto E2"</span><span class="p">]))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Costo estimado del estudio con Random Search: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">plan</span><span class="p">[</span><span class="s1">'horas estimadas (máx.)'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> h"</span><span class="p">)</span>
+<span class="n">plan</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Costo estimado del estudio con Random Search: 5.8 h
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>modelo</th>
+      <th>balanceo</th>
+      <th>mejor optimizador en E2</th>
+      <th>presupuesto E2</th>
+      <th>fracción de búsqueda</th>
+      <th>configuraciones por fold</th>
+      <th>evaluaciones totales</th>
+      <th>horas estimadas (máx.)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>arbol</td>
+      <td>ninguno</td>
+      <td>grid</td>
+      <td>12</td>
+      <td>1.00</td>
+      <td>60</td>
+      <td>300</td>
+      <td>0.42</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>bayes</td>
+      <td>ninguno</td>
+      <td>random</td>
+      <td>12</td>
+      <td>1.00</td>
+      <td>60</td>
+      <td>300</td>
+      <td>0.41</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>knn</td>
+      <td>ninguno</td>
+      <td>grid</td>
+      <td>8</td>
+      <td>0.25</td>
+      <td>60</td>
+      <td>300</td>
+      <td>0.82</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>logistica</td>
+      <td>ninguno</td>
+      <td>optuna</td>
+      <td>12</td>
+      <td>1.00</td>
+      <td>60</td>
+      <td>300</td>
+      <td>0.70</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>random_forest</td>
+      <td>ninguno</td>
+      <td>deap</td>
+      <td>8</td>
+      <td>0.25</td>
+      <td>60</td>
+      <td>300</td>
+      <td>1.48</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>svm</td>
+      <td>ninguno</td>
+      <td>grid</td>
+      <td>12</td>
+      <td>1.00</td>
+      <td>60</td>
+      <td>300</td>
+      <td>0.53</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>xgboost</td>
+      <td>adasyn</td>
+      <td>random</td>
+      <td>8</td>
+      <td>0.25</td>
+      <td>60</td>
+      <td>300</td>
+      <td>1.40</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="ejecucion">
+<h3>12.2.2. Ejecución<a class="headerlink" href="#ejecucion" title="Link to this heading">#</a></h3>
+<p>La celda siguiente revisa qué está calculado y lanza solo lo que falta, de los modelos más económicos a los más costosos. Cada lote de doce evaluaciones y cada reajuste se escriben en disco al terminar, así que se puede interrumpir en cualquier momento y volver a lanzar: continúa donde quedó, sin perder más que el lote en curso. Si todo está completo, no calcula nada.</p>
+<p>La búsqueda con Optuna de los dos finalistas usa el ejecutor del capítulo 8 sin cambios, con presupuesto de 60 y su propia tabla; ese ejecutor también omite las corridas que ya están en ella.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Del más económico al más costoso, para tener resultados parciales</span>
+<span class="c1"># interpretables desde el principio (estimación de la sección 12.2.1).</span>
+<span class="n">orden</span> <span class="o">=</span> <span class="n">plan</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"horas estimadas (máx.)"</span><span class="p">)[</span><span class="s2">"modelo"</span><span class="p">]</span>
+<span class="n">estado</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">progreso</span><span class="p">(</span><span class="n">RUTA_EVALUACIONES</span><span class="p">,</span> <span class="n">RUTA_REAJUSTES</span><span class="p">,</span>
+                      <span class="n">combinaciones</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)[</span><span class="s2">"estado"</span><span class="p">]</span>
+<span class="n">pendientes_random</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">orden</span> <span class="k">if</span> <span class="n">estado</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"Completo"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Random Search pendiente: </span><span class="si">{</span><span class="n">pendientes_random</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">'nada'</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="n">pendientes_random</span><span class="p">:</span>
+    <span class="n">fila</span> <span class="o">=</span> <span class="n">mejores</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">modelo</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="s1">'='</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">70</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">modelo</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">fila</span><span class="p">[</span><span class="s1">'balanceo'</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Random Search hasta "</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cor</span><span class="o">.</span><span class="n">PRESUPUESTO_MAXIMO</span><span class="si">}</span><span class="s2"> configuraciones por fold</span><span class="se">\n</span><span class="si">{</span><span class="s1">'='</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">70</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">inicio</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">cor</span><span class="o">.</span><span class="n">ejecutar_convergencia</span><span class="p">(</span>
+        <span class="n">modelo</span><span class="p">,</span> <span class="n">fila</span><span class="p">[</span><span class="s2">"balanceo"</span><span class="p">],</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span>
+        <span class="n">ruta_evaluaciones</span><span class="o">=</span><span class="n">RUTA_EVALUACIONES</span><span class="p">,</span>
+        <span class="n">ruta_reajustes</span><span class="o">=</span><span class="n">RUTA_REAJUSTES</span><span class="p">,</span>
+        <span class="n">fraccion_busqueda</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">"fraccion_busqueda"</span><span class="p">]),</span>
+        <span class="n">razon_desbalance</span><span class="o">=</span><span class="n">RAZON_DESBALANCE</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">modelo</span><span class="si">}</span><span class="s2"> terminado en </span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">inicio</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">60</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> min"</span><span class="p">)</span>
+
+<span class="n">FINALISTAS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"xgboost"</span><span class="p">,</span> <span class="s2">"random_forest"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="n">FINALISTAS</span><span class="p">:</span>
+    <span class="n">fila</span> <span class="o">=</span> <span class="n">mejores</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">modelo</span><span class="p">]</span>
+    <span class="n">ex</span><span class="o">.</span><span class="n">ejecutar_experimento</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">ex</span><span class="o">.</span><span class="n">Corrida</span><span class="p">(</span><span class="n">modelo</span><span class="o">=</span><span class="n">modelo</span><span class="p">,</span> <span class="n">balanceo</span><span class="o">=</span><span class="n">fila</span><span class="p">[</span><span class="s2">"balanceo"</span><span class="p">],</span>
+                    <span class="n">optimizador</span><span class="o">=</span><span class="s2">"optuna"</span><span class="p">,</span>
+                    <span class="n">presupuesto</span><span class="o">=</span><span class="n">cor</span><span class="o">.</span><span class="n">PRESUPUESTO_MAXIMO</span><span class="p">,</span>
+                    <span class="n">razon_desbalance</span><span class="o">=</span><span class="n">RAZON_DESBALANCE</span><span class="p">)],</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span>
+        <span class="n">ruta_tabla</span><span class="o">=</span><span class="n">RUTA_OPTUNA</span><span class="p">,</span>
+        <span class="n">folds_externos</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">folds_internos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">metrica</span><span class="o">=</span><span class="s2">"average_precision"</span><span class="p">,</span>
+        <span class="n">fraccion_busqueda</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">"fraccion_busqueda"</span><span class="p">]),</span>
+    <span class="p">)</span>
+
+<span class="n">cor</span><span class="o">.</span><span class="n">progreso</span><span class="p">(</span><span class="n">RUTA_EVALUACIONES</span><span class="p">,</span> <span class="n">RUTA_REAJUSTES</span><span class="p">,</span> <span class="n">combinaciones</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Random Search pendiente: nada
+[omitida] xgboost|adasyn|optuna
+[omitida] random_forest|ninguno|optuna
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>modelo</th>
+      <th>balanceo</th>
+      <th>evaluaciones</th>
+      <th>folds completos</th>
+      <th>estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>arbol</td>
+      <td>ninguno</td>
+      <td>300/300</td>
+      <td>5/5</td>
+      <td>Completo</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>bayes</td>
+      <td>ninguno</td>
+      <td>300/300</td>
+      <td>5/5</td>
+      <td>Completo</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>knn</td>
+      <td>ninguno</td>
+      <td>300/300</td>
+      <td>5/5</td>
+      <td>Completo</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>logistica</td>
+      <td>ninguno</td>
+      <td>300/300</td>
+      <td>5/5</td>
+      <td>Completo</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>random_forest</td>
+      <td>ninguno</td>
+      <td>300/300</td>
+      <td>5/5</td>
+      <td>Completo</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>svm</td>
+      <td>ninguno</td>
+      <td>300/300</td>
+      <td>5/5</td>
+      <td>Completo</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>xgboost</td>
+      <td>adasyn</td>
+      <td>300/300</td>
+      <td>5/5</td>
+      <td>Completo</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="control-el-corte-del-entregable-2-reproduce-sus-resultados">
+<h3>12.2.3. Control: el corte del Entregable 2 reproduce sus resultados<a class="headerlink" href="#control-el-corte-del-entregable-2-reproduce-sus-resultados" title="Link to this heading">#</a></h3>
+<p>Antes de leer la curva hay que comprobar que el estudio mide lo que dice medir. Si las particiones, la semilla, la submuestra de búsqueda y las configuraciones son las del Entregable 2, el corte de 8 o 12 configuraciones tiene que dar, fold a fold, la misma AUC-PR que la corrida de Random Search de esa combinación en la tabla maestra. Una discrepancia indicaría que algo del protocolo cambió y que las ganancias medidas no se pueden atribuir solo al presupuesto.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">convergencia</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">tabla_convergencia</span><span class="p">(</span><span class="n">RUTA_EVALUACIONES</span><span class="p">,</span> <span class="n">RUTA_REAJUSTES</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">convergencia</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Todavía no hay resultados del estudio de convergencia."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">reproduccion</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">verificar_reproduccion</span><span class="p">(</span><span class="n">convergencia</span><span class="p">,</span> <span class="n">completadas</span><span class="p">)</span>
+    <span class="n">guardar_resultado</span><span class="p">(</span><span class="n">reproduccion</span><span class="p">,</span> <span class="s2">"convergencia_reproduccion"</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">reproduccion</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>modelo</th>
+      <th>balanceo</th>
+      <th>presupuesto</th>
+      <th>folds comparados</th>
+      <th>AUC-PR E2 (random)</th>
+      <th>AUC-PR del corte</th>
+      <th>máx. |diferencia| por fold</th>
+      <th>reproduce</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>arbol</td>
+      <td>ninguno</td>
+      <td>12</td>
+      <td>5</td>
+      <td>0.200655</td>
+      <td>0.200655</td>
+      <td>5.551115e-17</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>bayes</td>
+      <td>ninguno</td>
+      <td>12</td>
+      <td>5</td>
+      <td>0.199457</td>
+      <td>0.199457</td>
+      <td>8.326673e-17</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>knn</td>
+      <td>ninguno</td>
+      <td>8</td>
+      <td>5</td>
+      <td>0.205208</td>
+      <td>0.205208</td>
+      <td>5.551115e-17</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>logistica</td>
+      <td>ninguno</td>
+      <td>12</td>
+      <td>5</td>
+      <td>0.210854</td>
+      <td>0.210854</td>
+      <td>8.326673e-17</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>random_forest</td>
+      <td>ninguno</td>
+      <td>8</td>
+      <td>5</td>
+      <td>0.221595</td>
+      <td>0.221595</td>
+      <td>8.326673e-17</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>svm</td>
+      <td>ninguno</td>
+      <td>12</td>
+      <td>5</td>
+      <td>0.214444</td>
+      <td>0.214444</td>
+      <td>8.326673e-17</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>xgboost</td>
+      <td>adasyn</td>
+      <td>8</td>
+      <td>5</td>
+      <td>0.226658</td>
+      <td>0.226658</td>
+      <td>8.326673e-17</td>
+      <td>Sí</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="curvas-de-convergencia">
+<h3>12.2.4. Curvas de convergencia<a class="headerlink" href="#curvas-de-convergencia" title="Link to this heading">#</a></h3>
+<p>El panel izquierdo muestra el mejor puntaje <strong>interno</strong> encontrado tras cada evaluación, promediado sobre los folds externos: es lo que ve el optimizador. El derecho muestra lo que importa para las conclusiones, la AUC-PR <strong>externa</strong> de la configuración elegida en cada corte, expresada como ganancia respecto al presupuesto del Entregable 2 de ese modelo, con la región de equivalencia práctica (<span class="math notranslate nohighlight">\(\pm 0.005\)</span>) sombreada. Una curva interna que sigue subiendo con una externa plana significa que el presupuesto extra solo afina el ajuste a la validación interna, sin trasladarse a datos nuevos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">anytime</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">curva_anytime</span><span class="p">(</span><span class="n">RUTA_EVALUACIONES</span><span class="p">)</span>
+<span class="n">deltas</span> <span class="o">=</span> <span class="p">(</span><span class="n">cor</span><span class="o">.</span><span class="n">ganancias</span><span class="p">(</span><span class="n">convergencia</span><span class="p">,</span> <span class="n">REFERENCIA_E2</span><span class="p">)</span>
+          <span class="k">if</span> <span class="ow">not</span> <span class="n">convergencia</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">())</span>
+
+<span class="k">if</span> <span class="n">anytime</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="n">deltas</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Sin resultados todavía."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">modelos_presentes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">anytime</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    <span class="n">colores</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">modelos_presentes</span><span class="p">,</span>
+                       <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">"colorblind"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">modelos_presentes</span><span class="p">))))</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">eje_int</span><span class="p">,</span> <span class="n">eje_ext</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.5</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">modelo</span><span class="p">,</span> <span class="n">grupo</span> <span class="ow">in</span> <span class="n">anytime</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">):</span>
+        <span class="n">media</span> <span class="o">=</span> <span class="n">grupo</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"evaluacion"</span><span class="p">)[</span><span class="s2">"mejor_hasta_ahora"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">eje_int</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">media</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">media</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colores</span><span class="p">[</span><span class="n">modelo</span><span class="p">],</span>
+                     <span class="n">lw</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">modelo</span><span class="p">)</span>
+    <span class="n">eje_int</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Configuraciones evaluadas por fold"</span><span class="p">)</span>
+    <span class="n">eje_int</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Mejor AUC-PR interna (media de folds)"</span><span class="p">)</span>
+    <span class="n">eje_int</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Lo que ve el optimizador"</span><span class="p">)</span>
+
+    <span class="n">eje_ext</span><span class="o">.</span><span class="n">axhspan</span><span class="p">(</span><span class="o">-</span><span class="n">cor</span><span class="o">.</span><span class="n">ROPE_AUC_PR</span><span class="p">,</span> <span class="n">cor</span><span class="o">.</span><span class="n">ROPE_AUC_PR</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s2">"Equivalencia práctica"</span><span class="p">)</span>
+    <span class="n">eje_ext</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">modelo</span><span class="p">,</span> <span class="n">grupo</span> <span class="ow">in</span> <span class="n">deltas</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">):</span>
+        <span class="n">resumen</span> <span class="o">=</span> <span class="n">grupo</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"presupuesto"</span><span class="p">)[</span><span class="s2">"ganancia"</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"std"</span><span class="p">])</span>
+        <span class="n">eje_ext</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">resumen</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">resumen</span><span class="p">[</span><span class="s2">"mean"</span><span class="p">],</span> <span class="s2">"o-"</span><span class="p">,</span>
+                     <span class="n">color</span><span class="o">=</span><span class="n">colores</span><span class="p">[</span><span class="n">modelo</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">modelo</span><span class="p">)</span>
+    <span class="n">eje_ext</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Presupuesto (configuraciones por fold)"</span><span class="p">)</span>
+    <span class="n">eje_ext</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Ganancia de AUC-PR externa vs. E2"</span><span class="p">)</span>
+    <span class="n">eje_ext</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Lo que se traslada al fold externo"</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">eje</span> <span class="ow">in</span> <span class="p">(</span><span class="n">eje_int</span><span class="p">,</span> <span class="n">eje_ext</span><span class="p">):</span>
+        <span class="n">eje</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">":"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">eje</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">":"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRIS</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">eje</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">cor</span><span class="o">.</span><span class="n">CORTES</span><span class="p">)</span>
+    <span class="n">eje_ext</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">"upper left"</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/520530d6a64f5f7cea94524ea74019987460a2e575b45dcbe0da439862ad807e.png" src="_images/520530d6a64f5f7cea94524ea74019987460a2e575b45dcbe0da439862ad807e.png" />
+</div>
+</div>
+</section>
+<section id="aplicacion-de-la-regla-de-decision">
+<h3>12.2.5. Aplicación de la regla de decisión<a class="headerlink" href="#aplicacion-de-la-regla-de-decision" title="Link to this heading">#</a></h3>
+<p>La tabla aplica la regla de la sección 12.2.1 a cada modelo. El intervalo de confianza de la ganancia media se calcula con la <span class="math notranslate nohighlight">\(t\)</span> de Student sobre las diferencias pareadas por fold; con cinco folds es ancho y se reporta como descripción de la incertidumbre, no como prueba. La decisión se toma con la ganancia media, como se fijó antes de ver los resultados.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">convergencia</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Sin resultados todavía."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">decision</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">resumen_ganancia</span><span class="p">(</span><span class="n">convergencia</span><span class="p">,</span> <span class="n">REFERENCIA_E2</span><span class="p">)</span>
+    <span class="n">guardar_resultado</span><span class="p">(</span><span class="n">decision</span><span class="p">,</span> <span class="s2">"convergencia_presupuesto"</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">decision</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>modelo</th>
+      <th>balanceo</th>
+      <th>presupuesto E2</th>
+      <th>AUC-PR con presupuesto E2</th>
+      <th>AUC-PR con 60</th>
+      <th>desviación entre folds (E2)</th>
+      <th>ganancia media</th>
+      <th>IC 95 % inferior</th>
+      <th>IC 95 % superior</th>
+      <th>decisión</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>arbol</td>
+      <td>ninguno</td>
+      <td>12</td>
+      <td>0.2007</td>
+      <td>0.2021</td>
+      <td>0.0108</td>
+      <td>0.0014</td>
+      <td>-0.0021</td>
+      <td>0.0049</td>
+      <td>Suficiente</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>bayes</td>
+      <td>ninguno</td>
+      <td>12</td>
+      <td>0.1995</td>
+      <td>0.1999</td>
+      <td>0.0115</td>
+      <td>0.0004</td>
+      <td>-0.0004</td>
+      <td>0.0013</td>
+      <td>Suficiente</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>knn</td>
+      <td>ninguno</td>
+      <td>8</td>
+      <td>0.2052</td>
+      <td>0.2065</td>
+      <td>0.0148</td>
+      <td>0.0013</td>
+      <td>-0.0003</td>
+      <td>0.0028</td>
+      <td>Suficiente</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>logistica</td>
+      <td>ninguno</td>
+      <td>12</td>
+      <td>0.2109</td>
+      <td>0.2109</td>
+      <td>0.0119</td>
+      <td>0.0000</td>
+      <td>-0.0006</td>
+      <td>0.0007</td>
+      <td>Suficiente</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>random_forest</td>
+      <td>ninguno</td>
+      <td>8</td>
+      <td>0.2216</td>
+      <td>0.2237</td>
+      <td>0.0152</td>
+      <td>0.0021</td>
+      <td>-0.0044</td>
+      <td>0.0087</td>
+      <td>Suficiente</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>svm</td>
+      <td>ninguno</td>
+      <td>12</td>
+      <td>0.2144</td>
+      <td>0.2145</td>
+      <td>0.0133</td>
+      <td>0.0000</td>
+      <td>-0.0002</td>
+      <td>0.0002</td>
+      <td>Suficiente</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>xgboost</td>
+      <td>adasyn</td>
+      <td>8</td>
+      <td>0.2267</td>
+      <td>0.2290</td>
+      <td>0.0153</td>
+      <td>0.0023</td>
+      <td>-0.0040</td>
+      <td>0.0086</td>
+      <td>Suficiente</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="contraste-con-optuna-y-estabilidad-del-ranking">
+<h3>12.2.6. Contraste con Optuna y estabilidad del ranking<a class="headerlink" href="#contraste-con-optuna-y-estabilidad-del-ranking" title="Link to this heading">#</a></h3>
+<p>Dos comprobaciones completan el estudio. La primera compara, para los dos finalistas, el mejor resultado del Entregable 2 con el de Random Search y Optuna a 60 configuraciones: si un optimizador guiado tampoco mejora de forma apreciable, el techo es del problema y no de la búsqueda. La segunda repite la secuencia de Friedman y Nemenyi del capítulo 11 con los siete modelos al presupuesto de 60, para comprobar si el ranking y el empate entre los finalistas sobreviven al cambio de presupuesto.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">optuna60</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RUTA_OPTUNA</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"estado == 'completada'"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">RUTA_OPTUNA</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="n">FINALISTAS</span><span class="p">:</span>
+    <span class="n">fila</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"modelo"</span><span class="p">:</span> <span class="n">modelo</span><span class="p">,</span>
+            <span class="s2">"mejor del E2"</span><span class="p">:</span> <span class="n">mejores</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">modelo</span><span class="p">,</span> <span class="s2">"auc_pr_media"</span><span class="p">],</span>
+            <span class="s2">"configuración del E2"</span><span class="p">:</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">mejores</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">modelo</span><span class="p">,</span><span class="w"> </span><span class="s1">'balanceo'</span><span class="p">]</span><span class="si">}</span><span class="s2"> + "</span>
+                                     <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">mejores</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">modelo</span><span class="p">,</span><span class="w"> </span><span class="s1">'optimizador'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">convergencia</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="n">r60</span> <span class="o">=</span> <span class="n">convergencia</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"modelo == @modelo and presupuesto == "</span>
+                                 <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cor</span><span class="o">.</span><span class="n">PRESUPUESTO_MAXIMO</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">r60</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">fila</span><span class="p">[</span><span class="s2">"Random (60)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">r60</span><span class="p">[</span><span class="s2">"auc_pr"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">optuna60</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">optuna60</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]):</span>
+        <span class="n">fila</span><span class="p">[</span><span class="s2">"Optuna (60)"</span><span class="p">]</span> <span class="o">=</span> <span class="n">optuna60</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">modelo</span><span class="p">,</span>
+                                                               <span class="s2">"auc_pr_media"</span><span class="p">]</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fila</span><span class="p">)</span>
+
+<span class="n">contraste_optuna</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">contraste_optuna</span><span class="p">,</span> <span class="s2">"convergencia_optuna_resumen"</span><span class="p">)</span>
+<span class="n">contraste_optuna</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>modelo</th>
+      <th>mejor del E2</th>
+      <th>configuración del E2</th>
+      <th>Random (60)</th>
+      <th>Optuna (60)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>xgboost</td>
+      <td>0.2267</td>
+      <td>adasyn + random</td>
+      <td>0.2290</td>
+      <td>0.2240</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>random_forest</td>
+      <td>0.2258</td>
+      <td>ninguno + deap</td>
+      <td>0.2237</td>
+      <td>0.2221</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scikit_posthocs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>
+
+<span class="c1"># AUC-PR por fold de la mejor configuración de cada modelo en el E2, la misma</span>
+<span class="c1"># matriz que usa el capítulo 11.</span>
+<span class="n">por_fold_e2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="n">modelo</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fila</span><span class="p">[</span><span class="s2">"auc_pr_por_fold"</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">modelo</span><span class="p">,</span> <span class="n">fila</span> <span class="ow">in</span> <span class="n">mejores</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()</span>
+<span class="p">})</span>
+
+<span class="n">completo_60</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">convergencia</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span>
+    <span class="n">convergencia</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">"presupuesto == </span><span class="si">{</span><span class="n">cor</span><span class="o">.</span><span class="n">PRESUPUESTO_MAXIMO</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span> <span class="o">==</span> <span class="mi">35</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">completo_60</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"El ranking con presupuesto 60 se calcula cuando estén los siete "</span>
+          <span class="s2">"modelos completos (35 folds)."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">por_fold_60</span> <span class="o">=</span> <span class="p">(</span><span class="n">convergencia</span>
+                   <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">"presupuesto == </span><span class="si">{</span><span class="n">cor</span><span class="o">.</span><span class="n">PRESUPUESTO_MAXIMO</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                   <span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">"fold"</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">"modelo"</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">"auc_pr"</span><span class="p">)</span>
+                   <span class="p">[</span><span class="n">por_fold_e2</span><span class="o">.</span><span class="n">columns</span><span class="p">])</span>
+
+    <span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">etiqueta</span><span class="p">,</span> <span class="n">matriz</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"E2 (mejor configuración)"</span><span class="p">,</span> <span class="n">por_fold_e2</span><span class="p">),</span>
+                             <span class="p">(</span><span class="sa">f</span><span class="s2">"Random Search con </span><span class="si">{</span><span class="n">cor</span><span class="o">.</span><span class="n">PRESUPUESTO_MAXIMO</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                              <span class="n">por_fold_60</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">))]:</span>
+        <span class="n">chi2</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">friedmanchisquare</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">matriz</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">matriz</span><span class="o">.</span><span class="n">columns</span><span class="p">])</span>
+        <span class="n">rangos</span> <span class="o">=</span> <span class="n">matriz</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+        <span class="n">p_finalistas</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">posthoc_nemenyi_friedman</span><span class="p">(</span><span class="n">matriz</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="s2">"xgboost"</span><span class="p">,</span> <span class="s2">"random_forest"</span><span class="p">]</span>
+        <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">"presupuesto"</span><span class="p">:</span> <span class="n">etiqueta</span><span class="p">,</span>
+            <span class="s2">"chi² de Friedman"</span><span class="p">:</span> <span class="n">chi2</span><span class="p">,</span> <span class="s2">"p-valor"</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span>
+            <span class="s2">"orden por rango medio"</span><span class="p">:</span> <span class="s2">" &gt; "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rangos</span><span class="o">.</span><span class="n">index</span><span class="p">),</span>
+            <span class="s2">"p de Nemenyi XGBoost vs. Random Forest"</span><span class="p">:</span> <span class="n">p_finalistas</span><span class="p">,</span>
+        <span class="p">})</span>
+
+    <span class="n">ranking_presupuesto</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span>
+    <span class="n">guardar_resultado</span><span class="p">(</span><span class="n">ranking_presupuesto</span><span class="p">,</span> <span class="s2">"convergencia_ranking"</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">ranking_presupuesto</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>presupuesto</th>
+      <th>chi² de Friedman</th>
+      <th>p-valor</th>
+      <th>orden por rango medio</th>
+      <th>p de Nemenyi XGBoost vs. Random Forest</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>E2 (mejor configuración)</td>
+      <td>28.5429</td>
+      <td>0.0001</td>
+      <td>xgboost &gt; random_forest &gt; svm &gt; logistica &gt; kn...</td>
+      <td>1.0000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Random Search con 60</td>
+      <td>26.8286</td>
+      <td>0.0002</td>
+      <td>xgboost &gt; random_forest &gt; svm &gt; logistica &gt; kn...</td>
+      <td>0.9972</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="lectura">
+<h3>12.2.7. Lectura<a class="headerlink" href="#lectura" title="Link to this heading">#</a></h3>
+<p>El estudio responde la observación del Entregable 2 con cinco resultados.</p>
+<p><strong>El protocolo es el mismo.</strong> En los siete modelos, el corte con el presupuesto del Entregable 2 reproduce la corrida de Random Search de la tabla maestra en los cinco folds, con una diferencia exactamente nula (sección 12.2.3). Las ganancias medidas se deben solo al presupuesto.</p>
+<p><strong>El presupuesto original era suficiente en los siete modelos.</strong> La ganancia media de AUC-PR al pasar a 60 configuraciones va de 0.0000 (logística y SVM) a 0.0023 (XGBoost). Ninguna se acerca al umbral de 0.005 fijado de antemano, y todos los intervalos de confianza incluyen el cero. Las curvas de la sección 12.2.4 muestran por qué: en la mayoría de los modelos la mejor AUC-PR interna casi no cambia después de las primeras diez a quince configuraciones, y en el árbol, k-NN y Random Forest, donde sigue subiendo, esa mejora interna apenas se traslada al fold externo.</p>
+<p><strong>La dimensión del espacio importa en la dirección esperada, pero no lo suficiente.</strong> Las dos mayores ganancias son las de XGBoost (0.0023) y Random Forest (0.0021), los modelos con los espacios más grandes, como anticipaba la sección 12.2.1. Aun así son unas siete veces menores que su desviación entre folds (0.015), y la curva externa de Random Forest sube y baja entre 20 y 60 configuraciones, que es el comportamiento del ruido y no el de una búsqueda que sigue encontrando regiones mejores.</p>
+<p><strong>Un optimizador guiado tampoco mejora.</strong> Optuna con 60 configuraciones queda por debajo del mejor resultado del Entregable 2 en los dos finalistas (XGBoost 0.2240 frente a 0.2267; Random Forest 0.2221 frente a 0.2258) y también por debajo de Random Search con 60. Un presupuesto mayor afina el ajuste a la validación interna sin mejorar la generalización: el límite es del problema y no de la búsqueda, como anticipaba el techo de desempeño estimado en la sección 5.4.</p>
+<p><strong>Las conclusiones del Entregable 2 no cambian.</strong> Con 60 configuraciones el orden de los siete modelos es idéntico, Friedman sigue rechazando la igualdad (<span class="math notranslate nohighlight">\(\chi^2 = 26.83\)</span>, <span class="math notranslate nohighlight">\(p = 0.0002\)</span>) y Nemenyi sigue sin distinguir a XGBoost de Random Forest (<span class="math notranslate nohighlight">\(p = 0.997\)</span>).</p>
+<p>La verificación costó 5.7 horas de Random Search para los siete modelos y unas 2 horas de Optuna para los finalistas, frente a las cerca de cien que habría costado repetir las 112 corridas.</p>
+</section>
+</section>
+<section id="tamano-del-efecto-parametrico-d-de-cohen">
+<h2>12.3. Tamaño del efecto paramétrico: d de Cohen<a class="headerlink" href="#tamano-del-efecto-parametrico-d-de-cohen" title="Link to this heading">#</a></h2>
+<p>El capítulo 11 midió el tamaño del efecto entre modelos con la delta de Cliff, que es ordinal: cuenta en qué proporción de pares de folds un modelo supera al otro. Es coherente con Friedman y Nemenyi, que también trabajan con rangos, pero se satura en <span class="math notranslate nohighlight">\(\pm 1\)</span> en cuanto las dos muestras no se solapan, y desde ahí deja de distinguir una separación pequeña de una enorme. La d de Cohen complementa esa lectura: expresa la diferencia de medias en unidades de desviación estándar.</p>
+<p>Se reportan dos versiones, porque responden preguntas distintas:</p>
+<div class="math notranslate nohighlight">
+\[
+g = \frac{\bar a - \bar b}{s_p}\left(1 - \frac{3}{4(n_a + n_b) - 9}\right),
+\qquad
+s_p = \sqrt{\frac{(n_a - 1)s_a^2 + (n_b - 1)s_b^2}{n_a + n_b - 2}}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+d_z = \frac{\bar\Delta}{s_\Delta}, \qquad \Delta_i = a_i - b_i
+\]</div>
+<ul class="simple">
+<li><p><strong><span class="math notranslate nohighlight">\(g\)</span> (d de Cohen con la corrección de Hedges)</strong> trata las dos muestras como independientes, igual que la delta de Cliff del capítulo 11, y por eso es la que se compara con ella. Con cinco valores por modelo, la d sin corregir sobrestima el efecto; el factor entre paréntesis lo corrige.</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\(d_z\)</span> (pareada)</strong> usa las diferencias fold a fold. Es la versión coherente con el diseño, porque todos los modelos se evaluaron sobre los mismos cinco folds externos y la variabilidad común a un fold se cancela en la diferencia. Por esa misma razón suele ser mucho mayor que <span class="math notranslate nohighlight">\(g\)</span>.</p></li>
+</ul>
+<p>Los umbrales convencionales de Cohen son 0.2 (pequeño), 0.5 (mediano) y 0.8 (grande). Dos advertencias para leer la tabla: la desviación que se usa es la variabilidad entre folds, no entre pacientes, así que un efecto «grande» dice que la diferencia es estable entre particiones, no que sea clínicamente relevante; y con cinco folds las estimaciones de <span class="math notranslate nohighlight">\(d\)</span> son inestables, de modo que importan el orden de magnitud y la coincidencia con Cliff más que el valor exacto.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">efectos</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">tabla_cohen</span><span class="p">(</span><span class="n">por_fold_e2</span><span class="p">)</span>
+
+<span class="c1"># Delta de Cliff del capítulo 11, para leer las dos medidas lado a lado.</span>
+<span class="n">cliff</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"tamanos_efecto_modelos.csv"</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">efectos</span> <span class="o">=</span> <span class="n">efectos</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+    <span class="n">cliff</span><span class="p">[[</span><span class="s2">"modelo A"</span><span class="p">,</span> <span class="s2">"modelo B"</span><span class="p">,</span> <span class="s2">"delta de Cliff"</span><span class="p">,</span> <span class="s2">"magnitud"</span><span class="p">]]</span>
+    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"magnitud"</span><span class="p">:</span> <span class="s2">"magnitud Cliff"</span><span class="p">}),</span>
+    <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">"modelo A"</span><span class="p">,</span> <span class="s2">"modelo B"</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s2">"left"</span><span class="p">)</span>
+
+<span class="n">efectos</span> <span class="o">=</span> <span class="n">efectos</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">efectos</span><span class="p">[</span><span class="s2">"d de Cohen (Hedges)"</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
+                          <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">efectos</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">"tamanos_efecto_cohen"</span><span class="p">)</span>
+
+<span class="n">coinciden</span> <span class="o">=</span> <span class="p">(</span><span class="n">efectos</span><span class="p">[</span><span class="s2">"magnitud d"</span><span class="p">]</span> <span class="o">==</span> <span class="n">efectos</span><span class="p">[</span><span class="s2">"magnitud Cliff"</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Pares comparados: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">efectos</span><span class="p">)</span><span class="si">}</span><span class="s2">; misma categoría de magnitud con g "</span>
+      <span class="sa">f</span><span class="s2">"y con Cliff: </span><span class="si">{</span><span class="n">coinciden</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">efectos</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pares comparados: 21; misma categoría de magnitud con g y con Cliff: 15
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>modelo A</th>
+      <th>modelo B</th>
+      <th>AUC-PR medio A</th>
+      <th>AUC-PR medio B</th>
+      <th>diferencia</th>
+      <th>d de Cohen (Hedges)</th>
+      <th>magnitud d</th>
+      <th>d_z pareada</th>
+      <th>magnitud d_z</th>
+      <th>delta de Cliff</th>
+      <th>magnitud Cliff</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>10</th>
+      <td>bayes</td>
+      <td>xgboost</td>
+      <td>0.199</td>
+      <td>0.227</td>
+      <td>-0.027</td>
+      <td>-1.817</td>
+      <td>Grande</td>
+      <td>-5.065</td>
+      <td>Grande</td>
+      <td>-0.92</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>bayes</td>
+      <td>random_forest</td>
+      <td>0.199</td>
+      <td>0.226</td>
+      <td>-0.026</td>
+      <td>-1.633</td>
+      <td>Grande</td>
+      <td>-4.465</td>
+      <td>Grande</td>
+      <td>-0.76</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>arbol</td>
+      <td>xgboost</td>
+      <td>0.203</td>
+      <td>0.227</td>
+      <td>-0.023</td>
+      <td>-1.594</td>
+      <td>Grande</td>
+      <td>-4.084</td>
+      <td>Grande</td>
+      <td>-0.84</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>arbol</td>
+      <td>random_forest</td>
+      <td>0.203</td>
+      <td>0.226</td>
+      <td>-0.022</td>
+      <td>-1.419</td>
+      <td>Grande</td>
+      <td>-3.477</td>
+      <td>Grande</td>
+      <td>-0.76</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>knn</td>
+      <td>xgboost</td>
+      <td>0.206</td>
+      <td>0.227</td>
+      <td>-0.021</td>
+      <td>-1.201</td>
+      <td>Grande</td>
+      <td>-2.937</td>
+      <td>Grande</td>
+      <td>-0.76</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>bayes</td>
+      <td>svm</td>
+      <td>0.199</td>
+      <td>0.215</td>
+      <td>-0.015</td>
+      <td>-1.092</td>
+      <td>Grande</td>
+      <td>-3.621</td>
+      <td>Grande</td>
+      <td>-0.60</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>knn</td>
+      <td>random_forest</td>
+      <td>0.206</td>
+      <td>0.226</td>
+      <td>-0.020</td>
+      <td>-1.087</td>
+      <td>Grande</td>
+      <td>-5.551</td>
+      <td>Grande</td>
+      <td>-0.68</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>logistica</td>
+      <td>xgboost</td>
+      <td>0.211</td>
+      <td>0.227</td>
+      <td>-0.016</td>
+      <td>-0.994</td>
+      <td>Grande</td>
+      <td>-1.983</td>
+      <td>Grande</td>
+      <td>-0.68</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>logistica</td>
+      <td>random_forest</td>
+      <td>0.211</td>
+      <td>0.226</td>
+      <td>-0.015</td>
+      <td>-0.876</td>
+      <td>Grande</td>
+      <td>-2.589</td>
+      <td>Grande</td>
+      <td>-0.68</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>bayes</td>
+      <td>logistica</td>
+      <td>0.199</td>
+      <td>0.211</td>
+      <td>-0.012</td>
+      <td>-0.849</td>
+      <td>Grande</td>
+      <td>-2.756</td>
+      <td>Grande</td>
+      <td>-0.52</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>arbol</td>
+      <td>svm</td>
+      <td>0.203</td>
+      <td>0.215</td>
+      <td>-0.011</td>
+      <td>-0.830</td>
+      <td>Grande</td>
+      <td>-2.601</td>
+      <td>Grande</td>
+      <td>-0.52</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>svm</td>
+      <td>xgboost</td>
+      <td>0.215</td>
+      <td>0.227</td>
+      <td>-0.012</td>
+      <td>-0.767</td>
+      <td>Mediano</td>
+      <td>-1.576</td>
+      <td>Grande</td>
+      <td>-0.52</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>random_forest</td>
+      <td>svm</td>
+      <td>0.226</td>
+      <td>0.215</td>
+      <td>0.011</td>
+      <td>0.665</td>
+      <td>Mediano</td>
+      <td>2.108</td>
+      <td>Grande</td>
+      <td>0.60</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>arbol</td>
+      <td>logistica</td>
+      <td>0.203</td>
+      <td>0.211</td>
+      <td>-0.008</td>
+      <td>-0.576</td>
+      <td>Mediano</td>
+      <td>-1.775</td>
+      <td>Grande</td>
+      <td>-0.44</td>
+      <td>Mediano</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>knn</td>
+      <td>svm</td>
+      <td>0.206</td>
+      <td>0.215</td>
+      <td>-0.009</td>
+      <td>-0.531</td>
+      <td>Mediano</td>
+      <td>-2.109</td>
+      <td>Grande</td>
+      <td>-0.52</td>
+      <td>Grande</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>bayes</td>
+      <td>knn</td>
+      <td>0.199</td>
+      <td>0.206</td>
+      <td>-0.006</td>
+      <td>-0.414</td>
+      <td>Pequeño</td>
+      <td>-1.043</td>
+      <td>Grande</td>
+      <td>-0.44</td>
+      <td>Mediano</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>arbol</td>
+      <td>bayes</td>
+      <td>0.203</td>
+      <td>0.199</td>
+      <td>0.004</td>
+      <td>0.323</td>
+      <td>Pequeño</td>
+      <td>1.821</td>
+      <td>Grande</td>
+      <td>0.44</td>
+      <td>Mediano</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>knn</td>
+      <td>logistica</td>
+      <td>0.206</td>
+      <td>0.211</td>
+      <td>-0.005</td>
+      <td>-0.320</td>
+      <td>Pequeño</td>
+      <td>-1.106</td>
+      <td>Grande</td>
+      <td>-0.44</td>
+      <td>Mediano</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>logistica</td>
+      <td>svm</td>
+      <td>0.211</td>
+      <td>0.215</td>
+      <td>-0.003</td>
+      <td>-0.239</td>
+      <td>Pequeño</td>
+      <td>-5.451</td>
+      <td>Grande</td>
+      <td>-0.28</td>
+      <td>Pequeño</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>arbol</td>
+      <td>knn</td>
+      <td>0.203</td>
+      <td>0.206</td>
+      <td>-0.002</td>
+      <td>-0.160</td>
+      <td>Insignificante</td>
+      <td>-0.402</td>
+      <td>Pequeño</td>
+      <td>-0.04</td>
+      <td>Insignificante</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>random_forest</td>
+      <td>xgboost</td>
+      <td>0.226</td>
+      <td>0.227</td>
+      <td>-0.001</td>
+      <td>-0.050</td>
+      <td>Insignificante</td>
+      <td>-0.187</td>
+      <td>Insignificante</td>
+      <td>-0.12</td>
+      <td>Insignificante</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>La comparación que decide el capítulo 11 es la de los finalistas. Entre XGBoost y Random Forest la diferencia media de AUC-PR es de una milésima, con <span class="math notranslate nohighlight">\(g\)</span> y <span class="math notranslate nohighlight">\(d_z\)</span> por debajo de 0.2: un efecto insignificante con las dos medidas paramétricas, igual que con la delta de Cliff. La d de Cohen confirma, en otra escala, la conclusión del Entregable 2.</p>
+<p>Entre <span class="math notranslate nohighlight">\(g\)</span> y Cliff la categoría de magnitud coincide en 15 de los 21 pares. En los seis restantes Cliff asigna siempre la categoría superior, sin que ninguna de las dos medidas cambie el sentido de la comparación: sus umbrales (Romano et al. para Cliff, Cohen para <span class="math notranslate nohighlight">\(g\)</span>) no son una traducción exacta uno del otro. La <span class="math notranslate nohighlight">\(d_z\)</span> pareada es mayor que <span class="math notranslate nohighlight">\(g\)</span> en todos los pares, como se esperaba, porque elimina la variabilidad común a cada fold.</p>
+</section>
+<section id="auditoria-de-fuga-de-informacion">
+<h2>12.4. Auditoría de fuga de información<a class="headerlink" href="#auditoria-de-fuga-de-informacion" title="Link to this heading">#</a></h2>
+<p>La sección 5.5 revisó la admisibilidad de cada predictor y el capítulo 6 justificó el diseño del pipeline. La guía del Entregable 3 exige además una auditoría explícita, antes de congelar resultados, de cuatro tipos de fuga. Esta sección la hace de forma verificable: cada tipo tiene una comprobación que se ejecuta sobre los datos y el código reales, y su resultado queda guardado.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tipo de fuga</p></th>
+<th class="head"><p>Qué se comprueba</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1. Preprocesamiento ajustado sobre todo el conjunto</p></td>
+<td><p>Que todas las transformaciones con parámetros aprendidos (imputación, escalado, codificación, remuestreo) son etapas del pipeline y se ajustan dentro de cada fold</p></td>
+</tr>
+<tr class="row-odd"><td><p>2. Variables que codifican la respuesta</p></td>
+<td><p>Que ningún predictor deriva del desenlace o de información posterior al alta, y que ninguno anticipa la respuesta de forma sospechosa</p></td>
+</tr>
+<tr class="row-even"><td><p>3. Duplicados entre particiones</p></td>
+<td><p>Que ningún paciente aparece a la vez en entrenamiento y evaluación, en ninguna partición de ningún nivel</p></td>
+</tr>
+<tr class="row-odd"><td><p>4. Mezcla temporal o espacial</p></td>
+<td><p>Qué información temporal o de centro contiene el conjunto y cómo se trata</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tipo 1: estructura de los pipelines de las 27 combinaciones aplicables.</span>
+<span class="n">auditoria_pipelines</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">calcular_o_leer</span><span class="p">(</span>
+    <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"auditoria_pipelines.csv"</span><span class="p">,</span>
+    <span class="k">lambda</span><span class="p">:</span> <span class="n">cor</span><span class="o">.</span><span class="n">verificar_pipelines</span><span class="p">(</span><span class="n">roles</span><span class="p">,</span> <span class="n">RAZON_DESBALANCE</span><span class="p">))</span>
+
+<span class="n">columnas_control</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"preprocesamiento primero"</span><span class="p">,</span> <span class="s2">"remuestreo solo al ajustar"</span><span class="p">,</span>
+                    <span class="s2">"remuestreo tras el preprocesador"</span><span class="p">]</span>
+<span class="n">tipo1_ok</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">auditoria_pipelines</span><span class="p">[</span><span class="n">columnas_control</span><span class="p">]</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Combinaciones revisadas: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">auditoria_pipelines</span><span class="p">)</span><span class="si">}</span><span class="s2">; "</span>
+      <span class="sa">f</span><span class="s2">"todas cumplen: </span><span class="si">{</span><span class="n">tipo1_ok</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">auditoria_pipelines</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Combinaciones revisadas: 27; todas cumplen: True
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>modelo</th>
+      <th>balanceo</th>
+      <th>etapas</th>
+      <th>clase</th>
+      <th>preprocesamiento primero</th>
+      <th>remuestreo solo al ajustar</th>
+      <th>remuestreo tras el preprocesador</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>knn</td>
+      <td>ninguno</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>knn</td>
+      <td>smote</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>knn</td>
+      <td>adasyn</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>bayes</td>
+      <td>ninguno</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>bayes</td>
+      <td>smote</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>bayes</td>
+      <td>adasyn</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>bayes</td>
+      <td>class_weight</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>logistica</td>
+      <td>ninguno</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>logistica</td>
+      <td>smote</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>logistica</td>
+      <td>adasyn</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>logistica</td>
+      <td>class_weight</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>arbol</td>
+      <td>ninguno</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>arbol</td>
+      <td>smote</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>arbol</td>
+      <td>adasyn</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>arbol</td>
+      <td>class_weight</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>random_forest</td>
+      <td>ninguno</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>random_forest</td>
+      <td>smote</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>random_forest</td>
+      <td>adasyn</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>random_forest</td>
+      <td>class_weight</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>xgboost</td>
+      <td>ninguno</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>xgboost</td>
+      <td>smote</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>xgboost</td>
+      <td>adasyn</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>xgboost</td>
+      <td>class_weight</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>svm</td>
+      <td>ninguno</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>svm</td>
+      <td>smote</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>svm</td>
+      <td>adasyn</td>
+      <td>preprocesamiento &gt; balanceo &gt; modelo</td>
+      <td>imblearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>svm</td>
+      <td>class_weight</td>
+      <td>preprocesamiento &gt; modelo</td>
+      <td>sklearn.Pipeline</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Que el preprocesador sea la primera etapa del pipeline es lo que garantiza que se ajuste dentro de cada fold: <code class="docutils literal notranslate"><span class="pre">cross_val_score</span></code> y el ejecutor clonan el pipeline completo antes de cada ajuste, de modo que la imputación, el escalado y la codificación se estiman solo con los datos de entrenamiento de ese fold. El remuestreo va en un pipeline de <code class="docutils literal notranslate"><span class="pre">imbalanced-learn</span></code>, que aplica SMOTE y ADASYN al ajustar y nunca al predecir, y después del preprocesador, así que las muestras sintéticas se generan solo con el fold de entrenamiento (sección 5.5). La sección 6.3 midió además el efecto contrario: la validación por filas sobrestima la AUC-PR hasta en 0.013 frente a la agrupada por paciente.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tipo 2: variables que codifican la respuesta.</span>
+<span class="n">ranking</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"ranking_predictores.csv"</span><span class="p">)</span>
+<span class="n">mejor_univariado</span> <span class="o">=</span> <span class="n">ranking</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ranking</span><span class="p">[</span><span class="s2">"AUC univariado"</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()]</span>
+
+<span class="n">nombres_prohibidos</span> <span class="o">=</span> <span class="p">{</span><span class="n">OBJETIVO</span><span class="p">,</span> <span class="n">IDENTIFICADOR</span><span class="p">,</span> <span class="s2">"readmitted"</span><span class="p">,</span> <span class="s2">"encounter_id"</span><span class="p">}</span>
+<span class="n">prohibidas</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">PREDICTORES</span>
+              <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">nombres_prohibidos</span> <span class="ow">or</span> <span class="s2">"readmit"</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+
+<span class="c1"># Las altas por fallecimiento u hospicio se excluyeron en el capítulo 2; tras</span>
+<span class="c1"># la traducción de los códigos, sus descripciones contienen "Expired" u</span>
+<span class="c1"># "Hospice".</span>
+<span class="n">niveles_alta</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s2">"discharge_disposition_id"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="n">altas_incompatibles</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">niveles_alta</span>
+                       <span class="k">if</span> <span class="s2">"expired"</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">"hospice"</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Predictores revisados: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">PREDICTORES</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Predictores derivados del desenlace o identificadores: </span><span class="si">{</span><span class="n">prohibidas</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mayor AUC univariado: </span><span class="si">{</span><span class="n">mejor_univariado</span><span class="p">[</span><span class="s1">'AUC univariado'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">mejor_univariado</span><span class="p">[</span><span class="s1">'variable'</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Niveles de alta por fallecimiento u hospicio presentes: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">altas_incompatibles</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">tipo2_ok</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">prohibidas</span> <span class="ow">and</span> <span class="n">mejor_univariado</span><span class="p">[</span><span class="s2">"AUC univariado"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.8</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">altas_incompatibles</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Predictores revisados: 38
+Predictores derivados del desenlace o identificadores: []
+Mayor AUC univariado: 0.607 (number_inpatient)
+Niveles de alta por fallecimiento u hospicio presentes: []
+</pre></div>
+</div>
+</div>
+</div>
+<p>Una variable que codificara el desenlace se delataría por un poder predictivo individual desproporcionado. El predictor más informativo del conjunto alcanza un AUC univariado de 0.607, muy lejos de cualquier valor sospechoso, y coincide con lo que se espera del mecanismo clínico: las hospitalizaciones del año anterior. Ningún predictor es el identificador ni deriva de <code class="docutils literal notranslate"><span class="pre">readmitted</span></code>, el <code class="docutils literal notranslate"><span class="pre">encounter_id</span></code> (creciente en el tiempo) se eliminó en el capítulo 2, y las altas por fallecimiento u hospicio, cuyo desenlace está determinado por el destino del alta, no aparecen en los datos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tipo 3: pacientes compartidos entre particiones, en todos los niveles.</span>
+<span class="n">auditoria_particiones</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">calcular_o_leer</span><span class="p">(</span>
+    <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"auditoria_particiones.csv"</span><span class="p">,</span>
+    <span class="k">lambda</span><span class="p">:</span> <span class="n">cor</span><span class="o">.</span><span class="n">verificar_particiones</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grupos</span><span class="p">))</span>
+
+<span class="c1"># Partición de prueba del capítulo 2.</span>
+<span class="n">prueba</span> <span class="o">=</span> <span class="n">leer_tabla</span><span class="p">(</span><span class="s2">"diabetes_test"</span><span class="p">)</span>
+<span class="n">compartidos_prueba</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">])</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">prueba</span><span class="p">[</span><span class="n">IDENTIFICADOR</span><span class="p">])</span>
+
+<span class="c1"># Encuentros de prueba cuyo vector completo de predictores aparece tal cual</span>
+<span class="c1"># en entrenamiento (necesariamente de otro paciente).</span>
+<span class="n">perfiles_train</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">PREDICTORES</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+                     <span class="o">.</span><span class="n">itertuples</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+<span class="n">repetidos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">perfil</span> <span class="ow">in</span> <span class="n">perfiles_train</span> <span class="k">for</span> <span class="n">perfil</span> <span class="ow">in</span>
+                      <span class="n">prueba</span><span class="p">[</span><span class="n">PREDICTORES</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+                      <span class="o">.</span><span class="n">itertuples</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Particiones revisadas: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">auditoria_particiones</span><span class="p">)</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"(5 externas y </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">auditoria_particiones</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="si">}</span><span class="s2"> internas)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Pacientes compartidos en alguna partición de la validación anidada: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">auditoria_particiones</span><span class="p">[</span><span class="s1">'pacientes compartidos'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Pacientes compartidos entre entrenamiento y prueba: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">compartidos_prueba</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Encuentros de prueba con un perfil idéntico en entrenamiento: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">repetidos</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> de </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">prueba</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">repetidos</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">repetidos</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tasa de readmisión en ellos: "</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prueba</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">repetidos</span><span class="p">,</span><span class="w"> </span><span class="n">OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">tipo3_ok</span> <span class="o">=</span> <span class="p">(</span><span class="n">auditoria_particiones</span><span class="p">[</span><span class="s2">"pacientes compartidos"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">compartidos_prueba</span><span class="p">)</span>
+
+<span class="n">auditoria_particiones</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"nivel"</span><span class="p">,</span> <span class="s2">"fracción de búsqueda"</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+    <span class="n">particiones</span><span class="o">=</span><span class="p">(</span><span class="s2">"pacientes compartidos"</span><span class="p">,</span> <span class="s2">"size"</span><span class="p">),</span>
+    <span class="n">pacientes_compartidos</span><span class="o">=</span><span class="p">(</span><span class="s2">"pacientes compartidos"</span><span class="p">,</span> <span class="s2">"sum"</span><span class="p">),</span>
+    <span class="n">tasa_positiva_min</span><span class="o">=</span><span class="p">(</span><span class="s2">"tasa positiva evaluación"</span><span class="p">,</span> <span class="s2">"min"</span><span class="p">),</span>
+    <span class="n">tasa_positiva_max</span><span class="o">=</span><span class="p">(</span><span class="s2">"tasa positiva evaluación"</span><span class="p">,</span> <span class="s2">"max"</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Particiones revisadas: 35 (5 externas y 30 internas)
+Pacientes compartidos en alguna partición de la validación anidada: 0
+Pacientes compartidos entre entrenamiento y prueba: 0
+Encuentros de prueba con un perfil idéntico en entrenamiento: 0 de 19,867 (0.00%)
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>particiones</th>
+      <th>pacientes_compartidos</th>
+      <th>tasa_positiva_min</th>
+      <th>tasa_positiva_max</th>
+    </tr>
+    <tr>
+      <th>nivel</th>
+      <th>fracción de búsqueda</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>externo</th>
+      <th>1.00</th>
+      <td>5</td>
+      <td>0</td>
+      <td>0.113872</td>
+      <td>0.113928</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">interno</th>
+      <th>0.25</th>
+      <td>15</td>
+      <td>0</td>
+      <td>0.109313</td>
+      <td>0.116632</td>
+    </tr>
+    <tr>
+      <th>1.00</th>
+      <td>15</td>
+      <td>0</td>
+      <td>0.113858</td>
+      <td>0.113911</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Ningún paciente se reparte entre entrenamiento y evaluación en ninguna de las particiones: ni en la de prueba, ni en las cinco externas, ni en las internas, tanto con la búsqueda sobre todos los pacientes como con la submuestra de un cuarto. La tasa positiva se mantiene estable entre particiones, como corresponde a la estratificación.</p>
+<p>Tampoco hay perfiles duplicados entre particiones: ninguno de los 19,867 encuentros de prueba tiene un vector de predictores idéntico a alguno de entrenamiento. Si los hubiera, no serían una fuga en sentido estricto, porque pertenecerían a pacientes distintos, pero podrían inflar la evaluación; la comprobación descarta también ese caso.</p>
+<p><strong>Tipo 4, mezcla temporal o espacial.</strong> El conjunto no incluye fechas ni identificador de hospital: sus diez años y 130 hospitales están anonimizados. La única huella temporal, el <code class="docutils literal notranslate"><span class="pre">encounter_id</span></code>, se eliminó en el capítulo 2 precisamente porque al ser creciente permitiría aprender tendencias del registro en lugar del mecanismo clínico. Lo que sí puede controlarse es la mezcla temporal <strong>dentro de un paciente</strong>: como cada paciente está entero en una sola partición, un encuentro posterior nunca informa la predicción de uno anterior del mismo paciente. La mezcla entre pacientes de distintas épocas o centros no puede controlarse con estos datos y se declara como limitación; la evaluación ante cambio de distribución del Entregable 3 la abordará con un bloque que se mantenga fuera de toda decisión de diseño.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">auditoria</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">{</span><span class="s2">"tipo"</span><span class="p">:</span> <span class="s2">"1. Preprocesamiento"</span><span class="p">,</span>
+     <span class="s2">"comprobación"</span><span class="p">:</span> <span class="s2">"Etapas del pipeline en las 27 combinaciones aplicables"</span><span class="p">,</span>
+     <span class="s2">"resultado"</span><span class="p">:</span> <span class="s2">"Sin fuga"</span> <span class="k">if</span> <span class="n">tipo1_ok</span> <span class="k">else</span> <span class="s2">"Revisar"</span><span class="p">,</span>
+     <span class="s2">"evidencia"</span><span class="p">:</span> <span class="s2">"results/auditoria_pipelines.csv; secciones 5.5 y 6.3"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"tipo"</span><span class="p">:</span> <span class="s2">"2. Variables que codifican la respuesta"</span><span class="p">,</span>
+     <span class="s2">"comprobación"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Predictores derivados del desenlace, AUC univariado "</span>
+                      <span class="s2">"máximo y altas incompatibles"</span><span class="p">),</span>
+     <span class="s2">"resultado"</span><span class="p">:</span> <span class="s2">"Sin fuga"</span> <span class="k">if</span> <span class="n">tipo2_ok</span> <span class="k">else</span> <span class="s2">"Revisar"</span><span class="p">,</span>
+     <span class="s2">"evidencia"</span><span class="p">:</span> <span class="s2">"results/ranking_predictores.csv; secciones 2.1, 2.4 y 5.5"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"tipo"</span><span class="p">:</span> <span class="s2">"3. Duplicados entre particiones"</span><span class="p">,</span>
+     <span class="s2">"comprobación"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Pacientes compartidos en prueba y en todas las "</span>
+                      <span class="s2">"particiones de la validación anidada"</span><span class="p">),</span>
+     <span class="s2">"resultado"</span><span class="p">:</span> <span class="s2">"Sin fuga"</span> <span class="k">if</span> <span class="n">tipo3_ok</span> <span class="k">else</span> <span class="s2">"Revisar"</span><span class="p">,</span>
+     <span class="s2">"evidencia"</span><span class="p">:</span> <span class="s2">"results/auditoria_particiones.csv; secciones 2.3 y 2.8"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"tipo"</span><span class="p">:</span> <span class="s2">"4. Mezcla temporal o espacial"</span><span class="p">,</span>
+     <span class="s2">"comprobación"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Información temporal y de centro disponible; "</span>
+                      <span class="s2">"agrupación por paciente"</span><span class="p">),</span>
+     <span class="s2">"resultado"</span><span class="p">:</span> <span class="s2">"Controlada dentro del paciente; declarada como limitación"</span><span class="p">,</span>
+     <span class="s2">"evidencia"</span><span class="p">:</span> <span class="s2">"Secciones 2.4 y 12.4"</span><span class="p">},</span>
+<span class="p">])</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">auditoria</span><span class="p">,</span> <span class="s2">"auditoria_fuga"</span><span class="p">)</span>
+<span class="n">auditoria</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>tipo</th>
+      <th>comprobación</th>
+      <th>resultado</th>
+      <th>evidencia</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1. Preprocesamiento</td>
+      <td>Etapas del pipeline en las 27 combinaciones ap...</td>
+      <td>Sin fuga</td>
+      <td>results/auditoria_pipelines.csv; secciones 5.5...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2. Variables que codifican la respuesta</td>
+      <td>Predictores derivados del desenlace, AUC univa...</td>
+      <td>Sin fuga</td>
+      <td>results/ranking_predictores.csv; secciones 2.1...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3. Duplicados entre particiones</td>
+      <td>Pacientes compartidos en prueba y en todas las...</td>
+      <td>Sin fuga</td>
+      <td>results/auditoria_particiones.csv; secciones 2...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4. Mezcla temporal o espacial</td>
+      <td>Información temporal y de centro disponible; a...</td>
+      <td>Controlada dentro del paciente; declarada como...</td>
+      <td>Secciones 2.4 y 12.4</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="pruebas-unitarias-y-modularizacion">
+<h2>12.5. Pruebas unitarias y modularización<a class="headerlink" href="#pruebas-unitarias-y-modularizacion" title="Link to this heading">#</a></h2>
+<section id="que-se-corrigio-y-por-que-de-esta-forma">
+<h3>12.5.1. Qué se corrigió y por qué de esta forma<a class="headerlink" href="#que-se-corrigio-y-por-que-de-esta-forma" title="Link to this heading">#</a></h3>
+<p>Las dos observaciones están ligadas. <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> reunía en un solo archivo de unas 1.300 líneas el preprocesamiento, los modelos, el balanceo, los espacios de búsqueda, los cuatro optimizadores, la validación anidada y la estadística; y sin pruebas automáticas, nada garantizaba que una pieza hiciera lo que el texto de los capítulos 6 a 11 afirma.</p>
+<p>La corrección tiene tres partes:</p>
+<ol class="arabic simple">
+<li><p><strong>División en módulos.</strong> El código se trasladó a <code class="docutils literal notranslate"><span class="pre">src/</span></code>, un módulo por responsabilidad (tabla de la sección 12.5.2). Los capítulos nuevos del Entregable 3 importan desde <code class="docutils literal notranslate"><span class="pre">src/</span></code>.</p></li>
+<li><p><strong>El motor del Entregable 2 queda congelado.</strong> <code class="docutils literal notranslate"><span class="pre">docs/experimento.py</span></code> no se modifica ni se borra, y los capítulos 6 a 12 lo siguen usando. Reescribir esos capítulos para importar desde <code class="docutils literal notranslate"><span class="pre">src/</span></code> obligaría a volver a ejecutarlos (más de cien horas de cómputo) solo para obtener los mismos números. En su lugar se <strong>demuestra</strong> que <code class="docutils literal notranslate"><span class="pre">src/</span></code> es el mismo código, de dos formas independientes: comparando el código (sección 12.5.3) y reproduciendo una corrida real (sección 12.5.4).</p></li>
+<li><p><strong>Pruebas con <code class="docutils literal notranslate"><span class="pre">pytest</span></code></strong> en <code class="docutils literal notranslate"><span class="pre">tests/</span></code>, que verifican las propiedades de las que dependen las conclusiones del proyecto (sección 12.5.4). Se ejecutan en cada cambio con integración continua (<code class="docutils literal notranslate"><span class="pre">.github/workflows/pruebas.yml</span></code>).</p></li>
+</ol>
+</section>
+<section id="mapa-de-modulos">
+<h3>12.5.2. Mapa de módulos<a class="headerlink" href="#mapa-de-modulos" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mapa</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">mapa_modulos</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">mapa</span><span class="p">,</span> <span class="s2">"mapa_modulos_src"</span><span class="p">)</span>
+<span class="n">mapa</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>módulo</th>
+      <th>propósito</th>
+      <th>líneas</th>
+      <th>funciones y clases públicas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>src/balanceo.py</td>
+      <td>Estrategias de balanceo y ensamblaje del pipel...</td>
+      <td>89</td>
+      <td>construir_pipeline</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>src/configuracion.py</td>
+      <td>Configuración global compartida por todos los ...</td>
+      <td>65</td>
+      <td>CombinacionNoAplicable, requiere</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>src/des_cpl.py</td>
+      <td>DES-CPL: selección dinámica de ensambles por c...</td>
+      <td>521</td>
+      <td>perfil, pesos_softmax, combinar, competencia_l...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>src/espacios.py</td>
+      <td>Espacios de búsqueda de hiperparámetros y pres...</td>
+      <td>153</td>
+      <td>rejilla_hiperparametros, espacio_busqueda, pre...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>src/estadistica.py</td>
+      <td>Pruebas estadísticas y tamaños del efecto para...</td>
+      <td>311</td>
+      <td>diferencia_critica, prueba_delong, correccion_...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>src/experimento_des_cpl.py</td>
+      <td>Protocolo experimental de DES-CPL (capítulo 13).</td>
+      <td>432</td>
+      <td>mejores_combinaciones, con_presupuesto, partic...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>src/explicacion.py</td>
+      <td>Explicación local con valores de Shapley, sobr...</td>
+      <td>123</td>
+      <td>shapley_permutacion, shapley_muestra</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>src/metricas.py</td>
+      <td>Métricas de clasificación para clases desbalan...</td>
+      <td>49</td>
+      <td>calcular_metricas</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>src/modelos.py</td>
+      <td>Los siete modelos base, el envoltorio de XGBoo...</td>
+      <td>220</td>
+      <td>XGBClasificadorParada, crear_modelo</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>src/optimizacion.py</td>
+      <td>Los cuatro optimizadores de hiperparámetros: G...</td>
+      <td>303</td>
+      <td>puntuar, optimizar</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>src/perfilamiento.py</td>
+      <td>Medición de tiempo, memoria y desempeño de un ...</td>
+      <td>63</td>
+      <td>medir_ajuste</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>src/preprocesamiento.py</td>
+      <td>Preprocesador por bloques de variables, ajusta...</td>
+      <td>96</td>
+      <td>construir_preprocesador, nombres_variables</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>src/sota.py</td>
+      <td>Benchmarks recientes del estado del arte (guía...</td>
+      <td>80</td>
+      <td>crear_modelo_sota, construir_pipeline_sota</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>src/validacion.py</td>
+      <td>Validación cruzada anidada y agrupada por paci...</td>
+      <td>328</td>
+      <td>Corrida, ejecutar_corrida, ejecutar_experimento</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>La configuración común (semilla, número de procesos) vive en <code class="docutils literal notranslate"><span class="pre">configuracion.py</span></code> y los demás módulos la leen como <code class="docutils literal notranslate"><span class="pre">cfg.N_JOBS</span></code>, de modo que cambiarla una vez en tiempo de ejecución afecta a todos. Dos módulos son nuevos y no provienen de <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code>: <code class="docutils literal notranslate"><span class="pre">explicacion.py</span></code>, con los valores de Shapley que usa el tablero, y <code class="docutils literal notranslate"><span class="pre">des_cpl.py</span></code>, con el modelo original del Entregable 3. La carpeta <code class="docutils literal notranslate"><span class="pre">src/tablero/</span></code> contiene el código de la interfaz y no forma parte del motor.</p>
+</section>
+<section id="equivalencia-del-codigo">
+<h3>12.5.3. Equivalencia del código<a class="headerlink" href="#equivalencia-del-codigo" title="Link to this heading">#</a></h3>
+<p>La primera comprobación compara cada función, clase y constante de <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> con su copia en <code class="docutils literal notranslate"><span class="pre">src/</span></code>. La comparación se hace sobre el árbol sintáctico de Python, no sobre el texto, así que ignora comentarios, docstrings y formato. Se normalizan los dos únicos cambios de forma de la reorganización: cuatro funciones privadas que pasaron a públicas porque otro módulo las importa (<code class="docutils literal notranslate"><span class="pre">_requiere</span></code>, <code class="docutils literal notranslate"><span class="pre">_muestrear</span></code>, <code class="docutils literal notranslate"><span class="pre">_discretizar</span></code>, <code class="docutils literal notranslate"><span class="pre">_puntuar</span></code>) y la lectura de la configuración como <code class="docutils literal notranslate"><span class="pre">cfg.N_JOBS</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">equivalencia</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">equivalencia_refactor</span><span class="p">(</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"docs"</span> <span class="o">/</span> <span class="s2">"experimento.py"</span><span class="p">,</span>
+                                         <span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">)</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">equivalencia</span><span class="p">,</span> <span class="s2">"equivalencia_refactor"</span><span class="p">)</span>
+
+<span class="n">conteo</span> <span class="o">=</span> <span class="n">equivalencia</span><span class="p">[</span><span class="s2">"resultado"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Definiciones comparadas: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">equivalencia</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">resultado</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">conteo</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">resultado</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">equivalencia</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"resultado != 'Idéntica'"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Definiciones comparadas: 36
+  Idéntica: 35
+  Difiere: 1
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>definición</th>
+      <th>tipo</th>
+      <th>módulo</th>
+      <th>resultado</th>
+      <th>diferencia</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>5</th>
+      <td>XGBClasificadorParada</td>
+      <td>clase</td>
+      <td>src/modelos.py</td>
+      <td>Difiere</td>
+      <td>-def __init__(self, n_estimators=1000, max_dep...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>La única diferencia es el valor por defecto de <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> en el constructor de <code class="docutils literal notranslate"><span class="pre">XGBClasificadorParada</span></code>: en <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> es <code class="docutils literal notranslate"><span class="pre">N_JOBS</span></code>, que vale <code class="docutils literal notranslate"><span class="pre">-1</span></code> cuando se define la clase, y en <code class="docutils literal notranslate"><span class="pre">src/</span></code> se escribe <code class="docutils literal notranslate"><span class="pre">-1</span></code> directamente, porque leer <code class="docutils literal notranslate"><span class="pre">cfg.N_JOBS</span></code> en la firma congelaría el valor del momento de la importación. Las dos firmas dan el mismo valor, y en ningún caso se usa ese valor por defecto: la fábrica de modelos (<code class="docutils literal notranslate"><span class="pre">crear_modelo</span></code>) siempre pasa <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> de forma explícita. El código que se ejecuta es, por tanto, el mismo.</p>
+</section>
+<section id="pruebas-automaticas">
+<h3>12.5.4. Pruebas automáticas<a class="headerlink" href="#pruebas-automaticas" title="Link to this heading">#</a></h3>
+<p>Las pruebas se agrupan por módulo y verifican propiedades, no solo que el código corra:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Archivo</p></th>
+<th class="head"><p>Qué verifica</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_preprocesamiento.py</span></code></p></td>
+<td><p>Que el preprocesador aprende sus parámetros solo del entrenamiento y que una categoría nueva en prueba no rompe la transformación</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_balanceo.py</span></code></p></td>
+<td><p>Que SMOTE y ADASYN actúan después del preprocesador y solo al entrenar, nunca al predecir (la condición que descarta fuga por remuestreo, sección 12.4)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_modelos.py</span></code></p></td>
+<td><p>Que cada uno de los siete modelos se construye, ajusta y predice probabilidades válidas, que la misma semilla da las mismas predicciones y que la parada temprana de XGBoost recorta árboles</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_espacios.py</span></code></p></td>
+<td><p>Que los presupuestos coinciden con los del Entregable 2, que las configuraciones muestreadas caen dentro del espacio y que la discretización de los parámetros continuos da 16 niveles</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_optimizacion.py</span></code></p></td>
+<td><p>Que los optimizadores respetan el presupuesto y devuelven la mejor configuración evaluada, que los presupuestos menores de Random Search son prefijos del mayor (la base del estudio de convergencia, sección 12.2) y que paralelizar no cambia los resultados</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_validacion.py</span></code></p></td>
+<td><p>Que ningún paciente queda a la vez en entrenamiento y evaluación, en las particiones externas, internas y en la submuestra de búsqueda, y que el ejecutor reanuda desde sus puntos de control</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_metricas.py</span></code>, <code class="docutils literal notranslate"><span class="pre">test_estadistica.py</span></code></p></td>
+<td><p>Las métricas, la diferencia crítica de Nemenyi, DeLong, Holm, el bootstrap BCa, la delta de Cliff y la d de Cohen contra valores calculados a mano o con una implementación de referencia</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_equivalencia_e2.py</span></code></p></td>
+<td><p>Que <code class="docutils literal notranslate"><span class="pre">src/</span></code> y <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> dan <strong>exactamente</strong> los mismos resultados en seis combinaciones de modelo, balanceo y optimizador sobre datos sintéticos; y, en la prueba marcada como lenta, que <code class="docutils literal notranslate"><span class="pre">src/</span></code> reproduce una corrida real de la tabla maestra con los datos completos</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_explicacion.py</span></code></p></td>
+<td><p>Que los valores de Shapley cumplen la propiedad de eficiencia (suman la diferencia entre la predicción y la base) y son reproducibles</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_formato_tablero.py</span></code></p></td>
+<td><p>El formato de las cifras que muestra el tablero</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_des_cpl.py</span></code></p></td>
+<td><p>El modelo original: la competencia calculada a mano, los extremos de la temperatura (promedio simple y selección dura), que la combinación es convexa, la descomposición de ambigüedad, que la región tiene <span class="math notranslate nohighlight">\(k\)</span> vecinos de cada clase y excluye al propio paciente, y que el ensamble favorece al modelo localmente mejor</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Las pruebas rápidas usan datos sintéticos de 300 pacientes y corren en unos dos minutos; son las que ejecuta la integración continua (<code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">-m</span> <span class="pre">&quot;not</span> <span class="pre">lento&quot;</span></code>). La prueba lenta usa los datos reales y tarda varios minutos, por eso se ejecuta aparte. La tabla siguiente se lee de los reportes que genera <code class="docutils literal notranslate"><span class="pre">pytest</span></code> con <code class="docutils literal notranslate"><span class="pre">--junitxml</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="o">-</span><span class="n">m</span> <span class="s2">"not lento"</span> <span class="o">--</span><span class="n">junitxml</span><span class="o">=</span><span class="n">results</span><span class="o">/</span><span class="n">pytest_rapidas</span><span class="o">.</span><span class="n">xml</span>
+<span class="n">pytest</span> <span class="o">-</span><span class="n">m</span> <span class="n">lento</span> <span class="o">--</span><span class="n">junitxml</span><span class="o">=</span><span class="n">results</span><span class="o">/</span><span class="n">pytest_lentas</span><span class="o">.</span><span class="n">xml</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pruebas</span><span class="p">,</span> <span class="n">totales_pruebas</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">resumen_pytest</span><span class="p">(</span>
+    <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"pytest_rapidas.xml"</span><span class="p">,</span> <span class="n">RESULTADOS</span> <span class="o">/</span> <span class="s2">"pytest_lentas.xml"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">pruebas</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Sin reportes de pytest en results/. Ejecuta los comandos de arriba."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">reporte</span><span class="p">,</span> <span class="n">fecha</span> <span class="ow">in</span> <span class="n">totales_pruebas</span><span class="p">[</span><span class="s2">"ejecuciones"</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">reporte</span><span class="si">}</span><span class="s2">: ejecutado el </span><span class="si">{</span><span class="n">fecha</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Pruebas: </span><span class="si">{</span><span class="n">totales_pruebas</span><span class="p">[</span><span class="s1">'pruebas'</span><span class="p">]</span><span class="si">}</span><span class="s2"> | fallidas: "</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">totales_pruebas</span><span class="p">[</span><span class="s1">'fallidas'</span><span class="p">]</span><span class="si">}</span><span class="s2"> | errores: </span><span class="si">{</span><span class="n">totales_pruebas</span><span class="p">[</span><span class="s1">'errores'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+          <span class="sa">f</span><span class="s2">" | omitidas: </span><span class="si">{</span><span class="n">totales_pruebas</span><span class="p">[</span><span class="s1">'omitidas'</span><span class="p">]</span><span class="si">}</span><span class="s2"> | tiempo total: "</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">totales_pruebas</span><span class="p">[</span><span class="s1">'segundos'</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">60</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> min"</span><span class="p">)</span>
+    <span class="n">guardar_resultado</span><span class="p">(</span><span class="n">pruebas</span><span class="p">,</span> <span class="s2">"resumen_pytest"</span><span class="p">)</span>
+<span class="n">pruebas</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pytest_rapidas.xml: ejecutado el 2026-11-09 23:29
+pytest_lentas.xml: ejecutado el 2026-11-09 00:02
+
+Pruebas: 147 | fallidas: 0 | errores: 0 | omitidas: 0 | tiempo total: 9.9 min
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>archivo</th>
+      <th>pruebas</th>
+      <th>aprobadas</th>
+      <th>segundos</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>test_balanceo.py</td>
+      <td>8</td>
+      <td>8</td>
+      <td>1.2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>test_des_cpl.py</td>
+      <td>39</td>
+      <td>39</td>
+      <td>0.9</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>test_equivalencia_e2.py</td>
+      <td>7</td>
+      <td>7</td>
+      <td>516.6</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>test_espacios.py</td>
+      <td>10</td>
+      <td>10</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>test_estadistica.py</td>
+      <td>13</td>
+      <td>13</td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>test_experimento_des_cpl.py</td>
+      <td>11</td>
+      <td>11</td>
+      <td>18.9</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>test_explicacion.py</td>
+      <td>6</td>
+      <td>6</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>test_formato_tablero.py</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>test_metricas.py</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>test_modelos.py</td>
+      <td>16</td>
+      <td>16</td>
+      <td>5.8</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>test_optimizacion.py</td>
+      <td>17</td>
+      <td>17</td>
+      <td>35.7</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>test_preprocesamiento.py</td>
+      <td>5</td>
+      <td>5</td>
+      <td>0.6</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>test_sota.py</td>
+      <td>5</td>
+      <td>5</td>
+      <td>9.7</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>test_validacion.py</td>
+      <td>5</td>
+      <td>5</td>
+      <td>3.8</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="id1">
+<h3>12.5.5. Lectura<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>Las dos comprobaciones son independientes y se refuerzan. La comparación del código muestra que lo que se ejecuta es lo mismo; la prueba de equivalencia lo confirma en los resultados, que es lo que importa, porque dos programas con el mismo código podrían diferir por el entorno (versiones de las bibliotecas, orden de las columnas, semillas). Que la corrida real de la tabla maestra se reproduzca con <code class="docutils literal notranslate"><span class="pre">src/</span></code> cierra esa posibilidad para el entorno del proyecto.</p>
+<p>Con eso, los resultados de los capítulos 6 a 12 valen para <code class="docutils literal notranslate"><span class="pre">src/</span></code> sin volver a ejecutarlos, y los capítulos nuevos pueden construirse sobre los módulos sin perder la continuidad con el Entregable 2.</p>
+</section>
+</section>
+<section id="tabla-de-trazabilidad-de-correcciones">
+<h2>12.6. Tabla de trazabilidad de correcciones<a class="headerlink" href="#tabla-de-trazabilidad-de-correcciones" title="Link to this heading">#</a></h2>
+<p>La tabla vincula cada observación con la acción realizada, su ubicación y la evidencia. El estado se calcula a partir de los archivos de resultados, de modo que la tabla se actualiza sola a medida que avanzan las correcciones.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">existe</span><span class="p">(</span><span class="o">*</span><span class="n">nombres</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Indica si todos los archivos de resultados indicados existen."""</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">((</span><span class="n">RESULTADOS</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nombres</span><span class="p">)</span>
+
+
+<span class="n">estado_convergencia</span> <span class="o">=</span> <span class="n">cor</span><span class="o">.</span><span class="n">progreso</span><span class="p">(</span><span class="n">RUTA_EVALUACIONES</span><span class="p">,</span> <span class="n">RUTA_REAJUSTES</span><span class="p">,</span>
+                                   <span class="n">combinaciones</span><span class="p">)</span>
+<span class="n">convergencia_lista</span> <span class="o">=</span> <span class="p">(</span><span class="n">estado_convergencia</span><span class="p">[</span><span class="s2">"estado"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Completo"</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="n">pruebas_aprobadas</span> <span class="o">=</span> <span class="p">(</span><span class="n">totales_pruebas</span><span class="p">[</span><span class="s2">"pruebas"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                     <span class="ow">and</span> <span class="n">totales_pruebas</span><span class="p">[</span><span class="s2">"fallidas"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+                     <span class="ow">and</span> <span class="n">totales_pruebas</span><span class="p">[</span><span class="s2">"errores"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">refactor_equivalente</span> <span class="o">=</span> <span class="p">(</span><span class="n">equivalencia</span><span class="p">[</span><span class="s2">"resultado"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"No trasladada"</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="n">trazabilidad</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">{</span><span class="s2">"observación"</span><span class="p">:</span> <span class="s2">"Presupuesto de solo 8 a 12 evaluaciones por búsqueda"</span><span class="p">,</span>
+     <span class="s2">"acción"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Estudio de convergencia: Random Search con 60 "</span>
+                <span class="s2">"configuraciones por fold, prefijos en 8-60, control de "</span>
+                <span class="s2">"reproducción, contraste con Optuna y ranking a 60"</span><span class="p">),</span>
+     <span class="s2">"ubicación"</span><span class="p">:</span> <span class="s2">"Sección 12.2"</span><span class="p">,</span>
+     <span class="s2">"evidencia"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"results/convergencia_presupuesto.csv, "</span>
+                   <span class="s2">"convergencia_reproduccion.csv, convergencia_ranking.csv; "</span>
+                   <span class="s2">"figura de la sección 12.2.4"</span><span class="p">),</span>
+     <span class="s2">"estado"</span><span class="p">:</span> <span class="s2">"Resuelta"</span> <span class="k">if</span> <span class="n">convergencia_lista</span> <span class="k">else</span> <span class="s2">"En curso"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"observación"</span><span class="p">:</span> <span class="s2">"Ausencia de la d de Cohen"</span><span class="p">,</span>
+     <span class="s2">"acción"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"g de Hedges y d_z pareada para los 21 pares de modelos, "</span>
+                <span class="s2">"junto a la delta de Cliff"</span><span class="p">),</span>
+     <span class="s2">"ubicación"</span><span class="p">:</span> <span class="s2">"Sección 12.3"</span><span class="p">,</span>
+     <span class="s2">"evidencia"</span><span class="p">:</span> <span class="s2">"results/tamanos_efecto_cohen.csv"</span><span class="p">,</span>
+     <span class="s2">"estado"</span><span class="p">:</span> <span class="s2">"Resuelta"</span> <span class="k">if</span> <span class="n">existe</span><span class="p">(</span><span class="s2">"tamanos_efecto_cohen.csv"</span><span class="p">)</span>
+     <span class="k">else</span> <span class="s2">"En curso"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"observación"</span><span class="p">:</span> <span class="s2">"Auditoría de fuga de información (guía del E3)"</span><span class="p">,</span>
+     <span class="s2">"acción"</span><span class="p">:</span> <span class="s2">"Comprobación automática de los cuatro tipos de fuga"</span><span class="p">,</span>
+     <span class="s2">"ubicación"</span><span class="p">:</span> <span class="s2">"Sección 12.4"</span><span class="p">,</span>
+     <span class="s2">"evidencia"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"results/auditoria_fuga.csv, auditoria_pipelines.csv, "</span>
+                   <span class="s2">"auditoria_particiones.csv"</span><span class="p">),</span>
+     <span class="s2">"estado"</span><span class="p">:</span> <span class="s2">"Resuelta"</span> <span class="k">if</span> <span class="n">existe</span><span class="p">(</span><span class="s2">"auditoria_fuga.csv"</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"En curso"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"observación"</span><span class="p">:</span> <span class="s2">"Ausencia de pruebas unitarias"</span><span class="p">,</span>
+     <span class="s2">"acción"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Pruebas con pytest en tests/, ejecutadas en integración "</span>
+                <span class="s2">"continua; una prueba lenta reproduce una corrida real"</span><span class="p">),</span>
+     <span class="s2">"ubicación"</span><span class="p">:</span> <span class="s2">"Sección 12.5.4"</span><span class="p">,</span>
+     <span class="s2">"evidencia"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"tests/, results/resumen_pytest.csv, "</span>
+                   <span class="s2">".github/workflows/pruebas.yml"</span><span class="p">),</span>
+     <span class="s2">"estado"</span><span class="p">:</span> <span class="s2">"Resuelta"</span> <span class="k">if</span> <span class="n">pruebas_aprobadas</span> <span class="k">else</span> <span class="s2">"En curso"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"observación"</span><span class="p">:</span> <span class="s2">"experimento.py concentra demasiada lógica"</span><span class="p">,</span>
+     <span class="s2">"acción"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"División en módulos de src/; experimento.py se conserva "</span>
+                <span class="s2">"congelado y se demuestra la equivalencia por código y por "</span>
+                <span class="s2">"resultados"</span><span class="p">),</span>
+     <span class="s2">"ubicación"</span><span class="p">:</span> <span class="s2">"Secciones 12.5.2 y 12.5.3"</span><span class="p">,</span>
+     <span class="s2">"evidencia"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"src/, results/mapa_modulos_src.csv, "</span>
+                   <span class="s2">"equivalencia_refactor.csv"</span><span class="p">),</span>
+     <span class="s2">"estado"</span><span class="p">:</span> <span class="s2">"Resuelta"</span> <span class="k">if</span> <span class="n">refactor_equivalente</span> <span class="k">else</span> <span class="s2">"En curso"</span><span class="p">},</span>
+<span class="p">])</span>
+<span class="n">guardar_resultado</span><span class="p">(</span><span class="n">trazabilidad</span><span class="p">,</span> <span class="s2">"trazabilidad_correcciones"</span><span class="p">)</span>
+<span class="n">trazabilidad</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>observación</th>
+      <th>acción</th>
+      <th>ubicación</th>
+      <th>evidencia</th>
+      <th>estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Presupuesto de solo 8 a 12 evaluaciones por bú...</td>
+      <td>Estudio de convergencia: Random Search con 60 ...</td>
+      <td>Sección 12.2</td>
+      <td>results/convergencia_presupuesto.csv, converge...</td>
+      <td>Resuelta</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Ausencia de la d de Cohen</td>
+      <td>g de Hedges y d_z pareada para los 21 pares de...</td>
+      <td>Sección 12.3</td>
+      <td>results/tamanos_efecto_cohen.csv</td>
+      <td>Resuelta</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Auditoría de fuga de información (guía del E3)</td>
+      <td>Comprobación automática de los cuatro tipos de...</td>
+      <td>Sección 12.4</td>
+      <td>results/auditoria_fuga.csv, auditoria_pipeline...</td>
+      <td>Resuelta</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Ausencia de pruebas unitarias</td>
+      <td>Pruebas con pytest en tests/, ejecutadas en in...</td>
+      <td>Sección 12.5.4</td>
+      <td>tests/, results/resumen_pytest.csv, .github/wo...</td>
+      <td>Resuelta</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>experimento.py concentra demasiada lógica</td>
+      <td>División en módulos de src/; experimento.py se...</td>
+      <td>Secciones 12.5.2 y 12.5.3</td>
+      <td>src/, results/mapa_modulos_src.csv, equivalenc...</td>
+      <td>Resuelta</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="sintesis-del-capitulo">
+<h2>12.7. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Observación</p></th>
+<th class="head"><p>Resultado</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Presupuesto de 8 a 12 evaluaciones</p></td>
+<td><p>Suficiente en los siete modelos: la mayor ganancia con 60 configuraciones es de 0.0023 en AUC-PR, por debajo del umbral de 0.005 fijado de antemano. Optuna tampoco mejora a los finalistas, y el ranking y el empate entre XGBoost y Random Forest se mantienen (sección 12.2)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ausencia de la d de Cohen</p></td>
+<td><p>Entre los finalistas el efecto es insignificante con las dos versiones (<span class="math notranslate nohighlight">\(g = -0.05\)</span>; <span class="math notranslate nohighlight">\(d_z = -0.19\)</span>), igual que con la delta de Cliff (<span class="math notranslate nohighlight">\(-0.12\)</span>). <span class="math notranslate nohighlight">\(g\)</span> y Cliff coinciden en la categoría de magnitud en 15 de los 21 pares (sección 12.3)</p></td>
+</tr>
+<tr class="row-even"><td><p>Auditoría de fuga</p></td>
+<td><p>Sin fuga por preprocesamiento, por variables que codifican la respuesta ni por pacientes o perfiles compartidos entre particiones. La mezcla temporal se controla dentro del paciente y, entre pacientes, se declara como limitación (sección 12.4)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pruebas unitarias y modularización</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> se dividió en diez módulos de <code class="docutils literal notranslate"><span class="pre">src/</span></code> y se conserva congelado para los capítulos 6 a 12. <code class="docutils literal notranslate"><span class="pre">src/</span></code> es el mismo código: 35 de 36 definiciones son idénticas en su árbol sintáctico y la restante difiere solo en un valor por defecto que nunca se usa; además, una prueba con los datos reales reproduce una corrida de la tabla maestra. Las pruebas de <code class="docutils literal notranslate"><span class="pre">tests/</span></code> aprueban sin fallos y corren en integración continua (sección 12.5)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ninguna corrección cambia una conclusión del Entregable 2, y la tabla maestra se conserva como resultado del benchmark. Lo que sí cambia es lo que respalda esas conclusiones: el empate entre los finalistas ya no puede atribuirse a una búsqueda insuficiente, porque sobrevive a un presupuesto entre cinco y siete veces mayor y a un optimizador guiado. La comparación con el modelo original del Entregable 3 usará el presupuesto de 60 configuraciones validado en este capítulo.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="11_Comparacion_Estadistica.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">11. Comparación estadística de los modelos</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="13_Modelo_Original.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">13. Modelo original: DES-CPL</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#presupuesto-de-busqueda">12.2. Presupuesto de búsqueda</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#que-se-cuestiona-y-como-se-contrasta">12.2.1. Qué se cuestiona y cómo se contrasta</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ejecucion">12.2.2. Ejecución</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#control-el-corte-del-entregable-2-reproduce-sus-resultados">12.2.3. Control: el corte del Entregable 2 reproduce sus resultados</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#curvas-de-convergencia">12.2.4. Curvas de convergencia</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicacion-de-la-regla-de-decision">12.2.5. Aplicación de la regla de decisión</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#contraste-con-optuna-y-estabilidad-del-ranking">12.2.6. Contraste con Optuna y estabilidad del ranking</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lectura">12.2.7. Lectura</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-del-efecto-parametrico-d-de-cohen">12.3. Tamaño del efecto paramétrico: d de Cohen</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#auditoria-de-fuga-de-informacion">12.4. Auditoría de fuga de información</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pruebas-unitarias-y-modularizacion">12.5. Pruebas unitarias y modularización</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#que-se-corrigio-y-por-que-de-esta-forma">12.5.1. Qué se corrigió y por qué de esta forma</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapa-de-modulos">12.5.2. Mapa de módulos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalencia-del-codigo">12.5.3. Equivalencia del código</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pruebas-automaticas">12.5.4. Pruebas automáticas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">12.5.5. Lectura</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabla-de-trazabilidad-de-correcciones">12.6. Tabla de trazabilidad de correcciones</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">12.7. Síntesis del capítulo</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
