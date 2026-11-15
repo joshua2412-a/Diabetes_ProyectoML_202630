@@ -410,7 +410,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostico-se-puede-saber-que-modelo-acierta-con-cada-paciente">13.4. Diagnóstico: ¿se puede saber qué modelo acierta con cada paciente?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-final-poda-y-encogimiento">13.5. Versión final: poda y encogimiento</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resultados-en-los-cinco-folds">13.5.1. Resultados en los cinco folds</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">13.5.2. Lectura</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">13.5.2. Lectura</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#busqueda-de-alternativas">13.6. Búsqueda de alternativas</a><ul class="nav section-nav flex-column">
@@ -421,7 +421,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-el-limite-explicativo-de-los-datos">13.7. Síntesis: el límite explicativo de los datos</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-final-en-el-conjunto-de-prueba">13.8. Evaluación final en el conjunto de prueba</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">13.8.1. Lectura</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">13.8.1. Lectura</a></li>
 </ul>
 </li>
 </ul>
@@ -698,7 +698,7 @@ document.write(`
 <li><p><strong>Competencia por Brier local.</strong> La competencia de cada modelo es su puntuación de Brier en la región, que mide la calidad de la probabilidad y no solo el acierto de la etiqueta:
 $<span class="math notranslate nohighlight">\(
 C_m(x) = \hat q(x)\,\frac{1}{k}\sum_{i \in \mathcal N_k^+(x)} \big(\tilde f_m(x_i) - 1\big)^2 + \big(1 - \hat q(x)\big)\,\frac{1}{k}\sum_{i \in \mathcal N_k^-(x)} \tilde f_m(x_i)^2 ,
-\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\( (eq-brier-local-resumen)
 donde \)</span>\hat q(x)<span class="math notranslate nohighlight">\( es la prevalencia local: la proporción de positivos entre los \)</span>2k<span class="math notranslate nohighlight">\( vecinos de \)</span>x$ sin estratificar, suavizada hacia la prevalencia global.</p></li>
 <li><p><strong>Ponderación softmax con temperatura.</strong> <span class="math notranslate nohighlight">\(w_m(x) \propto \exp(-C_m(x)/\tau)\)</span> y <span class="math notranslate nohighlight">\(\hat f(x) = \sum_m w_m(x) f_m(x)\)</span>. Con <span class="math notranslate nohighlight">\(\tau \to \infty\)</span> es el promedio simple; con <span class="math notranslate nohighlight">\(\tau = 0\)</span>, la selección del modelo localmente mejor.</p></li>
 </ol>
@@ -716,11 +716,11 @@ donde \)</span>\hat q(x)<span class="math notranslate nohighlight">\( es la prev
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Región en el espacio de salidas</p></td>
-<td><p>KNOP (Cavalcanti et al.)</p></td>
+<td><p>KNOP <span class="bibtex-citation" id="id1">[<a class="reference internal" href="18_Reproducibilidad.html#id73" title="Paulo R. Cavalin, Robert Sabourin, and Ching Y. Suen. Dynamic selection approaches for multiple classifier systems. Neural Computing and Applications, 22(3–4):673–688, 2013. doi:10.1007/s00521-011-0737-9.">Cavalin <em>et al.</em>, 2013</a>]</span></p></td>
 <td><p>Logit de las probabilidades, no votos</p></td>
 </tr>
 <tr class="row-odd"><td><p>Competencia probabilística</p></td>
-<td><p>RRC (Woloszynski y Kurzynski, 2011)</p></td>
+<td><p>RRC <span class="bibtex-citation" id="id2">[<a class="reference internal" href="18_Reproducibilidad.html#id60" title="Tomasz Woloszynski and Marek Kurzynski. A probabilistic model of classifier competence for dynamic ensemble selection. Pattern Recognition, 44(10–11):2656–2668, 2011. doi:10.1016/j.patcog.2011.03.020.">Woloszynski and Kurzynski, 2011</a>]</span></p></td>
 <td><p>Mide la calidad de la probabilidad (Brier), no la probabilidad de acertar la etiqueta</p></td>
 </tr>
 <tr class="row-even"><td><p>Competencia por error</p></td>
@@ -728,7 +728,7 @@ donde \)</span>\hat q(x)<span class="math notranslate nohighlight">\( es la prev
 <td><p>Aplicada a probabilidades de clasificación con clases desbalanceadas</p></td>
 </tr>
 <tr class="row-odd"><td><p>Región con ambas clases</p></td>
-<td><p>KNORA-B/BI, DES-MI (García et al., 2018)</p></td>
+<td><p>KNORA-B/BI, DES-MI <span class="bibtex-citation" id="id3">[<a class="reference internal" href="18_Reproducibilidad.html#id56" title="Salvador García, Zhong-Liang Zhang, Abdulrahman Altalhi, Saleh Alshomrani, and Francisco Herrera. Dynamic ensemble selection for multi-class imbalanced datasets. Information Sciences, 445:22–37, 2018. doi:10.1016/j.ins.2018.03.002.">García <em>et al.</em>, 2018</a>]</span></p></td>
 <td><p>Además repondera cada clase con la prevalencia local estimada: estimador estratificado del Brier de la zona</p></td>
 </tr>
 <tr class="row-even"><td><p>Exclusión del paciente</p></td>
@@ -1892,8 +1892,8 @@ donde \)</span>\hat q(x)<span class="math notranslate nohighlight">\( es la prev
 </div></div></div>
 </div>
 </section>
-<section id="id1">
-<h3>13.5.2. Lectura<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="id4">
+<h3>13.5.2. Lectura<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <p><strong>Control.</strong> Seis de los siete modelos base reproducen el estudio de convergencia hasta el redondeo numérico; Naive Bayes difiere hasta en 0.0008 según el fold, una discrepancia menor de un modelo que la poda deja fuera en tres de los cinco folds.</p>
 <p><strong>Resultado frente a la hipótesis confirmatoria.</strong> El mejor benchmark es XGBoost, con 0.2290 de AUC-PR media. DES-CPL obtiene 0.2279: <strong>0.0010 por debajo</strong>, con ventaja en un solo fold. La prueba de Nadeau-Bengio no rechaza la hipótesis nula frente a XGBoost (<span class="math notranslate nohighlight">\(p = 0.60\)</span>), ni frente a CatBoost (0.2285; <span class="math notranslate nohighlight">\(p = 0.58\)</span>) o LightGBM (0.2253; <span class="math notranslate nohighlight">\(p = 0.27\)</span>). Friedman rechaza la igualdad de los diez modelos (<span class="math notranslate nohighlight">\(\chi^2 = 38.7\)</span>, <span class="math notranslate nohighlight">\(p &lt; 0.0001\)</span>), pero la diferencia crítica de Nemenyi (6.1 posiciones) no separa a DES-CPL (rango medio 2.8, empatado con CatBoost) de los seis primeros. Después de Holm, DES-CPL solo supera significativamente a Naive Bayes y a k-NN.</p>
 <p><strong>Veredicto (protocolo, sección 5).</strong> La primera condición de superioridad, una media mayor que la del mejor benchmark, no se cumple; tampoco las pruebas. <strong>DES-CPL no supera a los benchmarks y la condición R3 no se cumple.</strong></p>
@@ -2232,7 +2232,7 @@ donde \)</span>\hat q(x)<span class="math notranslate nohighlight">\( es la prev
 </table>
 </div></div></div>
 </div>
-<p><strong>Lectura.</strong> La etiqueta ordinal no ayuda: lo que predice un reingreso tardío no ordena bien a quienes reingresan pronto, y forzar un puntaje compartido resta. Lo que sí mueve el desempeño es la información nueva: los códigos de diagnóstico completos y el historial del paciente, y sobre todo su combinación, que es la única variante de todo el capítulo que mejora en todos los pliegues por encima del margen de equivalencia práctica (0.005). No se adoptó como modelo original por dos razones: el mecanismo (codificación jerárquica de categorías, Micci-Barreca, 2001; uso de la jerarquía ICD-9 en readmisión, Jiang et al., 2018) ya está publicado, y la ventaja vendría de dar a un modelo información que los benchmarks no tienen. Queda como la dirección más clara de trabajo futuro.</p>
+<p><strong>Lectura.</strong> La etiqueta ordinal no ayuda: lo que predice un reingreso tardío no ordena bien a quienes reingresan pronto, y forzar un puntaje compartido resta. Lo que sí mueve el desempeño es la información nueva: los códigos de diagnóstico completos y el historial del paciente, y sobre todo su combinación, que es la única variante de todo el capítulo que mejora en todos los pliegues por encima del margen de equivalencia práctica (0.005). No se adoptó como modelo original por dos razones: el mecanismo (codificación jerárquica de categorías, <span class="bibtex-citation" id="id5">Micci-Barreca [<a class="reference internal" href="18_Reproducibilidad.html#id88" title="Daniele Micci-Barreca. A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems. ACM SIGKDD Explorations Newsletter, 3(1):27–32, 2001.">2001</a>]</span>; uso de la jerarquía ICD-9 en readmisión, Jiang et al., 2018) ya está publicado, y la ventaja vendría de dar a un modelo información que los benchmarks no tienen. Queda como la dirección más clara de trabajo futuro.</p>
 </section>
 </section>
 <section id="sintesis-el-limite-explicativo-de-los-datos">
@@ -2875,8 +2875,8 @@ donde \)</span>\hat q(x)<span class="math notranslate nohighlight">\( es la prev
 </div>
 </div>
 </div>
-<section id="id2">
-<h3>13.8.1. Lectura<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="id6">
+<h3>13.8.1. Lectura<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <p><strong>Desempeño.</strong> En el conjunto de prueba (19 867 hospitalizaciones, 11.4 % readmitidas antes de 30 días), DES-CPL obtiene AUC-PR = 0.2293, AUC-ROC = 0.6661 y Brier = 0.0961. Queda quinto de doce, detrás de XGBoost (0.2315), el apilamiento logístico (0.2311), los pesos globales (0.2307) y CatBoost (0.2301). La diferencia con XGBoost es −0.0021 puntos de AUC-PR, con IC 95 % BCa por paciente [−0.0080, 0.0033]: el intervalo contiene el cero. Los cinco primeros caben en una franja de 0.0022, menor que la incertidumbre de muestreo. El conjunto de prueba repite así lo que mostró el bucle externo en 13.5: DES-CPL empata con los mejores, pero no los supera. El 0.2285 de XGBoost en la sección 13.1 es el de su configuración del Entregable 2 (capítulo 10); aquí sus hiperparámetros se buscaron de nuevo con 60 evaluaciones.</p>
 <p><strong>Pruebas de hipótesis.</strong> Las tres pruebas exigidas por la guía, corregidas por Holm, no rechazan H0 frente al mejor benchmark:</p>
 <ul class="simple">
@@ -2983,7 +2983,7 @@ donde \)</span>\hat q(x)<span class="math notranslate nohighlight">\( es la prev
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostico-se-puede-saber-que-modelo-acierta-con-cada-paciente">13.4. Diagnóstico: ¿se puede saber qué modelo acierta con cada paciente?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-final-poda-y-encogimiento">13.5. Versión final: poda y encogimiento</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resultados-en-los-cinco-folds">13.5.1. Resultados en los cinco folds</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">13.5.2. Lectura</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">13.5.2. Lectura</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#busqueda-de-alternativas">13.6. Búsqueda de alternativas</a><ul class="nav section-nav flex-column">
@@ -2994,7 +2994,7 @@ donde \)</span>\hat q(x)<span class="math notranslate nohighlight">\( es la prev
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-el-limite-explicativo-de-los-datos">13.7. Síntesis: el límite explicativo de los datos</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-final-en-el-conjunto-de-prueba">13.8. Evaluación final en el conjunto de prueba</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">13.8.1. Lectura</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">13.8.1. Lectura</a></li>
 </ul>
 </li>
 </ul>

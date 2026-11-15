@@ -413,7 +413,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapa-de-modulos">12.5.2. Mapa de módulos</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalencia-del-codigo">12.5.3. Equivalencia del código</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pruebas-automaticas">12.5.4. Pruebas automáticas</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">12.5.5. Lectura</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">12.5.5. Lectura</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabla-de-trazabilidad-de-correcciones">12.6. Tabla de trazabilidad de correcciones</a></li>
@@ -526,7 +526,7 @@ Corridas completadas del Entregable 2: 108
 <p>El riesgo de ese presupuesto no es igual para todos los modelos. En Naive Bayes y SVM el espacio de búsqueda tiene una sola dimensión y doce puntos lo cubren bien; en Random Forest y XGBoost tiene cuatro y cinco dimensiones, y ocho puntos apenas lo exploran. Que los dos finalistas sean justamente los modelos con el espacio más grande impide despachar la crítica sin evidencia: si un presupuesto mayor los mejorara de forma desigual, el empate entre ellos podría ser un artefacto de la búsqueda y no una propiedad del problema.</p>
 <p>Repetir las 112 corridas con más presupuesto costaría del orden de cien horas de cómputo y no respondería mejor la pregunta. Se contrasta directamente si el presupuesto limitó el desempeño, con un <strong>estudio de convergencia</strong> sobre la mejor estrategia de balanceo de cada modelo:</p>
 <ol class="arabic simple">
-<li><p><strong>Random Search con 60 configuraciones por fold externo.</strong> Con 60 muestras independientes, la probabilidad de que al menos una caiga en el 5 % mejor del espacio de búsqueda es <span class="math notranslate nohighlight">\(1 - 0.95^{60} \approx 0.95\)</span>, sin importar cuántas dimensiones tenga el espacio (Bergstra y Bengio, 2012). Es el menor presupuesto con esa garantía, y equivale a entre cinco y siete veces el del Entregable 2.</p></li>
+<li><p><strong>Random Search con 60 configuraciones por fold externo.</strong> Con 60 muestras independientes, la probabilidad de que al menos una caiga en el 5 % mejor del espacio de búsqueda es <span class="math notranslate nohighlight">\(1 - 0.95^{60} \approx 0.95\)</span>, sin importar cuántas dimensiones tenga el espacio <span class="bibtex-citation" id="id1">[<a class="reference internal" href="18_Reproducibilidad.html#id17" title="James Bergstra and Yoshua Bengio. Random search for hyper-parameter optimization. Journal of Machine Learning Research, 13:281–305, 2012.">Bergstra and Bengio, 2012</a>]</span>. Es el menor presupuesto con esa garantía, y equivale a entre cinco y siete veces el del Entregable 2.</p></li>
 <li><p><strong>Los presupuestos menores son prefijos de la misma secuencia.</strong> El motor genera las configuraciones de Random Search una tras otra con un generador de semilla fija por fold, de modo que las 8 o 12 primeras de la secuencia de 60 son exactamente las que evaluó el Entregable 2. Cortar la secuencia en 8, 12, 20, 30, 45 y 60 da una curva de desempeño frente a presupuesto en la que todos los puntos comparten folds, semilla y configuraciones: la única diferencia entre ellos es cuántas configuraciones se evaluaron. El corte que coincide con el Entregable 2 sirve además de control, porque debe reproducir sus métricas (sección 12.2.3).</p></li>
 <li><p><strong>Mismo protocolo que el Entregable 2:</strong> el mismo código (<code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> sin modificar), las mismas particiones externas e internas agrupadas por paciente, la misma semilla, la misma métrica de búsqueda (AUC-PR) y la misma fracción de búsqueda (un cuarto de los pacientes en k-NN, Random Forest y XGBoost; sección 8.2).</p></li>
 <li><p><strong>Contraste con un optimizador que aprende de lo evaluado.</strong> Random Search no usa la información de las configuraciones anteriores. Para descartar que un optimizador guiado encuentre lo que el muestreo aleatorio no encuentra, los dos finalistas se buscan también con Optuna a 60 configuraciones.</p></li>
@@ -1333,14 +1333,14 @@ Corridas completadas del Entregable 2: 108
 <h2>12.3. Tamaño del efecto paramétrico: d de Cohen<a class="headerlink" href="#tamano-del-efecto-parametrico-d-de-cohen" title="Link to this heading">#</a></h2>
 <p>El capítulo 11 midió el tamaño del efecto entre modelos con la delta de Cliff, que es ordinal: cuenta en qué proporción de pares de folds un modelo supera al otro. Es coherente con Friedman y Nemenyi, que también trabajan con rangos, pero se satura en <span class="math notranslate nohighlight">\(\pm 1\)</span> en cuanto las dos muestras no se solapan, y desde ahí deja de distinguir una separación pequeña de una enorme. La d de Cohen complementa esa lectura: expresa la diferencia de medias en unidades de desviación estándar.</p>
 <p>Se reportan dos versiones, porque responden preguntas distintas:</p>
-<div class="math notranslate nohighlight">
-\[
+<div class="math notranslate nohighlight" id="equation-eq-hedges-g">
+<span class="eqno">(1)<a class="headerlink" href="#equation-eq-hedges-g" title="Link to this equation">#</a></span>\[
 g = \frac{\bar a - \bar b}{s_p}\left(1 - \frac{3}{4(n_a + n_b) - 9}\right),
 \qquad
 s_p = \sqrt{\frac{(n_a - 1)s_a^2 + (n_b - 1)s_b^2}{n_a + n_b - 2}}
 \]</div>
-<div class="math notranslate nohighlight">
-\[
+<div class="math notranslate nohighlight" id="equation-eq-dz-pareada">
+<span class="eqno">(2)<a class="headerlink" href="#equation-eq-dz-pareada" title="Link to this equation">#</a></span>\[
 d_z = \frac{\bar\Delta}{s_\Delta}, \qquad \Delta_i = a_i - b_i
 \]</div>
 <ul class="simple">
@@ -2780,8 +2780,8 @@ Pruebas: 173 | fallidas: 0 | errores: 0 | omitidas: 0 | tiempo total: 9.8 min
 </div></div></div>
 </div>
 </section>
-<section id="id1">
-<h3>12.5.5. Lectura<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="id2">
+<h3>12.5.5. Lectura<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <p>Las dos comprobaciones son independientes y se refuerzan. La comparación del código muestra que lo que se ejecuta es lo mismo; la prueba de equivalencia lo confirma en los resultados, que es lo que importa, porque dos programas con el mismo código podrían diferir por el entorno (versiones de las bibliotecas, orden de las columnas, semillas). Que la corrida real de la tabla maestra se reproduzca con <code class="docutils literal notranslate"><span class="pre">src/</span></code> cierra esa posibilidad para el entorno del proyecto.</p>
 <p>Con eso, los resultados de los capítulos 6 a 12 valen para <code class="docutils literal notranslate"><span class="pre">src/</span></code> sin volver a ejecutarlos, y los capítulos nuevos pueden construirse sobre los módulos sin perder la continuidad con el Entregable 2.</p>
 </section>
@@ -3029,7 +3029,7 @@ Pruebas: 173 | fallidas: 0 | errores: 0 | omitidas: 0 | tiempo total: 9.8 min
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mapa-de-modulos">12.5.2. Mapa de módulos</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalencia-del-codigo">12.5.3. Equivalencia del código</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pruebas-automaticas">12.5.4. Pruebas automáticas</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">12.5.5. Lectura</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">12.5.5. Lectura</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabla-de-trazabilidad-de-correcciones">12.6. Tabla de trazabilidad de correcciones</a></li>

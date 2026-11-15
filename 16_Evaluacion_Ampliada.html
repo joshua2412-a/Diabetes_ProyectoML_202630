@@ -487,13 +487,13 @@ document.write(`
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Default of Credit Card Clients (Yeh y Lien, 2009)</p></td>
+<tr class="row-even"><td><p>Default of Credit Card Clients <span class="bibtex-citation" id="id1">[<a class="reference internal" href="18_Reproducibilidad.html#id71" title="I-Cheng Yeh and Che-hui Lien. The comparisons of data mining techniques for the predictive accuracy of probability of default of credit card clients. Expert Systems with Applications, 36(2):2473–2480, 2009. doi:10.1016/j.eswa.2007.12.020.">Yeh and Lien, 2009</a>]</span></p></td>
 <td><p>30 000</p></td>
 <td><p>23</p></td>
 <td><p>22.1 %</p></td>
 <td><p>Finanzas</p></td>
 </tr>
-<tr class="row-odd"><td><p>Bank Marketing (Moro et al., 2014)</p></td>
+<tr class="row-odd"><td><p>Bank Marketing <span class="bibtex-citation" id="id2">[<a class="reference internal" href="18_Reproducibilidad.html#id70" title="Sérgio Moro, Paulo Cortez, and Paulo Rita. A data-driven approach to predict the success of bank telemarketing. Decision Support Systems, 62:22–31, 2014. doi:10.1016/j.dss.2014.03.001.">Moro <em>et al.</em>, 2014</a>]</span></p></td>
 <td><p>45 211</p></td>
 <td><p>15</p></td>
 <td><p>11.7 %</p></td>
@@ -699,7 +699,7 @@ document.write(`
 <h3>16.1.1. Prueba entre conjuntos<a class="headerlink" href="#prueba-entre-conjuntos" title="Link to this heading">#</a></h3>
 <p>El protocolo fija, para varios conjuntos:</p>
 <ul class="simple">
-<li><p><strong>Friedman con la corrección de Iman-Davenport</strong> (Demšar, 2006), con cada conjunto como bloque y la AUC-PR media como medida;</p></li>
+<li><p><strong>Friedman con la corrección de Iman-Davenport</strong> <span class="bibtex-citation" id="id3">[<a class="reference internal" href="18_Reproducibilidad.html#id27" title="Janez Demšar. Statistical comparisons of classifiers over multiple data sets. Journal of Machine Learning Research, 7:1–30, 2006.">Demšar, 2006</a>]</span>, con cada conjunto como bloque y la AUC-PR media como medida;</p></li>
 <li><p><strong>Wilcoxon de rangos con signo, con Holm,</strong> de DES-CPL frente a cada benchmark.</p></li>
 </ul>
 <p>Con solo <span class="math notranslate nohighlight">\(N = 4\)</span> conjuntos, el Wilcoxon unilateral no puede bajar de <span class="math notranslate nohighlight">\(p = 1/2^4 = 0.0625\)</span>. Por eso no puede rechazar a <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span> aunque DES-CPL ganara en los cuatro. Se reporta igual, porque lo pide el protocolo, y se complementa con la t de Nadeau-Bengio por conjunto, frente al mejor benchmark de cada uno.</p>
@@ -1496,7 +1496,7 @@ Nemenyi: diferencia crítica = 9.12 rangos; rango medio de DES-CPL = 3.75
 <ul class="simple">
 <li><p><strong>XGBoost es el más sensible.</strong> En los cinco escenarios, DES-CPL queda por encima de XGBoost. La ventaja es mayor donde la perturbación es más fuerte: con el 25 % de los pacientes gana en los 5 folds, por más de 0.01 en promedio, y con el 10 % de etiquetas invertidas gana en 4 de 5. XGBoost, el mejor benchmark con los datos completos, pierde en cada escenario entre 1.5 y 2 veces lo que pierde DES-CPL.</p></li>
 <li><p><strong>Los modelos de menor varianza pierden todavía menos.</strong> Random Forest y la regresión logística se degradan menos que DES-CPL. Su desempeño de partida es menor, pero la perturbación los afecta menos. DES-CPL queda en un punto intermedio: hereda parte de la estabilidad de los modelos que combina.</p></li>
-<li><p><strong>Por qué combinar ayuda.</strong> Combinar promedia errores que no están perfectamente correlacionados, y ese beneficio crece cuando cada modelo se vuelve más inestable por tener menos datos o datos más ruidosos (proposición 1 del capítulo 15).</p></li>
+<li><p><strong>Por qué combinar ayuda.</strong> Combinar promedia errores que no están perfectamente correlacionados, y ese beneficio crece cuando cada modelo se vuelve más inestable por tener menos datos o datos más ruidosos (proposición 1 del capítulo 15, ecuación <code class="xref eq docutils literal notranslate"><span class="pre">eq-ambiguedad</span></code>).</p></li>
 <li><p><strong>Los combinadores entre sí.</strong> DES-CPL, los pesos globales y el apilamiento se degradan casi igual, y entre ellos las diferencias siguen siendo de milésimas.</p></li>
 </ul>
 <p>Las pruebas de Nadeau-Bengio se corrigen con Holm sobre los cinco escenarios. Son exploratorias: el protocolo no las fija como confirmatorias, y los hiperparámetros de los modelos base no se reajustaron a cada escenario.</p>
@@ -2384,7 +2384,7 @@ Menor cobertura relativa de xgboost: 0.38 (race / Asian)
 <li><p><span class="math notranslate nohighlight">\(n_{10}\)</span>: DES-CPL falla y el benchmark acierta.</p></li>
 </ul>
 <p>Si los dos modelos fueran igual de buenos, cada discordante caería de un lado o del otro con probabilidad 1/2, así que <span class="math notranslate nohighlight">\(n_{01} \sim \text{Binomial}(n_{01} + n_{10}, 1/2)\)</span>. La versión exacta usa esa binomial.</p>
-<p><strong>t bayesiana correlacionada (pliegues externos).</strong> Es la versión bayesiana de Nadeau-Bengio (Corani y Benavoli, 2015). La posterior de la diferencia media de AUC-PR es una <span class="math notranslate nohighlight">\(t\)</span> de Student con 4 grados de libertad, centrada en la media de las cinco diferencias y con la misma varianza corregida por el solapamiento de los entrenamientos. En lugar de un valor <span class="math notranslate nohighlight">\(p\)</span> da tres probabilidades, con una región de equivalencia práctica (ROPE) de <span class="math notranslate nohighlight">\(\pm 0.005\)</span>, el umbral de relevancia que fijó el estudio de convergencia del capítulo 12:</p>
+<p><strong>t bayesiana correlacionada (pliegues externos).</strong> Es la versión bayesiana de Nadeau-Bengio <span class="bibtex-citation" id="id4">[<a class="reference internal" href="18_Reproducibilidad.html#id85" title="Giorgio Corani and Alessio Benavoli. A Bayesian approach for comparing cross-validated algorithms on multiple data sets. Machine Learning, 100(2–3):285–304, 2015. doi:10.1007/s10994-015-5486-z.">Corani and Benavoli, 2015</a>]</span>. La posterior de la diferencia media de AUC-PR es una <span class="math notranslate nohighlight">\(t\)</span> de Student con 4 grados de libertad, centrada en la media de las cinco diferencias y con la misma varianza corregida por el solapamiento de los entrenamientos. En lugar de un valor <span class="math notranslate nohighlight">\(p\)</span> da tres probabilidades, con una región de equivalencia práctica (ROPE) de <span class="math notranslate nohighlight">\(\pm 0.005\)</span>, el umbral de relevancia que fijó el estudio de convergencia del capítulo 12:</p>
 <ul class="simple">
 <li><p><strong>mejor:</strong> la diferencia supera <span class="math notranslate nohighlight">\(+0.005\)</span>;</p></li>
 <li><p><strong>equivalente:</strong> queda dentro de <span class="math notranslate nohighlight">\(\pm 0.005\)</span>;</p></li>
