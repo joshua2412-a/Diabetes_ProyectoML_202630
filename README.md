@@ -12,7 +12,7 @@ Con los datos de *Diabetes 130-US Hospitals* (UCI, 1999-2008), el proyecto predi
 | Pieza | Dónde |
 |---|---|
 | Libro (Jupyter Book) | `docs/`, publicado en https://joshua2412-a.github.io/Diabetes_ProyectoML_202630 |
-| Dashboard (Dash) | `app.py`, `pages/`, `src/tablero/`; desplegado en Render: *URL pendiente del despliegue* |
+| Dashboard (Dash) | `app.py`, `pages/`, `src/tablero/`; desplegado en Render: [https://readmision-diabetes.onrender.com](https://readmision-diabetes.onrender.com) |
 | Archivo versionado (Zenodo) | DOI [10.5281/zenodo.24211425](https://doi.org/10.5281/zenodo.24211425) |
 | Modelo original | `src/original_model.py` (interfaz) y `src/des_cpl.py` (implementación) |
 | Protocolo pre-registrado | `experiments/protocolo.md`, etiqueta de Git `protocolo-v1` |
@@ -118,7 +118,7 @@ La primera carga de cada página tarda unos segundos.
 `render.yaml` define un servicio web gratuito en Render: `gunicorn app:server --workers 1 --threads 4`. El tablero no entrena nada; solo carga los artefactos de `artifacts/`. Los pasos:
 1. Conectar el repositorio a Render como *Blueprint*.
 2. Esperar la construcción.
-3. Abrir la URL pública varios minutos antes de usarla: el plan gratuito duerme el servicio cuando está inactivo.
+3. Abrir la URL pública (https://readmision-diabetes.onrender.com) varios minutos antes de usarla: el plan gratuito duerme el servicio cuando está inactivo.
 
 ## Licencia y cita
 
