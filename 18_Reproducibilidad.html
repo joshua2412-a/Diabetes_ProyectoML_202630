@@ -60,6 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '18_Reproducibilidad';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="19. Mejores combinaciones, artefactos y dashboard" href="19_Artefactos_Dashboard.html" />
     <link rel="prev" title="17. Conclusiones, limitaciones y declaración de autoría" href="17_Conclusiones.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -197,6 +198,7 @@
 <li class="toctree-l1"><a class="reference internal" href="16_Evaluacion_Ampliada.html">16. Evaluación ampliada: otros conjuntos, robustez, semillas, sensibilidad, interpretabilidad, equidad y costo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="17_Conclusiones.html">17. Conclusiones, limitaciones y declaración de autoría</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">18. Reproducibilidad y bibliografía</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Artefactos_Dashboard.html">19. Mejores combinaciones, artefactos y dashboard</a></li>
 </ul>
 
     </div>
@@ -414,7 +416,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="reproducibilidad-y-bibliografia">
 <h1>18. Reproducibilidad y bibliografía<a class="headerlink" href="#reproducibilidad-y-bibliografia" title="Link to this heading">#</a></h1>
-<p>Este último capítulo reúne lo necesario para reconstruir los resultados del libro. La guía (sección 9.2) pide una lista de verificación que cubra:</p>
+<p>Este capítulo reúne lo necesario para reconstruir los resultados del libro. La guía (sección 9.2) pide una lista de verificación que cubra:</p>
 <ul class="simple">
 <li><p>las versiones del software y el hardware;</p></li>
 <li><p>las semillas;</p></li>
@@ -1044,7 +1046,7 @@ document.write(`
 <h2>18.4. Tabla maestra de experimentos<a class="headerlink" href="#tabla-maestra-de-experimentos" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">results/tabla_maestra_unificada.csv</span></code>, que genera <code class="docutils literal notranslate"><span class="pre">experiments/tabla_maestra_unificada.py</span></code>, reúne en un solo archivo todo lo evaluado en el bucle externo de los dos entregables:</p>
 <ul class="simple">
-<li><p>las 112 combinaciones del Entregable 2;</p></li>
+<li><p>las 112 combinaciones del Entregable 2: 108 ejecutadas y 4 no aplicables (k-NN no admite <code class="docutils literal notranslate"><span class="pre">class_weight</span></code>);</p></li>
 <li><p>los modelos con presupuesto de 60 evaluaciones;</p></li>
 <li><p>el estado del arte, los ensambles estáticos, DES-CPL y sus ablaciones;</p></li>
 <li><p>los conjuntos adicionales, las semillas y los escenarios de robustez.</p></li>
@@ -1396,7 +1398,7 @@ python<span class="w"> </span>../app.py<span class="w">                         
 </pre></div>
 </div>
 <p><strong>Reanudación.</strong> Cada script reanuda donde quedó: guarda un punto de control por fold o por lote y, al volver a correrlo, solo calcula lo que falta. Para rehacer una parte, basta con borrar su archivo de <code class="docutils literal notranslate"><span class="pre">results/</span></code>.</p>
-<p><strong>Exactitud de la reproducción.</strong> Seis de los siete modelos base reproducen el Entregable 2 sin diferencias. Bayes difiere hasta en 0.0012 por fold (sección 13.3.1). La prueba lenta reproduce fold a fold una corrida de la tabla maestra.</p>
+<p><strong>Exactitud de la reproducción.</strong> Seis de los siete modelos base reproducen el Entregable 2 sin diferencias. Bayes difiere hasta en 0.0008 por fold (sección 13.3.1). La prueba lenta reproduce fold a fold una corrida de la tabla maestra.</p>
 </section>
 <section id="lista-de-verificacion-de-reproducibilidad">
 <h2>18.7. Lista de verificación de reproducibilidad<a class="headerlink" href="#lista-de-verificacion-de-reproducibilidad" title="Link to this heading">#</a></h2>
@@ -1450,7 +1452,7 @@ python<span class="w"> </span>../app.py<span class="w">                         
 </tr>
 <tr class="row-even"><td><p>Pruebas automáticas</p></td>
 <td><p>✔</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code> (156 pruebas), GitHub Actions (<code class="docutils literal notranslate"><span class="pre">.github/workflows/pruebas.yml</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code> (173 pruebas; 172 en GitHub Actions y una lenta en local), GitHub Actions (<code class="docutils literal notranslate"><span class="pre">.github/workflows/pruebas.yml</span></code>)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Ficha del modelo y declaración de datos</p></td>
 <td><p>✔</p></td>
@@ -1887,6 +1889,15 @@ python<span class="w"> </span>../app.py<span class="w">                         
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">17. Conclusiones, limitaciones y declaración de autoría</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="19_Artefactos_Dashboard.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">19. Mejores combinaciones, artefactos y dashboard</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>

@@ -1,0 +1,1601 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>19. Mejores combinaciones, artefactos y dashboard &#8212; Machine Learning - Diabetes</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '19_Artefactos_Dashboard';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="18. Reproducibilidad y bibliografía" href="18_Reproducibilidad.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo1.png" class="logo__image only-light" alt="Machine Learning - Diabetes - Home"/>
+    <script>document.write(`<img src="_static/logo1.png" class="logo__image only-dark" alt="Machine Learning - Diabetes - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Predicción de Readmisión Hospitalaria en Pacientes Diabéticos
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Datos.html">1. Dataset y Estructura</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_ETL.html">2. Depuración, ingeniería de características y partición</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_Univariado.html">3. Análisis univariado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_Bivariado.html">4. Análisis bivariado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_Sintesis.html">5. Redundancia, fuga de información y techo de desempeño</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Preprocesamiento.html">6. Preprocesamiento y validación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_ModeloBase.html">7. Modelo base: regresión logística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Clasificacion.html">8. Experimento combinatorio de clasificación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Optimizadores.html">9. Comparación de optimizadores y optimización computacional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Evaluacion.html">10. Evaluación del modelo final, calibración e interpretabilidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Comparacion_Estadistica.html">11. Comparación estadística de los modelos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Correcciones.html">12. Correcciones del Entregable 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Modelo_Original.html">13. Modelo original: DES-CPL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Revision_Literatura.html">14. Revisión de literatura y declaración de novedad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Formulacion_DES_CPL.html">15. DES-CPL: formulación, propiedades y complejidad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Evaluacion_Ampliada.html">16. Evaluación ampliada: otros conjuntos, robustez, semillas, sensibilidad, interpretabilidad, equidad y costo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Conclusiones.html">17. Conclusiones, limitaciones y declaración de autoría</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Reproducibilidad.html">18. Reproducibilidad y bibliografía</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">19. Mejores combinaciones, artefactos y dashboard</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/joshua2412-a/Diabetes_ProyectoML_202630" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/joshua2412-a/Diabetes_ProyectoML_202630/issues/new?title=Issue%20on%20page%20%2F19_Artefactos_Dashboard.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/19_Artefactos_Dashboard.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>19. Mejores combinaciones, artefactos y dashboard</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#criterio-de-seleccion">19.1. Criterio de selección</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hiperparametros-finales">19.2. Hiperparámetros finales</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reentrenamiento-serializacion-y-metadatos">19.3. Reentrenamiento, serialización y metadatos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-ida-y-vuelta">19.4. Prueba de ida y vuelta</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-de-los-artefactos">19.5. Tamaño de los artefactos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dashboard">19.6. Dashboard</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arquitectura">19.6.1. Arquitectura</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#contenido">19.6.2. Contenido</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decisiones-de-diseno">19.6.3. Decisiones de diseño</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#capturas-de-pantalla">19.6.4. Capturas de pantalla</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#despliegue-en-render">19.7. Despliegue en Render</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ficha-del-modelo">19.8. Ficha del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">19.9. Síntesis del capítulo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#autoria-uso-de-herramientas-y-archivo-del-repositorio">19.10. Autoría, uso de herramientas y archivo del repositorio</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="mejores-combinaciones-artefactos-y-dashboard">
+<h1>19. Mejores combinaciones, artefactos y dashboard<a class="headerlink" href="#mejores-combinaciones-artefactos-y-dashboard" title="Link to this heading">#</a></h1>
+<p>Este capítulo documenta cómo los modelos del libro llegan al producto. Cubre dos bloques de la guía del Entregable 3:</p>
+<ul class="simple">
+<li><p><strong>Bloque B (sección 4):</strong> la selección de la mejor combinación de cada modelo, su reentrenamiento con todo el entrenamiento, la serialización y la prueba de ida y vuelta;</p></li>
+<li><p><strong>Bloques E y F (secciones 7 y 8):</strong> la arquitectura del dashboard, sus decisiones de diseño, el despliegue en Render y la ficha del modelo.</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Sección</p></th>
+<th class="head"><p>Contenido</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>19.1</p></td>
+<td><p>Criterio de selección y tabla de las mejores combinaciones</p></td>
+</tr>
+<tr class="row-odd"><td><p>19.2</p></td>
+<td><p>Hiperparámetros finales</p></td>
+</tr>
+<tr class="row-even"><td><p>19.3</p></td>
+<td><p>Reentrenamiento, serialización y metadatos</p></td>
+</tr>
+<tr class="row-odd"><td><p>19.4</p></td>
+<td><p>Prueba de ida y vuelta</p></td>
+</tr>
+<tr class="row-even"><td><p>19.5</p></td>
+<td><p>Tamaño de los artefactos</p></td>
+</tr>
+<tr class="row-odd"><td><p>19.6</p></td>
+<td><p>Dashboard: arquitectura, contenido y decisiones de diseño</p></td>
+</tr>
+<tr class="row-even"><td><p>19.7</p></td>
+<td><p>Despliegue en Render</p></td>
+</tr>
+<tr class="row-odd"><td><p>19.8</p></td>
+<td><p>Ficha del modelo</p></td>
+</tr>
+<tr class="row-even"><td><p>19.9</p></td>
+<td><p>Síntesis del capítulo</p></td>
+</tr>
+<tr class="row-odd"><td><p>19.10</p></td>
+<td><p>Autoría, uso de herramientas y archivo del repositorio</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Cómo se ejecuta.</strong> El capítulo no entrena nada: lee lo que dejaron dos scripts en <code class="docutils literal notranslate"><span class="pre">artifacts/</span></code>. Para regenerarlo, desde la raíz del repositorio:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">experiments</span><span class="o">/</span><span class="n">entrenar_artefactos</span><span class="o">.</span><span class="n">py</span>      <span class="c1"># los 7 modelos del Entregable 2</span>
+<span class="n">python</span> <span class="n">experiments</span><span class="o">/</span><span class="n">artefacto_des_cpl</span><span class="o">.</span><span class="n">py</span>        <span class="c1"># el modelo original</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">display</span>
+
+<span class="n">ARTEFACTOS</span> <span class="o">=</span> <span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"artifacts"</span>
+<span class="n">seleccion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ARTEFACTOS</span> <span class="o">/</span> <span class="s2">"mejores_combinaciones.csv"</span><span class="p">)</span>
+<span class="n">metadatos</span> <span class="o">=</span> <span class="p">{</span><span class="n">ruta</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">".metadata.json"</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">ruta</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>
+             <span class="k">for</span> <span class="n">ruta</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ARTEFACTOS</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.metadata.json"</span><span class="p">))}</span>
+<span class="n">BASE</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">seleccion</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]</span> <span class="k">if</span> <span class="n">m</span> <span class="o">!=</span> <span class="s2">"des_cpl"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Artefactos con metadatos: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">metadatos</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">metadatos</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Artefactos con metadatos: 8 (arbol, bayes, des_cpl, knn, logistica, random_forest, svm, xgboost)
+</pre></div>
+</div>
+</div>
+</div>
+<section id="criterio-de-seleccion">
+<h2>19.1. Criterio de selección<a class="headerlink" href="#criterio-de-seleccion" title="Link to this heading">#</a></h2>
+<p>El experimento del capítulo 8 evaluó cada modelo con hasta 4 estrategias de balanceo y 4 optimizadores. El dashboard no las incluye todas: lleva <strong>una combinación por modelo</strong>, elegida con una regla fija y no por apreciación visual.</p>
+<ul class="simple">
+<li><p><strong>Mejor combinación de cada modelo.</strong> La de mayor AUC-PR media en el bucle externo de la validación anidada, entre todas las combinaciones completadas de ese modelo (la regla del capítulo 11).</p></li>
+<li><p><strong>Mejor combinación global.</strong> La de mayor AUC-PR media entre las siete elegidas.</p></li>
+<li><p><strong>Finalista.</strong> Un modelo es finalista si su rango medio en los cinco folds externos dista del rango del mejor menos que la diferencia crítica de Nemenyi (capítulo 11). Se reporta además el valor p de Nemenyi frente al mejor.</p></li>
+</ul>
+<p>La tabla la produce <code class="docutils literal notranslate"><span class="pre">seleccionar()</span></code> en <code class="docutils literal notranslate"><span class="pre">experiments/entrenar_artefactos.py</span></code> y queda en <code class="docutils literal notranslate"><span class="pre">artifacts/mejores_combinaciones.csv</span></code>, que es el archivo que lee la tabla de líderes del dashboard.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tabla_seleccion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">"modelo"</span><span class="p">:</span> <span class="n">seleccion</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">],</span>
+    <span class="s2">"balanceo"</span><span class="p">:</span> <span class="n">seleccion</span><span class="p">[</span><span class="s2">"balanceo"</span><span class="p">],</span>
+    <span class="s2">"optimizador"</span><span class="p">:</span> <span class="n">seleccion</span><span class="p">[</span><span class="s2">"optimizador"</span><span class="p">],</span>
+    <span class="s2">"AUC-PR (media ± sd)"</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">m</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">s</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">seleccion</span><span class="p">[</span><span class="s2">"auc_pr_media"</span><span class="p">],</span> <span class="n">seleccion</span><span class="p">[</span><span class="s2">"auc_pr_sd"</span><span class="p">])],</span>
+    <span class="s2">"AUC-ROC (media ± sd)"</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">m</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">s</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">seleccion</span><span class="p">[</span><span class="s2">"auc_roc_media"</span><span class="p">],</span> <span class="n">seleccion</span><span class="p">[</span><span class="s2">"auc_roc_sd"</span><span class="p">])],</span>
+    <span class="s2">"combinaciones evaluadas"</span><span class="p">:</span> <span class="n">seleccion</span><span class="p">[</span><span class="s2">"combinaciones_evaluadas"</span><span class="p">],</span>
+    <span class="s2">"rango medio"</span><span class="p">:</span> <span class="n">seleccion</span><span class="p">[</span><span class="s2">"rango_medio"</span><span class="p">],</span>
+    <span class="s2">"p de Nemenyi vs. el mejor"</span><span class="p">:</span> <span class="n">seleccion</span><span class="p">[</span><span class="s2">"p_nemenyi_vs_mejor"</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="s2">"finalista"</span><span class="p">:</span> <span class="n">seleccion</span><span class="p">[</span><span class="s2">"finalista"</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span><span class="kc">True</span><span class="p">:</span> <span class="s2">"Sí"</span><span class="p">,</span> <span class="kc">False</span><span class="p">:</span> <span class="s2">"No"</span><span class="p">}),</span>
+<span class="p">})</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">tabla_seleccion</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">"display.max_colwidth"</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">seleccion</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)[[</span><span class="s2">"motivo"</span><span class="p">]])</span>
+
+<span class="n">base</span> <span class="o">=</span> <span class="n">seleccion</span><span class="p">[</span><span class="n">seleccion</span><span class="p">[</span><span class="s2">"modelo"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">BASE</span><span class="p">)]</span>
+<span class="n">mejor</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">base</span><span class="p">[</span><span class="s2">"auc_pr_media"</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mejor combinación global: </span><span class="si">{</span><span class="n">mejor</span><span class="p">[</span><span class="s1">'modelo'</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">mejor</span><span class="p">[</span><span class="s1">'balanceo'</span><span class="p">]</span><span class="si">}</span><span class="s2"> + </span><span class="si">{</span><span class="n">mejor</span><span class="p">[</span><span class="s1">'optimizador'</span><span class="p">]</span><span class="si">}</span><span class="s2">), "</span>
+      <span class="sa">f</span><span class="s2">"AUC-PR </span><span class="si">{</span><span class="n">mejor</span><span class="p">[</span><span class="s1">'auc_pr_media'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">mejor</span><span class="p">[</span><span class="s1">'auc_pr_sd'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">; finalista: </span><span class="si">{</span><span class="nb">bool</span><span class="p">(</span><span class="n">mejor</span><span class="p">[</span><span class="s1">'finalista'</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Finalistas:"</span><span class="p">,</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">base</span><span class="p">[</span><span class="s2">"finalista"</span><span class="p">],</span> <span class="s2">"modelo"</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>balanceo</th>
+      <th>optimizador</th>
+      <th>AUC-PR (media ± sd)</th>
+      <th>AUC-ROC (media ± sd)</th>
+      <th>combinaciones evaluadas</th>
+      <th>rango medio</th>
+      <th>p de Nemenyi vs. el mejor</th>
+      <th>finalista</th>
+    </tr>
+    <tr>
+      <th>modelo</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>xgboost</th>
+      <td>adasyn</td>
+      <td>random</td>
+      <td>0.2267 ± 0.0153</td>
+      <td>0.6689 ± 0.0066</td>
+      <td>16</td>
+      <td>1.6</td>
+      <td>1.0000</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>random_forest</th>
+      <td>ninguno</td>
+      <td>deap</td>
+      <td>0.2258 ± 0.0170</td>
+      <td>0.6703 ± 0.0087</td>
+      <td>16</td>
+      <td>1.6</td>
+      <td>1.0000</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>svm</th>
+      <td>ninguno</td>
+      <td>grid</td>
+      <td>0.2145 ± 0.0133</td>
+      <td>0.6626 ± 0.0080</td>
+      <td>16</td>
+      <td>2.8</td>
+      <td>0.9758</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>logistica</th>
+      <td>ninguno</td>
+      <td>optuna</td>
+      <td>0.2110 ± 0.0131</td>
+      <td>0.6619 ± 0.0079</td>
+      <td>16</td>
+      <td>4.0</td>
+      <td>0.5776</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>knn</th>
+      <td>ninguno</td>
+      <td>grid</td>
+      <td>0.2058 ± 0.0160</td>
+      <td>0.6504 ± 0.0105</td>
+      <td>12</td>
+      <td>5.2</td>
+      <td>0.1156</td>
+      <td>Sí</td>
+    </tr>
+    <tr>
+      <th>arbol</th>
+      <td>ninguno</td>
+      <td>grid</td>
+      <td>0.2034 ± 0.0106</td>
+      <td>0.6522 ± 0.0064</td>
+      <td>16</td>
+      <td>5.8</td>
+      <td>0.0345</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>bayes</th>
+      <td>ninguno</td>
+      <td>random</td>
+      <td>0.1995 ± 0.0115</td>
+      <td>0.6479 ± 0.0100</td>
+      <td>16</td>
+      <td>7.0</td>
+      <td>0.0015</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>des_cpl</th>
+      <td>por modelo base</td>
+      <td>optuna</td>
+      <td>0.2279 ± 0.0174</td>
+      <td>0.6721 ± 0.0086</td>
+      <td>60</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Sí</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>motivo</th>
+    </tr>
+    <tr>
+      <th>modelo</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>xgboost</th>
+      <td>Mayor AUC-PR media del bucle externo entre sus 16 combinaciones; la segunda (smote + random) queda a 0.0001</td>
+    </tr>
+    <tr>
+      <th>random_forest</th>
+      <td>Mayor AUC-PR media del bucle externo entre sus 16 combinaciones; la segunda (ninguno + grid) queda a 0.0014</td>
+    </tr>
+    <tr>
+      <th>svm</th>
+      <td>Mayor AUC-PR media del bucle externo entre sus 16 combinaciones; la segunda (ninguno + random) queda a 0.0001</td>
+    </tr>
+    <tr>
+      <th>logistica</th>
+      <td>Mayor AUC-PR media del bucle externo entre sus 16 combinaciones; la segunda (ninguno + deap) queda a 0.0001</td>
+    </tr>
+    <tr>
+      <th>knn</th>
+      <td>Mayor AUC-PR media del bucle externo entre sus 12 combinaciones; la segunda (ninguno + random) queda a 0.0006</td>
+    </tr>
+    <tr>
+      <th>arbol</th>
+      <td>Mayor AUC-PR media del bucle externo entre sus 16 combinaciones; la segunda (class_weight + random) queda a 0.0001</td>
+    </tr>
+    <tr>
+      <th>bayes</th>
+      <td>Mayor AUC-PR media del bucle externo entre sus 16 combinaciones; la segunda (class_weight + random) queda a 0.0001</td>
+    </tr>
+    <tr>
+      <th>des_cpl</th>
+      <td>Modelo original del Entregable 3. Combina árbol, Random Forest, XGBoost y SVM; Nemenyi no lo separa del mejor benchmark (capítulo 13)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mejor combinación global: xgboost (adasyn + random), AUC-PR 0.2267 ± 0.0153; finalista: True
+Finalistas: xgboost, random_forest, svm, logistica, knn
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Lectura.</strong></p>
+<ul class="simple">
+<li><p><strong>La mejor combinación global es XGBoost con ADASYN y Random Search</strong> (AUC-PR de 0.2267 ± 0.0153), y pertenece al conjunto de finalistas, como exige la guía.</p></li>
+<li><p><strong>Cinco de los siete modelos son finalistas.</strong> Nemenyi no distingue de XGBoost a Random Forest, SVM, regresión logística ni k-NN; el árbol y Naive Bayes sí quedan separados. Con cinco folds la prueba tiene poca potencia, y por eso el conjunto de finalistas es amplio (capítulo 11).</p></li>
+<li><p><strong>Las diferencias dentro de cada modelo son mínimas.</strong> En seis de los siete modelos, la segunda mejor combinación queda a 0.0001 o 0.0006 de la primera; solo en Random Forest la distancia llega a 0.0014. El balanceo y el optimizador importan mucho menos que la familia del modelo, la misma conclusión del capítulo 9.</p></li>
+<li><p><strong>k-NN tiene 12 combinaciones y no 16,</strong> porque no admite <code class="docutils literal notranslate"><span class="pre">class_weight</span></code>.</p></li>
+<li><p><strong>La fila de DES-CPL no se compara de igual a igual.</strong> Sus cifras son las del protocolo, con 60 evaluaciones, y las de los siete modelos son las del Entregable 2, con 8 a 12. Con el mismo presupuesto, XGBoost obtiene 0.2290 frente a 0.2279 de DES-CPL (sección 13.5). El dashboard lo indica en la columna «Presupuesto» y en una nota bajo la tabla.</p></li>
+</ul>
+</section>
+<section id="hiperparametros-finales">
+<h2>19.2. Hiperparámetros finales<a class="headerlink" href="#hiperparametros-finales" title="Link to this heading">#</a></h2>
+<p>La validación anidada elige una configuración de hiperparámetros en cada fold externo, así que para el modelo final hay que quedarse con una. La regla es la del capítulo 10: la <strong>configuración modal</strong>, es decir, la que más folds eligieron. La columna «criterio» dice en cuántos de los cinco folds se eligió.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="n">BASE</span><span class="p">:</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">metadatos</span><span class="p">[</span><span class="n">modelo</span><span class="p">]</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"modelo"</span><span class="p">:</span> <span class="n">modelo</span><span class="p">,</span> <span class="s2">"criterio"</span><span class="p">:</span> <span class="n">m</span><span class="p">[</span><span class="s2">"hiperparametros_criterio"</span><span class="p">],</span>
+                  <span class="s2">"hiperparámetros"</span><span class="p">:</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'modelo__'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">.4g</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+                                               <span class="k">else</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'modelo__'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span>
+                                               <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">m</span><span class="p">[</span><span class="s2">"hiperparametros"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())})</span>
+<span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">"display.max_colwidth"</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">))</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">metadatos</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"DES-CPL:"</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="s2">"hiperparametros"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  criterio:"</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="s2">"hiperparametros_criterio"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  modelos que combina:"</span><span class="p">,</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"modelos_base"</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>criterio</th>
+      <th>hiperparámetros</th>
+    </tr>
+    <tr>
+      <th>modelo</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>xgboost</th>
+      <td>Configuración modal: elegida en 1 de 5 folds externos</td>
+      <td>colsample_bytree = 0.9759, learning_rate = 0.04201, max_depth = 10, min_child_weight = 1.016, subsample = 0.6545</td>
+    </tr>
+    <tr>
+      <th>random_forest</th>
+      <td>Configuración modal: elegida en 1 de 5 folds externos</td>
+      <td>max_depth = 18, max_features = 0.1967, min_samples_leaf = 9, n_estimators = 447</td>
+    </tr>
+    <tr>
+      <th>svm</th>
+      <td>Configuración modal: elegida en 5 de 5 folds externos</td>
+      <td>estimator__C = 0.003511</td>
+    </tr>
+    <tr>
+      <th>logistica</th>
+      <td>Configuración modal: elegida en 1 de 5 folds externos</td>
+      <td>C = 0.1175, penalty = l1</td>
+    </tr>
+    <tr>
+      <th>knn</th>
+      <td>Configuración modal: elegida en 5 de 5 folds externos</td>
+      <td>n_neighbors = 201, weights = distance</td>
+    </tr>
+    <tr>
+      <th>arbol</th>
+      <td>Configuración modal: elegida en 3 de 5 folds externos</td>
+      <td>criterion = entropy, max_depth = 8, min_samples_leaf = 100</td>
+    </tr>
+    <tr>
+      <th>bayes</th>
+      <td>Configuración modal: elegida en 1 de 5 folds externos</td>
+      <td>var_smoothing = 0.01176</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DES-CPL: {'k': 20, 'tau': 0.0003, 'encogimiento': 0.9, 'n_pliegues': 3, 'competencia': 'brier', 'ponderacion': 'prevalencia', 'poda': 4}
+  criterio: Búsqueda bayesiana (Optuna, TPE) de 60 evaluaciones sobre el conjunto de selección del entrenamiento completo (sección 13.8)
+  modelos que combina: arbol, random_forest, xgboost, svm
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Lectura y una limitación de la regla.</strong></p>
+<ul class="simple">
+<li><p>En k-NN y SVM los cinco folds eligieron la misma configuración, y en el árbol, tres: ahí la moda es informativa.</p></li>
+<li><p>En XGBoost, Random Forest, la regresión logística y Naive Bayes <strong>cada fold eligió una configuración distinta</strong>. Sus espacios son continuos y los optimizadores casi nunca repiten un punto, así que no hay moda y la regla se queda con la configuración del primer fold. Es una elección arbitraria entre cinco candidatas equivalentes: el capítulo 12 mostró que, en estos modelos, las diferencias entre configuraciones buenas son menores que la variación entre folds.</p></li>
+<li><p>DES-CPL no usa esta regla. Sus modelos base llevan la configuración que eligió Random Search con 60 evaluaciones sobre todo el entrenamiento, y sus hiperparámetros propios (<span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(\tau\)</span>, <span class="math notranslate nohighlight">\(\lambda\)</span> y la poda) salen de la búsqueda de 60 evaluaciones de la sección 13.8.</p></li>
+</ul>
+</section>
+<section id="reentrenamiento-serializacion-y-metadatos">
+<h2>19.3. Reentrenamiento, serialización y metadatos<a class="headerlink" href="#reentrenamiento-serializacion-y-metadatos" title="Link to this heading">#</a></h2>
+<p>Con los hiperparámetros fijados, cada modelo se reentrena <strong>con todo el conjunto de entrenamiento</strong> (79 473 encuentros de 56 036 pacientes) y se guarda el <strong>pipeline completo</strong>: preprocesamiento, balanceo y modelo. Así el dashboard recibe las 38 variables originales y no necesita repetir ninguna transformación.</p>
+<ul class="simple">
+<li><p><strong>Formato.</strong> <code class="docutils literal notranslate"><span class="pre">joblib</span></code> con <code class="docutils literal notranslate"><span class="pre">compress=3</span></code>, en <code class="docutils literal notranslate"><span class="pre">artifacts/&lt;modelo&gt;.joblib</span></code>.</p></li>
+<li><p><strong>El dashboard no entrena ni optimiza.</strong> Solo carga estos archivos.</p></li>
+<li><p><strong>Metadatos.</strong> Junto a cada modelo hay un <code class="docutils literal notranslate"><span class="pre">&lt;modelo&gt;.metadata.json</span></code>. La celda siguiente comprueba que todos traen lo que pide la guía: versiones de las librerías, semilla, hiperparámetros finales, esquema de las columnas de entrada (nombre, tipo y rango o niveles válidos) y métricas del bucle externo.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">EXIGIDO</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"versiones"</span><span class="p">,</span> <span class="s2">"semilla"</span><span class="p">,</span> <span class="s2">"hiperparametros"</span><span class="p">,</span> <span class="s2">"esquema"</span><span class="p">,</span> <span class="s2">"metricas_bucle_externo"</span><span class="p">]</span>
+<span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">modelo</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">metadatos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"modelo"</span><span class="p">:</span> <span class="n">modelo</span><span class="p">,</span>
+                  <span class="s2">"campos exigidos"</span><span class="p">:</span> <span class="s2">"completos"</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">c</span> <span class="ow">in</span> <span class="n">m</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">EXIGIDO</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"FALTAN"</span><span class="p">,</span>
+                  <span class="s2">"semilla"</span><span class="p">:</span> <span class="n">m</span><span class="p">[</span><span class="s2">"semilla"</span><span class="p">],</span>
+                  <span class="s2">"columnas en el esquema"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s2">"esquema"</span><span class="p">]),</span>
+                  <span class="s2">"scikit-learn"</span><span class="p">:</span> <span class="n">m</span><span class="p">[</span><span class="s2">"versiones"</span><span class="p">][</span><span class="s2">"scikit-learn"</span><span class="p">],</span>
+                  <span class="s2">"python"</span><span class="p">:</span> <span class="n">m</span><span class="p">[</span><span class="s2">"versiones"</span><span class="p">][</span><span class="s2">"python"</span><span class="p">],</span>
+                  <span class="s2">"AUC-PR bucle externo"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s2">"metricas_bucle_externo"</span><span class="p">][</span><span class="s2">"auc_pr"</span><span class="p">][</span><span class="s2">"media"</span><span class="p">],</span> <span class="mi">4</span><span class="p">),</span>
+                  <span class="s2">"AUC-PR prueba"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s2">"metricas_prueba"</span><span class="p">][</span><span class="s2">"auc_pr"</span><span class="p">],</span> <span class="mi">4</span><span class="p">)})</span>
+<span class="n">display</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">))</span>
+
+<span class="n">ejemplo</span> <span class="o">=</span> <span class="n">metadatos</span><span class="p">[</span><span class="s2">"xgboost"</span><span class="p">][</span><span class="s2">"esquema"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Ejemplo del esquema (XGBoost):"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">columna</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">ejemplo</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">ejemplo</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ejemplo</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>campos exigidos</th>
+      <th>semilla</th>
+      <th>columnas en el esquema</th>
+      <th>scikit-learn</th>
+      <th>python</th>
+      <th>AUC-PR bucle externo</th>
+      <th>AUC-PR prueba</th>
+    </tr>
+    <tr>
+      <th>modelo</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>arbol</th>
+      <td>completos</td>
+      <td>42</td>
+      <td>38</td>
+      <td>1.9.1</td>
+      <td>3.12.13</td>
+      <td>0.2034</td>
+      <td>0.2083</td>
+    </tr>
+    <tr>
+      <th>bayes</th>
+      <td>completos</td>
+      <td>42</td>
+      <td>38</td>
+      <td>1.9.1</td>
+      <td>3.12.13</td>
+      <td>0.1995</td>
+      <td>0.1943</td>
+    </tr>
+    <tr>
+      <th>des_cpl</th>
+      <td>completos</td>
+      <td>42</td>
+      <td>38</td>
+      <td>1.9.1</td>
+      <td>3.12.13</td>
+      <td>0.2279</td>
+      <td>0.2293</td>
+    </tr>
+    <tr>
+      <th>knn</th>
+      <td>completos</td>
+      <td>42</td>
+      <td>38</td>
+      <td>1.9.1</td>
+      <td>3.12.13</td>
+      <td>0.2058</td>
+      <td>0.2060</td>
+    </tr>
+    <tr>
+      <th>logistica</th>
+      <td>completos</td>
+      <td>42</td>
+      <td>38</td>
+      <td>1.9.1</td>
+      <td>3.12.13</td>
+      <td>0.2110</td>
+      <td>0.2141</td>
+    </tr>
+    <tr>
+      <th>random_forest</th>
+      <td>completos</td>
+      <td>42</td>
+      <td>38</td>
+      <td>1.9.1</td>
+      <td>3.12.13</td>
+      <td>0.2258</td>
+      <td>0.2279</td>
+    </tr>
+    <tr>
+      <th>svm</th>
+      <td>completos</td>
+      <td>42</td>
+      <td>38</td>
+      <td>1.9.1</td>
+      <td>3.12.13</td>
+      <td>0.2145</td>
+      <td>0.2157</td>
+    </tr>
+    <tr>
+      <th>xgboost</th>
+      <td>completos</td>
+      <td>42</td>
+      <td>38</td>
+      <td>1.9.1</td>
+      <td>3.12.13</td>
+      <td>0.2267</td>
+      <td>0.2315</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ejemplo del esquema (XGBoost):
+  time_in_hospital: {'tipo': 'numerica', 'entero': True, 'min': 1.0, 'max': 14.0, 'mediana': 4.0}
+  num_lab_procedures: {'tipo': 'numerica', 'entero': True, 'min': 1.0, 'max': 132.0, 'mediana': 44.0}
+  tolazamide: {'tipo': 'categorica', 'niveles': ['No', 'Steady', 'Cambio'], 'moda': 'No'}
+</pre></div>
+</div>
+</div>
+</div>
+<p>El esquema es lo que usa el formulario de predicción del dashboard: de él salen los campos, sus rangos válidos y los niveles de cada variable categórica, de modo que el formulario no puede pedir un valor que el modelo no conozca.</p>
+<p>El AUC-PR de prueba de XGBoost en esta tabla (0.2315) es el del artefacto, reentrenado para el dashboard. El ajuste del capítulo 10 obtuvo 0.2285. No se investigó el origen de esa diferencia de 0.003; es del orden de la variación de XGBoost entre semillas que midió la sección 16.4 (rango de 0.0068). Random Forest sí coincide con el capítulo 10 (0.2279).</p>
+</section>
+<section id="prueba-de-ida-y-vuelta">
+<h2>19.4. Prueba de ida y vuelta<a class="headerlink" href="#prueba-de-ida-y-vuelta" title="Link to this heading">#</a></h2>
+<p>Un modelo serializado solo sirve si predice lo mismo que el modelo en memoria. Al guardar cada artefacto, el script lo vuelve a cargar del disco y compara sus probabilidades con las del modelo en memoria sobre <strong>todo el conjunto de prueba</strong> (19 867 encuentros). Si la diferencia máxima supera <span class="math notranslate nohighlight">\(10^{-9}\)</span>, el script se detiene y no escribe los metadatos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">modelo</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">metadatos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">diferencia</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ida_y_vuelta_diferencia_max"</span><span class="p">)</span>
+    <span class="n">filas</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"modelo"</span><span class="p">:</span> <span class="n">modelo</span><span class="p">,</span>
+                  <span class="s2">"ida y vuelta"</span><span class="p">:</span> <span class="s2">"Aprobada"</span> <span class="k">if</span> <span class="n">m</span><span class="p">[</span><span class="s2">"ida_y_vuelta"</span><span class="p">]</span> <span class="k">else</span> <span class="s2">"FALLA"</span><span class="p">,</span>
+                  <span class="s2">"diferencia máxima"</span><span class="p">:</span> <span class="s2">"no registrada"</span> <span class="k">if</span> <span class="n">diferencia</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">diferencia</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                  <span class="s2">"tamaño (MB)"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s2">"tamano_mb"</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span>
+                  <span class="s2">"ajuste (s)"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s2">"tiempo_ajuste_s"</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span>
+                  <span class="s2">"inferencia (ms por caso)"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s2">"tiempo_inferencia_ms_por_caso"</span><span class="p">],</span> <span class="mi">3</span><span class="p">)})</span>
+<span class="n">ida_vuelta</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">filas</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">ida_vuelta</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Aprobadas: </span><span class="si">{</span><span class="p">(</span><span class="n">ida_vuelta</span><span class="p">[</span><span class="s1">'ida y vuelta'</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'Aprobada'</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> de </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ida_vuelta</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tamaño total de los modelos: </span><span class="si">{</span><span class="n">ida_vuelta</span><span class="p">[</span><span class="s1">'tamaño (MB)'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MB"</span><span class="p">)</span>
+<span class="k">if</span> <span class="s2">"diferencia_con_seccion_13_8"</span> <span class="ow">in</span> <span class="n">metadatos</span><span class="p">[</span><span class="s2">"des_cpl"</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"DES-CPL, diferencia máxima con las predicciones de la sección 13.8: "</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">metadatos</span><span class="p">[</span><span class="s1">'des_cpl'</span><span class="p">][</span><span class="s1">'diferencia_con_seccion_13_8'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ida y vuelta</th>
+      <th>diferencia máxima</th>
+      <th>tamaño (MB)</th>
+      <th>ajuste (s)</th>
+      <th>inferencia (ms por caso)</th>
+    </tr>
+    <tr>
+      <th>modelo</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>arbol</th>
+      <td>Aprobada</td>
+      <td>0.0e+00</td>
+      <td>0.011</td>
+      <td>9.4</td>
+      <td>0.024</td>
+    </tr>
+    <tr>
+      <th>bayes</th>
+      <td>Aprobada</td>
+      <td>0.0e+00</td>
+      <td>0.008</td>
+      <td>7.5</td>
+      <td>0.028</td>
+    </tr>
+    <tr>
+      <th>des_cpl</th>
+      <td>Aprobada</td>
+      <td>1.1e-16</td>
+      <td>12.909</td>
+      <td>407.2</td>
+      <td>0.453</td>
+    </tr>
+    <tr>
+      <th>knn</th>
+      <td>Aprobada</td>
+      <td>0.0e+00</td>
+      <td>4.802</td>
+      <td>6.6</td>
+      <td>0.825</td>
+    </tr>
+    <tr>
+      <th>logistica</th>
+      <td>Aprobada</td>
+      <td>0.0e+00</td>
+      <td>0.004</td>
+      <td>10.9</td>
+      <td>0.021</td>
+    </tr>
+    <tr>
+      <th>random_forest</th>
+      <td>Aprobada</td>
+      <td>1.1e-16</td>
+      <td>30.134</td>
+      <td>84.9</td>
+      <td>0.051</td>
+    </tr>
+    <tr>
+      <th>svm</th>
+      <td>Aprobada</td>
+      <td>0.0e+00</td>
+      <td>0.008</td>
+      <td>9.2</td>
+      <td>0.020</td>
+    </tr>
+    <tr>
+      <th>xgboost</th>
+      <td>Aprobada</td>
+      <td>no registrada</td>
+      <td>1.205</td>
+      <td>92.3</td>
+      <td>0.034</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Aprobadas: 8 de 8
+Tamaño total de los modelos: 49.1 MB
+DES-CPL, diferencia máxima con las predicciones de la sección 13.8: 5.0e-09
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Lectura.</strong> Los ocho artefactos aprueban. Donde se registró, la diferencia máxima es del orden de <span class="math notranslate nohighlight">\(10^{-16}\)</span>, la precisión de la máquina. Para DES-CPL hay una comprobación adicional: el artefacto reproduce las predicciones de la evaluación en prueba de la sección 13.8 con una diferencia de <span class="math notranslate nohighlight">\(5 \cdot 10^{-9}\)</span>, así que el modelo del dashboard es el mismo que se evaluó en el libro.</p>
+</section>
+<section id="tamano-de-los-artefactos">
+<h2>19.5. Tamaño de los artefactos<a class="headerlink" href="#tamano-de-los-artefactos" title="Link to this heading">#</a></h2>
+<p>La guía pide cuidar el tamaño por dos límites: GitHub rechaza archivos de más de 100 MB y el plan gratuito de Render tiene 512 MB de memoria.</p>
+<ul class="simple">
+<li><p><strong>Random Forest es el más pesado (30.1 MB con compresión).</strong> Son 447 árboles de profundidad hasta 18. No se redujo el número de árboles porque el archivo cabe con holgura en el límite de GitHub y cambiarlo habría alterado el modelo evaluado en el libro.</p></li>
+<li><p><strong>DES-CPL ocupa 12.9 MB.</strong> Guarda 16 modelos (4 finales y 12 de pliegue) y el conjunto de selección completo, que necesita para buscar vecinos.</p></li>
+<li><p><strong>k-NN ocupa 4.8 MB,</strong> porque guarda el entrenamiento transformado.</p></li>
+<li><p><strong>Los demás pesan menos de 1.3 MB.</strong></p></li>
+</ul>
+<p>Los ocho suman unos 49 MB en disco. En memoria ocupan más, y por eso el dashboard no los carga todos a la vez (sección 19.6.3).</p>
+</section>
+<section id="dashboard">
+<h2>19.6. Dashboard<a class="headerlink" href="#dashboard" title="Link to this heading">#</a></h2>
+<p><strong>URL pública:</strong> <a class="reference external" href="https://readmision-diabetes.onrender.com">https://readmision-diabetes.onrender.com</a></p>
+<section id="arquitectura">
+<h3>19.6.1. Arquitectura<a class="headerlink" href="#arquitectura" title="Link to this heading">#</a></h3>
+<p>Es una aplicación Dash multipágina (<code class="docutils literal notranslate"><span class="pre">use_pages=True</span></code>) que separa la interfaz, la lógica de datos y los artefactos.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pieza</p></th>
+<th class="head"><p>Archivo</p></th>
+<th class="head"><p>Qué hace</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Punto de entrada</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">app.py</span></code></p></td>
+<td><p>Crea la aplicación, la barra de navegación y el pie; expone <code class="docutils literal notranslate"><span class="pre">server</span></code> para gunicorn</p></td>
+</tr>
+<tr class="row-odd"><td><p>Páginas</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pages/portada.py</span></code>, <code class="docutils literal notranslate"><span class="pre">contexto.py</span></code>, <code class="docutils literal notranslate"><span class="pre">eda.py</span></code>, <code class="docutils literal notranslate"><span class="pre">modelos.py</span></code></p></td>
+<td><p>Una por sección, cada una con sus <em>callbacks</em></p></td>
+</tr>
+<tr class="row-even"><td><p>Datos</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">src/tablero/datos.py</span></code></p></td>
+<td><p>Única puerta a los datos y a los artefactos, con caché</p></td>
+</tr>
+<tr class="row-odd"><td><p>Figuras</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">src/tablero/graficos.py</span></code>, <code class="docutils literal notranslate"><span class="pre">graficos_clinicos.py</span></code></p></td>
+<td><p>Funciones que devuelven la figura y su lectura calculada</p></td>
+</tr>
+<tr class="row-even"><td><p>Inferencia</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">src/tablero/inferencia.py</span></code></p></td>
+<td><p>Carga de modelos, validación del formulario, predicción y explicación local</p></td>
+</tr>
+<tr class="row-odd"><td><p>Análisis</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">src/tablero/analitica.py</span></code></p></td>
+<td><p>Predicción conforme, comparación estadística, equidad y pacientes parecidos</p></td>
+</tr>
+<tr class="row-even"><td><p>Explicación</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">src/explicacion.py</span></code></p></td>
+<td><p>Valores de Shapley por permutaciones sobre las variables originales</p></td>
+</tr>
+<tr class="row-odd"><td><p>Presentación</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">src/tablero/config.py</span></code>, <code class="docutils literal notranslate"><span class="pre">tema.py</span></code>, <code class="docutils literal notranslate"><span class="pre">formato.py</span></code>, <code class="docutils literal notranslate"><span class="pre">componentes.py</span></code></p></td>
+<td><p>Textos, paleta y plantilla de Plotly, formato de cifras y componentes reutilizables</p></td>
+</tr>
+<tr class="row-even"><td><p>Estilo</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">assets/</span></code></p></td>
+<td><p>Hoja de estilos, tema claro y oscuro e interacción</p></td>
+</tr>
+<tr class="row-odd"><td><p>Artefactos</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">artifacts/</span></code></p></td>
+<td><p>Modelos, metadatos, predicciones de prueba y valores SHAP precalculados</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="contenido">
+<h3>19.6.2. Contenido<a class="headerlink" href="#contenido" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Portada (<code class="docutils literal notranslate"><span class="pre">/</span></code>).</strong> Presentación del problema y acceso a las tres secciones.</p></li>
+<li><p><strong>Contexto (<code class="docutils literal notranslate"><span class="pre">/contexto</span></code>).</strong> El problema con sus cifras y su fuente, la pregunta de investigación y los objetivos, la descripción de los datos con su licencia y el diccionario de variables, el diagrama de la metodología, las limitaciones, la ética y los autores.</p></li>
+<li><p><strong>EDA (<code class="docutils literal notranslate"><span class="pre">/eda</span></code>).</strong> Filtros globales que actualizan todos los gráficos, la distribución del objetivo, las distribuciones univariadas, un explorador bivariado con ejes y color elegibles, la matriz de correlación, los faltantes y los atípicos. Cada gráfico lleva una lectura que se calcula con los datos filtrados.</p></li>
+<li><p><strong>Modelos (<code class="docutils literal notranslate"><span class="pre">/modelos</span></code>).</strong> Nueve subpestañas:</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Subpestaña</p></th>
+<th class="head"><p>Contenido</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Tabla de líderes</p></td>
+<td><p>Las mejores combinaciones de la sección 19.1, con orden y filtro por columna</p></td>
+</tr>
+<tr class="row-odd"><td><p>Capacidad del servicio</p></td>
+<td><p>Cuántas readmisiones se detectan según cuántos pacientes puede atender el equipo</p></td>
+</tr>
+<tr class="row-even"><td><p>Predicción en vivo</p></td>
+<td><p>Formulario generado desde el esquema, probabilidad, conjunto de predicción conforme con su cobertura, explicación SHAP local, «¿qué pasaría si…?», pacientes parecidos y consenso de los modelos</p></td>
+</tr>
+<tr class="row-odd"><td><p>Diagnóstico</p></td>
+<td><p>Matriz de confusión, curvas ROC y de precisión-recall, y calibración del modelo elegido</p></td>
+</tr>
+<tr class="row-even"><td><p>Interpretabilidad</p></td>
+<td><p>Resumen SHAP global del modelo elegido</p></td>
+</tr>
+<tr class="row-odd"><td><p>Comparación estadística</p></td>
+<td><p>Friedman y diagrama de diferencia crítica de Nemenyi con el modelo original incluido</p></td>
+</tr>
+<tr class="row-even"><td><p>Equidad</p></td>
+<td><p>Desempeño y detección por subgrupo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Modelo original</p></td>
+<td><p>Descripción y algoritmo de DES-CPL, pruebas de hipótesis con valores p ajustados y veredicto</p></td>
+</tr>
+<tr class="row-even"><td><p>Ficha del modelo</p></td>
+<td><p>El contenido de <code class="docutils literal notranslate"><span class="pre">MODEL_CARD.md</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="decisiones-de-diseno">
+<h3>19.6.3. Decisiones de diseño<a class="headerlink" href="#decisiones-de-diseno" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Una combinación por modelo, no las 112.</strong> La tabla de líderes muestra las elegidas en la sección 19.1.</p></li>
+<li><p><strong>Dos presupuestos, declarados.</strong> La tabla de líderes conserva las cifras del Entregable 2 y marca el presupuesto de cada fila. La comparación estadística usa la matriz del protocolo, con todos los modelos a 60 evaluaciones, más LightGBM y CatBoost: la misma de la sección 13.5.</p></li>
+<li><p><strong>El umbral es operativo, no 0.5.</strong> Se marca al 15 % de mayor riesgo, la regla del capítulo 10; con 0.5 los modelos no señalan a casi nadie.</p></li>
+<li><p><strong>Explicación sobre las variables originales.</strong> Los valores de Shapley se calculan sobre las 38 variables que ve el usuario, no sobre las columnas codificadas, con 6 permutaciones y 20 pacientes de referencia en la predicción en vivo. La implementación es propia (<code class="docutils literal notranslate"><span class="pre">src/explicacion.py</span></code>) y cumple la propiedad de eficiencia, que verifican las pruebas.</p></li>
+<li><p><strong>Incertidumbre junto a la predicción.</strong> El conjunto de predicción conforme se muestra como un semáforo con su cobertura nominal y la verificada. Aquí los cuantiles se calibran con una mitad del conjunto de prueba y se verifican en la otra, por lo que la cobertura no coincide con la de la sección 13.8.</p></li>
+<li><p><strong>Memoria.</strong> Los datos y los metadatos se cargan una sola vez al arrancar. Los modelos se cargan cuando se piden y se mantienen como mucho dos en memoria. El servidor usa un solo proceso con cuatro hilos, porque cada proceso adicional duplicaría los datos y los modelos.</p></li>
+<li><p><strong>Robustez.</strong> El formulario valida tipos y rangos con el esquema de cada modelo y responde con un aviso, sin detener la aplicación. Si falta un artefacto, la sección lo dice en lugar de fallar.</p></li>
+<li><p><strong>Diseño visual.</strong> Tema de <code class="docutils literal notranslate"><span class="pre">dash-bootstrap-components</span></code>, una tipografía, la misma plantilla de Plotly en todas las figuras, modo claro y oscuro, y azul para «no readmitido» y rojo para «readmitido», siempre acompañados de un rótulo para no depender solo del color.</p></li>
+<li><p><strong>Lenguaje.</strong> Las cifras del dashboard usan coma decimal y nombres legibles de los modelos, porque se dirige a un lector no técnico; el libro conserva el punto decimal.</p></li>
+</ul>
+</section>
+<section id="capturas-de-pantalla">
+<h3>19.6.4. Capturas de pantalla<a class="headerlink" href="#capturas-de-pantalla" title="Link to this heading">#</a></h3>
+<p>La celda muestra las capturas guardadas en <code class="docutils literal notranslate"><span class="pre">docs/capturas/</span></code> e indica cuáles faltan.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CAPTURAS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">"portada.png"</span><span class="p">,</span> <span class="s2">"Portada"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"contexto.png"</span><span class="p">,</span> <span class="s2">"Sección 1: Contexto"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"eda.png"</span><span class="p">,</span> <span class="s2">"Sección 2: EDA, con los filtros globales"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"modelos_lideres.png"</span><span class="p">,</span> <span class="s2">"Sección 3: tabla de líderes"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"modelos_prediccion.png"</span><span class="p">,</span> <span class="s2">"Sección 3: predicción en vivo con explicación local e incertidumbre"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"modelos_comparacion.png"</span><span class="p">,</span> <span class="s2">"Sección 3: comparación estadística con el modelo original"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"modelos_original.png"</span><span class="p">,</span> <span class="s2">"Sección 3: modelo original y veredicto"</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="n">carpeta</span> <span class="o">=</span> <span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"docs"</span> <span class="o">/</span> <span class="s2">"capturas"</span>
+<span class="n">faltan</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">archivo</span><span class="p">,</span> <span class="n">titulo</span> <span class="ow">in</span> <span class="n">CAPTURAS</span><span class="p">:</span>
+    <span class="n">ruta</span> <span class="o">=</span> <span class="n">carpeta</span> <span class="o">/</span> <span class="n">archivo</span>
+    <span class="k">if</span> <span class="n">ruta</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">"**</span><span class="si">{</span><span class="n">titulo</span><span class="si">}</span><span class="s2">**"</span><span class="p">))</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">ruta</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">900</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">faltan</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">archivo</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Capturas pendientes en docs/capturas/:"</span><span class="p">,</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">faltan</span><span class="p">)</span> <span class="k">if</span> <span class="n">faltan</span> <span class="k">else</span> <span class="s2">"ninguna"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<p><strong>Portada</strong></p>
+<a class="reference internal image-reference" href="_images/48c20a8ce4dafe54f4a9c4a1b8df45b38f971c4443c1a59f0e48c5df85003635.png"><img alt="_images/48c20a8ce4dafe54f4a9c4a1b8df45b38f971c4443c1a59f0e48c5df85003635.png" src="_images/48c20a8ce4dafe54f4a9c4a1b8df45b38f971c4443c1a59f0e48c5df85003635.png" style="width: 900px;" />
+</a>
+<p><strong>Sección 1: Contexto</strong></p>
+<a class="reference internal image-reference" href="_images/1a33bec37b8b1dbef941a8debef05092e3583cdcaaf3ef8b4db7249e91119af7.png"><img alt="_images/1a33bec37b8b1dbef941a8debef05092e3583cdcaaf3ef8b4db7249e91119af7.png" src="_images/1a33bec37b8b1dbef941a8debef05092e3583cdcaaf3ef8b4db7249e91119af7.png" style="width: 900px;" />
+</a>
+<p><strong>Sección 2: EDA, con los filtros globales</strong></p>
+<a class="reference internal image-reference" href="_images/d0ad0ab66037f13f710852754cb6459d20e6e74f888ec11a2adcd9c858701de8.png"><img alt="_images/d0ad0ab66037f13f710852754cb6459d20e6e74f888ec11a2adcd9c858701de8.png" src="_images/d0ad0ab66037f13f710852754cb6459d20e6e74f888ec11a2adcd9c858701de8.png" style="width: 900px;" />
+</a>
+<p><strong>Sección 3: tabla de líderes</strong></p>
+<a class="reference internal image-reference" href="_images/c9f45e14a7ec7e3475ccda19f6f6bedcafbe1bd2c9e0d87a2cbd4d99553547ce.png"><img alt="_images/c9f45e14a7ec7e3475ccda19f6f6bedcafbe1bd2c9e0d87a2cbd4d99553547ce.png" src="_images/c9f45e14a7ec7e3475ccda19f6f6bedcafbe1bd2c9e0d87a2cbd4d99553547ce.png" style="width: 900px;" />
+</a>
+<p><strong>Sección 3: predicción en vivo con explicación local e incertidumbre</strong></p>
+<a class="reference internal image-reference" href="_images/b3c60db21ceef1325c6bb0b71db9a00435699cbfe4f88b88a09f420acd45801f.png"><img alt="_images/b3c60db21ceef1325c6bb0b71db9a00435699cbfe4f88b88a09f420acd45801f.png" src="_images/b3c60db21ceef1325c6bb0b71db9a00435699cbfe4f88b88a09f420acd45801f.png" style="width: 900px;" />
+</a>
+<p><strong>Sección 3: comparación estadística con el modelo original</strong></p>
+<a class="reference internal image-reference" href="_images/5850739db0e37e5dd620a4aa7d8df963e100e5273540a458d619e0e3e6e80bb8.png"><img alt="_images/5850739db0e37e5dd620a4aa7d8df963e100e5273540a458d619e0e3e6e80bb8.png" src="_images/5850739db0e37e5dd620a4aa7d8df963e100e5273540a458d619e0e3e6e80bb8.png" style="width: 900px;" />
+</a>
+<p><strong>Sección 3: modelo original y veredicto</strong></p>
+<a class="reference internal image-reference" href="_images/1a8fb941b40a7ef9231fafc40521ab6fb726af1ffc776de73bdf2dff8a33eb35.png"><img alt="_images/1a8fb941b40a7ef9231fafc40521ab6fb726af1ffc776de73bdf2dff8a33eb35.png" src="_images/1a8fb941b40a7ef9231fafc40521ab6fb726af1ffc776de73bdf2dff8a33eb35.png" style="width: 900px;" />
+</a>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Capturas pendientes en docs/capturas/: ninguna
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="despliegue-en-render">
+<h2>19.7. Despliegue en Render<a class="headerlink" href="#despliegue-en-render" title="Link to this heading">#</a></h2>
+<p>El dashboard corre como un servicio web del plan gratuito de Render, definido en <code class="docutils literal notranslate"><span class="pre">render.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">web</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">readmision-diabetes</span>
+<span class="w">    </span><span class="nt">runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python</span>
+<span class="w">    </span><span class="nt">plan</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">free</span>
+<span class="w">    </span><span class="nt">buildCommand</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip install -r requirements-render.txt</span>
+<span class="w">    </span><span class="nt">startCommand</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gunicorn app:server --workers 1 --threads 4 --timeout 180</span>
+<span class="w">    </span><span class="nt">envVars</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PYTHON_VERSION</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.12.13</span>
+</pre></div>
+</div>
+<p><strong>Pasos.</strong></p>
+<ol class="arabic simple">
+<li><p>Comprobar en local que la aplicación corre con <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">app.py</span></code> y que <code class="docutils literal notranslate"><span class="pre">app.server</span></code> está expuesto.</p></li>
+<li><p>Subir el repositorio a GitHub con los artefactos de <code class="docutils literal notranslate"><span class="pre">artifacts/</span></code>.</p></li>
+<li><p>En Render, crear el servicio como <em>Blueprint</em> a partir de <code class="docutils literal notranslate"><span class="pre">render.yaml</span></code>.</p></li>
+<li><p>Revisar los registros de la construcción y abrir la URL pública.</p></li>
+<li><p>Con el despliegue automático activo, cada <code class="docutils literal notranslate"><span class="pre">push</span></code> a <code class="docutils literal notranslate"><span class="pre">main</span></code> vuelve a desplegar.</p></li>
+</ol>
+<p><strong>Decisiones del despliegue.</strong></p>
+<ul class="simple">
+<li><p><strong>Dependencias de producción aparte.</strong> <code class="docutils literal notranslate"><span class="pre">requirements-render.txt</span></code> lleva solo lo que el dashboard necesita, sin Jupyter Book, Optuna ni DEAP. Las librerías que reconstruyen los modelos (scikit-learn, XGBoost, imbalanced-learn, numpy, pandas, scipy y joblib) van con la <strong>misma versión exacta</strong> que <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>, porque un modelo serializado solo se garantiza con la versión que lo creó.</p></li>
+<li><p><strong>Versión de Python fijada</strong> en 3.12.13, la del entrenamiento.</p></li>
+<li><p><strong>Un problema encontrado al desplegar.</strong> La primera versión precargaba los datos en un hilo aparte. En Render esa precarga coincidía con la primera petición y la librería que lee los archivos Parquet quedaba importada a medias en dos hilos. Se corrigió precargando en el arranque, en el hilo principal: el servidor tarda unos segundos más en iniciar, pero no hay dos importaciones simultáneas.</p></li>
+<li><p><strong>Plan gratuito.</strong> El servicio se duerme tras un rato sin uso y la primera visita tarda cerca de un minuto en despertarlo. Conviene abrir la URL varios minutos antes de usarla.</p></li>
+</ul>
+</section>
+<section id="ficha-del-modelo">
+<h2>19.8. Ficha del modelo<a class="headerlink" href="#ficha-del-modelo" title="Link to this heading">#</a></h2>
+<p>La ficha del modelo original está en <code class="docutils literal notranslate"><span class="pre">MODEL_CARD.md</span></code>, en la raíz del repositorio, y se lee desde la subpestaña «Ficha del modelo» del dashboard. Se reproduce aquí.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">((</span><span class="n">RAIZ</span> <span class="o">/</span> <span class="s2">"MODEL_CARD.md"</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<h1 class="rubric" id="ficha-del-modelo-des-cpl">Ficha del modelo: DES-CPL</h1>
+<p><strong>Versión:</strong> 1.0, noviembre de 2026.
+<strong>Autores:</strong> Joshua Hincapié Llorente y Alejandro Cantillo Escorcia (Universidad del Norte).
+<strong>Artefacto:</strong> <code class="docutils literal notranslate"><span class="pre">artifacts/des_cpl.joblib</span></code>. Sus metadatos están en <code class="docutils literal notranslate"><span class="pre">artifacts/des_cpl.metadata.json</span></code>.</p>
+<h2 class="rubric" id="descripcion">Descripción</h2>
+<p>DES-CPL (<em>selección dinámica de ensambles por competencia probabilística local</em>) combina cuatro clasificadores: árbol de decisión, Random Forest, XGBoost y SVM lineal calibrado. Para cada paciente, decide cuánto confiar en cada modelo según la calidad de sus probabilidades (puntuación de Brier) en pacientes con un perfil de predicciones parecido. Esa competencia local se encoge hacia la global cuando es ruidosa.</p>
+<p><strong>Configuración del artefacto:</strong> $k = 20$ vecinos por clase, $\tau = 0.0003$ y $\lambda = 0.9$, elegidos con 60 evaluaciones de Optuna sobre el conjunto de selección. La formulación y sus propiedades están en el capítulo 15 del libro.</p>
+<h2 class="rubric" id="uso-previsto">Uso previsto</h2>
+<ul class="simple">
+<li><p><strong>Para qué:</strong> apoyar la priorización del seguimiento posterior al alta. Ordena a los pacientes diabéticos hospitalizados según su riesgo de readmisión antes de 30 días, para que un equipo con capacidad limitada concentre llamadas o citas en el 15 % de mayor riesgo, que es el umbral operativo del artefacto.</p></li>
+<li><p><strong>Usuarios:</strong> analistas y equipos de gestión hospitalaria, como herramienta de <strong>apoyo</strong>. La decisión clínica es del personal de salud.</p></li>
+<li><p><strong>Alcance:</strong> es un proyecto académico. No está validado para uso clínico.</p></li>
+</ul>
+<h2 class="rubric" id="datos-de-entrenamiento">Datos de entrenamiento</h2>
+<ul class="simple">
+<li><p><strong>Datos:</strong> <em>Diabetes 130-US Hospitals for Years 1999-2008</em> (UCI). Detalles en <code class="docutils literal notranslate"><span class="pre">DATA_STATEMENT.md</span></code>.</p></li>
+<li><p><strong>Unidad:</strong> el encuentro hospitalario.</p></li>
+<li><p><strong>Tamaño:</strong> 79 473 encuentros de entrenamiento (56 036 pacientes) y 19 867 de prueba (13 951), sin pacientes compartidos.</p></li>
+<li><p><strong>Etiqueta:</strong> readmisión antes de 30 días, con una prevalencia del 11.4 %.</p></li>
+<li><p><strong>Variables:</strong> 38 predictores administrativos y clínicos disponibles al alta, como demografía, diagnósticos agrupados, número de visitas previas y medicamentos.</p></li>
+</ul>
+<h2 class="rubric" id="metricas">Métricas</h2>
+<p>| Evaluación | AUC-PR | AUC-ROC | Brier |
+|—|—|—|—|
+| Bucle externo (5 folds agrupados por paciente) | 0.2279 ± 0.0174 | 0.6721 | 0.0963 |
+| Prueba (una sola vez) | 0.2293 | 0.6661 | 0.0961 |
+| Mejor benchmark en prueba (XGBoost) | 0.2315 | 0.6664 | 0.0960 |</p>
+<ul class="simple">
+<li><p><strong>Calibración:</strong> el error de calibración esperado en prueba es 0.0065.</p></li>
+<li><p><strong>Predicción conforme (α = 0.1):</strong> la cobertura es 0.890 en total y 0.869 en los readmitidos.</p></li>
+<li><p><strong>Variabilidad:</strong> con 10 semillas, el AUC-PR es 0.2270 ± 0.0007. El de XGBoost es 0.2251 ± 0.0017.</p></li>
+<li><p><strong>Robustez:</strong> con ruido en las etiquetas, menos prevalencia o menos datos, DES-CPL pierde entre 1.6 y 1.9 veces menos AUC-PR que XGBoost (capítulo 16).</p></li>
+</ul>
+<h2 class="rubric" id="limitaciones">Limitaciones</h2>
+<ul class="simple">
+<li><p><strong>No supera al mejor modelo individual.</strong> Las diferencias con XGBoost, LightGBM y CatBoost no son significativas (capítulos 13 y 16).</p></li>
+<li><p><strong>Capacidad de discriminación modesta.</strong> Con un AUC-ROC de 0.67, en el 15 % de mayor riesgo solo uno de cada cuatro o cinco pacientes marcados se readmite en realidad. Para la mayoría de los pacientes, el conjunto de predicción conforme contiene las dos clases.</p></li>
+<li><p><strong>Datos antiguos.</strong> Son de 1999 a 2008 y de hospitales de Estados Unidos. Las prácticas clínicas, la codificación y las poblaciones han cambiado desde entonces.</p></li>
+<li><p><strong>Variables limitadas.</strong> No incluye información posterior al alta ni determinantes sociales. El capítulo 13 muestra que el techo de desempeño viene de la información disponible, no del modelo.</p></li>
+<li><p><strong>Más lento en inferencia.</strong> Tarda unos 0.45 ms por paciente, frente a unos 0.03 ms de un modelo individual, y necesita los cuatro modelos base y su conjunto de selección (12.9 MB).</p></li>
+</ul>
+<h2 class="rubric" id="riesgos-y-equidad">Riesgos y equidad</h2>
+<ul>
+<li><p><strong>Atributos sensibles.</strong> <code class="docutils literal notranslate"><span class="pre">race</span></code> y <code class="docutils literal notranslate"><span class="pre">gender</span></code> son predictores. El análisis de equidad del modelo base (capítulo 7) encontró, con una capacidad del 10 %, una cobertura de los readmitidos parecida por sexo y entre los grupos raciales más numerosos (relativa de 0.93 a 1.04). En cambio, la cobertura fue mucho menor:</p>
+<ul class="simple">
+<li><p>en los encuentros sin raza registrada (0.36) y en la categoría «Other» (0.69);</p></li>
+<li><p>en los pacientes de 10 a 20 años (0.27).</p></li>
+</ul>
+<p>La sección 16.7 repite ese análisis con DES-CPL y con XGBoost en el conjunto de prueba, con la misma capacidad (<code class="docutils literal notranslate"><span class="pre">results/equidad_des_cpl_prueba.csv</span></code>). Antes de cualquier uso real habría que monitorear la cobertura por grupo y decidir si excluir los atributos sensibles.</p>
+</li>
+<li><p><strong>Daño por error.</strong> Un falso negativo deja sin seguimiento a un paciente que se readmite. Un falso positivo consume capacidad del equipo. El umbral debe ajustarse a la capacidad real del servicio, no fijarse en 0.5.</p></li>
+</ul>
+<h2 class="rubric" id="usos-no-recomendados">Usos no recomendados</h2>
+<ul class="simple">
+<li><p>Negar, retrasar o condicionar atención a un paciente según su puntaje.</p></li>
+<li><p>Usarlo como diagnóstico o como sustituto del juicio clínico.</p></li>
+<li><p>Aplicarlo a poblaciones distintas de la de entrenamiento (otros países, otras enfermedades principales, pacientes pediátricos) sin volver a validarlo.</p></li>
+<li><p>Fijar primas, coberturas o decisiones administrativas sobre personas individuales.</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="sintesis-del-capitulo">
+<h2>19.9. Síntesis del capítulo<a class="headerlink" href="#sintesis-del-capitulo" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Requisito de la guía</p></th>
+<th class="head"><p>Cómo se cumple</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Mejor combinación de cada modelo con un criterio estadístico</p></td>
+<td><p>Mayor AUC-PR media del bucle externo; tabla con media ± desviación y motivo (sección 19.1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mejor combinación global entre los finalistas</p></td>
+<td><p>XGBoost con ADASYN y Random Search, finalista de Friedman y Nemenyi (sección 19.1)</p></td>
+</tr>
+<tr class="row-even"><td><p>Reentrenamiento con todo el entrenamiento y serialización</p></td>
+<td><p>Pipeline completo en <code class="docutils literal notranslate"><span class="pre">artifacts/</span></code> con <code class="docutils literal notranslate"><span class="pre">joblib</span></code> y <code class="docutils literal notranslate"><span class="pre">compress=3</span></code> (sección 19.3)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metadata.json</span></code> por modelo</p></td>
+<td><p>Versiones, semilla, hiperparámetros, esquema de entrada y métricas (sección 19.3)</p></td>
+</tr>
+<tr class="row-even"><td><p>Prueba de ida y vuelta</p></td>
+<td><p>Aprobada en los ocho artefactos sobre todo el conjunto de prueba (sección 19.4)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tamaño de los artefactos</p></td>
+<td><p>49 MB en total; el mayor, 30.1 MB, dentro de los límites de GitHub y de Render (sección 19.5)</p></td>
+</tr>
+<tr class="row-even"><td><p>Dashboard con Contexto, EDA y Modelos</p></td>
+<td><p>Aplicación multipágina desplegada (sección 19.6)</p></td>
+</tr>
+<tr class="row-odd"><td><p>URL pública</p></td>
+<td><p><a class="reference external" href="https://readmision-diabetes.onrender.com">https://readmision-diabetes.onrender.com</a> (sección 19.7)</p></td>
+</tr>
+<tr class="row-even"><td><p>Ficha del modelo accesible desde la aplicación</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MODEL_CARD.md</span></code>, en el dashboard y en la sección 19.8</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Una limitación queda declarada: en cuatro modelos la regla de la configuración modal no decide y el artefacto usa la configuración del primer fold (sección 19.2).</p>
+</section>
+<section id="autoria-uso-de-herramientas-y-archivo-del-repositorio">
+<h2>19.10. Autoría, uso de herramientas y archivo del repositorio<a class="headerlink" href="#autoria-uso-de-herramientas-y-archivo-del-repositorio" title="Link to this heading">#</a></h2>
+<p>La guía pide cerrar el libro con la declaración de autoría y con el archivo versionado del repositorio. Los dos están en los capítulos anteriores y se enlazan aquí:</p>
+<ul class="simple">
+<li><p><strong>Declaración de autoría y uso de herramientas, incluidas las de inteligencia artificial.</strong> Firmada por los dos autores el 13 de noviembre de 2026, en la <a class="reference internal" href="17_Conclusiones.html"><span class="std std-doc">sección 17.6</span></a>.</p></li>
+<li><p><strong>Archivo versionado con identificador persistente.</strong> DOI <a class="reference external" href="https://doi.org/10.5281/zenodo.24211425">10.5281/zenodo.24211425</a>, en la <a class="reference internal" href="18_Reproducibilidad.html"><span class="std std-doc">sección 18.8</span></a>.</p></li>
+<li><p><strong>Lista de verificación de reproducibilidad.</strong> En la <a class="reference internal" href="18_Reproducibilidad.html"><span class="std std-doc">sección 18.7</span></a>.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="18_Reproducibilidad.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">18. Reproducibilidad y bibliografía</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#criterio-de-seleccion">19.1. Criterio de selección</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hiperparametros-finales">19.2. Hiperparámetros finales</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reentrenamiento-serializacion-y-metadatos">19.3. Reentrenamiento, serialización y metadatos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-ida-y-vuelta">19.4. Prueba de ida y vuelta</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-de-los-artefactos">19.5. Tamaño de los artefactos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dashboard">19.6. Dashboard</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arquitectura">19.6.1. Arquitectura</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#contenido">19.6.2. Contenido</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decisiones-de-diseno">19.6.3. Decisiones de diseño</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#capturas-de-pantalla">19.6.4. Capturas de pantalla</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#despliegue-en-render">19.7. Despliegue en Render</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ficha-del-modelo">19.8. Ficha del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintesis-del-capitulo">19.9. Síntesis del capítulo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#autoria-uso-de-herramientas-y-archivo-del-repositorio">19.10. Autoría, uso de herramientas y archivo del repositorio</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Joshua Hincapie Llorente y Alejandro Cantillo Escorcia — Universidad del Norte
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

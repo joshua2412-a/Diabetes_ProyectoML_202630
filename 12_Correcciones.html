@@ -200,6 +200,7 @@
 <li class="toctree-l1"><a class="reference internal" href="16_Evaluacion_Ampliada.html">16. Evaluación ampliada: otros conjuntos, robustez, semillas, sensibilidad, interpretabilidad, equidad y costo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="17_Conclusiones.html">17. Conclusiones, limitaciones y declaración de autoría</a></li>
 <li class="toctree-l1"><a class="reference internal" href="18_Reproducibilidad.html">18. Reproducibilidad y bibliografía</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Artefactos_Dashboard.html">19. Mejores combinaciones, artefactos y dashboard</a></li>
 </ul>
 
     </div>
@@ -2204,7 +2205,7 @@ Encuentros de prueba con un perfil idéntico en entrenamiento: 0 de 19,867 (0.00
 </div>
 <p>Ningún paciente se reparte entre entrenamiento y evaluación en ninguna de las particiones: ni en la de prueba, ni en las cinco externas, ni en las internas, tanto con la búsqueda sobre todos los pacientes como con la submuestra de un cuarto. La tasa positiva se mantiene estable entre particiones, como corresponde a la estratificación.</p>
 <p>Tampoco hay perfiles duplicados entre particiones: ninguno de los 19,867 encuentros de prueba tiene un vector de predictores idéntico a alguno de entrenamiento. Si los hubiera, no serían una fuga en sentido estricto, porque pertenecerían a pacientes distintos, pero podrían inflar la evaluación; la comprobación descarta también ese caso.</p>
-<p><strong>Tipo 4, mezcla temporal o espacial.</strong> El conjunto no incluye fechas ni identificador de hospital: sus diez años y 130 hospitales están anonimizados. La única huella temporal, el <code class="docutils literal notranslate"><span class="pre">encounter_id</span></code>, se eliminó en el capítulo 2 precisamente porque al ser creciente permitiría aprender tendencias del registro en lugar del mecanismo clínico. Lo que sí puede controlarse es la mezcla temporal <strong>dentro de un paciente</strong>: como cada paciente está entero en una sola partición, un encuentro posterior nunca informa la predicción de uno anterior del mismo paciente. La mezcla entre pacientes de distintas épocas o centros no puede controlarse con estos datos y se declara como limitación; la evaluación ante cambio de distribución del Entregable 3 la abordará con un bloque que se mantenga fuera de toda decisión de diseño.</p>
+<p><strong>Tipo 4, mezcla temporal o espacial.</strong> El conjunto no incluye fechas ni identificador de hospital: sus diez años y 130 hospitales están anonimizados. La única huella temporal, el <code class="docutils literal notranslate"><span class="pre">encounter_id</span></code>, se eliminó en el capítulo 2 precisamente porque al ser creciente permitiría aprender tendencias del registro en lugar del mecanismo clínico. Lo que sí puede controlarse es la mezcla temporal <strong>dentro de un paciente</strong>: como cada paciente está entero en una sola partición, un encuentro posterior nunca informa la predicción de uno anterior del mismo paciente. La mezcla entre pacientes de distintas épocas o centros no puede controlarse con estos datos y se declara como limitación. El Entregable 3 la evalúa con lo que los datos permiten: el conjunto de prueba, que se mantuvo fuera de toda decisión de diseño (sección 13.8), y un escenario de menor prevalencia (sección 16.3).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">auditoria</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
@@ -2358,7 +2359,7 @@ Encuentros de prueba con un perfil idéntico en entrenamiento: 0 de 19,867 (0.00
       <th>2</th>
       <td>src/des_cpl.py</td>
       <td>DES-CPL: selección dinámica de ensambles por c...</td>
-      <td>521</td>
+      <td>531</td>
       <td>perfil, pesos_softmax, combinar, competencia_l...</td>
     </tr>
     <tr>
@@ -2372,14 +2373,14 @@ Encuentros de prueba con un perfil idéntico en entrenamiento: 0 de 19,867 (0.00
       <th>4</th>
       <td>src/estadistica.py</td>
       <td>Pruebas estadísticas y tamaños del efecto para...</td>
-      <td>311</td>
+      <td>395</td>
       <td>diferencia_critica, prueba_delong, correccion_...</td>
     </tr>
     <tr>
       <th>5</th>
       <td>src/experimento_des_cpl.py</td>
       <td>Protocolo experimental de DES-CPL (capítulo 13).</td>
-      <td>432</td>
+      <td>463</td>
       <td>mejores_combinaciones, con_presupuesto, partic...</td>
     </tr>
     <tr>
@@ -2391,48 +2392,69 @@ Encuentros de prueba con un perfil idéntico en entrenamiento: 0 de 19,867 (0.00
     </tr>
     <tr>
       <th>7</th>
+      <td>src/incertidumbre.py</td>
+      <td>Calidad probabilística y cuantificación de inc...</td>
+      <td>81</td>
+      <td>error_calibracion, cuantiles_conformes, conjun...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>src/literatura.py</td>
+      <td>Lectura de los resultados de Google Scholar co...</td>
+      <td>117</td>
+      <td>leer_google_scholar</td>
+    </tr>
+    <tr>
+      <th>9</th>
       <td>src/metricas.py</td>
       <td>Métricas de clasificación para clases desbalan...</td>
       <td>49</td>
       <td>calcular_metricas</td>
     </tr>
     <tr>
-      <th>8</th>
+      <th>10</th>
       <td>src/modelos.py</td>
       <td>Los siete modelos base, el envoltorio de XGBoo...</td>
       <td>220</td>
       <td>XGBClasificadorParada, crear_modelo</td>
     </tr>
     <tr>
-      <th>9</th>
+      <th>11</th>
       <td>src/optimizacion.py</td>
       <td>Los cuatro optimizadores de hiperparámetros: G...</td>
       <td>303</td>
       <td>puntuar, optimizar</td>
     </tr>
     <tr>
-      <th>10</th>
+      <th>12</th>
+      <td>src/original_model.py</td>
+      <td>Modelo original del Entregable 3 con el nombre...</td>
+      <td>95</td>
+      <td>estimadores_por_defecto, ModeloOriginal</td>
+    </tr>
+    <tr>
+      <th>13</th>
       <td>src/perfilamiento.py</td>
       <td>Medición de tiempo, memoria y desempeño de un ...</td>
       <td>63</td>
       <td>medir_ajuste</td>
     </tr>
     <tr>
-      <th>11</th>
+      <th>14</th>
       <td>src/preprocesamiento.py</td>
       <td>Preprocesador por bloques de variables, ajusta...</td>
       <td>96</td>
       <td>construir_preprocesador, nombres_variables</td>
     </tr>
     <tr>
-      <th>12</th>
+      <th>15</th>
       <td>src/sota.py</td>
       <td>Benchmarks recientes del estado del arte (guía...</td>
       <td>80</td>
       <td>crear_modelo_sota, construir_pipeline_sota</td>
     </tr>
     <tr>
-      <th>13</th>
+      <th>16</th>
       <td>src/validacion.py</td>
       <td>Validación cruzada anidada y agrupada por paci...</td>
       <td>328</td>
@@ -2536,7 +2558,7 @@ Encuentros de prueba con un perfil idéntico en entrenamiento: 0 de 19,867 (0.00
 <td><p>Que ningún paciente queda a la vez en entrenamiento y evaluación, en las particiones externas, internas y en la submuestra de búsqueda, y que el ejecutor reanuda desde sus puntos de control</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_metricas.py</span></code>, <code class="docutils literal notranslate"><span class="pre">test_estadistica.py</span></code></p></td>
-<td><p>Las métricas, la diferencia crítica de Nemenyi, DeLong, Holm, el bootstrap BCa, la delta de Cliff y la d de Cohen contra valores calculados a mano o con una implementación de referencia</p></td>
+<td><p>Las métricas, la diferencia crítica de Nemenyi, DeLong, Holm, el bootstrap BCa, la delta de Cliff, la d de Cohen, la t de Nadeau-Bengio, McNemar y la t bayesiana contra valores calculados a mano o con una implementación de referencia</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_equivalencia_e2.py</span></code></p></td>
 <td><p>Que <code class="docutils literal notranslate"><span class="pre">src/</span></code> y <code class="docutils literal notranslate"><span class="pre">experimento.py</span></code> dan <strong>exactamente</strong> los mismos resultados en seis combinaciones de modelo, balanceo y optimizador sobre datos sintéticos; y, en la prueba marcada como lenta, que <code class="docutils literal notranslate"><span class="pre">src/</span></code> reproduce una corrida real de la tabla maestra con los datos completos</p></td>
@@ -2549,6 +2571,24 @@ Encuentros de prueba con un perfil idéntico en entrenamiento: 0 de 19,867 (0.00
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_des_cpl.py</span></code></p></td>
 <td><p>El modelo original: la competencia calculada a mano, los extremos de la temperatura (promedio simple y selección dura), que la combinación es convexa, la descomposición de ambigüedad, que la región tiene <span class="math notranslate nohighlight">\(k\)</span> vecinos de cada clase y excluye al propio paciente, y que el ensamble favorece al modelo localmente mejor</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_experimento_des_cpl.py</span></code></p></td>
+<td><p>El protocolo del modelo original: que las particiones externas no comparten pacientes, que el modelo final de cada base reproduce el ajuste del Entregable 2, que la poda y el encogimiento se eligen en el conjunto de selección, que la temperatura infinita reproduce el promedio simple y que la ejecución reanuda sin recalcular</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_original_model.py</span></code></p></td>
+<td><p>La interfaz que pide la guía del Entregable 3: que el modelo aprende mejor que el azar en datos sintéticos, que la misma semilla da las mismas probabilidades, que es compatible con <code class="docutils literal notranslate"><span class="pre">sklearn.base.clone</span></code>, que rechaza entradas e hiperparámetros inválidos y que <code class="docutils literal notranslate"><span class="pre">fit</span></code> no modifica los estimadores</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_sota.py</span></code></p></td>
+<td><p>Que los espacios de búsqueda de LightGBM y CatBoost son válidos, que los modelos ajustan y que la misma semilla da las mismas predicciones</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_incertidumbre.py</span></code></p></td>
+<td><p>Que el error de calibración esperado es cero con probabilidades calibradas y positivo si no lo están, y que la cobertura de la predicción conforme por clase cumple el nivel nominal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_literatura.py</span></code></p></td>
+<td><p>Que el lector de las páginas de Google Scholar extrae los registros, el total de resultados y la fecha (capítulo 14)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_analitica_tablero.py</span></code></p></td>
+<td><p>Los cálculos del tablero: el intervalo de Wilson, el conjunto conforme por clase y los redondeos de las figuras de 100 personas</p></td>
 </tr>
 </tbody>
 </table>
@@ -2578,10 +2618,10 @@ Encuentros de prueba con un perfil idéntico en entrenamiento: 0 de 19,867 (0.00
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pytest_rapidas.xml: ejecutado el 2026-11-09 23:29
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pytest_rapidas.xml: ejecutado el 2026-11-15 11:29
 pytest_lentas.xml: ejecutado el 2026-11-09 00:02
 
-Pruebas: 147 | fallidas: 0 | errores: 0 | omitidas: 0 | tiempo total: 9.9 min
+Pruebas: 173 | fallidas: 0 | errores: 0 | omitidas: 0 | tiempo total: 9.8 min
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -2611,101 +2651,129 @@ Pruebas: 147 | fallidas: 0 | errores: 0 | omitidas: 0 | tiempo total: 9.9 min
   <tbody>
     <tr>
       <th>0</th>
-      <td>test_balanceo.py</td>
+      <td>test_analitica_tablero.py</td>
       <td>8</td>
       <td>8</td>
-      <td>1.2</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>test_balanceo.py</td>
+      <td>8</td>
+      <td>8</td>
+      <td>1.1</td>
+    </tr>
+    <tr>
+      <th>2</th>
       <td>test_des_cpl.py</td>
       <td>39</td>
       <td>39</td>
       <td>0.9</td>
     </tr>
     <tr>
-      <th>2</th>
+      <th>3</th>
       <td>test_equivalencia_e2.py</td>
       <td>7</td>
       <td>7</td>
-      <td>516.6</td>
+      <td>506.3</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>4</th>
       <td>test_espacios.py</td>
       <td>10</td>
       <td>10</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>5</th>
       <td>test_estadistica.py</td>
-      <td>13</td>
-      <td>13</td>
+      <td>17</td>
+      <td>17</td>
       <td>1.1</td>
     </tr>
     <tr>
-      <th>5</th>
+      <th>6</th>
       <td>test_experimento_des_cpl.py</td>
-      <td>11</td>
-      <td>11</td>
-      <td>18.9</td>
+      <td>13</td>
+      <td>13</td>
+      <td>21.7</td>
     </tr>
     <tr>
-      <th>6</th>
+      <th>7</th>
       <td>test_explicacion.py</td>
       <td>6</td>
       <td>6</td>
       <td>0.1</td>
     </tr>
     <tr>
-      <th>7</th>
+      <th>8</th>
       <td>test_formato_tablero.py</td>
       <td>3</td>
       <td>3</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>8</th>
+      <th>9</th>
+      <td>test_incertidumbre.py</td>
+      <td>5</td>
+      <td>5</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>test_literatura.py</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>11</th>
       <td>test_metricas.py</td>
       <td>2</td>
       <td>2</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>9</th>
+      <th>12</th>
       <td>test_modelos.py</td>
       <td>16</td>
       <td>16</td>
-      <td>5.8</td>
+      <td>5.1</td>
     </tr>
     <tr>
-      <th>10</th>
+      <th>13</th>
       <td>test_optimizacion.py</td>
       <td>17</td>
       <td>17</td>
-      <td>35.7</td>
+      <td>32.5</td>
     </tr>
     <tr>
-      <th>11</th>
+      <th>14</th>
+      <td>test_original_model.py</td>
+      <td>6</td>
+      <td>6</td>
+      <td>4.1</td>
+    </tr>
+    <tr>
+      <th>15</th>
       <td>test_preprocesamiento.py</td>
       <td>5</td>
       <td>5</td>
       <td>0.6</td>
     </tr>
     <tr>
-      <th>12</th>
+      <th>16</th>
       <td>test_sota.py</td>
       <td>5</td>
       <td>5</td>
       <td>9.7</td>
     </tr>
     <tr>
-      <th>13</th>
+      <th>17</th>
       <td>test_validacion.py</td>
       <td>5</td>
       <td>5</td>
-      <td>3.8</td>
+      <td>3.5</td>
     </tr>
   </tbody>
 </table>

@@ -200,6 +200,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">16. Evaluación ampliada: otros conjuntos, robustez, semillas, sensibilidad, interpretabilidad, equidad y costo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="17_Conclusiones.html">17. Conclusiones, limitaciones y declaración de autoría</a></li>
 <li class="toctree-l1"><a class="reference internal" href="18_Reproducibilidad.html">18. Reproducibilidad y bibliografía</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Artefactos_Dashboard.html">19. Mejores combinaciones, artefactos y dashboard</a></li>
 </ul>
 
     </div>
@@ -1016,7 +1017,7 @@ Nemenyi: diferencia crítica = 9.12 rangos; rango medio de DES-CPL = 3.75
 <ul class="simple">
 <li><p><strong>Prueba global.</strong> Friedman rechaza la igualdad de los 13 métodos con amplio margen (Iman-Davenport, <span class="math notranslate nohighlight">\(p \approx 10^{-12}\)</span>): el orden entre familias de modelos se repite en los cuatro conjuntos.</p></li>
 <li><p><strong>Posición de DES-CPL.</strong> Es el tercero en rango medio (3.75), detrás de los dos ensambles estáticos fuertes: el apilamiento (2.00) y los pesos globales (2.75). Queda por delante de <strong>todos</strong> los benchmarks individuales: LightGBM 4.00, Random Forest y CatBoost 5.00, XGBoost 6.00. Es el mismo orden del problema principal, ahora visto en cuatro dominios.</p></li>
-<li><p><strong>Frente a cada mejor benchmark.</strong> DES-CPL supera al mejor benchmark solo en CDC (+0.0008 sobre LightGBM). En crédito (Random Forest) y en Bank Marketing (LightGBM) queda por debajo. Ninguna diferencia es significativa (Nadeau-Bengio, <span class="math notranslate nohighlight">\(p \ge 0.40\)</span>).</p></li>
+<li><p><strong>Frente a cada mejor benchmark.</strong> DES-CPL supera al mejor benchmark solo en CDC (+0.0009 sobre LightGBM). En crédito (Random Forest) y en Bank Marketing (LightGBM) queda por debajo. Ninguna diferencia es significativa (Nadeau-Bengio, <span class="math notranslate nohighlight">\(p \ge 0.40\)</span>).</p></li>
 <li><p><strong>Frente a XGBoost.</strong> DES-CPL supera a XGBoost en los tres conjuntos adicionales. XGBoost es el mejor benchmark del problema principal, pero en los otros conjuntos queda muy atrás de los ensambles: hasta 0.035 por debajo del mejor en Bank Marketing.</p></li>
 </ul>
 <p><strong>Condición 4 de superioridad del protocolo.</strong> Pide ser mejor que el mejor benchmark en al menos dos de los tres conjuntos adicionales y no significativamente peor en ninguno. <strong>No se cumple:</strong> DES-CPL es mejor en uno de tres, aunque no es significativamente peor en ninguno. El veredicto de R3 sigue siendo negativo.</p>
@@ -2589,22 +2590,25 @@ Mayor probabilidad posterior de 'equivalente': random_forest, xgboost, lightgbm,
 <tr class="row-even"><td><p>¿Es robusto?</p></td>
 <td><p>Más que XGBoost, que pierde entre 1.5 y 2 veces más con ruido en las etiquetas, menos prevalencia y menos datos. Random Forest y la regresión logística pierden aún menos, desde un punto de partida más bajo.</p></td>
 </tr>
-<tr class="row-odd"><td><p>¿Es estable frente a la semilla?</p></td>
+<tr class="row-odd"><td><p>¿Y ante un cambio de distribución?</p></td>
+<td><p>Los datos no traen fechas ni hospital, así que no se puede apartar un bloque temporal o espacial. Se evalúa con lo disponible: el conjunto de prueba, fuera de toda decisión de diseño (sección 13.8), y el escenario de menor prevalencia (sección 16.3). La mezcla entre épocas queda como limitación (sección 17.3).</p></td>
+</tr>
+<tr class="row-even"><td><p>¿Es estable frente a la semilla?</p></td>
 <td><p>Sí, como los otros combinadores y más que XGBoost. La comparación confirmatoria cayó en la mejor semilla de XGBoost.</p></td>
 </tr>
-<tr class="row-even"><td><p>¿Es sensible a sus hiperparámetros?</p></td>
+<tr class="row-odd"><td><p>¿Es sensible a sus hiperparámetros?</p></td>
 <td><p>Solo a <span class="math notranslate nohighlight">\(\lambda\)</span>, y en la misma dirección en selección y en evaluación.</p></td>
 </tr>
-<tr class="row-odd"><td><p>¿En qué variables se apoya?</p></td>
+<tr class="row-even"><td><p>¿En qué variables se apoya?</p></td>
 <td><p>En las mismas que XGBoost (Spearman 0.92, 14 de 15 variables principales en común), sobre todo el destino al alta y las hospitalizaciones previas (sección 16.6).</p></td>
 </tr>
-<tr class="row-even"><td><p>¿Trata distinto a algún grupo?</p></td>
+<tr class="row-odd"><td><p>¿Trata distinto a algún grupo?</p></td>
 <td><p>No más que XGBoost. Hay paridad por sexo; las brechas en los encuentros sin raza registrada, «Other» y «Asian» son las del capítulo 7 y vienen de los datos (sección 16.7).</p></td>
 </tr>
-<tr class="row-odd"><td><p>¿Cambian el veredicto McNemar y la <span class="math notranslate nohighlight">\(t\)</span> bayesiana?</p></td>
+<tr class="row-even"><td><p>¿Cambian el veredicto McNemar y la <span class="math notranslate nohighlight">\(t\)</span> bayesiana?</p></td>
 <td><p>No. Frente a XGBoost, CatBoost y LightGBM, McNemar no encuentra diferencias y la prueba bayesiana da como lo más probable la equivalencia práctica (sección 16.9).</p></td>
 </tr>
-<tr class="row-even"><td><p>¿Cuánto cuesta?</p></td>
+<tr class="row-odd"><td><p>¿Cuánto cuesta?</p></td>
 <td><p>Su búsqueda es más barata que la de los modelos de árboles; el costo está en el conjunto de selección (4 ajustes por modelo base) y en una inferencia unas 13 veces más lenta que la de XGBoost, aún por debajo de 1 ms por caso.</p></td>
 </tr>
 </tbody>

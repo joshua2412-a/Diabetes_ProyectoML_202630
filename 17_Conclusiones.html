@@ -200,6 +200,7 @@
 <li class="toctree-l1"><a class="reference internal" href="16_Evaluacion_Ampliada.html">16. Evaluación ampliada: otros conjuntos, robustez, semillas, sensibilidad, interpretabilidad, equidad y costo</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">17. Conclusiones, limitaciones y declaración de autoría</a></li>
 <li class="toctree-l1"><a class="reference internal" href="18_Reproducibilidad.html">18. Reproducibilidad y bibliografía</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Artefactos_Dashboard.html">19. Mejores combinaciones, artefactos y dashboard</a></li>
 </ul>
 
     </div>
@@ -455,7 +456,7 @@ document.write(`
 <li><p><strong>Siempre cerca de la cabeza:</strong> en los cuatro conjuntos de datos queda cerca del mejor método, aunque el mejor modelo individual cambia de un dominio a otro.</p></li>
 </ul>
 <p>Esa ventaja la comparte con los ensambles estáticos (pesos globales y apilamiento), así que viene de <strong>combinar</strong>, no de la parte <strong>local</strong>.</p>
-<p><strong>5. Documentación y reproducibilidad (capítulo 18).</strong> El código está en módulos con 156 pruebas automáticas que corren en integración continua. Cada resultado del libro se lee de un archivo de <code class="docutils literal notranslate"><span class="pre">results/</span></code>, y cada experimento se reanuda donde quedó si se interrumpe.</p>
+<p><strong>5. Documentación y reproducibilidad (capítulo 18).</strong> El código está en módulos con 173 pruebas automáticas: 172 corren en integración continua y una, que usa los datos reales, se ejecuta en local. Cada resultado del libro se lee de un archivo de <code class="docutils literal notranslate"><span class="pre">results/</span></code>, y cada experimento se reanuda donde quedó si se interrumpe.</p>
 </section>
 <section id="veredicto-sobre-el-modelo-original">
 <h2>17.2. Veredicto sobre el modelo original<a class="headerlink" href="#veredicto-sobre-el-modelo-original" title="Link to this heading">#</a></h2>
@@ -661,7 +662,7 @@ document.write(`
 </div>
 <p><strong>Lectura.</strong></p>
 <ul class="simple">
-<li><p><strong>Condición 1.</strong> DES-CPL queda unas milésimas por debajo de XGBoost, el mejor benchmark, aunque por encima de cinco de los siete modelos base.</p></li>
+<li><p><strong>Condición 1.</strong> DES-CPL queda unas milésimas por debajo de XGBoost, el mejor benchmark, aunque por encima de seis de los siete modelos base.</p></li>
 <li><p><strong>Condición 2.</strong> Friedman rechaza que todos los modelos sean iguales, pero Nemenyi no separa a DES-CPL del mejor. Nadeau-Bengio y DeLong no rechazan.</p></li>
 <li><p><strong>Condición 3.</strong> La δ de Cliff va en contra de DES-CPL: en la mayoría de los folds, XGBoost queda por encima.</p></li>
 <li><p><strong>Condición 4.</strong> DES-CPL solo supera al mejor benchmark en CDC, aunque en ningún conjunto es significativamente peor.</p></li>
@@ -688,7 +689,7 @@ document.write(`
 <li><p><strong>La parte local no aporta.</strong> En estos datos, la selección por región no mejora el ordenamiento, y la búsqueda la apaga (<span class="math notranslate nohighlight">\(\lambda \approx 1\)</span>). DES-CPL termina siendo casi un ensamble de pesos globales, con más costo.</p></li>
 <li><p><strong>Costo.</strong> El ajuste requiere reentrenar cada modelo base cuatro veces. La inferencia es unas 13 veces más lenta que la de XGBoost, aunque sigue por debajo de un milisegundo por caso (sección 16.8).</p></li>
 <li><p><strong>Cobertura conforme.</strong> En la clase readmitida queda en 0.869, por debajo del 0.90 nominal (sección 13.8). Las probabilidades de calibración son fuera de pliegue, mientras que las de prueba vienen del modelo reentrenado, y eso rompe en parte la intercambiabilidad.</p></li>
-<li><p><strong>Reproducción de un modelo base.</strong> Bayes difiere del Entregable 2 hasta en 0.0012 por fold. Las otras bases se reproducen exactamente (sección 13.3.1).</p></li>
+<li><p><strong>Reproducción de un modelo base.</strong> Bayes difiere del estudio de convergencia del capítulo 12 hasta en 0.0008 por fold. Las otras bases se reproducen exactamente (sección 13.3.1).</p></li>
 </ul>
 </section>
 <section id="riesgos-y-consideraciones-eticas">
