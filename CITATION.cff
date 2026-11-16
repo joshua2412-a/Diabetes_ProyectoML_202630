@@ -19,11 +19,11 @@ keywords:
   - "diabetes"
   - "selección dinámica de ensambles"
   - "aprendizaje automático"
-doi: "10.5281/zenodo.24211425"
+doi: "10.5281/zenodo.24211424"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.24211425"
-    description: "Versión v1.0 archivada en Zenodo"
+    value: "10.5281/zenodo.24211424"
+    description: "Todas las versiones archivadas en Zenodo; resuelve a la más reciente"
 references:
   - type: dataset
     title: "Diabetes 130-US Hospitals for Years 1999-2008"
