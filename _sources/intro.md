@@ -13,7 +13,7 @@ Joshua Hincapié Llorente
 
 <br>
 
-**Dashboard:** [https://readmision-diabetes.onrender.com](https://readmision-diabetes.onrender.com) · **Código:** [GitHub](https://github.com/joshua2412-a/Diabetes_ProyectoML_202630) · **Archivo:** DOI [10.5281/zenodo.24211425](https://doi.org/10.5281/zenodo.24211425)
+**Dashboard:** [https://readmision-diabetes.onrender.com](https://readmision-diabetes.onrender.com) · **Código:** [GitHub](https://github.com/joshua2412-a/Diabetes_ProyectoML_202630) · **Archivo:** DOI [10.5281/zenodo.24211424](https://doi.org/10.5281/zenodo.24211424)
 
 ---
 
