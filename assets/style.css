@@ -25,7 +25,10 @@
   --modelo-xgboost: #3462ac;
   --modelo-estatico: #a8326a;
   --modelo-resto: #878d9c;
-  --fondo: var(--bg);
+  /* Estilo B+: las tarjetas no llevan sombra ni anillo en reposo y se separan
+     del fondo solo por tono; por eso el fondo baja un punto respecto al --bg
+     de la portada (el salto entre ambas es imperceptible). */
+  --fondo: #eef1f6;
   --tarjeta: #ffffff;
   --suave: #edf1f7;
   --tinta: var(--ink);
@@ -50,8 +53,13 @@
   --noche-acento: #e8c766;
   --noche-filete: rgba(232, 199, 102, 0.18);
   --lectura: linear-gradient(140deg, #f4f6fc 0%, #edf1fa 55%, #e8eef9 100%);
-  --radio: 10px;
-  --sombra: 0 1px 2px rgba(15, 30, 51, .06), 0 1px 1px rgba(15, 30, 51, .04);
+  /* Radios del estilo B+ (gliomas usa 22/14): 20 px para tarjetas y bloques,
+     14 px para piezas pequeñas (entradas, botones secundarios, paneles
+     anidados), de modo que lo anidado quede concéntrico. */
+  --radio: 20px;
+  --radio-sm: 14px;
+  /* La sombra ya no marca reposo: solo aparece al pasar sobre algo clicable. */
+  --sombra: 0 10px 28px rgba(14, 32, 67, .12);
   --fuente: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --columna: 1440px;
   /* Movimiento: escala de transitions.dev. Las aperturas usan ease-out
@@ -73,7 +81,11 @@ p, li { text-wrap: pretty; }
 /* Foco visible como en la portada: 3 px del ámbar (oscuro en claro, arena en oscuro), y arena
    sobre la banda noche, donde el ámbar oscuro no se vería. */
 :focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
-.barra :focus-visible, .banda-pagina :focus-visible, .pasos-relato .active:focus-visible { outline-color: var(--arena); }
+.barra :focus-visible, .banda-pagina :focus-visible { outline-color: var(--arena); }
+/* Pastilla activa rellena de acento: el anillo va separado 2 px, sobre el
+   fondo, así que el ámbar oscuro de foco se sigue viendo. El relleno del
+   contenedor (4 px) evita que el overflow lo recorte. */
+.subpestanas .nav-link:focus-visible, .pasos-relato .nav-link:focus-visible { outline-offset: 1px; }
 ::selection { background: color-mix(in srgb, var(--clase-0) 28%, transparent); }
 .material-symbols-rounded { font-size: 1.2em; vertical-align: -0.2em; }
 
@@ -102,40 +114,85 @@ html[data-tema="oscuro"] .tema-sol { display: inline; }
 html[data-tema="oscuro"] .tema-luna { display: none; }
 
 /* ---- Cabecera de página: continúa la banda a todo el ancho --------------- */
+/* Sin el patrón de iconos médicos (fondo-medico.svg): competía con el título.
+   Queda el degradado limpio de la portada y, a la derecha, una capa de
+   partículas estáticas (::before, abajo) pintada solo con CSS. */
 .banda-pagina {
-  margin: 0 calc(50% - 50vw) 24px; padding: 32px max(32px, calc(50vw - 688px)) 32px;
-  background: url("fondo-medico.svg") right -40px top -30px / 420px 260px repeat,
-              linear-gradient(180deg, var(--noche) 0%, var(--noche-2) 100%);
-  color: var(--noche-suave); min-height: 190px; position: relative; overflow: hidden;
+  margin: 0 calc(50% - 50vw) 32px; padding: 40px max(32px, calc(50vw - 688px)) 40px;
+  background: linear-gradient(180deg, var(--noche) 0%, var(--noche-2) 100%);
+  color: var(--noche-suave); min-height: 220px; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: center;
 }
+.banda-pagina > * { position: relative; z-index: 1; }
+/* Partículas: puntos de radial-gradient con los colores de la portada (arena,
+   ámbar y azules claros), alineados a la derecha y desvanecidos hacia el
+   texto. Es una imagen fija: no hay bucle de animación ni JS. */
+.banda-pagina::before {
+  content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: min(560px, 48%); z-index: 0;
+  pointer-events: none; opacity: .55;
+  background:
+    radial-gradient(circle at 88% 22%, #e8c766 0 3px, transparent 3.5px),
+    radial-gradient(circle at 72% 64%, #e8af2e 0 2.5px, transparent 3px),
+    radial-gradient(circle at 94% 78%, #85a4d6 0 2px, transparent 2.5px),
+    radial-gradient(circle at 60% 30%, #85a4d6 0 1.5px, transparent 2px),
+    radial-gradient(circle at 80% 46%, #e8c766 0 1.5px, transparent 2px),
+    radial-gradient(circle at 48% 72%, #5a85c4 0 2px, transparent 2.5px),
+    radial-gradient(circle at 66% 14%, #e8c766 0 1px, transparent 1.5px),
+    radial-gradient(circle at 98% 40%, #e8af2e 0 1.5px, transparent 2px),
+    radial-gradient(circle at 36% 48%, #85a4d6 0 1px, transparent 1.5px),
+    radial-gradient(circle at 54% 90%, #e8c766 0 1.5px, transparent 2px),
+    radial-gradient(circle at 86% 92%, #5a85c4 0 1px, transparent 1.5px),
+    radial-gradient(circle at 76% 8%, #85a4d6 0 1px, transparent 1.5px),
+    radial-gradient(ellipse 60% 70% at 82% 50%, rgba(52, 98, 172, .35), transparent 70%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 45%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 45%);
+}
+/* Con ilustración (solo se ve en pantallas anchas) las partículas sobran. */
+@media (min-width: 992px) { .banda-pagina:has(.banda-ilustracion)::before { display: none; } }
 /* La ilustración de la portada vive a la derecha de la banda; en pantallas
    estrechas se oculta para no robar espacio al texto. */
 .banda-con-ilustracion { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; }
 .banda-ilustracion { width: min(360px, 32vw); height: auto; filter: drop-shadow(0 12px 24px rgba(0, 0, 0, .25)); }
 @media (max-width: 991.98px) { .banda-ilustracion { display: none; } .banda-con-ilustracion { display: block; } }
-.banda-ceja { font-size: .82rem; font-weight: 600; color: var(--noche-acento); margin-bottom: 8px; letter-spacing: .02em; }
+.banda-ceja { font-size: .82rem; font-weight: 600; color: var(--noche-acento); margin-bottom: 8px; letter-spacing: .02em;
+  display: flex; align-items: center; gap: 8px; }
+/* Línea de bloque antes de la ceja: el mismo guion de 24 × 3 de los KPI. */
+.banda-ceja::before { content: ""; width: 24px; height: 3px; border-radius: 2px; background: var(--arena); flex: none; }
 .banda-titulo { color: var(--noche-tinta); font-size: clamp(1.7rem, 3vw, 2.3rem); line-height: 1.12; margin: 0 0 8px; max-width: 780px; }
 .titulo-ligero { font-weight: 400; }
 .banda-texto { max-width: 70ch; margin: 0; color: var(--noche-suave); }
 
 /* ---- Subpestañas ----------------------------------------------------------- */
-.subpestanas { border-bottom: 1px solid var(--filete); margin-bottom: 24px; flex-wrap: nowrap;
-               overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
-.subpestanas .nav-link.subpestana { color: var(--tinta-tenue); border: 0; white-space: nowrap; background: none; font-weight: 500;
-  min-height: 40px; display: inline-flex; align-items: center; padding: 8px 16px;
-  transition: color var(--dur-rapida) var(--ease-salida), box-shadow var(--dur-media) var(--ease-salida); }
-.subpestanas .nav-link.subpestana.subpestana-activa,
-.subpestanas .nav-link.subpestana.active { color: var(--tinta); box-shadow: inset 0 -3px 0 var(--ambar); background: none; }
+/* Pastillas en UNA sola fila, también con las 12 de EDA y las 9 de Modelos:
+   lo que no cabe se desliza (barra oculta) y el borde por donde quedan más
+   pestañas se desvanece (regla de fundido al final del archivo). El relleno
+   de 4 px deja sitio al anillo de foco, que el overflow recortaría. */
+.subpestanas, .pasos-relato { display: flex; flex-wrap: nowrap; gap: 4px; border: 0; margin: 0 0 24px; padding: 4px;
+  overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.subpestanas::-webkit-scrollbar, .pasos-relato::-webkit-scrollbar { display: none; }
+.subpestanas .nav-item, .pasos-relato .nav-item { flex: none; margin: 0; }
+.subpestanas .nav-link.subpestana, .pasos-relato .nav-link.paso-etiqueta {
+  color: var(--tinta-suave); border: 0; border-radius: 999px; margin: 0; white-space: nowrap; background: transparent;
+  font-weight: 500; min-height: 40px; display: inline-flex; align-items: center; padding: 8px 16px; box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--dur-rapida) var(--ease-salida), background-color var(--dur-rapida) var(--ease-salida); }
+/* Activa: rellena con el acento (azul en claro, ámbar con tinta noche en oscuro). */
+.subpestanas .nav-link.subpestana.subpestana-activa, .subpestanas .nav-link.subpestana.active,
+.pasos-relato .nav-link.paso-etiqueta.paso-etiqueta-activa, .pasos-relato .nav-link.paso-etiqueta.active {
+  color: var(--accent-ink); background: var(--accent); font-weight: 600; box-shadow: none; }
 
 /* ---- Tarjetas y piezas ----------------------------------------------------- */
-.tarjeta { background: var(--tarjeta); border: 0; border-radius: var(--radio); box-shadow: var(--anillo), var(--sombra); }
+/* Sin sombra ni anillo: la tarjeta se separa del fondo por tono (blanco sobre
+   --fondo en claro; #0e2043 sobre #08142c en oscuro). */
+.tarjeta { background: var(--tarjeta); border: 0; border-radius: var(--radio); box-shadow: none; }
 /* Altura igual entre columnas solo cuando la tarjeta es lo único de su
    columna. Si comparte columna con un subtítulo, un 100 % la haría medir lo
    que la columna entera y desbordaría sobre lo que viene debajo. */
 .row > [class*="col"] > .tarjeta:only-child,
 .row > [class*="col"] > .lectura:only-child { height: 100%; }
 .tarjeta.tono-acento, .lectura { background: var(--lectura); }
-.lectura { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--arena) 45%, transparent), var(--sombra); }
+/* El filete arena de la lectura no es elevación sino su seña: se conserva. */
+.lectura { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--arena) 45%, transparent); }
 .tarjeta.tono-panel { background: var(--suave); }
 .tarjeta-titulo { font-size: 1rem; margin-bottom: 8px; line-height: 1.35; }
 .tarjeta-nota { font-size: .84rem; color: var(--tinta-tenue); margin-top: 8px; }
@@ -152,12 +209,14 @@ html[data-tema="oscuro"] .tema-luna { display: none; }
 .nota-fuente { font-size: .8rem; color: var(--tinta-tenue); margin-top: 16px; }
 .enlace-libro { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: var(--acento-texto); font-weight: 600; }
 .tex p { margin: 0; }
-.kpi { position: relative; overflow: hidden; }
-.kpi-franja { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
-.kpi-etiqueta { font-size: .82rem; color: var(--tinta-tenue); }
-.kpi-valor { font-size: clamp(1.3rem, 1.55vw, 1.7rem); font-weight: 600; color: var(--tinta); font-variant-numeric: tabular-nums;
-  line-height: 1.2; text-wrap: balance; }
-.kpi-detalle { font-size: .8rem; color: var(--tinta-tenue); }
+/* KPI como los mosaicos de gliomas: guion de color de 24 × 3 arriba (ya no la
+   franja lateral), rótulo pequeño, cifra grande y nota tenue de 1-2 líneas. */
+.kpi { position: relative; height: 100%; }
+.kpi-franja { display: block; width: 24px; height: 3px; border-radius: 2px; margin: 20px 0 0 24px; }
+.kpi-etiqueta { font-size: .86rem; font-weight: 500; color: var(--tinta-tenue); }
+.kpi-valor { font-size: clamp(1.6rem, 2.2vw, 2.1rem); font-weight: 700; color: var(--tinta); font-variant-numeric: tabular-nums;
+  line-height: 1.15; letter-spacing: -.01em; margin: 4px 0 4px; text-wrap: balance; }
+.kpi-detalle { font-size: .8rem; line-height: 1.4; color: var(--tinta-tenue); }
 .aviso { border-radius: var(--radio); padding: 16px; margin: 16px 0; border: 1px solid color-mix(in srgb, var(--acento) 35%, transparent);
   background: color-mix(in srgb, var(--acento) 7%, var(--tarjeta)); }
 .aviso-alcance { border-color: color-mix(in srgb, #9a6b08 40%, transparent); background: color-mix(in srgb, #e8af2e 9%, var(--tarjeta)); }
@@ -177,7 +236,7 @@ html[data-tema="oscuro"] .aviso-alcance { border-color: color-mix(in srgb, var(-
 
 /* ---- Pipeline de la metodología ----------------------------------------- */
 .pipeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; counter-reset: paso; }
-.paso { display: flex; gap: 16px; align-items: flex-start; padding: 16px; border-radius: var(--radio); background: var(--tarjeta); border: 1px solid var(--filete); position: relative; }
+.paso { display: flex; gap: 16px; align-items: flex-start; padding: 16px; border-radius: var(--radio); background: var(--tarjeta); border: 1px solid transparent; position: relative; }
 .paso-pendiente { border-style: dashed; }
 .paso-icono { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--suave); color: var(--acento-texto); }
 .paso-titulo { font-weight: 600; color: var(--tinta); }
@@ -201,17 +260,40 @@ button:active:not(:disabled) { transform: scale(.96); }
 /* ---- DataTable ------------------------------------------------------------
    La tabla de Dash trae su propia hoja (fondo blanco, letra monoespaciada,
    bordes grises en línea); se reemplaza con !important para que siga al tema. */
-.tabla-datos { background: var(--tarjeta); border: 1px solid var(--filete); border-radius: var(--radio);
-  box-shadow: var(--sombra); padding: 6px 6px 10px; overflow: hidden; }
+/* Como una tarjeta: sin borde ni sombra. El encabezado gris lleva el radio
+   pequeño, concéntrico con el de la tarjeta (20 − 8 de relleno ≈ 14). */
+.tabla-datos { background: var(--tarjeta); border: 0; border-radius: var(--radio);
+  box-shadow: none; padding: 8px 8px 12px; overflow: hidden; }
 .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner th,
 .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td {
   font-family: var(--fuente) !important; font-size: .88rem !important; color: var(--tinta-suave) !important;
   background: transparent !important; border-top: 0 !important; border-left: 0 !important; border-right: 0 !important;
   border-bottom: 1px solid var(--filete) !important; padding: 10px 12px !important; }
+/* Encabezados sin mayúsculas forzadas: «AUC-PR (media ± sd)» se lee mejor así
+   y ocupa menos. Filas de ~44 px, como las tablas de gliomas. */
 .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner th.dash-header {
-  color: var(--tinta-tenue) !important; font-size: .74rem !important; font-weight: 700 !important;
-  text-transform: uppercase; letter-spacing: .05em; background: var(--suave) !important; white-space: normal !important;
+  color: var(--tinta-suave) !important; font-size: .82rem !important; font-weight: 600 !important;
+  text-transform: none; letter-spacing: 0; background: var(--suave) !important; white-space: normal !important;
   line-height: 1.3; vertical-align: bottom; }
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td.dash-cell { height: 44px; }
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner tr:first-of-type th.dash-header:first-child { border-top-left-radius: var(--radio-sm); }
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner tr:first-of-type th.dash-header:last-child { border-top-right-radius: var(--radio-sm); }
+/* Fila del modelo original: fondo ámbar suave además de la negrita. La tabla
+   pinta las celdas transparentes con !important, así que la marca llega en
+   línea (style_data_conditional, rgba(184, 134, 11, .1)) y aquí se traduce al
+   token, que tiene su par en oscuro. */
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td.dash-cell[style*="rgba(184, 134, 11, 0.1)"] {
+  background: color-mix(in srgb, var(--modelo-original) 11%, var(--tarjeta)) !important; color: var(--tinta) !important; }
+html[data-tema="oscuro"] .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td.dash-cell[style*="rgba(184, 134, 11, 0.1)"] {
+  background: color-mix(in srgb, var(--modelo-original) 24%, var(--tarjeta)) !important; }
+/* Fila de filtros oculta hasta que se activa «Filtrar» encima de la tabla
+   (interruptor sin callback: CSS con :has). La tabla sigue siendo filtrable. */
+.lideres-tabla:not(:has(.interruptor-filtro input:checked)) .dash-spreadsheet-inner tr:has(> th.dash-filter) { display: none; }
+.lideres-herramientas { display: flex; justify-content: flex-end; margin: 0 0 8px; }
+.interruptor-filtro { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; margin: 0; font-size: .86rem;
+  color: var(--tinta-suave); font-weight: 500; }
+.interruptor-filtro .form-check-input { cursor: pointer; }
+.interruptor-filtro .form-check-input:checked { background-color: var(--accent); border-color: var(--accent); }
 .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td.dash-cell.column-0 { color: var(--tinta) !important; font-weight: 600; }
 .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner tr:hover td { background: var(--suave) !important; }
 /* Flechas de orden: discretas y del color de la tinta tenue, no el icono gris por defecto. */
@@ -222,7 +304,7 @@ button:active:not(:disabled) { transform: scale(.96); }
 .dash-table-container .dash-spreadsheet-inner th.dash-filter { background: var(--tarjeta) !important; padding: 6px 8px !important; }
 .dash-table-container .dash-filter input[type="text"] { font-family: var(--fuente) !important; font-size: .82rem !important;
   color: var(--tinta-suave) !important; background: var(--suave) !important; border: 1px solid var(--filete) !important;
-  border-radius: 8px !important; padding: 5px 9px !important; width: 100% !important; text-align: left !important; height: auto !important; }
+  border-radius: var(--radio-sm) !important; padding: 8px 12px !important; width: 100% !important; text-align: left !important; height: auto !important; }
 .dash-table-container .dash-filter input[type="text"]::placeholder { color: var(--tinta-tenue); opacity: .8; }
 .dash-table-container .dash-filter input[type="text"]:focus { outline: 2px solid var(--acento); outline-offset: 0; }
 .dash-table-container .dash-filter--case { display: none !important; }
@@ -231,7 +313,7 @@ button:active:not(:disabled) { transform: scale(.96); }
 /* Paginación */
 .dash-table-container .previous-next-container { font-family: var(--fuente); color: var(--tinta-tenue); margin-top: 10px; padding-right: 6px; }
 .dash-table-container .previous-next-container button { background: transparent; border: 1px solid var(--filete);
-  border-radius: 8px; color: var(--tinta-suave); min-width: 40px; height: 40px; margin: 0 2px; }
+  border-radius: var(--radio-sm); color: var(--tinta-suave); min-width: 40px; height: 40px; margin: 0 2px; }
 .dash-table-container .previous-next-container button:hover:not(:disabled) { background: var(--suave); color: var(--acento-texto); }
 .dash-table-container .previous-next-container button:disabled { opacity: .35; }
 .dash-table-container .current-page-container input { font-family: var(--fuente) !important; color: var(--tinta) !important;
@@ -268,7 +350,8 @@ button:active:not(:disabled) { transform: scale(.96); }
 @media (hover: hover) and (pointer: fine) {
   .barra-nav .barra-enlace:hover { color: var(--noche-tinta); background: rgba(255, 255, 255, .06); }
   .boton-barra:hover { background: rgba(255, 255, 255, .08); color: #fff; }
-  .subpestanas .nav-link.subpestana:hover { color: var(--tinta); }
+  .subpestanas .nav-link.subpestana:not(.active):hover,
+  .pasos-relato .nav-link.paso-etiqueta:not(.active):hover { color: var(--tinta); background: color-mix(in srgb, var(--accent) 9%, transparent); }
   .boton-secundario:hover { background: var(--suave); color: var(--acento-texto); }
   .boton-terciario:hover { text-decoration: underline; }
   .boton-icono:hover { border-color: var(--acento); }
@@ -297,6 +380,7 @@ html[data-tema="oscuro"] {
   --modelo-xgboost: #5a8fd8;
   --modelo-estatico: #c04577;
   --modelo-resto: #7a808e;
+  --fondo: var(--bg);                /* en claro es un valor propio (ver :root); aquí vuelve al de la portada */
   --anillo: 0 0 0 1px rgba(255, 255, 255, .07);
   --tarjeta: #0e2043;
   --suave: #15295a;
@@ -420,7 +504,9 @@ html[data-tema="oscuro"] .semaforo-critico .semaforo-icono { color: #f08a80; }
   .banda-titulo { animation-delay: 60ms; }
   .banda-texto { animation-delay: 120ms; }
   .banda-ilustracion { animation: aparecer 500ms var(--ease-salida) 80ms backwards; }
-  .pagina > .tarjeta-filtros, .pagina > .tarjeta-personas, .pagina > .subpestanas { animation: subir var(--dur-lenta) var(--ease-salida) backwards; }
+  /* Las subpestañas no entran con «subir»: su animación es el fundido de los
+     bordes ligado al desplazamiento (final del archivo) y una pisaría a la otra. */
+  .pagina > .tarjeta-filtros, .pagina > .tarjeta-personas { animation: subir var(--dur-lenta) var(--ease-salida) backwards; }
   .pagina > .tarjeta-personas { animation-delay: 60ms; }
   /* Cambio de subpestaña (frecuente): un fundido corto, sin escalonado,
      para que la respuesta se sienta inmediata. */
@@ -507,7 +593,7 @@ html[data-tema="oscuro"] .con-foco .barlayer .point.punto-activo path { filter: 
   font-size: .82rem; border-radius: 8px; padding: 3px 9px; }
 .camino-libre { color: var(--tinta-tenue); font-weight: 500; border-style: dashed; background: transparent; }
 .camino-flecha { color: var(--ambar); display: inline-flex; }
-.boton-icono { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--filete); background: var(--suave);
+.boton-icono { width: 40px; height: 40px; border-radius: var(--radio-sm); border: 1px solid var(--filete); background: var(--suave);
   color: var(--acento-texto); display: grid; place-items: center; }
 
 .titulo-ligero { font-weight: 400; }
@@ -570,15 +656,7 @@ html[data-tema="oscuro"] .gluco-tira { border-color: #34477e; }
 @keyframes paso-entra { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .paso-relato-titulo { font-size: clamp(1.3rem, 2.2vw, 1.75rem); line-height: 1.2; margin: 0 0 24px; max-width: 62ch; font-weight: 600; }
 
-/* Navegación por pasos */
-.pasos-relato { display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; overflow-y: hidden; border: 0; margin: 0 0 24px;
-  padding: 2px 2px 8px; scrollbar-width: thin; }
-.pasos-relato .nav-link.paso-etiqueta { white-space: nowrap; min-height: 40px; display: inline-flex; align-items: center;
-  border: 0; border-radius: 999px; padding: 8px 16px; background: var(--tarjeta); color: var(--tinta-suave); font-weight: 500;
-  box-shadow: var(--anillo);
-  transition: color var(--dur-rapida) var(--ease-salida), background-color var(--dur-rapida) var(--ease-salida), box-shadow var(--dur-rapida) var(--ease-salida); }
-.pasos-relato .nav-link.paso-etiqueta.active, .pasos-relato .nav-link.paso-etiqueta-activa {
-  background: var(--noche); color: var(--noche-tinta); box-shadow: inset 0 -3px 0 var(--arena), var(--anillo); }
+/* Navegación por pasos: mismas pastillas que las subpestañas (ver arriba). */
 .pasos-navegacion { justify-content: space-between; margin-top: 28px; }
 .pasos-navegacion .btn { min-height: 40px; }
 
@@ -655,11 +733,11 @@ html[data-tema="oscuro"] {
 .regla-valor { color: var(--tinta-tenue); font-size: .86rem; }
 
 /* Veredicto: sobrio, sin rojo de alarma (es un resultado reportado, no un error) */
-.veredicto { background: var(--tarjeta); border-radius: var(--radio); box-shadow: var(--anillo), var(--sombra); padding: 24px; height: 100%; }
+.veredicto { background: var(--tarjeta); border-radius: var(--radio); box-shadow: none; padding: 24px; height: 100%; }
 .veredicto-clave { font-size: .82rem; letter-spacing: .08em; font-weight: 700; color: var(--tinta-tenue); }
 .veredicto-valor { font-size: 2.2rem; font-weight: 700; color: var(--tinta); line-height: 1.1; margin: 4px 0; }
-.veredicto-si { box-shadow: inset 0 -3px 0 var(--acento), var(--anillo), var(--sombra); }
-.veredicto-no { box-shadow: inset 0 -3px 0 var(--ambar), var(--anillo), var(--sombra); }
+.veredicto-si { box-shadow: inset 0 -3px 0 var(--acento); }
+.veredicto-no { box-shadow: inset 0 -3px 0 var(--ambar); }
 .veredicto-nombre { font-weight: 600; color: var(--tinta); }
 .veredicto-detalle { color: var(--tinta-tenue); font-size: .88rem; margin: 6px 0 0; }
 
@@ -685,9 +763,11 @@ html[data-tema="oscuro"] {
 .g-3 { --bs-gutter-x: 16px; --bs-gutter-y: 16px; }
 .g-4 { --bs-gutter-x: 24px; --bs-gutter-y: 24px; }
 .tarjeta > .card-body, .lectura > .card-body { padding: 24px; }
-.kpi > .card-body { padding: 16px 24px; }
+.kpi > .card-body { padding: 12px 24px 20px; }
 @media (max-width: 767.98px) {
   .tarjeta > .card-body, .lectura > .card-body, .kpi > .card-body { padding: 16px; }
+  .kpi > .card-body { padding-top: 12px; }
+  .kpi-franja { margin: 16px 0 0 16px; }
   .g-4 { --bs-gutter-x: 16px; --bs-gutter-y: 16px; }
 }
 
@@ -727,12 +807,9 @@ html, body { background-color: var(--bg); }
 [data-i="12"] { --i: 12; } [data-i="13"] { --i: 13; } [data-i="14"] { --i: 14; } [data-i="15"] { --i: 15; } [data-i="16"] { --i: 16; } [data-i="17"] { --i: 17; } 
 [data-i="18"] { --i: 18; } [data-i="19"] { --i: 19; } [data-i="20"] { --i: 20; } [data-i="21"] { --i: 21; } [data-i="22"] { --i: 22; } [data-i="23"] { --i: 23; } 
 
-/* En escritorio y proyector (1280 × 720) las 12 subpestañas de EDA no caben
-   en una fila y las últimas quedaban ocultas tras el scroll: pasan a una
-   segunda línea. En móvil siguen en una fila deslizable. */
-@media (min-width: 992px) {
-  .subpestanas { flex-wrap: wrap; overflow-x: visible; row-gap: 0; }
-}
+/* (24-nov, estilo B+) Las subpestañas ya no pasan a una segunda línea en
+   escritorio: siguen en una fila deslizable y el fundido del borde avisa de
+   que hay más. Ver «Subpestañas» y el fundido al final del archivo. */
 
 /* Tablas simples a 390 px: los encabezados en mayúsculas no partían línea y
    empujaban la última columna fuera de la tarjeta. */
@@ -752,3 +829,63 @@ html[data-tema="oscuro"] .kpi-franja[style*="rgb(185, 124, 12)"] { background: #
   .control-simulador .dash-slider-mark { font-size: .68rem; white-space: normal; max-width: 5.5em;
     text-align: center; line-height: 1.15; }
 }
+
+/* ========================================================================== *
+   Estilo B+ (24-nov, tarde): acabado de gliomas sobre la paleta del proyecto.
+   Solo presentación; los tokens están en :root.
+   ========================================================================== */
+/* Piezas pequeñas con el radio corto (14 px). Las pastillas (chips, botones,
+   subpestañas) siguen en 999 px: son pastillas por diseño. */
+.form-control, .form-select, .accordion, .accordion-item, .dash-dropdown, .dash-input-container input,
+.camino-paso, .kpi-mini { border-radius: var(--radio-sm); }
+.accordion-item:first-of-type, .accordion-item:first-of-type > .accordion-header .accordion-button { border-top-left-radius: var(--radio-sm); border-top-right-radius: var(--radio-sm); }
+.accordion-item:last-of-type { border-bottom-left-radius: var(--radio-sm); border-bottom-right-radius: var(--radio-sm); }
+/* Bloques dentro de una tarjeta (relleno de 24): radio corto para que el
+   anidado quede concéntrico con los 20 px de fuera. */
+.tarjeta .aviso, .tarjeta .semaforo, .tarjeta .paso, .tarjeta .tabla-datos { border-radius: var(--radio-sm); }
+/* Lo clicable que parece tarjeta se eleva solo al pasar el ratón. */
+@media (hover: hover) and (pointer: fine) {
+  .boton-principal { transition: box-shadow var(--dur-rapida) var(--ease-salida), transform var(--dur-rapida) var(--ease-salida); }
+  .boton-principal:hover { box-shadow: 0 2px 0 var(--accent-sombra), var(--sombra); }
+}
+html[data-tema="oscuro"] { --sombra: 0 10px 28px rgba(0, 0, 0, .4); }
+
+/* Fila de KPI: 4 columnas en escritorio, 2 en tableta y 1 en móvil (fila_kpi). */
+.fila-kpi { margin-bottom: 24px; }
+
+/* Fundido del borde por donde quedan más pestañas (como las pestañas de la
+   Introducción de gliomas). Línea de tiempo de desplazamiento: si el
+   navegador no la tiene, o si todas las pestañas caben, no se aplica nada. */
+@property --fundido-izq { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --fundido-der { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@supports (animation-timeline: scroll()) {
+  .subpestanas, .pasos-relato {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--fundido-izq), #000 calc(100% - var(--fundido-der)), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 var(--fundido-izq), #000 calc(100% - var(--fundido-der)), transparent 100%);
+    animation: fundido-pestanas linear both;
+    animation-timeline: scroll(self inline);
+  }
+  /* No es movimiento (sigue al desplazamiento del usuario): se conserva aunque
+     el sistema pida reducirlo, por encima de la regla general de arriba. */
+  @media (prefers-reduced-motion: reduce) {
+    .subpestanas, .pasos-relato { animation: fundido-pestanas linear both !important; animation-timeline: scroll(self inline) !important; }
+  }
+}
+@keyframes fundido-pestanas {
+  from { --fundido-izq: 0px; --fundido-der: 56px; }
+  8% { --fundido-izq: 40px; }
+  92% { --fundido-der: 56px; }
+  to { --fundido-izq: 40px; --fundido-der: 0px; }
+}
+
+/* Cabecera en móvil: más baja y sin partículas, para que nada tape el texto. */
+@media (max-width: 767.98px) {
+  .banda-pagina { min-height: 0; padding: 24px 16px; }
+  .banda-pagina::before { display: none; }
+}
+
+/* Franja de los KPI de modelo en oscuro: mismo par validado que los gráficos
+   (tema.COLOR_MODELO_OSCURO). */
+html[data-tema="oscuro"] .kpi-franja[style*="rgb(184, 134, 11)"] { background: #bd8c05 !important; }
+html[data-tema="oscuro"] .kpi-franja[style*="rgb(52, 98, 172)"] { background: #5a8fd8 !important; }
+html[data-tema="oscuro"] .kpi-franja[style*="rgb(168, 50, 106)"] { background: #c04577 !important; }

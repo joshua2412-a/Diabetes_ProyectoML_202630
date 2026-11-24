@@ -90,7 +90,8 @@ _precalentar()
 def barra() -> html.Div:
     enlaces = [dbc.NavLink([icono(i, "me-2"), n], href=r, active="exact", className="barra-enlace")
                for n, r, i in [("Contexto", "/contexto", "public"), ("EDA", "/eda", "bar_chart"),
-                               ("Modelos", "/modelos", "account_tree")]]
+                               ("Modelos", "/modelos", "account_tree"),
+                               ("Modelo original", "/modelo-original", "route")]]
     return html.Div(dbc.Container([
         html.A([html.Span("Readmisión temprana", className="barra-marca-titulo"),
                 html.Span("Diabetes 130-US Hospitals", className="barra-marca-sub")],

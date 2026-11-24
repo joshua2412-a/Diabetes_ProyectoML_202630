@@ -36,11 +36,11 @@ from src.tablero import evidencia as E
 from src.tablero import explicador as X
 from src.tablero import graficos as G
 from src.tablero import graficos_relato as R
-from src.tablero.componentes import (aviso, encabezado, icono, kpi, lectura, tabla, tarjeta,
+from src.tablero.componentes import (aviso, encabezado, fila_kpi, icono, kpi, lectura, tabla, tarjeta,
                                      tarjeta_grafico)
 from src.tablero.formato import decimales_es, miles, num, p_valor, pct
 from src.tablero.ilustracion import svg_comite
-from src.tablero.tema import papel_modelo
+from src.tablero.tema import color_modelo, papel_modelo
 
 dash.register_page(__name__, path="/modelo-original", name="Modelo original", order=3,
                    title="Modelo original · Readmisión temprana")
@@ -585,6 +585,51 @@ def paso_veredicto():
     ])
 
 
+#: Familias contra las que se mide al modelo original (el «mejor benchmark»
+#: del protocolo: 7 modelos base y los 2 del estado del arte).
+_BENCHMARKS = ("Modelo base", "Estado del arte")
+
+
+def _kpis():
+    """Cuatro cifras de entrada, leídas de los mismos archivos que los pasos 3
+    y 7. Si falta un archivo, su tarjeta no aparece."""
+    tarjetas = []
+    nombre = C.nombre_modelo(C.MODELO_ORIGINAL)
+    lideres = A.lideres_igual_presupuesto()
+    if lideres is not None and lideres["es_original"].any():
+        o = lideres[lideres["es_original"]].iloc[0]
+        b = lideres[lideres["familia"].isin(_BENCHMARKS)].iloc[0]
+        tarjetas.append({
+            "valor": num(o["auc_pr_media"], 4), "etiqueta": f"AUC-PR de {nombre} (5 folds)",
+            "detalle": (f"Frente a {num(b['auc_pr_media'], 4)} de {b['modelo']}, el mejor benchmark: "
+                        f"{num(o['auc_pr_media'] - b['auc_pr_media'], 4, signo=True)}."),
+            "color": color_modelo(C.MODELO_ORIGINAL)})
+    pruebas = E.pruebas_protocolo()
+    if pruebas is not None:
+        nb = pruebas[pruebas["prueba"].str.contains("Nadeau", na=False)]
+        if len(nb):
+            f = nb.iloc[0]
+            tarjetas.append({
+                "valor": p_valor(float(f["p ajustado (Holm)"])), "etiqueta": "Nadeau-Bengio con Holm",
+                "detalle": (f"{E.legible(f['estadístico'])}; {p_valor(float(f['p crudo']))} sin ajustar "
+                            f"(Holm sobre las {len(pruebas)} pruebas del protocolo). {E.legible(f['conclusión'])}.")})
+    prueba = D.leer_csv_opcional(C.RESULTADOS / "prueba_metricas.csv")
+    if prueba is not None and (prueba["método"] == "DES-CPL").any():
+        o = prueba[prueba["método"] == "DES-CPL"].iloc[0]
+        b = prueba[prueba["familia"].isin(_BENCHMARKS)].sort_values("auc_pr", ascending=False).iloc[0]
+        tarjetas.append({
+            "valor": num(o["auc_pr"], 4), "etiqueta": "AUC-PR en el conjunto de prueba",
+            "detalle": f"Frente a {num(b['auc_pr'], 4)} de {C.nombre_modelo(b['método'])} en la misma prueba.",
+            "color": color_modelo(C.MODELO_ORIGINAL)})
+    if C.MODELO_ORIGINAL in D.modelos_disponibles():
+        meta = D.metadata(C.MODELO_ORIGINAL)
+        tarjetas.append({
+            "valor": f"{num(meta['tiempo_inferencia_ms_por_caso'], 2)} ms", "etiqueta": "Inferencia por caso",
+            "detalle": (f"Ajuste completo en {num(meta['tiempo_ajuste_s'] / 60, 1)} min; artefacto de "
+                        f"{num(meta['tamano_mb'], 1)} MB.")})
+    return fila_kpi(tarjetas, md=12 // len(tarjetas)) if tarjetas else None
+
+
 CONSTRUCTORES = {"idea": paso_idea, "decide": paso_decide, "resultado": paso_resultado, "empata": paso_empata,
                  "generaliza": paso_generaliza, "comprobaciones": paso_comprobaciones, "veredicto": paso_veredicto}
 
@@ -597,6 +642,7 @@ def layout():
         encabezado("04 · Modelo original", "DES-CPL: un comité que decide por paciente",
                    "Qué hace el modelo original, cómo decide con un paciente real y qué evidencia hay de que "
                    "empata con los mejores sin superarlos."),
+        _kpis(),
         dbc.Tabs([dbc.Tab(label=f"{i + 1} · {nombre}", tab_id=clave, label_class_name="paso-etiqueta",
                           active_label_class_name="paso-etiqueta-activa")
                   for i, (clave, nombre) in enumerate(PASOS)],

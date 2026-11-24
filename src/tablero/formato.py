@@ -36,9 +36,15 @@ def pct(valor, decimales: int = 1, signo: bool = False) -> str:
 
 
 def p_valor(valor, umbral: float = 0.0001) -> str:
+    """p-valor legible: dos decimales desde 0,1 («p = 0,60», «p = 1,00»),
+    porque ahí los decimales extra no cambian ninguna conclusión y «1,0000»
+    sugiere una precisión que no hay; cuatro por debajo, para que un valor
+    cercano a 0,05 no se redondee al otro lado del umbral."""
     if _nulo(valor):
         return "–"
-    return "p < 0,0001" if valor < umbral else f"p = {num(valor, 4)}"
+    if valor < umbral:
+        return "p < 0,0001"
+    return f"p = {num(valor, 2 if valor >= 0.1 else 4)}"
 
 
 def tnum(valor, decimales: int = 1) -> str:

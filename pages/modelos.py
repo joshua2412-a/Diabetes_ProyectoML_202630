@@ -40,11 +40,11 @@ from src.tablero import datos as D
 from src.tablero import graficos as G
 from src.tablero import graficos_clinicos as GC
 from src.tablero import inferencia as I
-from src.tablero.componentes import (aviso, encabezado, falta_artefacto, icono, kpi,
+from src.tablero.componentes import (aviso, encabezado, falta_artefacto, fila_kpi, icono, kpi,
                                      glucometro, lectura, lista, matriz_personas, pendiente, semaforo,
                                      subpestanas, subtitulo, tabla, tarjeta, tarjeta_grafico, tex)
-from src.tablero.formato import decimales_es, miles, num, pct
-from src.tablero.tema import CLASE, COLOR_MARCA
+from src.tablero.formato import decimales_es, miles, num, p_valor, pct
+from src.tablero.tema import CLASE, COLOR_MARCA, color_modelo
 
 dash.register_page(__name__, path="/modelos", name="Modelos", order=2,
                    title="Modelos · Readmisión temprana")
@@ -59,8 +59,63 @@ def _selector(id_, valor=None):
 
 
 # =========================================================================== #
+# Indicadores de la cabecera
+# =========================================================================== #
+def _kpis():
+    """Cuatro cifras de entrada, leídas de los mismos archivos que las
+    subpestañas. Si falta un archivo, su tarjeta no aparece."""
+    tarjetas = []
+    maestra = D.leer_csv_opcional(C.TABLA_MAESTRA)
+    if maestra is not None:
+        completas = int((maestra["estado"] == "completada").sum())
+        tarjetas.append({
+            "valor": miles(len(maestra)), "etiqueta": "Combinaciones del Entregable 2",
+            "detalle": (f"{maestra['modelo'].nunique()} modelos × {maestra['balanceo'].nunique()} balanceos × "
+                        f"{maestra['optimizador'].nunique()} optimizadores; {completas} completadas y "
+                        f"{len(maestra) - completas} no aplicables.")})
+    lideres = A.lideres_igual_presupuesto()
+    if lideres is not None:
+        mejor = lideres.iloc[0]
+        tarjetas.append({
+            "valor": num(mejor["auc_pr_media"], 4), "etiqueta": "Mejor AUC-PR a igual presupuesto",
+            "detalle": f"{mejor['modelo']}, ± {num(mejor['auc_pr_sd'], 4)} entre folds; todos con 60 evaluaciones.",
+            "color": color_modelo(mejor["clave"])})
+        original = lideres[lideres["es_original"]]
+        if len(original):
+            o = original.iloc[0]
+            tarjetas.append({
+                "valor": num(o["auc_pr_media"], 4), "etiqueta": f"AUC-PR de {o['modelo']} (modelo original)",
+                "detalle": (f"{num(o['auc_pr_media'] - mejor['auc_pr_media'], 4, signo=True)} frente a "
+                            f"{mejor['modelo']}; puesto {original.index[0] + 1} de {len(lideres)}."),
+                "color": color_modelo(C.MODELO_ORIGINAL)})
+    matriz, es_protocolo = A.matriz_comparacion()
+    chi2, p = stats.friedmanchisquare(*[matriz[c] for c in matriz.columns])
+    tarjetas.append({
+        "valor": f"χ² = {num(chi2, 2)}", "etiqueta": "Prueba de Friedman",
+        "detalle": (f"{p_valor(p)}; {matriz.shape[1]} modelos en {matriz.shape[0]} folds"
+                    + (" a igual presupuesto." if es_protocolo else " (Entregable 2)."))})
+    return fila_kpi(tarjetas, md=12 // len(tarjetas))
+
+
+# =========================================================================== #
 # Tabla de líderes
 # =========================================================================== #
+#: Marca en línea de la fila del modelo original. La hoja de estilos pinta las
+#: celdas transparentes con !important, así que este rgba no se ve tal cual:
+#: style.css lo reconoce y lo cambia por el ámbar suave de cada tema.
+ESTILO_FILA_ORIGINAL = {"fontWeight": "700", "backgroundColor": "rgba(184, 134, 11, 0.1)"}
+
+
+def _tabla_lideres(tabla_datos):
+    """La tabla con un interruptor «Filtrar»: la fila de filtros queda oculta
+    hasta activarlo (solo CSS, sin callback), y la tabla sigue siendo filtrable."""
+    return html.Div([
+        html.Div(dbc.Switch(label="Filtrar", value=False, className="interruptor-filtro"),
+                 className="lideres-herramientas"),
+        html.Div(tabla_datos, className="tabla-datos"),
+    ], className="lideres-tabla")
+
+
 def _lideres_benchmark():
     """Segunda vista: la mejor combinación de cada modelo del Entregable 2."""
     if not D.artefactos_disponibles():
@@ -102,7 +157,7 @@ def _lideres_benchmark():
     finalistas = benchmarks[benchmarks["finalista"]]["Modelo"].tolist()
     prevalencia = float(D.entrenamiento()[G.Y].mean())
     return html.Div([
-        html.Div(dash_table.DataTable(
+        _tabla_lideres(dash_table.DataTable(
             data=m.to_dict("records"), columns=columnas, sort_action="native",
             filter_action="native", filter_options={"placeholder_text": "Filtrar..."},
             locale_format={"decimal": ",", "group": "."},
@@ -110,8 +165,10 @@ def _lideres_benchmark():
             style_cell={"textAlign": "left"},
             style_cell_conditional=[{"if": {"column_id": c}, "textAlign": "right"}
                                     for c in ["brier_media", "Inferencia (ms por caso)", "rango_medio"]],
+            style_data_conditional=[{"if": {"filter_query": '{Presupuesto} = "60 evaluaciones (protocolo)"'},
+                                     **ESTILO_FILA_ORIGINAL}],
             tooltip_data=[{"Modelo": {"value": r["motivo"], "type": "text"}} for r in m.to_dict("records")],
-            tooltip_delay=200, id="tabla-lideres"), className="tabla-datos"),
+            tooltip_delay=200, id="tabla-lideres")),
         html.P("Pasa el ratón sobre un modelo para ver por qué se eligió esa combinación. La métrica es "
                "la del bucle externo de la validación anidada (5 folds agrupados por paciente).",
                className="nota-fuente"),
@@ -157,7 +214,7 @@ def _lideres_igual_presupuesto():
     nombres = ", ".join(tabla.loc[~tabla["es_original"], "modelo"])
     return html.Div([
         *ausentes,
-        html.Div(dash_table.DataTable(
+        _tabla_lideres(dash_table.DataTable(
             data=t.to_dict("records"), columns=columnas, sort_action="native",
             filter_action="native", filter_options={"placeholder_text": "Filtrar..."},
             locale_format={"decimal": ",", "group": "."},
@@ -165,8 +222,8 @@ def _lideres_igual_presupuesto():
             style_cell={"textAlign": "left"},
             style_cell_conditional=[{"if": {"column_id": "brier_media"}, "textAlign": "right"}],
             style_data_conditional=[{"if": {"filter_query": '{Familia} = "Modelo original"'},
-                                     "fontWeight": "700"}],
-            id="tabla-lideres-presupuesto"), className="tabla-datos"),
+                                     **ESTILO_FILA_ORIGINAL}],
+            id="tabla-lideres-presupuesto")),
         html.P("Todos los métodos con el mismo presupuesto de búsqueda (60 evaluaciones), en los mismos 5 folds "
                "externos agrupados por paciente. Los modelos base usan la configuración de Random Search del "
                "capítulo 12; DES-CPL, Optuna con 60 evaluaciones. La métrica es la del bucle externo.",
@@ -845,6 +902,7 @@ def layout():
         encabezado("03 · Modelos", "Modelos: comparar, predecir y explicar",
                    "La mejor combinación de cada uno de los 7 modelos del Entregable 2, entrenada con todo "
                    "el entrenamiento y evaluada en prueba, y el modelo original del Entregable 3."),
+        _kpis(),
         subpestanas([
             ("mod-lideres", "Tabla de líderes", _lideres()),
             ("mod-capacidad", "Capacidad del servicio", _capacidad()),

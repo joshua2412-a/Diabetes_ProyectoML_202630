@@ -108,8 +108,13 @@ def kpi(valor: str, etiqueta: str, detalle: str = "", color: str = COLOR_MARCA) 
 
 
 def fila_kpi(indicadores: Sequence[dict], md: int = 3) -> dbc.Row:
-    return dbc.Row([dbc.Col(kpi(**k), md=md, sm=6, xs=12, className="mb-3")
-                    for k in indicadores], className="g-3")
+    """Fila de indicadores: 4 por fila en escritorio, 2 en tableta y 1 en móvil.
+
+    ``md`` es el ancho de columna desde 992 px (``lg``): con 768 px cuatro
+    tarjetas partían la cifra grande en dos líneas.
+    """
+    return dbc.Row([dbc.Col(kpi(**k), lg=md, md=6, xs=12)
+                    for k in indicadores], className="g-3 fila-kpi")
 
 
 def aviso(texto, titulo: str | None = None, tipo: str = "info") -> html.Div:

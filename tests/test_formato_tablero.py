@@ -18,5 +18,7 @@ def test_signo_y_nulos():
 def test_p_valor_y_listas():
     assert p_valor(0.00002) == "p < 0,0001"
     assert p_valor(0.0312) == "p = 0,0312"
+    assert p_valor(1.0) == "p = 1,00"
+    assert p_valor(0.5969) == "p = 0,60"
     assert lista_y(["A", "B", "C"]) == "A, B y C"
     assert lista_y(["A"]) == "A"
