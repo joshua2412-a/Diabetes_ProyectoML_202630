@@ -40,6 +40,7 @@ from src.tablero.componentes import (aviso, encabezado, icono, kpi, lectura, tab
                                      tarjeta_grafico)
 from src.tablero.formato import decimales_es, miles, num, p_valor, pct
 from src.tablero.ilustracion import svg_comite
+from src.tablero.tema import papel_modelo
 
 dash.register_page(__name__, path="/modelo-original", name="Modelo original", order=3,
                    title="Modelo original · Readmisión temprana")
@@ -76,8 +77,9 @@ def _hiperparametros() -> dict:
 def _barras(filas, destacar=None, marca=None, pie=None):
     """Barras horizontales HTML (nombre, pista, valor). El ancho se anima por CSS al cambiar.
 
-    ``filas`` son tuplas (nombre, fracción 0-1, texto). ``marca`` es una
-    posición 0-1 y su rótulo (una línea vertical, como el umbral).
+    ``filas`` son tuplas (nombre, fracción 0-1, texto). Cada barra lleva el color del
+    papel de su modelo (``tema.papel_modelo``), como en los gráficos de Plotly.
+    ``marca`` es una posición 0-1 y su rótulo (una línea vertical, como el umbral).
     """
     cuerpo = []
     for i, (nombre, fraccion, texto) in enumerate(filas):
@@ -88,7 +90,8 @@ def _barras(filas, destacar=None, marca=None, pie=None):
         cuerpo.append(html.Div([html.Span(nombre, className="barra-nombre"),
                                 html.Div(pista, className="barra-pista"),
                                 html.Span(texto, className="barra-valor")],
-                               className="barra-fila" + (" barra-destacada" if destacar == i else "")))
+                               className=f"barra-fila barra-{papel_modelo(nombre)}"
+                                         + (" barra-destacada" if destacar == i else "")))
     if pie:
         cuerpo.append(html.Div(pie, className="tarjeta-nota"))
     return html.Div(cuerpo, className="barras")

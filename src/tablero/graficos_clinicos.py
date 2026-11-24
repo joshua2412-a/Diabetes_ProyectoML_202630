@@ -23,9 +23,9 @@ from . import config as C
 from . import datos as D
 from .formato import miles, num, pct
 from .graficos import _vacio
-from .tema import (AZUR, CLASE, COLOR_MARCA, COLOR_SEGUNDO, COLOR_TENUE, DIVERGENTE, EJE,
+from .tema import (CLASE, COLOR_MARCA, COLOR_SEGUNDO, COLOR_TENUE, DIVERGENTE, EJE,
                    ESCALA_AMBAR, FONDO, MEDIANOCHE, REJILLA, TINTA, TINTA_TENUE, con_guia, rgba,
-                   tematizar)
+                   color_modelo, tematizar)
 
 Y = A.Y
 
@@ -405,7 +405,7 @@ def fig_capacidad(curvas: dict, modelo: str, porcentaje: int):
     curva = curvas[modelo]
     fig.add_trace(go.Scatter(x=[0] + curva["porcentaje"].tolist(), y=[0] + curva["deteccion"].tolist(),
                              mode="lines", name=C.MODELOS.get(modelo, modelo),
-                             line=dict(color=COLOR_MARCA, width=3),
+                             line=dict(color=color_modelo(modelo), width=3),
                              customdata=[0] + curva["precision"].tolist(),
                              hovertemplate="%{x} % seguidos → %{y:.1f} % de las readmisiones detectadas"
                                            "<br>Precisión: %{customdata:.1f} %<extra></extra>"))
@@ -432,7 +432,7 @@ def fig_decision(tabla: pd.DataFrame, modelo: str, umbral_operativo: float | Non
                              line=dict(color=TINTA_TENUE, dash="dot", width=1.5),
                              hovertemplate="Umbral %{x:.2f}: %{y:.4f}<extra>Intervenir a todos</extra>"))
     fig.add_trace(go.Scatter(x=tabla["umbral"], y=tabla["modelo"], mode="lines",
-                             name=C.MODELOS.get(modelo, modelo), line=dict(color=COLOR_MARCA, width=3),
+                             name=C.MODELOS.get(modelo, modelo), line=dict(color=color_modelo(modelo), width=3),
                              hovertemplate="Umbral %{x:.2f}: %{y:.4f}<extra>Modelo</extra>"))
     if umbral_operativo is not None:
         fig.add_vline(x=umbral_operativo, line=dict(color=CLASE[1], dash="dash", width=1.2),
@@ -571,19 +571,18 @@ def fig_rangos(rangos: pd.DataFrame, original: str | None = None):
     """Rango de cada modelo en cada fold: ¿el orden se mantiene?
 
     Se destacan los dos mejores por rango medio y, si se indica, el modelo
-    original (en tinta, como en el diagrama de diferencia crítica).
+    original. El color es el del papel de cada modelo (``tema.color_modelo``)
+    y el grosor marca a los destacados.
     """
     medios = rangos.mean().sort_values()
     destacados = list(medios.index[:2])
     fig = go.Figure()
     for modelo in medios.index[::-1]:
         destacado = modelo in destacados or modelo == original
-        color = (TINTA if modelo == original else COLOR_MARCA if modelo == destacados[0]
-                 else AZUR if destacado else COLOR_TENUE)
+        color = color_modelo(modelo)
         fig.add_trace(go.Scatter(
             x=rangos.index, y=rangos[modelo], mode="lines+markers", name=C.nombre_modelo(modelo),
-            # Raya discontinua para el original: en modo oscuro su tinta y el
-            # color del mejor se aclaran casi igual, y el trazo los separa.
+            # Raya discontinua para el original: su identidad no depende solo del color.
             line=dict(color=color, width=3 if destacado else 1.5,
                       dash="dash" if modelo == original else "solid"),
             marker=dict(size=10 if destacado else 7, color=color, line=dict(color=FONDO, width=2)),

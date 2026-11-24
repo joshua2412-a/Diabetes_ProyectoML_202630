@@ -117,8 +117,9 @@ def _lideres_benchmark():
                className="nota-fuente"),
         dbc.Row([
             dbc.Col(tarjeta_grafico(G.fig_lideres(D.mejores(), prevalencia),
-                                    "AUC-PR de la mejor combinación de cada modelo",
-                                    "Oscuro: finalistas que la prueba de Nemenyi no distingue del mejor. "
+                                    f"{mejor['Modelo']} encabeza, pero Nemenyi no lo separa de los finalistas",
+                                    "Color por modelo: DES-CPL dorado, XGBoost azul, el resto gris. Círculo relleno: finalistas "
+                                    "que la prueba de Nemenyi no distingue del mejor; hueco: los que sí separa. "
                                     "La línea punteada es el AUC-PR del azar, igual a la prevalencia. "
                                     "El modelo original usa otro presupuesto de búsqueda (ver la nota)."), lg=8),
             dbc.Col(lectura([
@@ -172,9 +173,9 @@ def _lideres_igual_presupuesto():
                className="nota-fuente"),
         dbc.Row([
             dbc.Col(tarjeta_grafico(G.fig_lideres_presupuesto(tabla),
-                                    "AUC-PR de cada método a igual presupuesto",
-                                    "Media de los 5 folds externos y desviación entre folds. El modelo "
-                                    "original, en oscuro. Al azar se obtendría "
+                                    f"A igual presupuesto, {tabla.iloc[0]['modelo']} encabeza sin separarse de los siguientes",
+                                    "Media de los 5 folds externos y desviación entre folds. DES-CPL en dorado, "
+                                    "XGBoost en azul, los ensambles estáticos en granate y el resto en gris. Al azar se obtendría "
                                     f"{num(prevalencia, 3)}."), lg=8),
             dbc.Col(lectura(A.lectura_lideres_presupuesto(tabla)), lg=4),
         ], className="g-4 mt-1"),
@@ -264,7 +265,7 @@ def capacidad(pestana, modelo, porcentaje):
                 ], className="g-2 mb-3"),
                 tarjeta_grafico(GC.fig_capacidad(curvas, modelo, porcentaje),
                                 "Curva de ganancia: seguidos frente a readmisiones detectadas",
-                                "Cada curva es un modelo (el elegido, en oscuro); la diagonal es elegir pacientes "
+                                "Cada curva es un modelo (el elegido, en trazo grueso y con su color); la diagonal es elegir pacientes "
                                 "al azar. Cuanto más arriba, más readmisiones alcanza el mismo esfuerzo."),
             ], lg=7),
         ], className="g-4"),
@@ -681,7 +682,7 @@ def _comparacion():
             dbc.Col(tarjeta_grafico(G.fig_diferencia_critica(matriz, cd, original),
                                     "Diagrama de diferencia crítica (Nemenyi)",
                                     "Rango medio de cada modelo en AUC-PR sobre los 5 folds externos. Los "
-                                    "modelos unidos por una barra no se distinguen al 5 %."
+                                    "modelos unidos por una barra no se distinguen al 5 %. DES-CPL en dorado, XGBoost en azul."
                                     + (" Todos con presupuesto de 60 evaluaciones (protocolo del capítulo 13), "
                                        "incluidos LightGBM y CatBoost." if es_protocolo else "")
                                     + (" El modelo original aparece en negrita." if original else
@@ -696,8 +697,8 @@ def _comparacion():
         ], className="g-4"),
         dbc.Row([
             dbc.Col(tarjeta_grafico(GC.fig_rangos(A.rangos_por_fold(), C.MODELO_ORIGINAL), "Puesto de cada modelo en cada fold",
-                                    "1 = mejor AUC-PR en ese fold externo. En color, los dos mejores por rango "
-                                    "medio; en raya discontinua, el modelo original. Si las líneas se cruzan, el orden "
+                                    "1 = mejor AUC-PR en ese fold externo. En trazo grueso, los dos mejores por rango "
+                                    "medio y el modelo original (dorado, en raya discontinua); XGBoost en azul, el resto en gris. Si las líneas se cruzan, el orden "
                                     "depende de la partición."), lg=8),
             dbc.Col(lectura(_lectura_rangos()), lg=4),
         ], className="g-4 mt-1"),

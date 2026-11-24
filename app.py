@@ -27,7 +27,8 @@ app = dash.Dash(
     use_pages=True,
     external_stylesheets=[
         dbc.themes.FLATLY,
-        "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap",
+        # Las mismas cinco variantes que carga la portada (assets/portada.html).
+        "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
         # display=block: que no se vea el nombre del icono en texto mientras carga
         "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:"
         "opsz,wght,FILL,GRAD@20..48,300..600,0..1,0&display=block",
@@ -45,6 +46,11 @@ app.index_string = """<!DOCTYPE html>
 <html lang="es">
     <head>
         {%metas%}<title>{%title%}</title>{%favicon%}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <!-- El fondo de la portada (--bg) antes de que lleguen las hojas de estilo:
+             al pasar de la portada al tablero no hay destello blanco en modo oscuro. -->
+        <style>html{background:#f4f6fa}html[data-tema="oscuro"]{background:#08142c;color-scheme:dark}</style>
         <script>
             (function () {
                 var g = null; try { g = localStorage.getItem("tema"); } catch (e) {}

@@ -23,12 +23,34 @@ CRITERIO DE COLOR: el color hace un trabajo o no está.
 - Variables categóricas sin significado de clase (explorador bivariado): la
   paleta categórica de referencia de dataviz, en orden fijo y siempre con
   leyenda; es el único sitio donde aparecen más tonos.
+- Modelos (``COLOR_MODELO``): un color por PAPEL, el mismo en todas las
+  páginas. DES-CPL en el dorado de la portada, XGBoost en azul, los tres
+  ensambles estáticos en un tono común y el resto en gris. Ningún gráfico
+  define el color de un modelo por su cuenta: todos llaman a ``color_modelo``.
+
+INTERFAZ Y DATOS VAN SEPARADOS. Los tokens de interfaz (fondo, tinta,
+acento, marca) son los de assets/portada.html y viven en assets/style.css;
+aquí solo se repiten los que necesita Plotly. Los colores de datos salen de
+la skill dataviz y se validan con su script (ver ``COLOR_MODELO``).
 """
 
 from __future__ import annotations
 
 import plotly.graph_objects as go
 import plotly.io as pio
+
+from . import config as C
+
+# --------------------------------------------------------------------------- #
+# Interfaz: tokens de la portada (assets/portada.html). style.css los declara
+# como --bg, --ink, --muted, --accent y --marca, con sus versiones oscuras.
+# --------------------------------------------------------------------------- #
+PORTADA = {
+    "claro": {"bg": "#F4F6FA", "ink": "#0E2043", "muted": "#3D4A5D", "accent": "#3462AC",
+              "accent_ink": "#FFFFFF", "marca": "#E8AF2E", "ceja": "#8A5A06"},
+    "oscuro": {"bg": "#08142C", "ink": "#F3F5FB", "muted": "#C3CCE3", "accent": "#E8AF2E",
+               "accent_ink": "#0E2043", "marca": "#E8C766", "ceja": "#E8C766"},
+}
 
 # Paleta del proyecto
 ARENA = "#E8C766"        # Golden Sand
@@ -67,6 +89,47 @@ RAMPA_AMBAR = ["#F4E0A9", "#E8C766", "#D9A23A", "#B97C0C", "#7E5405"]
 ESCALA_AMBAR = [[i / (len(RAMPA_AMBAR) - 1), c] for i, c in enumerate(RAMPA_AMBAR)]
 
 
+# --------------------------------------------------------------------------- #
+# Datos: color de cada modelo según su papel.
+#
+# Validado con scripts/validate_palette.py de la skill dataviz (24-nov-2026),
+# con --pairs all porque los modelos se ven juntos en gráficos de puntos:
+#   claro  "#B8860B,#3462AC,#A8326A" sobre #FFFFFF  -> 5/5 PASS
+#          (CVD peor 11,4; visión normal peor 21,7; contraste >= 3:1)
+#   oscuro "#BD8C05,#5A8FD8,#C04577" sobre #0E2043  -> 5/5 PASS
+#          (CVD peor 14,6; visión normal peor 22,6; contraste >= 3:1)
+# El dorado de la portada (#E8C766) no cabe en la banda de luminosidad
+# (L 0,84) ni llega a 3:1 sobre blanco; #B8860B / #BD8C05 son los tonos
+# validados más cercanos. El gris del resto es neutro a propósito (no compite)
+# y pasa 3:1 en los dos temas: #878D9C (3,3:1) y #7A808E (4,1:1).
+# style.css cambia cada color claro por su par oscuro: si se toca uno aquí,
+# hay que tocar su regla allí.
+# --------------------------------------------------------------------------- #
+COLOR_MODELO = {"original": "#B8860B", "xgboost": AZUR, "estatico": "#A8326A", "resto": "#878D9C"}
+COLOR_MODELO_OSCURO = {"original": "#BD8C05", "xgboost": "#5A8FD8", "estatico": "#C04577", "resto": "#7A808E"}
+#: Ensambles estáticos de la evaluación del modelo original (nombres de los CSV).
+ENSAMBLES_ESTATICOS = frozenset({"Pesos globales (Brier)", "Apilamiento logístico", "Promedio simple"})
+
+
+def papel_modelo(clave_o_nombre: str) -> str:
+    """Papel de un modelo en los gráficos: original, xgboost, estatico o resto.
+
+    Acepta la clave del tablero («des_cpl», «xgboost») o el nombre que traen
+    los CSV («DES-CPL», «Promedio simple»).
+    """
+    nombre = C.nombre_modelo(str(clave_o_nombre))
+    if nombre == C.nombre_modelo(C.MODELO_ORIGINAL):
+        return "original"
+    if nombre == C.nombre_modelo("xgboost"):
+        return "xgboost"
+    return "estatico" if nombre in ENSAMBLES_ESTATICOS else "resto"
+
+
+def color_modelo(clave_o_nombre: str) -> str:
+    """Color de un modelo, el mismo en todas las páginas (ver ``COLOR_MODELO``)."""
+    return COLOR_MODELO[papel_modelo(clave_o_nombre)]
+
+
 def rgba(color: str, alfa: float) -> str:
     """Hex a rgba: los rellenos translúcidos (bandas, flujos) usan el color
     de la clase sin inventar un tono nuevo."""
@@ -102,11 +165,31 @@ pio.templates["readmision"] = PLANTILLA
 pio.templates.default = "readmision"
 
 
+#: Largo máximo de una línea del título del eje x: a 390 px el área de trazado
+#: mide unos 200 px y un título más largo se cortaba por la derecha.
+LARGO_TITULO_EJE = 40
+
+
+def _partir_titulo(texto: str, maximo: int = LARGO_TITULO_EJE) -> str:
+    """Parte en dos líneas un título largo, por el espacio más cercano al centro."""
+    if not texto or len(texto) <= maximo or "<br>" in texto:
+        return texto
+    centro = len(texto) // 2
+    espacios = [i for i, c in enumerate(texto) if c == " "]
+    if not espacios:
+        return texto
+    corte = min(espacios, key=lambda i: abs(i - centro))
+    return texto[:corte] + "<br>" + texto[corte + 1:]
+
+
 def tematizar(fig: go.Figure, alto: int | None = None, **layout) -> go.Figure:
     """Último paso de toda figura: plantilla, altura y ajustes comunes."""
     fig.update_layout(template=PLANTILLA, **layout)
     if alto is not None:
         fig.update_layout(height=alto)
+    # Títulos largos del eje x en dos líneas (automargin reserva el alto).
+    fig.for_each_xaxis(lambda eje: eje.update(title_text=_partir_titulo(eje.title.text))
+                       if eje.title and eje.title.text else None)
     return fig
 
 

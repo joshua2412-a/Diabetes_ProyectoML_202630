@@ -208,7 +208,7 @@ def test_ilustracion_es_un_svg_valido_con_los_cuatro_modelos():
     assert raiz.tag.endswith("svg") and "\n" not in svg
     for nombre in ("Árbol", "Random Forest", "XGBoost", "SVM"):
         assert nombre in svg
-    assert "NaN" not in svg and "style=\"--i:" in svg
+    assert "NaN" not in svg and "data-i=\"" in svg and "style=\"--i:" not in svg
 
 
 # --- Explicador: matemática de la combinación (sin artefacto) ---------------- #

@@ -23,8 +23,8 @@ from sklearn.metrics import (average_precision_score, precision_recall_curve,
 from . import config as C
 from . import datos as D
 from .formato import miles, num, pct
-from .tema import (CATEGORICA, CLASE, COLOR_MARCA, COLOR_TENUE, DIVERGENTE,
-                   EJE, FONDO, RAMPA, TINTA, TINTA_TENUE, tematizar)
+from .tema import (CATEGORICA, CLASE, COLOR_MARCA, DIVERGENTE,
+                   EJE, FONDO, RAMPA, REJILLA, TINTA, TINTA_TENUE, color_modelo, tematizar)
 
 Y = "readmitted_30"
 NINGUNO = "__ninguno__"
@@ -101,7 +101,7 @@ def fig_objetivo(df: pd.DataFrame):
             text=[f"{miles(conteo[clase])} ({pct(100 * conteo[clase] / total)})"],
             textposition="outside", cliponaxis=False,
             hovertemplate=f"{C.CLASES[clase]}: %{{x:,}} encuentros<extra></extra>"))
-    fig.update_xaxes(title_text="Encuentros", showgrid=True, gridcolor="#ECEEF6")
+    fig.update_xaxes(title_text="Encuentros", showgrid=True, gridcolor=REJILLA)
     fig.update_yaxes(autorange="reversed")
     tasa = 100 * conteo[1] / total
     lectura = [
@@ -301,7 +301,7 @@ def fig_faltantes(tabla: pd.DataFrame):
         marker=dict(color=COLOR_MARCA), customdata=tabla[["faltantes", "decision"]],
         text=[pct(p) for p in tabla["porcentaje"]], textposition="outside", cliponaxis=False,
         hovertemplate="%{y}: %{x:.2f} % (%{customdata[0]:,} registros)<br>%{customdata[1]}<extra></extra>"))
-    fig.update_xaxes(title_text="Registros sin dato (%)", range=[0, 110], showgrid=True, gridcolor="#ECEEF6")
+    fig.update_xaxes(title_text="Registros sin dato (%)", range=[0, 110], showgrid=True, gridcolor=REJILLA)
     return tematizar(fig, alto=300, showlegend=False, margin=dict(l=140, r=60, t=20, b=45))
 
 
@@ -342,32 +342,35 @@ def fig_atipicos(df: pd.DataFrame):
 def fig_lideres(tabla: pd.DataFrame, prevalencia: float):
     tabla = tabla.sort_values("auc_pr_media")
     nombres = [C.MODELOS.get(m, m) for m in tabla["modelo"]]
-    colores = [COLOR_MARCA if f else COLOR_TENUE for f in tabla["finalista"]]
+    # Color = papel del modelo (igual en todo el tablero); relleno = finalista.
+    # El círculo hueco marca a los que Nemenyi sí separa del mejor.
+    colores = [color_modelo(m) for m in tabla["modelo"]]
     fig = go.Figure(go.Scatter(
         x=tabla["auc_pr_media"], y=nombres, mode="markers",
         error_x=dict(type="data", array=tabla["auc_pr_sd"], color=EJE, thickness=2, width=4),
-        marker=dict(size=12, color=colores, line=dict(color=FONDO, width=2)),
+        marker=dict(size=12, color=colores, symbol=["circle" if f else "circle-open" for f in tabla["finalista"]],
+                    line=dict(color=colores, width=2)),
         customdata=np.column_stack([tabla["auc_pr_sd"], tabla["balanceo"], tabla["optimizador"]]),
         hovertemplate="%{y}: %{x:.4f} ± %{customdata[0]:.4f}<br>%{customdata[1]} + %{customdata[2]}<extra></extra>"))
     fig.add_vline(x=prevalencia, line=dict(color=TINTA_TENUE, dash="dot", width=1),
                   annotation_text=f"azar: {num(prevalencia, 3)}", annotation_position="bottom right",
                   annotation_font=dict(size=11, color=TINTA_TENUE))
     fig.update_xaxes(title_text="AUC-PR del bucle externo (media ± desviación, 5 folds)",
-                     showgrid=True, gridcolor="#ECEEF6")
+                     showgrid=True, gridcolor=REJILLA)
     return tematizar(fig, alto=340, showlegend=False, margin=dict(l=150, r=30, t=20, b=50))
 
 
 def fig_lideres_presupuesto(tabla: pd.DataFrame):
     """AUC-PR de todos los métodos a igual presupuesto (60 evaluaciones).
 
-    ``tabla`` sale de ``analitica.tabla_igual_presupuesto``. El modelo original
-    va en el color de marca y el resto en tenue: la figura pregunta si el
-    original se separa del grupo, no cuál es cada familia. No lleva la línea
-    del azar (0,114): estiraría el eje y apretaría los 13 puntos, que están
-    todos entre 0,19 y 0,24.
+    ``tabla`` sale de ``analitica.tabla_igual_presupuesto``. Cada método lleva
+    el color de su papel (``tema.color_modelo``): DES-CPL dorado, XGBoost
+    azul, ensambles estáticos en su tono común y el resto gris. No lleva la
+    línea del azar (0,114): estiraría el eje y apretaría los 13 puntos, que
+    están todos entre 0,19 y 0,24.
     """
     tabla = tabla.sort_values("auc_pr_media")
-    colores = [COLOR_MARCA if o else COLOR_TENUE for o in tabla["es_original"]]
+    colores = [color_modelo(c) for c in tabla["clave"]]
     fig = go.Figure(go.Scatter(
         x=tabla["auc_pr_media"], y=tabla["modelo"], mode="markers",
         error_x=dict(type="data", array=tabla["auc_pr_sd"], color=EJE, thickness=2, width=4),
@@ -376,7 +379,7 @@ def fig_lideres_presupuesto(tabla: pd.DataFrame):
         customdata=np.column_stack([tabla["auc_pr_sd"], tabla["familia"]]),
         hovertemplate="%{y}: %{x:.4f} ± %{customdata[0]:.4f}<br>%{customdata[1]}<extra></extra>"))
     fig.update_xaxes(title_text="AUC-PR del bucle externo (media ± desviación, 5 folds)",
-                     showgrid=True, gridcolor="#ECEEF6")
+                     showgrid=True, gridcolor=REJILLA)
     return tematizar(fig, alto=460, showlegend=False, margin=dict(l=170, r=30, t=20, b=50))
 
 
@@ -464,7 +467,7 @@ def fig_shap_local(contribuciones: pd.Series, caso: pd.DataFrame, top: int = 10)
     fig.add_vline(x=0, line=dict(color=EJE, width=1))
     fig.update_yaxes(autorange="reversed")
     fig.update_xaxes(title_text="Aporte a la probabilidad de readmisión (puntos porcentuales)",
-                     showgrid=True, gridcolor="#ECEEF6")
+                     showgrid=True, gridcolor=REJILLA)
     return tematizar(fig, alto=60 + 30 * len(etiquetas), showlegend=False,
                      margin=dict(l=260, r=60, t=10, b=50))
 
@@ -488,7 +491,7 @@ def fig_cohorte(p_prueba, y_prueba, p_caso: float, umbral: float):
     fig.update_layout(barmode="overlay")
     fig.update_xaxes(title_text="Probabilidad de readmisión predicha", tickformat=".0%",
                      range=[0, max(tope, p_caso) * 1.08])
-    fig.update_yaxes(title_text="Pacientes de su grupo (%)", showgrid=True, gridcolor="#ECEEF6")
+    fig.update_yaxes(title_text="Pacientes de su grupo (%)", showgrid=True, gridcolor=REJILLA)
     return tematizar(fig, alto=300, margin=dict(l=60, r=20, t=40, b=50))
 
 
@@ -501,7 +504,7 @@ def fig_shap_global(tabla: pd.DataFrame, modelo: str, top: int = 15):
         marker=dict(color=COLOR_MARCA),
         hovertemplate="%{y}: %{x:.2f} pp de aporte medio<extra></extra>"))
     fig.update_xaxes(title_text="Aporte medio absoluto a la probabilidad (puntos porcentuales)",
-                     showgrid=True, gridcolor="#ECEEF6")
+                     showgrid=True, gridcolor=REJILLA)
     return tematizar(fig, alto=80 + 26 * len(importancia), showlegend=False,
                      margin=dict(l=210, r=30, t=10, b=50)), importancia[::-1]
 
@@ -513,7 +516,8 @@ def fig_diferencia_critica(matriz: pd.DataFrame, cd: float, destacado: str | Non
     nombres = [C.nombre_modelo(m) for m in rangos.index]
     fig = go.Figure(go.Scatter(
         x=rangos.values, y=[0] * len(rangos), mode="markers",
-        marker=dict(size=12, color=[TINTA if m == destacado else COLOR_MARCA for m in rangos.index],
+        marker=dict(size=[15 if m == destacado else 12 for m in rangos.index],
+                    color=[color_modelo(m) for m in rangos.index],
                     line=dict(color=FONDO, width=2)),
         text=nombres, hovertemplate="%{text}: rango medio %{x:.2f}<extra></extra>"))
     for i, (modelo, valor) in enumerate(rangos.items()):

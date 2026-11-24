@@ -30,7 +30,7 @@ def _persona(x: float, y: float, clase_camisa: str, entra: int, atras: bool = Tr
     cx, cy = P(x, y)
     piernas = "" if atras else (f'<rect class="il-pantalon" x="{cx - 9:.1f}" y="{cy + 8:.1f}" width="7" height="20" rx="3"/>'
                                 f'<rect class="il-pantalon" x="{cx + 2:.1f}" y="{cy + 8:.1f}" width="7" height="20" rx="3"/>')
-    return (f'<g class="il-entra" style="--i:{entra}">{piernas}'
+    return (f'<g class="il-entra" data-i="{entra}">{piernas}'
             f'<rect class="{clase_camisa}" x="{cx - 14:.1f}" y="{cy - 14:.1f}" width="28" height="28" rx="12"/>'
             f'<circle class="il-piel" cx="{cx:.1f}" cy="{cy - 26:.1f}" r="11"/>'
             f'<path class="il-pelo" d="M{cx - 11:.1f} {cy - 28:.1f}a11 11 0 0 1 22 0z"/></g>')
@@ -56,14 +56,14 @@ def svg_comite(modelos: list[str] | None = None) -> str:
     x0, y0 = P(0.9, 3.806, 0.7)
     x1, y1 = P(12.4, 4.619, 0.7)
     _, yf = P(0, 4.619, 0)
-    partes.append(f'<g class="il-entra" style="--i:{len(xs)}">'
+    partes.append(f'<g class="il-entra" data-i="{len(xs)}">'
                   f'<rect class="il-mesa-sup" x="{x0:.1f}" y="{y0:.1f}" width="{x1 - x0:.1f}" height="{y1 - y0:.1f}" rx="4"/>'
                   f'<rect class="il-mesa-fre" x="{x0:.1f}" y="{y1:.1f}" width="{x1 - x0:.1f}" height="{yf - y1:.1f}" rx="4"/></g>')
     # Barra de confianza de cada modelo sobre el mostrador y su placa en la cara frontal.
     for i, (x, nombre, w) in enumerate(zip(xs, modelos, pesos)):
         cx, _ = P(x, 0)
         largo = 76
-        partes.append(f'<g class="il-entra" style="--i:{len(xs) + 1 + i}">'
+        partes.append(f'<g class="il-entra" data-i="{len(xs) + 1 + i}">'
                       f'<rect class="il-pista" x="{cx - largo / 2:.1f}" y="{y0 + 6:.1f}" width="{largo}" height="10" rx="5"/>'
                       f'<rect class="il-barra" x="{cx - largo / 2:.1f}" y="{y0 + 6:.1f}" width="{largo * w * 1.9:.1f}" height="10" rx="5"/>'
                       f'<rect class="il-placa" x="{cx - 44:.1f}" y="{y1 + 4:.1f}" width="88" height="19" rx="9"/>'
@@ -78,13 +78,13 @@ def svg_comite(modelos: list[str] | None = None) -> str:
         cls = "il-vecino-1" if j % 2 else "il-vecino-0"
         anillo.append(f'<circle class="{cls}" cx="{px + r * math.cos(ang):.1f}" cy="{py + 0.62 * r * math.sin(ang):.1f}" r="5"/>')
     n = len(xs) * 2 + 1
-    partes.append(f'<g class="il-entra" style="--i:{n}"><ellipse class="il-region" cx="{px:.1f}" cy="{py:.1f}" rx="78" ry="52"/>'
+    partes.append(f'<g class="il-entra" data-i="{n}"><ellipse class="il-region" cx="{px:.1f}" cy="{py:.1f}" rx="78" ry="52"/>'
                   + "".join(anillo) + '</g>')
     # Camino del paciente al comité (discontinuo) y el paciente.
-    partes.append(f'<path class="il-camino il-entra" style="--i:{n + 1}" d="M{px - 18:.1f} {py - 30:.1f}C{px - 90:.1f} {py - 70:.1f} 300 150 262 {yf + 8:.1f}"/>')
-    partes.append(f'<g class="il-llega" style="--i:{n + 2}">' + _persona(16.6, 6.6, "il-camisa-paciente", 0, atras=False) + '</g>')
+    partes.append(f'<path class="il-camino il-entra" data-i="{n + 1}" d="M{px - 18:.1f} {py - 30:.1f}C{px - 90:.1f} {py - 70:.1f} 300 150 262 {yf + 8:.1f}"/>')
+    partes.append(f'<g class="il-llega" data-i="{n + 2}">' + _persona(16.6, 6.6, "il-camisa-paciente", 0, atras=False) + '</g>')
     # Rótulos.
-    partes.append(f'<g class="il-entra" style="--i:{n + 3}">'
+    partes.append(f'<g class="il-entra" data-i="{n + 3}">'
                   '<text class="il-rotulo" x="40" y="20">Comité de modelos</text>'
                   '<text class="il-rotulo-suave" x="40" y="36">cada barra: cuánto se confía en él</text>'
                   f'<text class="il-rotulo" x="{px:.1f}" y="{py + 82:.1f}" text-anchor="middle">Paciente que llega</text>'

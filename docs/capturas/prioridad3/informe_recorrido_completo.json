@@ -1,0 +1,65 @@
+{
+ "errores": [],
+ "desbordes": [],
+ "cifras": {
+  "controles": [
+   {
+    "vista": "claro_1280_modelooriginal_02-como-decide",
+    "lambda": "= 0,60",
+    "tau": "= 0,0010",
+    "final": "Probabilidad final\n29,74 %\nCon el umbral operativo de 16,8 %: priorizar seguimiento. El artefacto (λ = 0,9, τ = 0,0003) da 30,56 %."
+   },
+   {
+    "vista": "claro_390_modelooriginal_02-como-decide",
+    "lambda": "= 0,60",
+    "tau": "= 0,0010",
+    "final": "Probabilidad final\n29,74 %\nCon el umbral operativo de 16,8 %: priorizar seguimiento. El artefacto (λ = 0,9, τ = 0,0003) da 30,56 %."
+   },
+   {
+    "vista": "oscuro_1280_modelooriginal_02-como-decide",
+    "lambda": "= 0,60",
+    "tau": "= 0,0010",
+    "final": "Probabilidad final\n29,74 %\nCon el umbral operativo de 16,8 %: priorizar seguimiento. El artefacto (λ = 0,9, τ = 0,0003) da 30,56 %."
+   },
+   {
+    "vista": "oscuro_390_modelooriginal_02-como-decide",
+    "lambda": "= 0,60",
+    "tau": "= 0,0010",
+    "final": "Probabilidad final\n29,74 %\nCon el umbral operativo de 16,8 %: priorizar seguimiento. El artefacto (λ = 0,9, τ = 0,0003) da 30,56 %."
+   }
+  ],
+  "0,0010": [
+   "claro_1280_modelooriginal_02-como-decide",
+   "claro_1280_modelooriginal_03-el-resultado",
+   "claro_390_modelooriginal_02-como-decide",
+   "claro_390_modelooriginal_03-el-resultado",
+   "oscuro_1280_modelooriginal_02-como-decide",
+   "oscuro_1280_modelooriginal_03-el-resultado",
+   "oscuro_390_modelooriginal_02-como-decide",
+   "oscuro_390_modelooriginal_03-el-resultado"
+  ],
+  "0,60": [
+   "claro_1280_modelooriginal_02-como-decide",
+   "claro_1280_modelooriginal_03-el-resultado",
+   "claro_390_modelooriginal_02-como-decide",
+   "claro_390_modelooriginal_03-el-resultado",
+   "oscuro_1280_modelooriginal_02-como-decide",
+   "oscuro_1280_modelooriginal_03-el-resultado",
+   "oscuro_390_modelooriginal_02-como-decide",
+   "oscuro_390_modelooriginal_03-el-resultado"
+  ],
+  "0,2279": [
+   "claro_1280_modelooriginal_03-el-resultado",
+   "claro_390_modelooriginal_03-el-resultado",
+   "oscuro_1280_modelooriginal_03-el-resultado",
+   "oscuro_390_modelooriginal_03-el-resultado"
+  ],
+  "0,2290": [
+   "claro_1280_modelooriginal_03-el-resultado",
+   "claro_390_modelooriginal_03-el-resultado",
+   "oscuro_1280_modelooriginal_03-el-resultado",
+   "oscuro_390_modelooriginal_03-el-resultado"
+  ]
+ },
+ "capturas": 136
+}
