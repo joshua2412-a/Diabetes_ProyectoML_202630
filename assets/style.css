@@ -521,3 +521,116 @@ html[data-tema="oscuro"] .gluco-tira { border-color: #34477e; }
 .gluco-boton { width: 30px; height: 12px; border-radius: 999px; background: rgba(255, 255, 255, .12);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, .35); }
 .gluco-pie { margin-top: 10px; font-size: .8rem; color: var(--tinta-tenue); text-align: center; }
+
+
+/* ========================================================================== *
+   Página «Modelo original» (/modelo-original): el relato en siete pasos.
+   Movimiento solo donde explica algo: la entrada de cada paso (250 ms) y el
+   ancho de las barras de pesos al mover λ y τ (250 ms). Nada en bucle; la
+   regla de «reducir movimiento» de arriba desactiva las animaciones.
+   ========================================================================== */
+.pagina-relato .paso-relato { min-height: 320px; }
+.paso-relato > * { animation: paso-entra var(--dur-media) var(--ease-salida) both; }
+.paso-relato > *:nth-child(2) { animation-delay: 60ms; }
+.paso-relato > *:nth-child(3) { animation-delay: 120ms; }
+.paso-relato > *:nth-child(n+4) { animation-delay: 180ms; }
+@keyframes paso-entra { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.paso-relato-titulo { font-size: clamp(1.3rem, 2.2vw, 1.75rem); line-height: 1.2; margin: 4px 0 20px; max-width: 62ch; font-weight: 600; }
+
+/* Navegación por pasos */
+.pasos-relato { display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; overflow-y: hidden; border: 0; margin: 0 0 20px;
+  padding: 2px 2px 8px; scrollbar-width: thin; }
+.pasos-relato .nav-link.paso-etiqueta { white-space: nowrap; min-height: 40px; display: inline-flex; align-items: center;
+  border: 0; border-radius: 999px; padding: 8px 16px; background: var(--tarjeta); color: var(--tinta-suave); font-weight: 500;
+  box-shadow: var(--anillo);
+  transition: color var(--dur-rapida) var(--ease-salida), background-color var(--dur-rapida) var(--ease-salida), box-shadow var(--dur-rapida) var(--ease-salida); }
+.pasos-relato .nav-link.paso-etiqueta.active, .pasos-relato .nav-link.paso-etiqueta-activa {
+  background: var(--noche); color: var(--noche-tinta); box-shadow: inset 0 -3px 0 var(--arena), var(--anillo); }
+.pasos-navegacion { justify-content: space-between; margin-top: 28px; }
+.pasos-navegacion .btn { min-height: 40px; }
+
+.frase-clave { font-size: 1.12rem; line-height: 1.5; color: var(--tinta); font-weight: 500; margin-bottom: 14px; }
+.pasos-lista { padding-left: 1.25rem; margin: 0; line-height: 1.55; }
+.pasos-lista li { margin-bottom: 8px; }
+
+/* Ilustración del comité (clases del SVG de src/tablero/ilustracion.py; mismos tonos que la portada) */
+.il-contenedor p { margin: 0; }
+.il-comite { width: 100%; height: auto; display: block; border-radius: 14px; }
+:root {
+  --il-piso-a: #e4eaf4; --il-piso-b: #d6e0f2; --il-mesa-sup: #f1f4fa; --il-mesa-fre: #223164; --il-placa: #3462ac;
+  --il-placa-texto: #ffffff; --il-pista: rgba(14, 32, 67, .15); --il-barra: #e8af2e; --il-enfermera: #85a4d6;
+  --il-paciente: #e8c766; --il-pantalon: #223164; --il-piel: #e8b892; --il-pelo: #5a3b28; --il-camino: #5a85c4;
+  --il-region: #3462ac; --il-v0: #3462ac; --il-v1: #b97c0c; --il-tinta: #0e2043; --il-tinta-suave: #3d4a5d;
+}
+html[data-tema="oscuro"] {
+  --il-piso-a: #122651; --il-piso-b: #0e2043; --il-mesa-sup: #e4eaf4; --il-mesa-fre: #3462ac; --il-placa: #5a8fd8;
+  --il-placa-texto: #0e2043; --il-pista: rgba(255, 255, 255, .18); --il-barra: #e8af2e; --il-enfermera: #85a4d6;
+  --il-paciente: #e8c766; --il-pantalon: #34477e; --il-piel: #e8b892; --il-pelo: #1e1e28; --il-camino: #5a8fd8;
+  --il-region: #e8c766; --il-v0: #5a8fd8; --il-v1: #c2850c; --il-tinta: #f3f5fb; --il-tinta-suave: #c3cce3;
+}
+.il-piso-a { fill: var(--il-piso-a); } .il-piso-b { fill: var(--il-piso-b); }
+.il-mesa-sup { fill: var(--il-mesa-sup); } .il-mesa-fre { fill: var(--il-mesa-fre); }
+.il-placa { fill: var(--il-placa); } .il-placa-texto { fill: var(--il-placa-texto); font: 700 12px var(--fuente); }
+.il-pista { fill: var(--il-pista); } .il-barra { fill: var(--il-barra); }
+.il-camisa-enfermera { fill: var(--il-enfermera); } .il-camisa-paciente { fill: var(--il-paciente); }
+.il-pantalon { fill: var(--il-pantalon); } .il-piel { fill: var(--il-piel); } .il-pelo { fill: var(--il-pelo); }
+.il-camino { fill: none; stroke: var(--il-camino); stroke-width: 3; stroke-dasharray: 2 9; stroke-linecap: round; }
+.il-region { fill: none; stroke: var(--il-region); stroke-width: 1.5; stroke-dasharray: 5 5; opacity: .75; }
+.il-vecino-0 { fill: var(--il-v0); } .il-vecino-1 { fill: var(--il-v1); }
+.il-rotulo { fill: var(--il-tinta); font: 700 13px var(--fuente); }
+.il-rotulo-suave { fill: var(--il-tinta-suave); font: 500 12px var(--fuente); }
+.il-entra { animation: il-entra var(--dur-media) var(--ease-salida) both; animation-delay: calc(var(--i, 0) * 60ms); }
+.il-llega { animation: il-llega var(--dur-media) var(--ease-salida) both; animation-delay: calc(var(--i, 0) * 60ms); }
+@keyframes il-entra { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes il-llega { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+
+/* Barras de probabilidad y de pesos: el ancho se anima al mover los controles */
+.barras { display: grid; gap: 10px; }
+.barra-fila { display: grid; grid-template-columns: minmax(96px, 150px) minmax(0, 1fr) 64px; align-items: center; gap: 12px; }
+.barra-nombre { color: var(--tinta); font-weight: 500; font-size: .92rem; }
+.barra-pista { position: relative; height: 16px; border-radius: 8px; background: var(--suave); overflow: visible; }
+.barra-relleno { height: 100%; border-radius: 8px; background: color-mix(in srgb, var(--acento) 55%, transparent);
+  transition: width var(--dur-media) var(--ease-salida), background-color var(--dur-media) var(--ease-salida); }
+.barra-destacada .barra-relleno { background: var(--acento); }
+.barra-umbral { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--tinta); border-radius: 1px; }
+.barra-valor { text-align: right; font-variant-numeric: tabular-nums; color: var(--tinta); font-weight: 600; font-size: .92rem; }
+.resultado-final { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--filete); }
+.final-fila { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.final-numero { font-size: clamp(1.6rem, 2.4vw, 2.1rem); font-weight: 700; color: var(--tinta); font-variant-numeric: tabular-nums; }
+.valor-control { color: var(--acento-texto); font-variant-numeric: tabular-nums; font-weight: 600; }
+.kpi-gigante { font-size: clamp(2rem, 3.4vw, 2.8rem); font-weight: 700; color: var(--tinta); font-variant-numeric: tabular-nums; line-height: 1.1; margin-bottom: 8px; }
+
+/* Ficha del paciente */
+.ficha-lista { margin: 14px 0 10px; display: grid; gap: 6px; }
+.ficha-lista > div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--filete); padding-bottom: 4px; }
+.ficha-lista dt { font-weight: 500; color: var(--tinta-tenue); font-size: .88rem; }
+.ficha-lista dd { margin: 0; color: var(--tinta); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+
+/* Tablas del relato */
+.tabla-corta .tabla { font-size: .88rem; }
+.tabla-corta .tabla td, .tabla-corta .tabla th { vertical-align: top; padding: 8px 10px; }
+.tabla-corta .tabla td { font-variant-numeric: tabular-nums; }
+
+/* Regla de superioridad */
+.reglas { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.regla { display: flex; gap: 12px; align-items: flex-start; }
+.regla-icono { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 18px;
+  background: var(--suave); color: var(--tinta-suave); }
+.regla-no .regla-icono { background: color-mix(in srgb, var(--ambar) 22%, transparent); color: var(--tinta); }
+.regla-si .regla-icono { background: color-mix(in srgb, var(--acento) 22%, transparent); color: var(--acento-texto); }
+.regla-texto { color: var(--tinta); font-weight: 600; font-size: .92rem; }
+.regla-valor { color: var(--tinta-tenue); font-size: .86rem; }
+
+/* Veredicto: sobrio, sin rojo de alarma (es un resultado reportado, no un error) */
+.veredicto { background: var(--tarjeta); border-radius: var(--radio); box-shadow: var(--anillo), var(--sombra); padding: 20px; height: 100%; }
+.veredicto-clave { font-size: .82rem; letter-spacing: .08em; font-weight: 700; color: var(--tinta-tenue); }
+.veredicto-valor { font-size: 2.2rem; font-weight: 700; color: var(--tinta); line-height: 1.1; margin: 4px 0; }
+.veredicto-si { box-shadow: inset 0 -3px 0 var(--acento), var(--anillo), var(--sombra); }
+.veredicto-no { box-shadow: inset 0 -3px 0 var(--ambar), var(--anillo), var(--sombra); }
+.veredicto-nombre { font-weight: 600; color: var(--tinta); }
+.veredicto-detalle { color: var(--tinta-tenue); font-size: .88rem; margin: 6px 0 0; }
+
+@media (max-width: 767.98px) {
+  .barra-fila { grid-template-columns: minmax(84px, 112px) minmax(0, 1fr) 56px; gap: 8px; }
+  .pasos-relato .nav-link.paso-etiqueta { padding: 8px 12px; }
+}

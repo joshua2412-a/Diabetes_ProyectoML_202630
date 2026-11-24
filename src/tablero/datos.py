@@ -197,6 +197,41 @@ def por_fold_protocolo() -> pd.DataFrame | None:
     return matriz.sort_index().reset_index(drop=True)
 
 
+def leer_csv_opcional(ruta) -> pd.DataFrame | None:
+    """CSV de results/ o None si no está: Render solo ve lo que hay en Git, y
+    la sección que lo necesita muestra un aviso en vez de fallar."""
+    return pd.read_csv(ruta) if ruta.exists() else None
+
+
+@lru_cache(maxsize=1)
+def evaluacion_60() -> pd.DataFrame | None:
+    """Evaluación a igual presupuesto (60 evaluaciones): una fila por fold y
+    método (7 base, 3 ensambles, DES-CPL, versión inicial y ablaciones)."""
+    return leer_csv_opcional(C.RESULTADOS / "des_cpl_evaluacion_60.csv")
+
+
+@lru_cache(maxsize=1)
+def benchmarks_sota() -> pd.DataFrame | None:
+    """LightGBM y CatBoost del protocolo (60 evaluaciones), por fold."""
+    tabla = leer_csv_opcional(C.RESULTADOS / "benchmarks_sota.csv")
+    return None if tabla is None else tabla[tabla["presupuesto"] == 60].reset_index(drop=True)
+
+
+@lru_cache(maxsize=1)
+def conformal_protocolo() -> dict | None:
+    """Cobertura de la predicción conforme con el procedimiento del protocolo
+    (capítulo 13.8): total, no readmitidos y readmitidos."""
+    tabla = leer_csv_opcional(C.RESULTADOS / "prueba_conformal.csv")
+    if tabla is None:
+        return None
+    por_grupo = tabla.set_index("grupo")["cobertura"]
+    try:
+        return {"total": float(por_grupo["Todos"]), "no_readmitidos": float(por_grupo["No readmitidos"]),
+                "readmitidos": float(por_grupo["Readmitidos"])}
+    except KeyError:
+        return None
+
+
 @lru_cache(maxsize=1)
 def tamanos_efecto() -> pd.DataFrame | None:
     ruta = C.RESULTADOS / "tamanos_efecto_cohen.csv"

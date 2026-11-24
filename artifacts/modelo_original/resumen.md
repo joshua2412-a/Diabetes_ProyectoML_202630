@@ -18,6 +18,6 @@
 - Supera de forma significativa a 6 de los 7 modelos base en prueba (DeLong con Holm) y empata con XGBoost, LightGBM y CatBoost.
 
 **Evaluación ampliada** (capítulo 16):
-- Es 3.º en rango medio entre 13 métodos y 4 conjuntos de datos, por delante de todos los benchmarks individuales.
-- Pierde 1.6 a 1.9 veces menos que XGBoost ante ruido en las etiquetas, menos prevalencia y menos datos.
+- Es 3.º en rango medio (3.75) entre 13 métodos y 4 conjuntos de datos, por delante de todos los modelos individuales; LightGBM, el mejor de ellos, tiene 4.00. Es un orden de rango medio sobre los 4 conjuntos: en los 3 adicionales DES-CPL empata con LightGBM (3.33).
+- Ante ruido en las etiquetas, menos prevalencia y menos datos, XGBoost pierde entre 1.6 y 1.9 veces lo que pierde DES-CPL.
 - En 10 semillas su AUC-PR es 0.2270 ± 0.0007, frente a 0.2251 ± 0.0017 de XGBoost.

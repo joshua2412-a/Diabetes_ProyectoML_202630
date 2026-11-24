@@ -61,7 +61,8 @@ def _selector(id_, valor=None):
 # =========================================================================== #
 # Tabla de líderes
 # =========================================================================== #
-def _lideres():
+def _lideres_benchmark():
+    """Segunda vista: la mejor combinación de cada modelo del Entregable 2."""
     if not D.artefactos_disponibles():
         return falta_artefacto("la tabla de mejores combinaciones (artifacts/mejores_combinaciones.csv)")
     m = D.mejores().copy()
@@ -131,6 +132,71 @@ def _lideres():
             ]), lg=4),
         ], className="g-4 mt-1"),
     ])
+
+
+def _lideres_igual_presupuesto():
+    """Vista por defecto: todos los métodos con 60 evaluaciones (protocolo)."""
+    tabla = A.lideres_igual_presupuesto()
+    if tabla is None:
+        return aviso("Falta results/des_cpl_evaluacion_60.csv, con la evaluación a 60 evaluaciones. "
+                     "La otra vista (benchmark del Entregable 2) sigue disponible.",
+                     "Evaluación a igual presupuesto sin generar", "pendiente")
+    t = tabla.copy()
+    t["Modelo"] = t["modelo"]
+    t["Familia"] = t["familia"]
+    t["AUC-PR (media ± sd)"] = [f"{num(a, 4)} ± {num(b, 4)}" for a, b in zip(t["auc_pr_media"], t["auc_pr_sd"])]
+    t["AUC-ROC (media ± sd)"] = [f"{num(a, 4)} ± {num(b, 4)}" for a, b in zip(t["auc_roc_media"], t["auc_roc_sd"])]
+    columnas = [{"name": c, "id": c} for c in ["Modelo", "Familia", "AUC-PR (media ± sd)", "AUC-ROC (media ± sd)"]]
+    columnas.append({"name": "Brier", "id": "brier_media", "type": "numeric",
+                     "format": Format(precision=4, scheme=Scheme.fixed)})
+    prevalencia = float(D.entrenamiento()[G.Y].mean())
+    ausentes = [] if D.benchmarks_sota() is not None else [
+        aviso("Falta results/benchmarks_sota.csv: LightGBM y CatBoost no aparecen en esta tabla.",
+              tipo="pendiente")]
+    nombres = ", ".join(tabla.loc[~tabla["es_original"], "modelo"])
+    return html.Div([
+        *ausentes,
+        html.Div(dash_table.DataTable(
+            data=t.to_dict("records"), columns=columnas, sort_action="native",
+            filter_action="native", filter_options={"placeholder_text": "Filtrar..."},
+            locale_format={"decimal": ",", "group": "."},
+            style_as_list_view=True, style_table={"overflowX": "auto"},
+            style_cell={"textAlign": "left"},
+            style_cell_conditional=[{"if": {"column_id": "brier_media"}, "textAlign": "right"}],
+            style_data_conditional=[{"if": {"filter_query": '{Familia} = "Modelo original"'},
+                                     "fontWeight": "700"}],
+            id="tabla-lideres-presupuesto"), className="tabla-datos"),
+        html.P("Todos los métodos con el mismo presupuesto de búsqueda (60 evaluaciones), en los mismos 5 folds "
+               "externos agrupados por paciente. Los modelos base usan la configuración de Random Search del "
+               "capítulo 12; DES-CPL, Optuna con 60 evaluaciones. La métrica es la del bucle externo.",
+               className="nota-fuente"),
+        dbc.Row([
+            dbc.Col(tarjeta_grafico(G.fig_lideres_presupuesto(tabla),
+                                    "AUC-PR de cada método a igual presupuesto",
+                                    "Media de los 5 folds externos y desviación entre folds. El modelo "
+                                    "original, en oscuro. Al azar se obtendría "
+                                    f"{num(prevalencia, 3)}."), lg=8),
+            dbc.Col(lectura(A.lectura_lideres_presupuesto(tabla)), lg=4),
+        ], className="g-4 mt-1"),
+    ])
+
+
+VISTAS_LIDERES = [{"label": "A igual presupuesto (60 evaluaciones)", "value": "igual"},
+                  {"label": "Benchmark del Entregable 2 (8 a 12 evaluaciones)", "value": "benchmark"}]
+
+
+def _lideres():
+    return html.Div([
+        html.Div(dbc.RadioItems(id="lideres-vista", options=VISTAS_LIDERES, value="igual", inline=True,
+                                className="vista-lideres"), className="mb-3"),
+        html.Div(_lideres_igual_presupuesto(), id="lideres-contenido"),
+    ])
+
+
+@callback(Output("lideres-contenido", "children"), Input("lideres-vista", "value"),
+          prevent_initial_call=True)
+def vista_lideres(vista):
+    return _lideres_benchmark() if vista == "benchmark" else _lideres_igual_presupuesto()
 
 
 # =========================================================================== #
@@ -328,6 +394,20 @@ def _semaforo_conforme(modelo, p):
                     + cobertura, "error")
 
 
+def _nota_conforme(modelo):
+    """Cómo se calibró este conjunto y en qué se parece (o no) al del protocolo."""
+    info = A.conforme(modelo)
+    texto = ("Este tablero calibra el conjunto con la mitad de los pacientes de la prueba y verifica la cobertura "
+             f"en la otra mitad: queda en {pct(100 * info['cobertura'])} en total y en "
+             f"{pct(100 * info['cobertura_1'])} en los readmitidos, "
+             + ("cerca del 90 % nominal." if abs(info["cobertura"] - 0.9) <= 0.02 else "frente al 90 % nominal."))
+    protocolo = D.conformal_protocolo()
+    if modelo == C.MODELO_ORIGINAL and protocolo is not None:
+        texto += (f" El procedimiento del protocolo (capítulo 13.8) da {num(protocolo['readmitidos'], 3)} en los "
+                  "readmitidos, sin causa identificada (libro, 13.8.1).")
+    return html.Div(texto, className="tarjeta-nota mt-2")
+
+
 @callback(Output("pred-resultado", "children"), Output("pred-detalle", "children"), Output("pred-caso", "data"),
           Input("btn-predecir", "n_clicks"),
           State("pred-modelo", "value"), State({"type": "campo", "index": ALL}, "value"),
@@ -355,6 +435,7 @@ def predecir(_, modelo, valores, ids):
     resumen = html.Div([
         tarjeta(glucometro(p, umbral, marcado, percentil), titulo="Lectura del modelo", clase="mt-3"),
         _semaforo_conforme(modelo, p) if predicciones is not None else None,
+        _nota_conforme(modelo) if predicciones is not None else None,
     ])
 
     parecidos = A.pacientes_parecidos(caso, k=20) if predicciones is not None else None
@@ -699,6 +780,15 @@ def _legible(texto: str) -> str:
                          "árbol de decisión, Random Forest, XGBoost y SVM lineal")
 
 
+def _enlace_modelo_original():
+    """El relato del modelo original vive en su propia página (/modelo-original)."""
+    return aviso([
+        "El modelo original tiene ahora su propia página, con un paciente real, la evidencia estadística paso a paso "
+        "y las 13 comprobaciones posteriores al protocolo. ",
+        html.A([icono("route", "me-1"), "Abrir «Modelo original»"], href="/modelo-original",
+               className="enlace-libro")], "Modelo original: el relato completo", "info")
+
+
 def _modelo_original():
     resumen = D.archivo_original("resumen.md")
     if resumen is None:
@@ -730,6 +820,7 @@ def _modelo_original():
     if veredicto:
         veredicto = {**veredicto, "texto": _legible(veredicto.get("texto", ""))}
     return html.Div([
+        _enlace_modelo_original(),
         tarjeta(dcc.Markdown(resumen, mathjax=True, className="markdown")),
         (tarjeta(tabla(list(pruebas[0].keys()), [list(f.values()) for f in pruebas]),
                  titulo="Pruebas de hipótesis") if pruebas else None),
@@ -761,7 +852,7 @@ def layout():
             ("mod-interpretabilidad", "Interpretabilidad", _interpretabilidad()),
             ("mod-comparacion", "Comparación estadística", _comparacion()),
             ("mod-equidad", "Equidad", _equidad()),
-            ("mod-original", "Modelo original", _modelo_original()),
+            ("mod-original", "Modelo original (resumen)", _modelo_original()),
             ("mod-ficha", "Ficha del modelo", _ficha()),
         ], SUBPESTANAS),
     ], className="pagina")

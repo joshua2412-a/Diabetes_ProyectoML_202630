@@ -357,6 +357,29 @@ def fig_lideres(tabla: pd.DataFrame, prevalencia: float):
     return tematizar(fig, alto=340, showlegend=False, margin=dict(l=150, r=30, t=20, b=50))
 
 
+def fig_lideres_presupuesto(tabla: pd.DataFrame):
+    """AUC-PR de todos los métodos a igual presupuesto (60 evaluaciones).
+
+    ``tabla`` sale de ``analitica.tabla_igual_presupuesto``. El modelo original
+    va en el color de marca y el resto en tenue: la figura pregunta si el
+    original se separa del grupo, no cuál es cada familia. No lleva la línea
+    del azar (0,114): estiraría el eje y apretaría los 13 puntos, que están
+    todos entre 0,19 y 0,24.
+    """
+    tabla = tabla.sort_values("auc_pr_media")
+    colores = [COLOR_MARCA if o else COLOR_TENUE for o in tabla["es_original"]]
+    fig = go.Figure(go.Scatter(
+        x=tabla["auc_pr_media"], y=tabla["modelo"], mode="markers",
+        error_x=dict(type="data", array=tabla["auc_pr_sd"], color=EJE, thickness=2, width=4),
+        marker=dict(size=[14 if o else 11 for o in tabla["es_original"]], color=colores,
+                    line=dict(color=FONDO, width=2)),
+        customdata=np.column_stack([tabla["auc_pr_sd"], tabla["familia"]]),
+        hovertemplate="%{y}: %{x:.4f} ± %{customdata[0]:.4f}<br>%{customdata[1]}<extra></extra>"))
+    fig.update_xaxes(title_text="AUC-PR del bucle externo (media ± desviación, 5 folds)",
+                     showgrid=True, gridcolor="#ECEEF6")
+    return tematizar(fig, alto=460, showlegend=False, margin=dict(l=170, r=30, t=20, b=50))
+
+
 def fig_confusion(y, p, umbral: float):
     predicho = (np.asarray(p) >= umbral).astype(int)
     y = np.asarray(y)

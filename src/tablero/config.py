@@ -202,3 +202,54 @@ def nombre(variable: str) -> str:
 
 def descripcion(variable: str) -> str:
     return VARIABLES.get(variable, ("", ""))[1]
+
+
+# --------------------------------------------------------------------------- #
+# Página «Modelo original» (/modelo-original)
+# --------------------------------------------------------------------------- #
+#: Temperaturas del control deslizante de τ. El valor del artefacto (0,0003)
+#: está en la lista para que el explicador lo reproduzca exactamente: un
+#: deslizante continuo en escala logarítmica lo habría aproximado.
+TAUS = (0.0001, 0.0002, 0.0003, 0.0005, 0.001, 0.002, 0.005, 0.01, 0.03, 0.1, 1.0)
+#: Franja de equivalencia de la AUC-PR (±0,005) fijada en el protocolo.
+EQUIVALENCIA_AUC_PR = 0.005
+#: Proyección 2D: pacientes de fondo que se dibujan (el espacio tiene 79.473).
+PUNTOS_FONDO_PROYECCION = 1500
+
+#: Las 13 comprobaciones posteriores al protocolo: (clave, qué se probó, cifra
+#: clave, ¿cambia el veredicto?). Copiadas de la sección 21.6 de
+#: docs/21_Exploracion_Mejoras.ipynb («Todas las comprobaciones posteriores al
+#: protocolo»), con la convención del libro (punto decimal, fórmulas en $...$):
+#: la página las pasa por ``formato.decimales_es``. Si cambia esa tabla del
+#: libro, hay que cambiar estas constantes.
+COMPROBACIONES = (
+    ("V1", "Reproducibilidad de la evaluación",
+     "Las métricas y configuraciones del capítulo 13 se reproducen exactamente (diferencia máxima 1e-16)", "No"),
+    ("V2", "Orden de las filas en el SVM",
+     "Barajar cambia su AUC-PR en +0.0004 de media", "No"),
+    ("V3", "Reproducción de Bayes",
+     "La diferencia de hasta 0.0008 con el capítulo 12 viene del redondeo al guardar sus predicciones; "
+     "sin efecto en DES-CPL", "No"),
+    ("V4", "Nueve modelos en DES-CPL",
+     "0.2302, +0.0012 frente a XGBoost ($p = 0.36$); el apilamiento llega a 0.2320", "No"),
+    ("V5", "Cinco pliegues en la selección",
+     "0.2289, −0.0001 frente a XGBoost ($p = 0.51$)", "No"),
+    ("V6", "Predicción conforme",
+     "En los folds externos la cobertura de los readmitidos es la nominal (0.896); la explicación de la "
+     "subcobertura en prueba se retiró", "No"),
+    ("V7", "Parada temprana de XGBoost",
+     "Separar la validación con pacientes reales sin repetir la búsqueda deja un XGBoost peor (−0.054) y "
+     "degenerado en dos folds; no es una versión comparable", "No"),
+    ("V8", "Calibración del SVM agrupada",
+     "+0.0004 de AUC-PR; el Brier no cambia", "No"),
+    ("V9", "Duplicados en los conjuntos adicionales",
+     "En CDC, la ventaja de DES-CPL sobre XGBoost pasa de +0.0060 a +0.0058 sin los registros con copia", "No"),
+    ("E1", "Cinco pliegues y nueve modelos",
+     "0.2314, +0.0024 frente a XGBoost ($p = 0.24$); el apilamiento llega a 0.2333", "No"),
+    ("E2", "Competencia por ordenamiento",
+     "0.2269 con la configuración oficial y 0.2309 con la de E1; $\\lambda = 1$ en 7 de 10 folds", "No"),
+    ("E3", "Potencia",
+     "La diferencia mínima detectable no baja de 0.0048 aunque se repita el bucle externo", "No"),
+    ("E4", "Información frente a combinador",
+     "Los códigos ICD-9 completos y el historial mejoran 0.0055, más que cualquier cambio del combinador", "No"),
+)

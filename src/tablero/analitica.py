@@ -19,6 +19,7 @@ from sklearn.metrics import average_precision_score, roc_auc_score
 
 from . import config as C
 from . import datos as D
+from .formato import num
 
 Y = "readmitted_30"
 
@@ -542,6 +543,88 @@ def matriz_comparacion() -> tuple[pd.DataFrame, bool]:
     if protocolo is not None:
         return protocolo, True
     return D.por_fold_mejores(), False
+
+
+#: Familias de la tabla a igual presupuesto, en el orden en que se explican.
+FAMILIAS_PRESUPUESTO = ("Modelo base", "Estado del arte", "Ensamble estático", "Modelo original")
+
+
+def por_fold_igual_presupuesto(evaluacion: pd.DataFrame, sota: pd.DataFrame | None = None) -> pd.DataFrame:
+    """AUC-PR, AUC-ROC y Brier por fold de cada método a 60 evaluaciones.
+
+    Formato largo: ``clave`` (la del tablero), ``familia``, ``fold``,
+    ``auc_pr``, ``auc_roc`` y ``brier``. Deja fuera las ablaciones y la
+    versión inicial, que no son competidores. Es la base de la tabla de
+    líderes y de los pasos 3 a 5 de «Modelo original».
+    """
+    base = evaluacion[evaluacion["familia"].isin(["Modelo base", "Ensamble estático", "Modelo original"])]
+    partes = [base.rename(columns={"método": "clave"})[["clave", "familia", "fold", "auc_pr", "auc_roc", "brier"]]]
+    if sota is not None and len(sota):
+        externo = sota.rename(columns={"modelo": "clave"})[["clave", "fold", "auc_pr", "auc_roc", "brier"]]
+        partes.append(externo.assign(familia="Estado del arte"))
+    por_fold = pd.concat(partes, ignore_index=True)
+    # El nombre del modelo original en el CSV es «DES-CPL»; su clave del tablero es C.MODELO_ORIGINAL.
+    por_fold["clave"] = por_fold["clave"].replace({"DES-CPL": C.MODELO_ORIGINAL})
+    return por_fold
+
+
+def tabla_igual_presupuesto(evaluacion: pd.DataFrame, sota: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Tabla de líderes con todos los métodos a 60 evaluaciones.
+
+    ``evaluacion`` es results/des_cpl_evaluacion_60.csv (fold, método, familia,
+    auc_pr, auc_roc, brier) y ``sota`` results/benchmarks_sota.csv ya filtrado
+    a 60 evaluaciones (modelo, fold, auc_pr, auc_roc, brier). Incluye los 7
+    modelos base, los dos del estado del arte (si están), los tres ensambles
+    estáticos y DES-CPL; deja fuera las ablaciones y la versión inicial, que
+    no son competidores. Media y desviación (n - 1) sobre los folds externos.
+    Orden: AUC-PR media, de mayor a menor.
+    """
+    por_fold = por_fold_igual_presupuesto(evaluacion, sota)
+    agregado = por_fold.groupby("clave", sort=False).agg(
+        familia=("familia", "first"), n_folds=("fold", "nunique"),
+        auc_pr_media=("auc_pr", "mean"), auc_pr_sd=("auc_pr", "std"),
+        auc_roc_media=("auc_roc", "mean"), auc_roc_sd=("auc_roc", "std"),
+        brier_media=("brier", "mean")).reset_index()
+    agregado["modelo"] = agregado["clave"].map(C.nombre_modelo)
+    agregado["es_original"] = agregado["clave"] == C.MODELO_ORIGINAL
+    return agregado.sort_values("auc_pr_media", ascending=False).reset_index(drop=True)
+
+
+#: Margen de equivalencia en AUC-PR (la franja ±0,005 del protocolo).
+EQUIVALENCIA_AUC_PR = 0.005
+
+
+def lectura_lideres_presupuesto(tabla: pd.DataFrame) -> list[str]:
+    """Frases de la tabla a igual presupuesto, calculadas con ella."""
+    mejor = tabla.iloc[0]
+    lineas = [f"A igual presupuesto, el mejor es {mejor['modelo']} con AUC-PR de {num(mejor['auc_pr_media'], 4)} "
+              f"(± {num(mejor['auc_pr_sd'], 4)} entre folds)."]
+    dentro = tabla[mejor["auc_pr_media"] - tabla["auc_pr_media"] <= EQUIVALENCIA_AUC_PR]
+    lineas.append(f"{len(dentro)} de {len(tabla)} métodos quedan a menos de {num(EQUIVALENCIA_AUC_PR, 3)} de AUC-PR del "
+                  f"mejor, y su desviación entre folds ({num(dentro['auc_pr_sd'].min(), 4)} a "
+                  f"{num(dentro['auc_pr_sd'].max(), 4)}) es mayor que esa distancia: el orden del extremo "
+                  "superior no es concluyente.")
+    original = tabla[tabla["es_original"]]
+    if len(original) and not original.index[0] == 0:
+        o = original.iloc[0]
+        distancia = mejor["auc_pr_media"] - o["auc_pr_media"]
+        veredicto = ("dentro de la franja de equivalencia: empata con el mejor, pero no lo supera."
+                     if distancia <= EQUIVALENCIA_AUC_PR else "fuera de la franja de equivalencia.")
+        lineas.append(f"{o['modelo']} es el puesto {original.index[0] + 1} de {len(tabla)}, a "
+                      f"{num(distancia, 4)} de {mejor['modelo']}, {veredicto}")
+    elif len(original):
+        lineas.append(f"{original.iloc[0]['modelo']} encabeza la tabla, pero la diferencia con el resto es menor "
+                      "que la desviación entre folds.")
+    return lineas
+
+
+def lideres_igual_presupuesto() -> pd.DataFrame | None:
+    """La tabla anterior con los CSV del repositorio, o None si falta la
+    evaluación a 60 (sin LightGBM ni CatBoost si solo falta su CSV)."""
+    evaluacion = D.evaluacion_60()
+    if evaluacion is None:
+        return None
+    return tabla_igual_presupuesto(evaluacion, D.benchmarks_sota())
 
 
 def rangos_por_fold() -> pd.DataFrame:

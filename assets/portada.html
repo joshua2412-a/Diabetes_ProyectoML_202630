@@ -132,6 +132,11 @@ h1 .ligero{font-weight:400}
 .cta:active{transform:translateY(4px);box-shadow:0 1px 0 var(--accent-sombra)}
 .cta:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
 .cta svg{width:1.1em;height:1.1em}
+.enlace-secundario{display:inline-flex;align-items:center;gap:.45rem;min-height:40px;font-weight:600;font-size:.95rem;color:var(--accent);text-decoration:none;border-bottom:2px solid transparent;transition:border-color .15s ease}
+html[data-tema="oscuro"] .enlace-secundario{color:var(--marca)}
+.enlace-secundario:hover{border-bottom-color:currentColor}
+.enlace-secundario:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.enlace-secundario svg{width:1em;height:1em}
 .note{
   margin:0; font-size:.8rem; color:var(--muted);
   padding-top:.9rem; border-top:1px solid var(--line);
@@ -188,6 +193,9 @@ html[data-tema="oscuro"] .tema .luna{display:none}
     <p class="lede">¿Quién volverá al hospital antes de 30 días? Explora los datos de 130 hospitales de EE. UU., los modelos predictivos y los factores asociados al reingreso.</p>
     <a class="cta" id="cta" href="#entrar">Entrar al dashboard
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+    </a>
+    <a class="enlace-secundario" id="enlace-modelo" href="/modelo-original" target="_top">Ver la evidencia del modelo original
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
     </a>
     <p class="hint" id="hint" role="status"></p>
     <p class="autores">Joshua Hincapié Llorente y Alejandro Cantillo Escorcia · Universidad del Norte</p>
