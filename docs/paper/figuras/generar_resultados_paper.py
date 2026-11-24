@@ -52,7 +52,13 @@ filas2=[]
 for m in BENCH+EST+["DES-CPL"]:
     p=pr[m].values; yh=umbral(p)
     filas2.append(dict(método=m,auc_pr=average_precision_score(y,p),auc_roc=roc_auc_score(y,p),f1=f1_score(y,yh),mcc=matthews_corrcoef(y,yh),bacc=balanced_accuracy_score(y,yh),prec=precision_score(y,yh),rec=recall_score(y,yh)))
-te=pd.DataFrame(filas2).set_index("método"); print("== prueba umbral 15%"); print(te.round(4))
+te=pd.DataFrame(filas2).set_index("método")
+# Las predicciones de prueba_predicciones.csv están redondeadas a 8 cifras: en Naive Bayes
+# eso deja probabilidades en 1.0 exacto y los empates cambian su AUC-PR (cap. 20, V3).
+# Las AUC se toman de prueba_metricas.csv, calculadas antes de guardar.
+pm=pd.read_csv(R+"prueba_metricas.csv").set_index("método")
+te.loc[te.index.intersection(pm.index),["auc_pr","auc_roc"]]=pm[["auc_pr","auc_roc"]]
+print("== prueba umbral 15%"); print(te.round(4))
 # McNemar exact on correctness
 mc=[]
 yd=umbral(pr["DES-CPL"].values)

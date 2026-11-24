@@ -1,0 +1,6 @@
+fold,método,familia,k,tau,lambda,modelos_combinados,auc_pr_seleccion,auc_pr,auc_roc,brier
+0,DES-CPL por orden,Exploración,5.0,1.0,0.0,"random_forest, xgboost, lightgbm, catboost",0.22020867007818082,0.25423799437448635,0.6836761200751292,0.0950358350809969
+1,DES-CPL por orden,Exploración,50.0,0.0,1.0,"random_forest, xgboost, lightgbm, catboost",0.22913942546731245,0.2238007130738313,0.6695372243970357,0.09642568561460775
+2,DES-CPL por orden,Exploración,50.0,0.0,1.0,"random_forest, xgboost, lightgbm, catboost",0.22790295926118326,0.2202669668359692,0.6637479536277232,0.09656471501343981
+3,DES-CPL por orden,Exploración,5.0,0.001,1.0,"logistica, bayes, knn, arbol, random_forest, xgboost, svm, lightgbm, catboost",0.23314564902294785,0.22145757167970626,0.6757269694455721,0.0970165467737335
+4,DES-CPL por orden,Exploración,30.0,0.0,1.0,"logistica, bayes, knn, arbol, random_forest, xgboost, svm, lightgbm, catboost",0.2333697928176297,0.23482828734635058,0.6761892966342864,0.09581281599328359

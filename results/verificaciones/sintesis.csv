@@ -1,0 +1,9 @@
+verificación,se mantiene la conclusión
+V1 Reproducibilidad,Sí
+V2 Orden de las filas en el SVM,Sí
+V3 Reproducción de Bayes,No
+V4 Conjunto ampliado (exploratoria),Sí
+V5 Cinco pliegues en la selección,Sí
+V7 Parada temprana de XGBoost,No
+V8 Calibración del SVM agrupada,Sí
+V9 Duplicados en los conjuntos adicionales,Sí

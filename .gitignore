@@ -45,6 +45,15 @@ data/raw/adicionales/
 results/robustez/
 results/adicionales_prueba/
 results/semillas/
+# Verificaciones del capítulo 20: se versionan los resúmenes; las predicciones
+# por fold (~35 MB) y los modelos fuera de pliegue (~50 MB) se regeneran
+# ejecutando docs/20_Verificaciones.ipynb.
+results/verificaciones/oof_k5/
+results/verificaciones/conjunto_ampliado/
+results/verificaciones/*_calibracion_fold*.csv
+results/verificaciones/*_predicciones_fold*.csv
+# Exploración posterior (docs/21_Exploracion_Mejoras.ipynb): predicciones por fold
+results/exploracion/k5_ampliado/
 mlruns/
 optuna_*.db
 catboost_info/

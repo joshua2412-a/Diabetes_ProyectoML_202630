@@ -1,0 +1,646 @@
+\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}
+
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage[title]{appendix}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage{manyfoot}
+\usepackage{booktabs}
+\usepackage{rotating}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{url}
+
+\theoremstyle{plain}
+\newtheorem{proposicion}{Proposición}
+
+\graphicspath{{figuras/}}
+
+\raggedbottom
+
+\begin{document}
+\renewcommand{\abstractname}{Resumen}
+
+\title[Selección dinámica para readmisión en diabéticos]{Selección dinámica de ensambles por competencia probabilística local para predecir readmisión temprana en diabéticos}
+
+\author*[1]{\fnm{Joshua} \sur{Hincapié Llorente}}\email{hjoshua@uninorte.edu.co}
+
+\author[1]{\fnm{Alejandro} \sur{Cantillo Escorcia}}\email{cantilloalejandro@uninorte.edu.co}
+
+\affil*[1]{\orgdiv{Departamento de Matemáticas, Física y Ciencia de Datos}, \orgname{Universidad del Norte}, \orgaddress{\city{Barranquilla}, \country{Colombia}}}
+
+\abstract{La readmisión a 30 días del alta es un indicador de calidad asistencial y un costo evitable, más frecuente en pacientes diabéticos. Los modelos que la predicen usan clasificadores individuales o ensambles estáticos, que aplican la misma combinación a todos los pacientes, y la selección dinámica de ensambles, que pondera los modelos según la región en que se encuentra cada paciente, no se ha aplicado a este problema. Se propone DES-CPL, un ensamble dinámico que mide la competencia local de cada modelo con la puntuación de Brier fuera de pliegue, reponderada por la prevalencia local en vecindarios estratificados que excluyen al propio paciente, y la encoge hacia la competencia global. Se demuestran una cota para su pérdida, que su competencia es una regla propia, su consistencia y el encogimiento óptimo. Con 99,340 encuentros de Diabetes 130-US Hospitals, un protocolo pre-registrado, validación anidada agrupada por paciente y 60 evaluaciones de hiperparámetros para cada modelo, DES-CPL alcanza un AUC-PR de 0.2279 $\pm$ 0.0174, frente a 0.2290 $\pm$ 0.0124 de XGBoost, sin diferencias significativas con XGBoost, CatBoost ni LightGBM en tres pruebas de hipótesis. En rango medio sobre cuatro conjuntos de datos queda por delante de todos los modelos individuales, aunque solo supera al mejor de cada conjunto en uno, y es más estable que XGBoost ante cambios de semilla y perturbaciones de los datos. El diagnóstico muestra que no es predecible qué modelo acierta en cada paciente: el límite está en la información disponible, no en el combinador.}
+
+\keywords{Readmisión hospitalaria, Diabetes mellitus, Aprendizaje automático, Selección dinámica de ensambles, Desbalance de clases, Clasificación}
+
+\maketitle
+
+\section{Introducción}\label{sec:intro}
+
+La readmisión hospitalaria no planificada dentro de los 30 días posteriores al alta es uno de los indicadores con los que los sistemas de salud miden la calidad de la atención. Jencks y colaboradores \cite{bib_jencks} estimaron que cerca de una quinta parte de los beneficiarios de Medicare dados de alta volvía al hospital dentro de ese plazo, con un costo anual cercano a 17 mil millones de dólares. En los pacientes diabéticos el problema es más agudo: su tasa de readmisión es casi el doble de la de los pacientes sin diabetes \cite{bib_liu_2024}. Si al momento del alta fuera posible ordenar a los pacientes por su riesgo de reingreso, un servicio con capacidad limitada de seguimiento podría concentrar sus recursos en quienes más lo necesitan.
+
+Esa ordenación sigue siendo poco precisa. Una revisión sistemática encontró que la mayoría de los modelos de readmisión obtenía un estadístico C entre 0.60 y 0.70 \cite{bib_kansagara}. El conjunto \emph{Diabetes 130-US Hospitals}, con diez años de registros de 130 hospitales estadounidenses \cite{bib_strack}, es la referencia para estudiar el problema en pacientes diabéticos, y sobre él se han ensayado máquinas de vectores de soporte \cite{bib_cui_2018}, bosques aleatorios y Naive Bayes \cite{bib_shang_2021, bib_neto_2021}, baterías de algoritmos \cite{bib_liu_2024}, ensambles por apilamiento \cite{bib_lu_2022, bib_salim_2026} y redes neuronales \cite{bib_ram_2023, bib_garcia_mosquera_2025}. Con una evaluación rigurosa el techo se mantiene: con validación cruzada anidada, un ensamble por apilamiento alcanza un AUC-ROC de 0.664 \cite{bib_salim_2026}. Además, rara vez se valida respetando que un mismo paciente aporta varios encuentros. La pregunta que guía este trabajo es si una combinación que adapte el peso de cada modelo al perfil de cada paciente puede superar ese techo cuando la evaluación respeta la agrupación por paciente y, si no puede, por qué.
+
+Nuestro benchmark previo confirma ese diagnóstico. De 108 configuraciones de siete modelos, estimadas con validación cruzada anidada agrupada por paciente, la mejor, XGBoost \cite{bib_chen} con ADASYN, alcanzó un AUC-PR de 0.2267 $\pm$ 0.0153, y la prueba de Nemenyi \cite{bib_demsar} no la separó de Random Forest. Que modelos tan distintos empaten en promedio sugiere que cada uno acierta en regiones diferentes del espacio de pacientes. Los ensambles usados hasta ahora en este problema, sin embargo, son estáticos: aplican la misma regla de combinación a todos los pacientes.
+
+La selección dinámica de ensambles responde a esa limitación: estima, para cada consulta, la competencia de cada clasificador en su vecindario y elige o pondera a los más competentes \cite{bib_woods_1997, bib_ko_2008, bib_cruz_2018}. Sus criterios de competencia, sin embargo, miden el acierto de etiquetas y se degeneran con clases desbalanceadas: cuando solo el 11\% de los encuentros son positivos, muchos vecindarios no contienen ningún positivo y todos los modelos parecen igual de competentes \cite{bib_cruz_2019, bib_garcia_2018}. Tampoco contemplan la agrupación de encuentros por paciente. En la búsqueda bibliográfica realizada no se encontró ninguna aplicación de selección dinámica a la readmisión de pacientes diabéticos; la más cercana es a la readmisión en cirrosis \cite{bib_shi_2025}.
+
+El objetivo de este trabajo es diseñar, fundamentar y evaluar un ensamble dinámico cuyo criterio de competencia funcione con clases desbalanceadas y datos agrupados. Se propone DES-CPL, una selección dinámica de ensambles por competencia probabilística local, con cuatro contribuciones:
+\begin{enumerate}
+\item una competencia basada en la puntuación de Brier \cite{bib_brier} fuera de pliegue, reponderada por la prevalencia local, que es una regla de puntuación propia \cite{bib_gneiting_2007} y premia la calidad de la probabilidad;
+\item una región de competencia estratificada por clase que excluye los encuentros del propio paciente;
+\item un encogimiento de la competencia local hacia la global, con un parámetro $\lambda$ elegido en los datos que mide cuánta heterogeneidad local aprovechable existe;
+\item cuatro propiedades demostradas: una cota para la pérdida del ensamble, la propiedad de la competencia, su consistencia y el encogimiento óptimo.
+\end{enumerate}
+
+DES-CPL se implementa desde cero y se evalúa con el mismo protocolo que los modelos de referencia: las mismas particiones agrupadas por paciente, la misma semilla y el mismo presupuesto de 60 evaluaciones de hiperparámetros. Se compara además con LightGBM \cite{bib_ke_2017}, CatBoost \cite{bib_prokhorenkova_2018} y tres ensambles estáticos, con tres pruebas de hipótesis fijadas en un protocolo pre-registrado, tres conjuntos de datos adicionales y estudios de ablación, sensibilidad, robustez y costo. El protocolo se congeló con una etiqueta de Git antes de los experimentos definitivos y fija una regla de superioridad exigente, de modo que el resultado, favorable o no, se reporta tal como sale.
+
+La Sección~\ref{sec:relacionado} revisa el trabajo relacionado; la Sección~\ref{sec:metodologia} describe los datos, los modelos y el protocolo, y la Sección~\ref{sec:resultados} presenta los resultados.
+
+\section{Trabajo relacionado}\label{sec:relacionado}
+
+\subsection{Predicción de la readmisión hospitalaria}\label{subsec:rel_readmision}
+
+La predicción de la readmisión cuenta con una literatura amplia y con un techo de desempeño persistente. La revisión sistemática de Kansagara y colaboradores \cite{bib_kansagara} reunió 26 modelos distintos y encontró que la mayoría discriminaba de forma modesta, con estadísticos C entre 0.60 y 0.70. Futoma y colaboradores \cite{bib_futoma} compararon modelos lineales penalizados, bosques aleatorios y redes neuronales profundas sobre registros administrativos de gran escala para predecir readmisiones tempranas, uno de los primeros contrastes sistemáticos entre familias de modelos en este problema.
+
+En pacientes diabéticos, el conjunto \emph{Diabetes 130-US Hospitals} \cite{bib_strack} es la referencia común. Sus autores lo construyeron para estudiar la asociación entre la medición de la hemoglobina glucosilada durante el ingreso y la readmisión, no para comparar algoritmos. Sobre él se han propuesto, entre otros, una máquina de vectores de soporte con hiperparámetros ajustados por un algoritmo genético y sobremuestreo SMOTE \cite{bib_cui_2018}; comparaciones de bosques aleatorios, Naive Bayes y ensambles de árboles \cite{bib_shang_2021}; distintos escenarios de preprocesamiento y selección de variables \cite{bib_neto_2021}; una batería de más de diez algoritmos \cite{bib_liu_2024}; ensambles por apilamiento con explicaciones \cite{bib_lu_2022, bib_salim_2026}, y redes neuronales guiadas o basadas en Transformers \cite{bib_ram_2023, bib_garcia_mosquera_2025}.
+
+Dos rasgos de esta literatura limitan la comparación entre estudios. El primero es la métrica: varios trabajos reportan exactitudes cercanas al 90\% \cite{bib_neto_2021}, que apenas superan las de predecir siempre que el paciente no reingresa cuando la clase positiva es el 11\%. Los estudios que usan métricas de ordenamiento y validación anidada reportan cifras mucho más modestas, como el AUC-ROC de 0.664 del apilamiento de Salim e Ibrahim \cite{bib_salim_2026}. El segundo es la unidad de análisis: un mismo paciente aporta varios encuentros, y una partición por filas reparte sus encuentros entre entrenamiento y validación, lo que constituye una forma de fuga de información \cite{bib_kapoor_2023}. En los estudios citados es raro encontrar una validación agrupada por paciente.
+
+\subsection{Ensambles para datos tabulares}\label{subsec:rel_ensambles}
+
+En datos tabulares de tamaño medio, los ensambles de árboles siguen siendo la referencia. Random Forest \cite{bib_breiman_rf} reduce la varianza promediando árboles decorrelacionados, y el \emph{gradient boosting} regularizado de XGBoost \cite{bib_chen}, LightGBM \cite{bib_ke_2017} y CatBoost \cite{bib_prokhorenkova_2018} reduce el sesgo añadiendo árboles de forma secuencial. Las comparaciones sistemáticas muestran que estos modelos superan en promedio a las redes neuronales profundas en este tipo de datos \cite{bib_grinsztajn_2022}, lo que explica que sean los benchmarks naturales del problema.
+
+Las dos familias atacan fuentes de error distintas. El \emph{bagging} promedia modelos ajustados sobre remuestras y reduce la varianza sin cambiar mucho el sesgo; el \emph{boosting} corrige en cada paso los errores del modelo acumulado y reduce el sesgo, a costa de mayor sensibilidad al ruido de las etiquetas. Esa diferencia se nota cuando los datos son pocos o ruidosos, y es una de las razones por las que el mejor modelo individual cambia de un conjunto de datos a otro. Cuando varios modelos fuertes empatan, combinarlos es la estrategia habitual. El apilamiento \cite{bib_wolpert_1992} aprende una regla de combinación sobre predicciones fuera de pliegue, y es el ensamble más usado en la readmisión de diabéticos \cite{bib_lu_2022, bib_salim_2026}. Todos estos ensambles son, sin embargo, estáticos: una vez ajustados, aplican los mismos pesos a todos los pacientes, aunque la calidad relativa de los modelos cambie de una región del espacio a otra.
+
+\subsection{Selección dinámica de clasificadores y ensambles}\label{subsec:rel_des}
+
+Todo sistema de selección dinámica tiene tres etapas: generar un conjunto de clasificadores base diversos, definir para cada consulta una región de competencia en un conjunto de validación y medir en ella la competencia de cada clasificador para elegirlos o ponderarlos. Las variantes difieren sobre todo en cómo se define la región (vecinos en el espacio de las variables, en el de las salidas o agrupamientos previos) y en cómo se mide la competencia (exactitud local, probabilidad de acierto, rangos o meta-aprendizaje). La selección dinámica estima así, para cada consulta, la competencia de cada clasificador en una región local y elige uno (selección de clasificadores) o pondera varios (selección de ensambles) \cite{bib_cruz_2018}. Woods y colaboradores \cite{bib_woods_1997} propusieron medir la competencia como la exactitud del clasificador entre los $k$ vecinos más cercanos de la consulta en un conjunto de validación. Ko y colaboradores \cite{bib_ko_2008} extendieron la idea a la selección de ensambles con KNORA, que conserva los clasificadores que aciertan en todo el vecindario o en parte de él. Cavalin y colaboradores \cite{bib_cavalin_2013} definieron el vecindario en el espacio de las salidas de los clasificadores en lugar del espacio de las variables, y META-DES \cite{bib_cruz_2015} aprende la competencia con un meta-clasificador a partir de varias meta-variables del vecindario.
+
+La propuesta más cercana a la de este trabajo en su medida de competencia es el clasificador de referencia aleatorizado de Woloszynski y Kurzynski \cite{bib_woloszynski_2011}, que estima la probabilidad de que cada clasificador acierte la etiqueta en lugar de contar aciertos. Sigue midiendo, sin embargo, el acierto y no la calidad de la probabilidad. La revisión de Cruz y colaboradores \cite{bib_cruz_2018} observó que su ventaja frente a ensambles estáticos fuertes no es sistemática y depende de que los clasificadores base sean complementarios en regiones distintas del espacio.
+
+El desbalance de clases es una debilidad reconocida de estos métodos. Cuando los vecindarios casi no contienen ejemplos de la clase minoritaria, la competencia favorece a los clasificadores sesgados hacia la mayoritaria. FIRE-DES++ \cite{bib_cruz_2019} descarta en línea, para cada consulta, los clasificadores que no predicen ambas clases en su vecindario; García y colaboradores \cite{bib_garcia_2018} combinaron la selección dinámica con remuestreo para problemas multiclase desbalanceados, y Hou y colaboradores \cite{bib_hou_2020} la adaptaron a la evaluación de riesgo de crédito. Todas estas variantes actúan sobre el conjunto de entrenamiento o sobre qué clasificadores se conservan, pero mantienen una medida de competencia basada en el acierto.
+
+En readmisión hospitalaria, la única aplicación encontrada es la de Shi y colaboradores \cite{bib_shi_2025}, que seleccionan clasificadores para pacientes con cirrosis con regiones de competencia definidas por sus complicaciones. No se encontraron aplicaciones a pacientes diabéticos, ni variantes que estratifiquen la región por clase, que excluyan los encuentros del mismo paciente o que encojan la competencia local hacia la global.
+
+\subsection{Calidad probabilística y evaluación de clasificadores}\label{subsec:rel_evaluacion}
+
+Ordenar pacientes por riesgo exige probabilidades bien ordenadas y, para usarlas como riesgos, bien calibradas. La puntuación de Brier \cite{bib_brier} es una regla de puntuación estrictamente propia: su esperanza solo se minimiza al reportar la probabilidad verdadera \cite{bib_gneiting_2007}. Los clasificadores difieren mucho en su calibración, y algunos, como los de margen y los de \emph{boosting}, distorsionan sus probabilidades de forma sistemática \cite{bib_niculescu}. Con clases desbalanceadas, la curva de precisión-exhaustividad es más informativa que la ROC, porque esta normaliza los falsos positivos por una clase mayoritaria muy grande \cite{bib_saito}.
+
+La comparación entre clasificadores exige además protocolos que eviten estimaciones optimistas. Elegir hiperparámetros y estimar el desempeño con los mismos datos sesga la estimación, lo que obliga a usar validación cruzada anidada \cite{bib_cawley}. Para comparar varios modelos sobre los mismos pliegues se recomiendan pruebas no paramétricas con corrección por comparaciones múltiples \cite{bib_demsar}, y la prueba $t$ sobre pliegues debe corregir la varianza porque los entrenamientos se solapan \cite{bib_nadeau_2003}.
+
+\subsection{Posición de este trabajo}\label{subsec:rel_posicion}
+
+DES-CPL toma de la literatura el marco de selección dinámica con vecinos \cite{bib_ko_2008} y la región en el espacio de salidas \cite{bib_cavalin_2013}, y aporta cuatro elementos que no se encontraron en ella: una competencia probabilística que es una regla propia para el riesgo local, una región estratificada que respeta la agrupación por paciente, un encogimiento local-global elegido en los datos y una evaluación pre-registrada, con el mismo presupuesto que los benchmarks, en un problema donde la selección dinámica no se había aplicado.
+
+\section{Materiales y métodos}\label{sec:metodologia}
+
+\subsection{Formulación del problema y notación}\label{subsec:formulacion}
+
+Sea $\mathcal{D}=\{(x_i, y_i, g_i)\}_{i=1}^{n}$ la muestra de entrenamiento, donde $x_i \in \mathcal{X} \subseteq \mathbb{R}^{p}$, con $p=152$, describe el encuentro hospitalario $i$ después del preprocesamiento, $y_i \in \mathcal{Y}=\{0,1\}$ indica si el paciente reingresó antes de 30 días y $g_i$ identifica al paciente. Un mismo paciente puede aportar varios encuentros, de modo que las observaciones son independientes entre pacientes pero no dentro de ellos. La tarea es aprender una función $f:\mathcal{X}\to[0,1]$ que estime la probabilidad de reingreso $\eta(x)=P(Y=1\mid X=x)$ y que ordene correctamente a pacientes que no se observaron durante el entrenamiento.
+
+Se dispone de un conjunto de $M$ clasificadores base $\{f_1,\dots,f_M\}$, cada uno con salida probabilística $f_m(x)\in[0,1]$. La pérdida con la que se mide la calidad de una probabilidad $q$ frente a la etiqueta $y$ es la puntuación de Brier \cite{bib_brier},
+\begin{equation}
+\ell(q, y) = (q - y)^2,
+\label{eq:brier}
+\end{equation}
+una regla de puntuación estrictamente propia: su esperanza se minimiza solo cuando $q$ coincide con la probabilidad verdadera \cite{bib_gneiting_2007}. Por la Ecuación~\eqref{eq:brier}, un clasificador obtiene poca pérdida solo si asigna probabilidades altas a los positivos y bajas a los negativos, y no basta con que acierte la etiqueta. Los modelos base se ajustan con sus propias pérdidas; los probabilísticos (la regresión logística y los de \emph{boosting}) minimizan la entropía cruzada,
+\begin{equation}
+L_{\text{CE}} = -\frac{1}{n}\sum_{i=1}^{n}\Big[y_i\log f(x_i) + (1-y_i)\log\big(1-f(x_i)\big)\Big],
+\label{eq:entropia}
+\end{equation}
+mientras que DES-CPL no ajusta parámetros por gradiente: usa la Ecuación~\eqref{eq:brier} para medir la competencia de cada modelo. La métrica de evaluación es distinta de ambas pérdidas y se describe en la Sección~\ref{subsec:evaluacion}. La Tabla~\ref{tab:notacion} resume la notación.
+
+\begin{table}[h]
+\caption{Notación utilizada en la formulación de DES-CPL.}\label{tab:notacion}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Símbolo & Significado \\
+\midrule
+$x_i,\ y_i,\ g_i$ & Predictores, etiqueta y paciente del encuentro $i$ \\
+$f_m$ & Clasificador base $m$, con $m=1,\dots,M$ \\
+$\tilde{f}_m(x_i)$ & Predicción fuera de pliegue de $f_m$ para el encuentro $i$ \\
+$\phi(x)$ & Perfil de salidas: vector de las $M$ predicciones para $x$ \\
+$\mathcal{N}^{+}_{k}(x),\ \mathcal{N}^{-}_{k}(x)$ & $k$ vecinos positivos y $k$ negativos de $x$ \\
+$\hat{q}(x)$ & Prevalencia local estimada en la zona de $x$ \\
+$C_m(x)$ & Competencia local de $f_m$ en $x$ (Brier reponderado) \\
+$C^{\text{glob}}_m$ & Competencia global de $f_m$ en todo el conjunto de selección \\
+$\lambda$ & Encogimiento de la competencia local hacia la global \\
+$M'$ & Número de modelos que se conservan tras la poda \\
+$\tau$ & Temperatura de la ponderación softmax \\
+$w_m(x)$ & Peso de $f_m$ en la combinación para $x$ \\
+$\hat{f}(x)$ & Probabilidad final del ensamble \\
+\botrule
+\end{tabular}
+\end{table}
+
+\subsection{Datos y preprocesamiento}\label{subsec:datos}
+
+\textbf{Conjunto principal.} Se usa \emph{Diabetes 130-US Hospitals for Years 1999--2008} \cite{bib_strack}, publicado en el repositorio UCI con licencia CC BY 4.0 \cite{bib_uci}. Contiene 101{,}766 encuentros de 71{,}518 pacientes en 130 hospitales estadounidenses, descritos por 50 atributos demográficos, administrativos, diagnósticos CIE-9, de laboratorio y de 23 medicamentos antidiabéticos. La variable \texttt{readmitted} se dicotomiza en reingreso antes de 30 días frente al resto. Se excluyen 2{,}426 encuentros con fallecimiento o cuidados paliativos al alta, en los que no puede observarse un reingreso, y quedan 99{,}340 encuentros. La clase positiva representa el 11.39\%, una razón de desbalance de 1 a 7.8.
+
+\textbf{Análisis exploratorio.} Se calculó solo con el entrenamiento (79{,}473 encuentros de 56{,}036 pacientes; 9{,}051 positivos). La Tabla~\ref{tab:eda} resume las variables numéricas: ninguna es normal (Shapiro--Wilk y D'Agostino--Pearson), y las de utilización previa tienen colas largas y entre un 67\% y un 89\% de ceros. Sus valores extremos corresponden a pacientes que reingresan más, así que se conservan.
+
+\begin{table}[!htbp]
+\caption{Estadísticos descriptivos de las variables numéricas y ordinales en el conjunto de entrenamiento ($n=79{,}473$), ordenadas por su AUC univariado. Las medias por clase corresponden a los no readmitidos (0) y a los readmitidos antes de 30 días (1); $\delta$ es la delta de Cliff entre ambas clases, [P25, P75] los cuartiles y \% 0 el porcentaje de ceros. Todas las diferencias son significativas con la prueba de Mann--Whitney corregida por Holm, salvo las marcadas con $^\dagger$.}\label{tab:eda}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+Variable & Media (DE) & Mediana [P25, P75] & \% 0 & Asim. & Media 0 / 1 & AUC & $\delta$ \\
+\midrule
+Hospitalizaciones previas & 0.63 (1.27) & 0 [0, 1] & 66.8 & 3.74 & 0.55 / 1.23 & 0.607 & 0.214 \\
+Días de estancia & 4.38 (2.97) & 4 [2, 6] & 0.0 & 1.14 & 4.33 / 4.76 & 0.547 & 0.094 \\
+Diagnósticos & 7.40 (1.94) & 8 [6, 9] & 0.0 & $-0.86$ & 7.36 / 7.67 & 0.542 & 0.084 \\
+Medicamentos & 15.96 (8.08) & 15 [10, 20] & 0.0 & 1.33 & 15.86 / 16.78 & 0.539 & 0.078 \\
+Urgencias previas & 0.20 (0.97) & 0 [0, 0] & 88.9 & 24.67 & 0.18 / 0.36 & 0.532 & 0.064 \\
+Pruebas de lab. & 42.87 (19.59) & 44 [31, 57] & 0.0 & $-0.24$ & 42.68 / 44.29 & 0.524 & 0.048 \\
+Consultas externas & 0.37 (1.25) & 0 [0, 0] & 83.4 & 8.59 & 0.36 / 0.44 & 0.521 & 0.041 \\
+Edad (ordinal) & 6.07 (1.60) & 6 [5, 7] & 0.2 & $-0.63$ & 6.06 / 6.16 & 0.519 & 0.038 \\
+Fármacos activos$^\dagger$ & 1.19 (0.92) & 1 [1, 2] & 22.8 & 0.68 & 1.19 / 1.19 & 0.503 & 0.007 \\
+Procedimientos$^\dagger$ & 1.34 (1.70) & 1 [0, 2] & 45.9 & 1.32 & 1.35 / 1.27 & 0.493 & $-0.013$ \\
+\botrule
+\end{tabular}
+\end{table}
+
+La señal es débil: ninguna numérica pasa de un efecto pequeño ($\delta=0.214$), y de las 27 categóricas, 15 son significativas tras Holm, pero con una V de Cramér de 0.106 como máximo. El mejor predictor alcanza un AUC de 0.607 (Figura~\ref{fig:eda}b), y un oráculo sobre los perfiles de los tres mejores llega a 0.648, cerca de lo que logran los modelos (0.666): se espera un techo bajo y compartido, por lo que se busca combinar mejor los modelos existentes y no un modelo más complejo.
+
+La Figura~\ref{fig:eda}a muestra el hallazgo con más consecuencias. Un paciente aporta en promedio 1.42 encuentros, y sus predictores se repiten casi por completo ($\eta^2=0.99$ en la edad, frente a 0.36 al azar), mientras que la etiqueta no (0.354 frente a 0.358). El efecto de diseño es 1.395. Por eso toda partición se hace por paciente.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{fig_eda.pdf}
+\caption{Análisis exploratorio en el conjunto de entrenamiento. (a) Similitud entre encuentros de un mismo paciente (varianza explicada por el paciente, $\eta^2$, en las numéricas; concordancia en las categóricas), frente a una referencia que reasigna los encuentros a pacientes al azar: los predictores se repiten dentro del paciente y la etiqueta no. (b) AUC univariado de los ocho mejores predictores, con el techo estimado por un oráculo sobre los perfiles de los tres primeros y el AUC-ROC de los mejores modelos en el conjunto de prueba.}
+\label{fig:eda}
+\end{figure}
+
+\textbf{Preprocesamiento.} Se descartan \texttt{weight}, con un 98.5\% de faltantes, y nueve fármacos casi constantes. La ausencia de \texttt{race} (2.25\%) se conserva como categoría propia, los niveles poco frecuentes se agrupan y los diagnósticos CIE-9 se consolidan en grupos clínicos. Los faltantes restantes se imputan con la mediana en las numéricas y con la moda en las categóricas. Las variables numéricas se escalan con mediana e intervalo intercuartílico, porque todas rechazan la normalidad y tres tienen más del 50\% de ceros. Las categóricas se codifican \emph{one-hot}, lo que deja 152 columnas.
+
+\textbf{Particiones y control de fuga.} El conjunto se divide por paciente en 79{,}473 encuentros de entrenamiento y 19{,}867 de prueba, sin pacientes compartidos y con prevalencias de 11.389\% y 11.391\%. Particionar por filas inflaba el AUC-PR de Random Forest en 0.0127, del orden de las diferencias que se quieren detectar. Toda transformación con parámetros aprendidos (imputación, escalado, codificación, remuestreo y las predicciones fuera de pliegue de DES-CPL) se ajusta solo con el entrenamiento de cada pliegue.
+
+\textbf{Conjuntos adicionales.} Para evaluar si el mecanismo se transfiere, todos los modelos se evalúan además en tres conjuntos públicos de UCI de otros dominios: \emph{CDC Diabetes Health Indicators} (253{,}680 encuestas, 13.9\% de positivos), \emph{Bank Marketing} (45{,}211 contactos, 11.7\% de positivos) \cite{bib_moro_2014} y \emph{Default of Credit Card Clients} (30{,}000 clientes, 22.1\% de positivos) \cite{bib_yeh_2009}. Ninguno tiene identificador de individuo, de modo que en ellos la partición es estratificada simple; el preprocesamiento es análogo (escalado robusto y codificación \emph{one-hot} ajustados dentro de cada pliegue).
+
+\subsection{Modelos de referencia}\label{subsec:referencia}
+
+DES-CPL se compara con tres grupos de modelos, con las mismas particiones, preprocesamiento y 60 evaluaciones de hiperparámetros (Tabla~\ref{tab:hiper}); los siete primeros son sus componentes. $\sigma$ es la función logística.
+
+\textbf{Regresión logística} \cite{bib_tibshirani}. Minimiza la entropía cruzada penalizada (Lasso o Ridge):
+\begin{equation}
+\min_{\beta_0,\beta}\; n\,L_{\text{CE}}(\beta_0,\beta) + \frac{1}{C}\,\Omega(\beta), \qquad \Omega(\beta)=\lVert\beta\rVert_1 \ \text{o} \ \tfrac{1}{2}\lVert\beta\rVert_2^2 .
+\label{eq:logistica}
+\end{equation}
+
+\textbf{Naive Bayes gaussiano} \cite{bib_zhang}. Supone predictores independientes y gaussianos dada la clase; $\epsilon$ estabiliza las varianzas pequeñas:
+\begin{equation}
+P(Y=c\mid x)\;\propto\;\pi_c\prod_{j=1}^{p}\mathcal{N}\!\big(x_j;\,\mu_{jc},\,\sigma^2_{jc}+\epsilon\big).
+\label{eq:bayes}
+\end{equation}
+
+\textbf{$k$ vecinos más cercanos} \cite{bib_cover}. Vota entre los $k$ vecinos más cercanos (distancia de Minkowski de orden $r$):
+\begin{equation}
+f(x)=\frac{\sum_{i\in\mathcal{N}_k(x)} \omega_i\, y_i}{\sum_{i\in\mathcal{N}_k(x)} \omega_i}, \qquad \omega_i = 1 \ \text{o}\ \omega_i = \lVert x-x_i\rVert_r^{-1}.
+\label{eq:knn}
+\end{equation}
+
+\textbf{Árbol de decisión} \cite{bib_breiman_cart}. Elige en cada nodo la división de mayor descenso de impureza y se poda por costo-complejidad:
+\begin{equation}
+\Delta i(s,t)=i(t)-p_L\,i(t_L)-p_R\,i(t_R), \qquad i(t)=1-\sum_c \hat p_{c\mid t}^2 \ \text{(Gini)} \ \text{o} \ -\sum_c \hat p_{c\mid t}\log\hat p_{c\mid t}.
+\label{eq:arbol}
+\end{equation}
+
+\textbf{Random Forest} \cite{bib_breiman_rf}. Promedia $B$ árboles \emph{bootstrap}; bajar su correlación $\rho$ reduce la varianza ($s^2$, la de un árbol):
+\begin{equation}
+f(x)=\frac{1}{B}\sum_{b=1}^{B}T_b(x), \qquad \operatorname{Var}\big[f(x)\big]=\rho\,s^2+\frac{1-\rho}{B}\,s^2.
+\label{eq:rf}
+\end{equation}
+
+\textbf{XGBoost} \cite{bib_chen}. Suma árboles en el logit, $\hat y^{(t)}=\hat y^{(t-1)}+\eta\, h_t(x)$, y cada uno minimiza
+\begin{equation}
+\mathcal{L}^{(t)}=\sum_{i=1}^{n}\ell\big(y_i,\hat{y}_i^{(t-1)}+h_t(x_i)\big)+\gamma J_t+\tfrac{1}{2}\lambda_{\text{x}}\lVert w_t\rVert_2^2,
+\label{eq:xgboost}
+\end{equation}
+con $J_t$ hojas de pesos $w_t$. El número de árboles se fija por parada temprana.
+
+\textbf{SVM lineal} \cite{bib_cortes}. Minimiza la pérdida bisagra y convierte su puntaje $z(x)=w^\top x+b$ en probabilidad con Platt \cite{bib_platt}, $f(x)=\sigma(Az(x)+B)$:
+\begin{equation}
+\min_{w,b}\;\tfrac{1}{2}\lVert w\rVert_2^2+C\sum_{i=1}^{n}\max\big(0,\,1-\tilde{y}_i(w^\top x_i+b)\big), \qquad \tilde y_i\in\{-1,1\}.
+\label{eq:svm}
+\end{equation}
+
+\textbf{LightGBM y CatBoost.} Representan el estado del arte en datos tabulares y optimizan el objetivo de la Ecuación~\eqref{eq:xgboost}. LightGBM \cite{bib_ke_2017} (4.7.0) crece el árbol por hojas sobre histogramas; CatBoost \cite{bib_prokhorenkova_2018} (1.2.10) usa \emph{boosting} ordenado: el residuo de cada encuentro se calcula con un modelo que no lo vio, $r_i=y_i-F^{(\pi(i)-1)}(x_i)$.
+
+\textbf{Ensambles estáticos.} Con las mismas bases y predicciones fuera de pliegue que DES-CPL, aplican una regla única a todos los pacientes: el promedio simple, los pesos globales ($w_m\propto\exp(-C^{\text{glob}}_m/\tau)$, es decir, DES-CPL con $\lambda=1$) y el apilamiento \cite{bib_wolpert_1992},
+\begin{equation}
+f(x)=\sigma\Big(\alpha_0+\sum_{m=1}^{M} \alpha_m\operatorname{logit}\tilde f_m(x)\Big).
+\label{eq:apilamiento}
+\end{equation}
+
+\textbf{Desbalance.} Cada base usa la estrategia de su mejor combinación previa entre ninguna, SMOTE \cite{bib_smote}, ADASYN \cite{bib_adasyn} y la reponderación $n/(2n_c)$; solo XGBoost la usa (ADASYN). El remuestreo ocurre dentro del pliegue (\texttt{imbalanced-learn} 0.14.2, \texttt{scikit-learn} 1.9.1, \texttt{xgboost} 3.4.1). El mejor benchmark es el de mayor AUC-PR medio entre los nueve modelos individuales.
+
+\subsection{Modelo propuesto: DES-CPL}\label{subsec:propuesto}
+
+\textbf{Idea central.} DES-CPL decide, para cada paciente nuevo, cuánto confiar en cada clasificador base según la calidad de sus probabilidades en pacientes parecidos (Figura~\ref{fig:descpl}). El marco de selección dinámica con vecinos se reutiliza de la literatura \cite{bib_ko_2008, bib_cruz_2018}; la competencia, el vecindario, el encogimiento y la ponderación son nuevos. La poda y el encogimiento se añadieron tras un piloto en el que la competencia local resultó ruidosa.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{fig_descpl_diagrama.pdf}
+\caption{Esquema de DES-CPL: a la izquierda, el entrenamiento dentro de cada pliegue externo; a la derecha, la predicción para un paciente nuevo. Las predicciones fuera de pliegue de los $M$ modelos base forman el conjunto de selección dinámica. Para cada consulta se buscan $k$ vecinos positivos y $k$ negativos en el espacio de perfiles de salida, excluyendo los encuentros del mismo paciente; con ellos se calcula la puntuación de Brier de cada modelo por clase, que se repondera por la prevalencia local, se encoge hacia la competencia global y se convierte en pesos mediante una softmax con temperatura $\tau$.}
+\label{fig:descpl}
+\end{figure}
+
+\textbf{Componente 1: conjunto de selección fuera de pliegue.} Sobre sus propios datos de entrenamiento todos los modelos parecerían competentes. Por eso cada $f_m$ se reentrena en una validación cruzada agrupada por paciente y, para cada encuentro, se guarda la predicción del modelo que no lo vio, $\tilde{f}_m(x_i)$. El conjunto de selección es $\mathcal{S}=\{(\phi(x_i), y_i, g_i)\}_{i=1}^{n}$, con el perfil de salidas
+\begin{equation}
+\phi(x) = \big(\operatorname{logit} \bar{f}_1(x), \dots, \operatorname{logit} \bar{f}_M(x)\big) \in \mathbb{R}^{M},
+\label{eq:perfil}
+\end{equation}
+donde $\bar{f}_m(x_i)=\tilde{f}_m(x_i)$ en $\mathcal{S}$ y, para una consulta nueva, $\bar{f}_m(x)$ es el promedio de los $K$ modelos de pliegue, de modo que ambos perfiles son comparables. Las probabilidades se recortan a $[10^{-6},\,1-10^{-6}]$. La distancia se mide en este espacio y no en el de los 152 predictores, disperso y de alta dimensión: dos perfiles cercanos son pacientes que los modelos consideran parecidos \cite{bib_cruz_2018}.
+
+\textbf{Componente 2: región de competencia estratificada y agrupada.} Con un 11\% de positivos, los $k$ vecinos de una consulta a menudo no contienen positivos, y la competencia solo premiaría las probabilidades bajas. La región reúne entonces los $k$ positivos y los $k$ negativos más cercanos sobre $\phi$, $\mathcal{N}^{+}_{k}(x)$ y $\mathcal{N}^{-}_{k}(x)$, en distancia euclidiana. Cuando la consulta pertenece a $\mathcal{S}$, como al ajustar los hiperparámetros, se excluyen los encuentros de su propio paciente.
+
+\textbf{Componente 3: competencia por Brier reponderado.} La competencia local de $f_m$ es su puntuación de Brier en la región, calculada por clase y combinada con la prevalencia local estimada:
+\begin{equation}
+C_m(x) = \frac{\hat{q}(x)}{k}\sum_{i\in\mathcal{N}^{+}_{k}(x)} \big(\tilde{f}_m(x_i) - 1\big)^2 + \frac{1-\hat{q}(x)}{k}\sum_{i\in\mathcal{N}^{-}_{k}(x)} \tilde{f}_m(x_i)^2 ,
+\label{eq:competencia}
+\end{equation}
+donde $\hat{q}(x)=(n^{+}_{2k}(x)+s\,\bar{y})/(2k+s)$ es la proporción de positivos entre los $2k$ vecinos sin estratificar, suavizada hacia la prevalencia global con $s=10$. Un $C_m$ menor indica más competencia. Es el estimador estratificado del Brier local y, a diferencia de la exactitud local \cite{bib_ko_2008} o de la probabilidad de acierto \cite{bib_woloszynski_2011}, distingue una probabilidad de 0.45 de una de 0.05 para un positivo, aunque ambas fallen la etiqueta. Con peso $\tfrac{1}{2}$ por clase, la primera formulación, no sería propia (Proposición~\ref{prop:propia}).
+
+\textbf{Componente 4: ponderación softmax con temperatura.} Los pesos se obtienen como
+\begin{equation}
+w_m(x) = \frac{\exp\!\big(-C_m(x)/\tau\big)}{\sum_{j=1}^{M}\exp\!\big(-C_j(x)/\tau\big)}, \qquad
+\hat{f}(x) = \sum_{m=1}^{M} w_m(x)\, f_m(x).
+\label{eq:pesos}
+\end{equation}
+La temperatura $\tau>0$ recorre un espectro continuo: cuando $\tau\to\infty$ los pesos se igualan y DES-CPL coincide con el promedio estático, y cuando $\tau\to 0$ toda la masa se concentra en el modelo localmente más competente, que es la selección dinámica de un solo clasificador. $\tau$ se ajusta en los datos.
+
+\textbf{Componente 5: poda.} Se conservan los $M'\in\{4, M\}$ modelos de mayor AUC-PR fuera de pliegue, decididos con $\mathcal{S}$ y nunca con el pliegue evaluado: los débiles añaden ruido al perfil y a la mezcla. Desde aquí, el perfil, las competencias y la combinación usan solo esos $M'$ modelos.
+
+\textbf{Componente 6: encogimiento hacia la competencia global.} Con $k$ vecinos por clase la competencia local es ruidosa, así que se combina con la global, $C^{\text{glob}}_m$, la misma medida sobre todo $\mathcal{S}$:
+\begin{equation}
+C^{\lambda}_m(x) = (1-\lambda)\, C_m(x) + \lambda\, C^{\text{glob}}_m, \qquad \lambda\in[0,1],
+\label{eq:encogimiento}
+\end{equation}
+y los pesos de la Ecuación~\eqref{eq:pesos} usan $C^{\lambda}_m$. Con $\lambda=0$ es una selección dinámica pura y con $\lambda=1$, un ensamble de pesos globales; el $\lambda$ elegido mide cuánta heterogeneidad local aprovechable existe. Junto con $\tau$, DES-CPL incluye como casos particulares el promedio simple, los pesos globales y la selección de un solo modelo.
+
+\textbf{Propiedades teóricas.} Las cuatro proposiciones siguientes justifican el diseño; las demostraciones se incluyen en el Apéndice~\ref{app:demostraciones}.
+
+\begin{proposicion}[Descomposición local de la pérdida]\label{prop:cota}
+Para todo $x$, toda etiqueta $y\in\{0,1\}$ y cualesquiera pesos $w_m(x)\geq 0$ con $\sum_m w_m(x)=1$,
+\begin{equation}
+\ell\big(\hat{f}(x), y\big) = \sum_{m=1}^{M} w_m(x)\,\ell\big(f_m(x), y\big) - \sum_{m=1}^{M} w_m(x)\big(f_m(x)-\hat{f}(x)\big)^2 .
+\label{eq:ambiguedad}
+\end{equation}
+En consecuencia, la pérdida del ensamble nunca supera el promedio ponderado de las pérdidas de sus miembros, y la diferencia es la dispersión ponderada de sus predicciones.
+\end{proposicion}
+
+La Ecuación~\eqref{eq:ambiguedad} es la descomposición de ambigüedad de Krogh y Vedelsby \cite{bib_krogh_1995}, aplicada con pesos que dependen de $x$; DES-CPL da más peso a los modelos con menor pérdida estimada en la zona, de modo que la cota sea pequeña cuando la competencia se estima bien.
+
+\begin{proposicion}[La competencia reponderada es propia; la balanceada no]\label{prop:propia}
+Sea una zona con riesgo $q=P(Y=1\mid\text{zona})$ y un modelo que predice la constante $p$ en ella. La competencia reponderada $C_q(p)=q(1-p)^2+(1-q)p^2$ es el Brier esperado en la zona, se minimiza en $p=q$ y cumple $C_q(p)=q(1-q)+(p-q)^2$. La competencia balanceada $C_{1/2}(p)$ se minimiza en $p=\tfrac{1}{2}$ sea cual sea $q$. Además, el estimador estratificado es insesgado (Apéndice~\ref{app:demostraciones}).
+\end{proposicion}
+
+\begin{proposicion}[Consistencia del estimador de competencia]\label{prop:consistencia}
+Si los pacientes son independientes, $\phi$ tiene densidad dentro de cada clase y la pérdida esperada de cada clase es continua en el perfil, entonces, con $k\to\infty$ y $k/n_c\to 0$ en cada clase, $C_m(x)$ converge en probabilidad al riesgo de Brier de $f_m$ dado $\phi(x)$, $q(x)B_{1,m}(x)+(1-q(x))B_{0,m}(x)$, donde $B_{c,m}$ es su pérdida esperada en la clase $c$.
+\end{proposicion}
+
+La Proposición~\ref{prop:consistencia} se sigue de la consistencia de la regresión por $k$ vecinos \cite{bib_stone_1977}; como la independencia vale entre pacientes y no entre encuentros, exige excluir al propio paciente (Componente~2).
+
+\begin{proposicion}[Encogimiento óptimo]\label{prop:encogimiento}
+Fije $x$ y un modelo $m$, y sea $C$ su competencia verdadera relativa a la de los demás modelos (los pesos softmax no cambian si se suma una constante a todas las competencias). Si la estimación local $\hat{C}^{\text{loc}}$ es insesgada con varianza $v$, la global $C^{\text{glob}}$ tiene varianza despreciable y $b=C^{\text{glob}}-C$ es su sesgo en la zona de $x$, el error cuadrático medio de $(1-\lambda)\hat{C}^{\text{loc}}+\lambda C^{\text{glob}}$ es $(1-\lambda)^2 v+\lambda^2 b^2$, y se minimiza en
+\begin{equation}
+\lambda^\star = \frac{v}{v+b^2}.
+\label{eq:lambda_optimo}
+\end{equation}
+\end{proposicion}
+
+Es el razonamiento del estimador de James--Stein: un $\lambda$ cercano a 1 indica que el ruido local domina sobre la heterogeneidad real entre zonas.
+
+El Algoritmo~\ref{alg:descpl} resume el procedimiento.
+
+\begin{algorithm}
+\caption{DES-CPL: entrenamiento y predicción}\label{alg:descpl}
+\begin{algorithmic}[1]
+\Require Datos $\mathcal{D}=\{(x_i,y_i,g_i)\}$, modelos base $f_1,\dots,f_M$ con hiperparámetros fijos, vecinos por clase $k$, temperatura $\tau$, encogimiento $\lambda$, modelos tras la poda $M'$, pliegues $K$
+\Ensure Probabilidad $\hat{f}(x)$ para una consulta $x$
+\Statex \textit{Entrenamiento}
+\For{cada pliegue $(\mathcal{T}_r, \mathcal{V}_r)$ de \textsc{StratifiedGroupKFold}$(\mathcal{D}, K)$}
+    \State Ajustar cada $f_m$ sobre $\mathcal{T}_r$ y guardar $\tilde{f}_m(x_i)$ para $i\in\mathcal{V}_r$
+\EndFor
+\State Conservar los $M'$ modelos con mayor AUC-PR fuera de pliegue (poda)
+\State Construir $\mathcal{S}$ con los perfiles $\phi(x_i)$ de la Ec.~\eqref{eq:perfil} y calcular $C^{\text{glob}}_m$
+\State Construir un índice de vecinos para los positivos de $\mathcal{S}$ y otro para los negativos
+\State Reajustar cada $f_m$ sobre $\mathcal{D}$ completo
+\Statex \textit{Predicción}
+\State Calcular $f_m(x)$ con los modelos reajustados y el perfil $\phi(x)$ con el promedio de los $K$ modelos de pliegue
+\State Obtener $\mathcal{N}^{+}_{k}(x)$ y $\mathcal{N}^{-}_{k}(x)$, excluyendo encuentros del paciente $g(x)$ si está en $\mathcal{S}$
+\State Estimar $\hat{q}(x)$ con los $2k$ vecinos sin estratificar
+\State Calcular $C_m(x)$ con la Ec.~\eqref{eq:competencia}, encogerla con la Ec.~\eqref{eq:encogimiento} y obtener $w_m(x)$ con la Ec.~\eqref{eq:pesos}
+\State \Return $\hat{f}(x)=\sum_m w_m(x)\,f_m(x)$
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Complejidad.} Sea $T_m(n)$ el costo de ajustar el modelo $m$ con $n$ encuentros. El entrenamiento cuesta $O\big((K+1)\sum_m T_m(n)\big)$ por los $K$ ajustes fuera de pliegue y el ajuste final, más $O(nM\log n)$ por la construcción de los dos índices de vecinos. La predicción de una consulta cuesta la inferencia de los $M$ modelos más $O(M\log n)$ en promedio para la búsqueda de vecinos y $O(kM)$ para las competencias. La memoria adicional es $O(nM)$. DES-CPL no tiene parámetros entrenables propios: solo los hiperparámetros $k$, $\tau$, $\lambda$ y $M'$, más los de los modelos base.
+
+\subsection{Entrenamiento y optimización}\label{subsec:entrenamiento}
+
+El conjunto base está formado por los siete modelos del benchmark previo, cada uno con la estrategia de balanceo de su mejor combinación: regresión logística, Naive Bayes, $k$ vecinos más cercanos, árbol de decisión, Random Forest, XGBoost y SVM lineal. Sus hiperparámetros son, en cada pliegue externo, los que eligió Random Search con 60 evaluaciones en un estudio de convergencia del presupuesto realizado sobre esas mismas particiones. DES-CPL no recibe información adicional: combina exactamente esos modelos. Las predicciones fuera de pliegue se calculan con $K=3$ pliegues agrupados por paciente dentro de cada pliegue externo de entrenamiento.
+
+Los hiperparámetros de DES-CPL son $k\in\{5, 10, 20, 30, 50, 100\}$ vecinos por clase; la temperatura $\tau\in\{0, 10^{-4}, 3\cdot10^{-4}, 10^{-3}, 3\cdot10^{-3}, 10^{-2}, 3\cdot10^{-2}, 0.1, 0.3, \infty\}$, en unidades de la puntuación de Brier; el encogimiento $\lambda\in\{0, 0.25, 0.5, 0.75, 0.9, 1\}$, y la poda a $M'\in\{4, 7\}$ modelos. Se exploran con optimización bayesiana con estimador de Parzen estructurado en árbol \cite{bib_bergstra_tpe}, implementada en Optuna \cite{bib_optuna}, con 60 evaluaciones por pliegue externo, el mismo presupuesto que reciben los modelos de referencia. Como DES-CPL ya dispone de predicciones fuera de pliegue, cada configuración se evalúa sin reentrenar los modelos base: cada encuentro de $\mathcal{S}$ se predice con vecinos que excluyen a su propio paciente, y se maximiza el AUC-PR resultante. Esta evaluación ocurre íntegramente dentro del pliegue externo de entrenamiento. La semilla es 42 en todas las librerías (más el número de pliegue en Optuna). En XGBoost el número de árboles se fija por parada temprana sobre una partición interna. Los experimentos se ejecutan en un equipo con procesador AMD de cuatro núcleos físicos (ocho lógicos), 15.3~GB de RAM y sin GPU, con Python 3.12.13 y cuatro procesos en paralelo.
+
+La Tabla~\ref{tab:hiper} reúne los espacios de búsqueda de todos los modelos y los valores elegidos al reajustar con todo el entrenamiento; en cada pliegue externo la búsqueda elige sus propios valores.
+
+\begin{table}[!htbp]
+\caption{Espacios de búsqueda de hiperparámetros (60 evaluaciones por pliegue externo para todos los modelos: Random Search en los de referencia y optimización bayesiana TPE en DES-CPL) y valores elegidos con todo el conjunto de entrenamiento. ``log'' indica muestreo uniforme en escala logarítmica.}\label{tab:hiper}
+\footnotesize
+\begin{tabular}{@{}p{1.75cm}p{1.35cm}p{5.6cm}p{2.9cm}@{}}
+\toprule
+Modelo & Balanceo & Espacio de búsqueda & Valor elegido \\
+\midrule
+Logística & Ninguno & $C\in[10^{-4},10^{2}]$ (log); penalización $\in\{\ell_1,\ell_2\}$ & $C=0.101$; $\ell_1$ \\
+Naive Bayes & Ninguno & \texttt{var\_smoothing} $\in[10^{-12},1]$ (log) & $0.020$ \\
+$k$-NN & Ninguno & $k\in[5,301]$ (entero, log); pesos $\in\{$uniformes, $1/d\}$; $r\in\{1,2\}$ & $k=267$; uniformes; $r=2$ \\
+Árbol & Ninguno & profundidad $\in[2,30]$; mín. por hoja $\in[1,500]$ (log); criterio $\in\{$Gini, entropía$\}$; $\alpha_{\text{ccp}}\in[10^{-7},10^{-2}]$ (log) & 16; 15; entropía; $1.4\cdot10^{-4}$ \\
+Random Forest & Ninguno & árboles $\in[100,500]$; profundidad $\in[4,30]$; mín. por hoja $\in[1,100]$ (log); fracción de variables $\in[0.05,0.6]$ & 299; 5; 2; 0.43 \\
+XGBoost & ADASYN & $\eta\in[0.01,0.3]$ (log); profundidad $\in[2,10]$; peso mín. de hijo $\in[1,50]$ (log); submuestra y columnas $\in[0.5,1]$ & 0.045; 5; 2.43; 0.78; 0.53 \\
+SVM lineal & Ninguno & $C\in[10^{-6},10^{2}]$ (log) & $C=0.0047$ \\
+LightGBM & Pesos (hiperp.) & árboles $\in[100,1000]$; $\eta\in[0.01,0.3]$ (log); hojas $\in[8,256]$ (log); mín. por hoja $\in[5,300]$ (log); submuestra y columnas $\in[0.5,1]$; $\lambda_{\ell_2}\in[10^{-3},10]$ (log); pesos $\in\{$ninguno, balanceados$\}$ & 240; 0.017; 12; 5; 0.53; 0.59; 0.0016; ninguno \\
+CatBoost & Peso (hiperp.) & iteraciones $\in[200,800]$; $\eta\in[0.01,0.3]$ (log); profundidad $\in[4,8]$; $\lambda_{\ell_2}\in[1,30]$ (log); peso de la clase positiva $\in[1,10]$ (log) & 343; 0.016; 7; 1.97; 1.02 \\
+DES-CPL & Por modelo base & $k\in\{5,10,20,30,50,100\}$; $\tau\in\{0,10^{-4},\dots,0.3,\infty\}$ (10 valores); $\lambda\in\{0,0.25,0.5,0.75,0.9,1\}$; $M'\in\{4,7\}$ & $k=20$; $\tau=3\cdot10^{-4}$; $\lambda=0.9$; $M'=4$ \\
+\botrule
+\end{tabular}
+\end{table}
+
+\subsection{Protocolo de evaluación}\label{subsec:evaluacion}
+
+\textbf{Pre-registro.} Hipótesis, métricas, pruebas, conjuntos adicionales y presupuesto se fijaron en un protocolo congelado con la etiqueta de Git \texttt{protocolo-v1} el 9 de noviembre de 2026. Los análisis previos se declaran exploratorios.
+
+\textbf{Validación.} Todos los modelos se evalúan con validación cruzada anidada de cinco pliegues externos y tres internos, estratificada y agrupada por paciente, con la semilla 42. Las particiones externas son las del benchmark previo, con una sola repetición por cómputo (Figura~\ref{fig:validacion}). Después, todos los modelos se reentrenan con todo el entrenamiento y se evalúan una vez en el conjunto de prueba.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{fig_validacion.pdf}
+\caption{Esquema de validación. (1) Partición del conjunto en entrenamiento y prueba por paciente. (2) Bucle externo: cinco pliegues estratificados y agrupados por paciente; cada uno se reserva una vez para estimar el desempeño. (3) Bucle interno, dentro de cada entrenamiento externo: tres pliegues agrupados, con los que se ajustan los hiperparámetros de los modelos de referencia y se construye el conjunto de selección de DES-CPL. (4) Reajuste y evaluación: el pliegue externo y el conjunto de prueba nunca intervienen en ninguna decisión.}
+\label{fig:validacion}
+\end{figure}
+
+\textbf{Métricas.} La principal es el AUC-PR, calculado como precisión media: refleja la proporción de señalados que realmente reingresan y su referencia aleatoria es la prevalencia \cite{bib_saito}. Las secundarias son el AUC-ROC, la puntuación de Brier, el error de calibración esperado y, con un umbral que marca al 15\% de mayor riesgo (un percentil de las puntuaciones, sin etiquetas), $F_1$, la exactitud balanceada y el coeficiente de Matthews.
+
+\textbf{Pruebas de hipótesis.} La hipótesis nula es que el AUC-PR de DES-CPL no supera al del mejor benchmark. Se contrasta, con $\alpha=0.05$, con tres pruebas: (1) Friedman \cite{bib_friedman} con el post-hoc de Nemenyi \cite{bib_nemenyi, bib_demsar}; (2) la $t$ corregida de Nadeau y Bengio \cite{bib_nadeau_2003}, unilateral, sobre las cinco diferencias emparejadas, con una razón de $1/4$ entre los tamaños de validación y entrenamiento, que corrige el solapamiento de los entrenamientos; y (3) DeLong \cite{bib_delong}, unilateral, para el AUC-ROC en los 19{,}867 encuentros de prueba. Las comparaciones contra los nueve benchmarks se corrigen con Holm \cite{bib_holm}. Los tamaños de efecto son la $\delta$ de Cliff \cite{bib_cliff} y la $g$ de Hedges \cite{bib_hedges_1981}, con un intervalo BCa \cite{bib_efron} de la diferencia en prueba (2{,}000 réplicas por paciente). Entre conjuntos se usan Friedman con la corrección de Iman--Davenport \cite{bib_iman_davenport_1980} y Wilcoxon \cite{bib_wilcoxon_1945} con Holm. Después del registro se añadieron, como complementarias, la prueba exacta de McNemar \cite{bib_mcnemar_1947} y la $t$ bayesiana correlacionada \cite{bib_corani_2015, bib_benavoli_2017}, con una región de equivalencia práctica de $\pm 0.005$.
+
+\textbf{Regla de superioridad.} DES-CPL sería superior solo si a la vez: su AUC-PR medio supera al de cada benchmark; las tres pruebas rechazan con $p$ ajustado $<0.05$; $\delta\geq 0.147$; y gana en al menos dos de los tres conjuntos adicionales sin perder significativamente en ninguno.
+
+\textbf{Robustez, calibración e incertidumbre.} Se miden la sensibilidad a $k$, $\tau$ y $\lambda$ en el pliegue 0; la estabilidad con diez semillas; y el efecto de invertir el 5\% y el 10\% de las etiquetas, de reducir el entrenamiento al 25\% y al 50\% de los pacientes y de bajar la prevalencia al 5\%. Se reportan la calibración, conjuntos conformes de Mondrian \cite{bib_angelopoulos_2023} con $\alpha=0.1$ y valores de Shapley \cite{bib_lundberg} sobre las variables originales.
+
+\subsection{Diseño del estudio de ablación}\label{subsec:ablacion}
+
+Cada variante cambia un solo componente, con el mismo protocolo, su propia búsqueda de 60 evaluaciones y la prueba de Nadeau y Bengio con Holm:
+\begin{enumerate}
+\item \textbf{Competencia por exactitud local} en lugar de Brier. ¿Aporta medir la probabilidad y no el acierto?
+\item \textbf{Brier balanceado}, con peso $\tfrac{1}{2}$ por clase en lugar de la prevalencia local. Contrasta la Proposición~\ref{prop:propia}.
+\item \textbf{Vecindario no estratificado}, con $2k$ vecinos sin distinguir clase. ¿Mejora la estimación garantizar positivos en la región?
+\item \textbf{Sin exclusión del paciente} al ajustar los hiperparámetros. ¿Sesga la fuga intra-paciente la elección de la configuración?
+\item \textbf{Selección dura} ($\tau=0$). ¿Supera ponderar varios modelos a elegir uno?
+\item \textbf{Sin encogimiento} ($\lambda=0$). ¿Basta la competencia local pura?
+\item \textbf{Sin poda} (los siete modelos). ¿Mejora descartar los modelos débiles?
+\end{enumerate}
+Se reporta además la versión inicial de DES-CPL, sin poda ni encogimiento y con Brier balanceado.
+
+\subsection{Disponibilidad de código y datos}\label{subsec:disponibilidad}
+
+El código de DES-CPL y sus pruebas, el protocolo, la tabla maestra de experimentos, los modelos serializados, las versiones exactas de las dependencias y el código que genera cada tabla y figura están en \url{https://github.com/joshua2412-a/Diabetes_ProyectoML_202630}. Los cuatro conjuntos de datos son públicos en el repositorio UCI. La semilla principal es 42; las otras nueve solo se usan en el análisis de estabilidad.
+
+\section{Resultados}\label{sec:resultados}
+
+\subsection{Montaje experimental}\label{subsec:montaje}
+
+Todos los métodos se evaluaron sobre las mismas cinco particiones externas agrupadas por paciente (semilla 42), con el mismo preprocesamiento dentro del pliegue y 60 evaluaciones de hiperparámetros por pliegue: Random Search para los siete modelos base, LightGBM y CatBoost, y optimización bayesiana para DES-CPL. Se reporta una repetición del bucle externo. La métrica primaria es el AUC-PR; las secundarias, el AUC-ROC, la puntuación de Brier, el error de calibración esperado (ECE) y, con el umbral que marca al 15\% de mayor riesgo, F1, el coeficiente de Matthews (MCC) y la exactitud balanceada. Después, los modelos se reentrenaron con todo el entrenamiento y se evaluaron una sola vez sobre los 19{,}867 encuentros reservados. Las hipótesis, las pruebas y la regla de superioridad se fijaron en el protocolo \texttt{protocolo-v1} antes de la corrida definitiva.
+
+\subsection{Desempeño predictivo global}\label{subsec:desempeno}
+
+La Tabla~\ref{tab:cv} resume el bucle externo y la Figura~\ref{fig:folds} muestra los cinco valores de cada método. DES-CPL obtiene un AUC-PR de $0.2279 \pm 0.0174$, por debajo de XGBoost ($0.2290 \pm 0.0124$), de los pesos globales y de CatBoost, y por encima de los otros seis modelos del curso, de LightGBM y del promedio simple. La distancia al mejor es de una milésima, es decir un 0.5\% relativo, unas doce veces menor que la desviación entre pliegues de XGBoost. En AUC-ROC el orden cambia ligeramente: los ensambles (apilamiento 0.6726, pesos globales 0.6722, DES-CPL 0.6721) quedan por delante de XGBoost (0.6707), con diferencias del mismo orden. La puntuación de Brier separa solo a Naive Bayes y a LightGBM, cuyas probabilidades están mal calibradas en algunos pliegues; el resto queda entre 0.0961 y 0.0974.
+
+Frente a la prevalencia del 11.39\%, que es el AUC-PR de un clasificador aleatorio, todos los métodos duplican esa referencia, pero los cinco primeros caben en un intervalo de 0.0011. El problema tiene un techo bajo y compartido, que la Sección~\ref{subsec:interpretabilidad} atribuye a la información disponible y no a los modelos.
+
+\begin{table}[h]
+\caption{Desempeño en el bucle externo (media $\pm$ desviación estándar sobre cinco pliegues agrupados por paciente). En negrita el mejor valor de cada columna y subrayado el segundo; en Brier, menor es mejor. $^\dagger$: DES-CPL lo supera con $p_{\text{Holm}} < 0.05$ en la prueba $t$ corregida de Nadeau--Bengio.}\label{tab:cv}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Método & AUC-PR & AUC-ROC & Brier \\
+\midrule
+Regresión logística & 0.2109 $\pm$ 0.0123 & 0.6621 $\pm$ 0.0071 & 0.0971 $\pm$ 0.0007 \\
+Naive Bayes$^\dagger$ & 0.1997 $\pm$ 0.0121 & 0.6500 $\pm$ 0.0086 & 0.1360 $\pm$ 0.0084 \\
+$k$-NN$^\dagger$ & 0.2065 $\pm$ 0.0152 & 0.6513 $\pm$ 0.0082 & 0.0974 $\pm$ 0.0007 \\
+Árbol de decisión & 0.2021 $\pm$ 0.0089 & 0.6510 $\pm$ 0.0073 & 0.0973 $\pm$ 0.0006 \\
+Random Forest & 0.2237 $\pm$ 0.0186 & 0.6689 $\pm$ 0.0088 & 0.0966 $\pm$ 0.0007 \\
+XGBoost & \textbf{0.2290} $\pm$ 0.0124 & 0.6707 $\pm$ 0.0056 & \underline{0.0961} $\pm$ 0.0007 \\
+SVM lineal & 0.2145 $\pm$ 0.0133 & 0.6624 $\pm$ 0.0081 & 0.0971 $\pm$ 0.0008 \\
+LightGBM & 0.2253 $\pm$ 0.0143 & 0.6695 $\pm$ 0.0086 & 0.1223 $\pm$ 0.0582 \\
+CatBoost & 0.2285 $\pm$ 0.0171 & 0.6713 $\pm$ 0.0107 & 0.0968 $\pm$ 0.0014 \\
+\midrule
+Promedio simple & 0.2185 $\pm$ 0.0131 & 0.6687 $\pm$ 0.0081 & 0.0970 $\pm$ 0.0008 \\
+Apilamiento logístico & 0.2280 $\pm$ 0.0158 & \textbf{0.6726} $\pm$ 0.0085 & \textbf{0.0961} $\pm$ 0.0008 \\
+Pesos globales (Brier) & \underline{0.2286} $\pm$ 0.0170 & \underline{0.6722} $\pm$ 0.0086 & 0.0962 $\pm$ 0.0007 \\
+\midrule
+\textbf{DES-CPL (propuesto)} & 0.2279 $\pm$ 0.0174 & 0.6721 $\pm$ 0.0086 & 0.0963 $\pm$ 0.0007 \\
+\botrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_folds_aucpr.pdf}
+\caption{AUC-PR de cada pliegue externo (puntos) con su media y desviación estándar (barra). Cuadrados: DES-CPL; rombos: XGBoost; triángulos: ensambles estáticos; círculos: demás modelos. La línea punteada marca la prevalencia. Los intervalos de los cinco primeros métodos se solapan casi por completo.}
+\label{fig:folds}
+\end{figure}
+
+En el conjunto de prueba (Tabla~\ref{tab:prueba}) el orden se mantiene: XGBoost llega a 0.2315 de AUC-PR, el apilamiento a 0.2311 y DES-CPL a 0.2293. El intervalo BCa al 95\% de la diferencia de AUC-PR entre DES-CPL y XGBoost, remuestreando pacientes, es $[-0.0080,\, 0.0033]$ e incluye el cero. Con el umbral operativo, DES-CPL detecta 700 de las 2{,}263 readmisiones (exhaustividad 30.9\%, precisión 23.5\%) y XGBoost 708: una diferencia de ocho encuentros. Las curvas ROC y de precisión-exhaustividad de ambos modelos son prácticamente indistinguibles en todo su recorrido, y sus matrices de confusión difieren en menos de diez encuentros por celda (Figura~\ref{fig:prueba}). En las métricas de umbral, DES-CPL queda detrás de XGBoost, del apilamiento y de los pesos globales por menos de 0.005 en F1 y en MCC. En el recuento de la Tabla~\ref{tab:prueba}, DES-CPL no gana ninguna de las seis métricas frente a XGBoost, y gana las seis frente a Naive Bayes, $k$-NN, Random Forest, el SVM y LightGBM.
+
+\begin{table}[h]
+\caption{Desempeño en el conjunto de prueba reservado (19{,}867 encuentros de 13{,}951 pacientes). F1, MCC y exactitud balanceada (Ex.\ bal.) se calculan marcando el 15\% de mayor riesgo de cada modelo. ECE: error de calibración esperado con diez intervalos de cuantiles (menor es mejor). Negrita: mejor; subrayado: segundo. $^\ddagger$: DES-CPL lo supera con $p_{\text{Holm}} < 0.05$ en la prueba de DeLong; $^\S$: en la prueba exacta de McNemar.}\label{tab:prueba}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Método & AUC-PR & AUC-ROC & F1 & MCC & Ex.\ bal. & ECE \\
+\midrule
+Regresión logística\textsuperscript{\ddag} & 0.2140 & 0.6585 & 0.2640 & 0.1564 & 0.5879 & \textbf{0.0038} \\
+Naive Bayes\textsuperscript{\ddag} & 0.1959 & 0.6444 & 0.2529 & 0.1436 & 0.5807 & 0.1218 \\
+$k$-NN\textsuperscript{\ddag}\textsuperscript{\S} & 0.2049 & 0.6498 & 0.2525 & 0.1422 & 0.5806 & 0.0097 \\
+Árbol de decisión\textsuperscript{\ddag}\textsuperscript{\S} & 0.2074 & 0.6522 & 0.2680 & 0.1559 & \textbf{0.5929} & \underline{0.0050} \\
+Random Forest\textsuperscript{\ddag} & 0.2189 & 0.6564 & 0.2628 & 0.1551 & 0.5872 & 0.0097 \\
+XGBoost & \textbf{0.2315} & 0.6664 & \underline{0.2701} & \underline{0.1635} & 0.5919 & 0.0064 \\
+SVM lineal\textsuperscript{\ddag} & 0.2156 & 0.6575 & 0.2628 & 0.1551 & 0.5872 & 0.0099 \\
+LightGBM & 0.2280 & 0.6650 & 0.2632 & 0.1555 & 0.5874 & 0.0101 \\
+CatBoost & 0.2301 & 0.6661 & 0.2647 & 0.1573 & 0.5884 & 0.0074 \\
+\midrule
+Promedio simple & 0.2199 & 0.6617 & 0.2621 & 0.1542 & 0.5867 & 0.0133 \\
+Apilamiento logístico & \underline{0.2311} & \textbf{0.6678} & \textbf{0.2708} & \textbf{0.1644} & \underline{0.5924} & 0.0052 \\
+Pesos globales (Brier) & 0.2307 & \underline{0.6664} & 0.2678 & 0.1609 & 0.5904 & 0.0073 \\
+\midrule
+\textbf{DES-CPL (propuesto)} & 0.2293 & 0.6661 & 0.2670 & 0.1600 & 0.5899 & 0.0065 \\
+\botrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_prueba_curvas.pdf}
+\caption{DES-CPL y XGBoost en el conjunto de prueba: (a) curva ROC; (b) curva de precisión-exhaustividad; (c) calibración por deciles; (d) matriz de confusión de DES-CPL con el umbral del 15\%, con la de XGBoost entre paréntesis. Las líneas punteadas marcan el clasificador aleatorio, la prevalencia y la calibración perfecta.}
+\label{fig:prueba}
+\end{figure}
+
+\subsection{Pruebas de significancia}\label{subsec:significancia}
+
+El protocolo fijó tres pruebas confirmatorias: Friedman con Nemenyi sobre los pliegues, la $t$ corregida de Nadeau--Bengio \cite{bib_nadeau_2003} y la de DeLong \cite{bib_delong} sobre el conjunto de prueba. Para cubrir la combinación mínima que se exige en clasificación se añadieron después dos pruebas que el protocolo no incluía, y que se declaran como tales: la prueba exacta de McNemar \cite{bib_mcnemar_1947} sobre las decisiones con el umbral operativo, que sí estaba fijado de antemano, y la prueba $t$ bayesiana correlacionada \cite{bib_corani_2015,bib_benavoli_2017}. Para esta última, la región de equivalencia práctica (ROPE) es $\pm 0.005$ de AUC-PR, el umbral de relevancia que el estudio de convergencia del benchmark previo fijó antes de ver sus resultados. La Tabla~\ref{tab:pruebas} reúne los resultados frente a cada uno de los nueve benchmarks, y la Figura~\ref{fig:diferencias} muestra las diferencias con su intervalo.
+
+\begin{sidewaystable}
+\caption{Pruebas de significancia de DES-CPL frente a cada benchmark. $\Delta$: diferencia media de AUC-PR sobre los cinco pliegues externos (positiva si DES-CPL es mejor), con su IC del 95\% según la varianza corregida de Nadeau--Bengio. $\Delta$AUC: diferencia de AUC-ROC en el conjunto de prueba. McNemar: encuentros que DES-CPL clasifica bien y el benchmark mal / al revés, con el umbral del 15\%. Bayes: probabilidades posteriores de que DES-CPL sea mejor / equivalente (ROPE $\pm 0.005$) / peor. $\delta$: delta de Cliff sobre los pliegues. Los $p$ están ajustados con Holm por separado en cada prueba ($m = 9$).}\label{tab:pruebas}
+\footnotesize
+\begin{tabular*}{\textheight}{@{\extracolsep\fill}lcccccccccc@{}}
+\toprule
+ & \multicolumn{4}{c}{Nadeau--Bengio (pliegues)} & \multicolumn{2}{c}{DeLong (prueba)} & \multicolumn{2}{c}{McNemar (prueba)} & Bayes & \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+Benchmark & $\Delta$ & IC 95\% & $t$ & $p_{\text{Holm}}$ & $\Delta$AUC & $p_{\text{Holm}}$ & $n_{01}/n_{10}$ & $p_{\text{Holm}}$ & mejor / ROPE / peor & $\delta$ \\
+\midrule
+Regresión logística & +0.0170 & [+0.0047, +0.0294] & 3.83 & 0.056 & +0.0076 & 2.5e-4 & 583/567 & 1.000 & 0.97 / 0.02 / 0.00 & +0.76 \\
+Naive Bayes & +0.0282 & [+0.0170, +0.0395] & 6.97 & 0.010 & +0.0217 & 1.4e-8 & 941/867 & 0.602 & 1.00 / 0.00 / 0.00 & +0.92 \\
+$k$-NN & +0.0215 & [+0.0127, +0.0302] & 6.79 & 0.010 & +0.0163 & 3.1e-5 & 929/805 & 0.025 & 1.00 / 0.00 / 0.00 & +0.76 \\
+Árbol de decisión & +0.0258 & [+0.0083, +0.0434] & 4.09 & 0.052 & +0.0139 & 6.4e-8 & 569/234 & 4.8e-32 & 0.99 / 0.01 / 0.00 & +0.92 \\
+Random Forest & +0.0042 & [$-$0.0003, +0.0087] & 2.58 & 0.123 & +0.0097 & 3.5e-7 & 376/354 & 1.000 & 0.33 / 0.67 / 0.00 & +0.28 \\
+XGBoost & $-$0.0010 & [$-$0.0119, +0.0099] & $-$0.26 & 1.000 & $-$0.0003 & 0.978 & 159/175 & 1.000 & 0.10 / 0.72 / 0.18 & $-$0.36 \\
+SVM lineal & +0.0135 & [+0.0023, +0.0247] & 3.34 & 0.072 & +0.0086 & 1.1e-4 & 434/412 & 1.000 & 0.95 / 0.05 / 0.01 & +0.60 \\
+LightGBM & +0.0026 & [$-$0.0081, +0.0133] & 0.68 & 0.802 & +0.0011 & 0.580 & 266/246 & 1.000 & 0.28 / 0.66 / 0.06 & +0.12 \\
+CatBoost & $-$0.0005 & [$-$0.0075, +0.0064] & $-$0.22 & 1.000 & +0.0000 & 0.978 & 303/291 & 1.000 & 0.05 / 0.88 / 0.07 & $-$0.12 \\
+\botrule
+\end{tabular*}
+\end{sidewaystable}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_diferencias_ic.pdf}
+\caption{Diferencia de AUC-PR entre DES-CPL y cada benchmark sobre los pliegues externos, con su intervalo del 95\% (varianza corregida de Nadeau--Bengio) y el $p$ ajustado por Holm. La franja sombreada es la región de equivalencia práctica.}
+\label{fig:diferencias}
+\end{figure}
+
+La lectura conjunta es la siguiente. Frente a los tres benchmarks más fuertes (XGBoost, CatBoost y LightGBM) ninguna prueba encuentra evidencia de diferencia: los $p$ ajustados van de 0.58 a 1.00, los intervalos contienen el cero y la prueba bayesiana asigna la mayor probabilidad a la equivalencia práctica (0.72, 0.88 y 0.66). Frente a XGBoost la probabilidad de que DES-CPL sea peor (0.18) supera incluso a la de que sea mejor (0.10), y la delta de Cliff ($-0.36$) va en su contra: XGBoost queda por encima en cuatro de los cinco pliegues. Frente a los modelos del curso más débiles hay evidencia, pero no uniforme. DES-CPL supera significativamente a $k$-NN con las tres pruebas frecuentistas; a Naive Bayes, con Nadeau--Bengio y DeLong; al árbol, con DeLong y McNemar; y a la regresión logística, a Random Forest y al SVM, solo con DeLong. En la escala bayesiana, la probabilidad de una mejora práctica supera 0.95 frente a Naive Bayes, $k$-NN, el árbol y la logística, y frente a Random Forest domina la equivalencia (0.67).
+
+En resumen, DES-CPL supera significativamente a cuatro de los nueve benchmarks en al menos dos pruebas y es estadísticamente equivalente a XGBoost, CatBoost y LightGBM.
+
+La prueba de Friedman sobre los rangos de los pliegues rechaza que todos los métodos sean iguales ($\chi^2 = 38.72$, $p = 1.3\times10^{-5}$), pero con cinco bloques la diferencia crítica de Nemenyi es de 6.06 rangos y no separa a DES-CPL (rango medio 2.8) del mejor (XGBoost, 1.8).
+
+Las discrepancias entre pruebas se explican por su insumo y su potencia, no por una contradicción. DeLong compara AUC-ROC sobre casi veinte mil encuentros emparejados y detecta diferencias de 0.008; Nadeau--Bengio solo dispone de cinco diferencias por pliegue, con una varianza inflada por el solapamiento de los entrenamientos, y solo rechaza tras la corrección cuando la diferencia es grande y estable entre pliegues; McNemar descarta la información de ordenamiento y solo cuenta los encuentros que cambian de lado del umbral, que entre modelos tan correlacionados son pocos. Por eso las diferencias del orden de 0.01--0.02 frente a los modelos lineales son significativas en unas pruebas y no en otras. También conviene separar significancia y relevancia: la ventaja frente a la logística es estadísticamente clara en prueba ($p_{\text{Holm}} = 2.5\times10^{-4}$), pero equivale a 0.0076 de AUC-ROC y a ocho readmisiones más detectadas en el umbral operativo.
+
+\textbf{Varios conjuntos de datos.} Con los cuatro conjuntos (el principal, impago de tarjetas de crédito \cite{bib_yeh_2009}, Bank Marketing \cite{bib_moro_2014} y CDC Diabetes Health Indicators), la prueba de Friedman con la corrección de Iman--Davenport \cite{bib_iman_davenport_1980} rechaza la igualdad de los 13 métodos ($F_F = 19.87$, $p = 2.3\times10^{-12}$). DES-CPL queda tercero en rango medio (3.75), detrás del apilamiento (2.00) y de los pesos globales (2.75) y por delante de todos los modelos individuales: LightGBM 4.00, CatBoost y Random Forest 5.00, XGBoost 6.00 (Figura~\ref{fig:rangos}). Con $N = 4$ la diferencia crítica de Nemenyi es de 9.12 rangos y solo separa los extremos, y el Wilcoxon por pares \cite{bib_wilcoxon_1945} no puede bajar de $p = 0.0625$ unilateral; tras Holm ningún par es significativo. Frente al mejor benchmark de cada conjunto, DES-CPL gana solo en CDC (+0.0009 frente a LightGBM, $p = 0.41$) y pierde por poco en crédito ($-0.0005$) y en Bank Marketing ($-0.0028$), sin que ninguna diferencia sea significativa.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_rangos_conjuntos.pdf}
+\caption{Rango medio del AUC-PR de los 13 métodos en los cuatro conjuntos de datos (1 = mejor). La barra horizontal es la diferencia crítica de Nemenyi: dos métodos cuyos rangos difieren menos que ella no se distinguen. En azul oscuro, los ensambles estáticos; DES-CPL con rayas y XGBoost punteado.}
+\label{fig:rangos}
+\end{figure}
+
+Con esto, ninguna de las cuatro condiciones de superioridad del protocolo se cumple: la media no supera al mejor benchmark, las tres pruebas confirmatorias no rechazan, la delta de Cliff va en contra y DES-CPL gana en uno de los tres conjuntos adicionales. La conclusión es que \emph{no hay evidencia de que DES-CPL supere a XGBoost, CatBoost ni LightGBM}, y que la evidencia frente a los modelos más simples depende de la prueba.
+
+\subsection{Estudio de ablación}\label{subsec:res_ablacion}
+
+Ninguna diferencia frente al modelo completo es significativa tras Holm ($m = 8$; todos los $p_{\text{Holm}} = 1.00$), así que las hipótesis de diseño solo pueden leerse en dirección (Figura~\ref{fig:ablacion}). Tres componentes aportan en cuatro de los cinco pliegues: el encogimiento (quitarlo cuesta 0.0020), la competencia por Brier en lugar de exactitud (0.0021) y la reponderación por la prevalencia local (0.0011). La combinación suave frente a la selección dura (0.0009) y la región estratificada (0.0005) aportan menos. Esas tres diferencias apoyan, en dirección, las hipótesis del encogimiento, de la competencia probabilística y de la reponderación (Proposición~\ref{prop:propia}). Las de excluir al propio paciente y podar a cuatro modelos no se confirman: no mejoran el resultado ($-0.0005$ y $-0.0003$). La versión inicial, sin poda ni encogimiento y con Brier balanceado, queda 0.0035 por debajo en los cinco pliegues. Sin excluir al paciente y sin poda, la desviación de las diferencias por pliegue no pasa de 0.0015: esos componentes apenas cambian las predicciones. La búsqueda eligió $\lambda = 1$ en tres pliegues y 0.9 y 0.5 en los otros dos, y los pesos globales, sin componente local, obtienen 0.2286. Con todo el entrenamiento, la configuración elegida fue $k=20$, $\tau=3\cdot10^{-4}$ y $\lambda=0.9$, con el árbol, Random Forest, XGBoost y el SVM tras la poda; su AUC-PR en el conjunto de selección (0.2293) coincide con el de prueba.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_ablacion.pdf}
+\caption{Diferencia de AUC-PR entre DES-CPL completo y cada variante (media $\pm$ desviación estándar sobre los cinco pliegues). Valores positivos: el componente eliminado aporta. Ninguna diferencia es significativa tras Holm.}
+\label{fig:ablacion}
+\end{figure}
+
+\subsection{Sensibilidad y robustez}\label{subsec:robustez}
+
+\textbf{Hiperparámetros.} En el pliegue 0 el AUC-PR depende sobre todo de $\lambda$: sube de forma monótona de 0.240--0.244 con $\lambda = 0$ a 0.256 con $\lambda = 1$, con la misma tendencia en el conjunto de selección (Figura~\ref{fig:sensibilidad}). Con $\lambda$ fijo, $k$ mueve el resultado menos de 0.005, y las temperaturas pequeñas ($\tau \le 3\cdot10^{-4}$) superan a las grandes en menos de 0.01.
+
+\textbf{Semillas.} Con diez semillas de la búsqueda y de la partición interna, DES-CPL promedia $0.2270 \pm 0.0007$ y XGBoost $0.2251 \pm 0.0017$; DES-CPL queda por encima en nueve de las diez (Figura~\ref{fig:semillas}). La semilla 42, fijada en el protocolo, fue la mejor de XGBoost: el resultado confirmatorio se mantiene porque la semilla se fijó antes, pero no representa el desempeño medio de XGBoost. El Wilcoxon por semillas ($p = 0.003$) es exploratorio, porque las semillas comparten pliegues.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_sensibilidad.pdf}
+\caption{AUC-PR del pliegue 0 en función del encogimiento $\lambda$ y del número de vecinos por clase $k$, con la temperatura elegida. Con $\lambda = 1$ la competencia es global y $k$ no interviene.}
+\label{fig:sensibilidad}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_semillas.pdf}
+\caption{AUC-PR medio de los cinco pliegues de DES-CPL y XGBoost con diez semillas de la búsqueda y de la partición interna. La semilla 42 es la fijada en el protocolo.}
+\label{fig:semillas}
+\end{figure}
+
+\textbf{Ruido, desbalance y tamaño de muestra.} XGBoost pierde entre 1.6 y 1.9 veces lo que pierde DES-CPL en cada escenario: con el 10\% de etiquetas invertidas, 0.0141 frente a 0.0073; con el 5\% de prevalencia, 0.0135 frente a 0.0082; con el 25\% de los pacientes, 0.0292 frente a 0.0165, escenario en que DES-CPL gana en los cinco pliegues. En la curva de aprendizaje (25\%, 50\% y 100\% de los pacientes), DES-CPL pasa de 0.2115 a 0.2195 y 0.2279, y XGBoost de 0.1998 a 0.2148 y 0.2290. Los pesos globales y el apilamiento se degradan igual que DES-CPL, y Random Forest y la regresión logística pierden aún menos en términos absolutos, aunque parten de un desempeño menor. La mayor caída de XGBoost aparece con el 25\% de los pacientes.
+
+\subsection{Costo computacional}\label{subsec:costo}
+
+La Tabla~\ref{tab:costo} reporta el costo medido en el equipo descrito en la Sección~\ref{subsec:entrenamiento}. La búsqueda propia de DES-CPL tarda 8.1 minutos por pliegue, frente a 13.4 de XGBoost y 19.6 de Random Forest, porque cada evaluación solo consulta vecinos y combina probabilidades. Construir el conjunto de selección exige reentrenar cada modelo base en tres pliegues (5.3 minutos por pliegue externo), y el ajuste final cuesta 4.4 veces el de XGBoost. La inferencia es 13 veces más lenta que la de XGBoost, porque exige predecir con los modelos finales y con los de pliegue y buscar vecinos, pero queda por debajo de 0.5~ms por encuentro. Con un desempeño equivalente al de XGBoost, ese costo adicional no se justifica por exactitud, sino, a lo sumo, por la estabilidad de la Sección~\ref{subsec:robustez}, que los ensambles estáticos ofrecen a menor costo.
+
+\begin{table}[h]
+\caption{Costo computacional por modelo. Búsqueda: minutos por pliegue externo con 60 evaluaciones. Ajuste: segundos para reentrenar con todo el entrenamiento; en DES-CPL incluye los cuatro ajustes de cada modelo base que combina. Inferencia: milisegundos por encuentro. Memoria: tamaño del artefacto serializado con compresión, como aproximación a la memoria del modelo (no se serializaron LightGBM ni CatBoost).}\label{tab:costo}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Modelo & Búsqueda (min) & Ajuste (s) & Inferencia (ms) & Memoria (MB) \\
+\midrule
+Árbol de decisión & 4.8 & 9.4 & 0.024 & 0.01 \\
+Naive Bayes & 4.5 & 7.5 & 0.028 & $<$0.01 \\
+$k$-NN & 8.1 & 6.6 & 0.825 & 4.8 \\
+Regresión logística & 6.3 & 10.9 & 0.021 & $<$0.01 \\
+Random Forest & 19.6 & 84.9 & 0.051 & 30.1 \\
+SVM lineal & 4.8 & 9.2 & 0.020 & $<$0.01 \\
+XGBoost & 13.4 & 92.3 & 0.034 & 1.2 \\
+CatBoost & 17.9 & 13.7 & 0.020 & --- \\
+LightGBM & 4.8 & 4.6 & 0.023 & --- \\
+\textbf{DES-CPL} & 8.1 & 407.2 & 0.453 & 12.9 \\
+\botrule
+\end{tabular}
+\end{table}
+
+\subsection{Interpretabilidad y análisis de errores}\label{subsec:interpretabilidad}
+
+Los valores de Shapley \cite{bib_lundberg}, calculados por permutaciones sobre las 38 variables originales y los mismos 150 encuentros de prueba para todos los modelos, muestran que DES-CPL se apoya en lo mismo que XGBoost (Figura~\ref{fig:shap}): la correlación de Spearman entre sus importancias es 0.92 y comparten 14 de sus 15 variables más importantes. Encabezan el destino al alta, las hospitalizaciones del año anterior, la insulina y el grupo del diagnóstico principal, en coincidencia con el análisis exploratorio de los datos. Las cinco primeras reúnen el 58\% de la importancia en DES-CPL y el 51\% en XGBoost: combinar modelos no diluye la dependencia de la utilización previa, porque todos los modelos base la comparten.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_shap_des_cpl.pdf}
+\caption{Importancia global (media del valor absoluto de Shapley, en puntos de probabilidad) de las diez variables principales de DES-CPL, comparada con XGBoost, sobre 150 encuentros de prueba.}
+\label{fig:shap}
+\end{figure}
+
+\textbf{Por qué la selección local no ayuda.} Para que la selección dinámica gane, la diferencia de pérdida entre dos modelos debe poder predecirse a partir del encuentro. Un regresor fuera de pliegue que intenta predecirla a partir del perfil de salidas alcanza un $R^2$ de 0.009 como máximo, y de 0.013 si se añaden las 38 variables; una competencia aprendida con ese regresor tampoco supera al mejor modelo base. No hay información sobre qué modelo acierta en cada paciente, y por eso la búsqueda apaga la parte local ($\lambda \to 1$).
+
+\textbf{Dónde falla.} Con el umbral operativo, DES-CPL deja sin marcar 1{,}563 de las 2{,}263 readmisiones, y de cada cuatro pacientes marcados unos tres no reingresan. Por subgrupos, con la capacidad del 10\% usada en el análisis de equidad del benchmark previo, la cobertura de las readmisiones es pareja por sexo (relativa 1.01 en mujeres y 0.99 en hombres), pero mucho menor en los encuentros sin raza registrada (0.34; XGBoost 0.45), en la categoría «Other» (0.49) y en «Asian» (0.38 con ambos modelos). Son las mismas brechas del benchmark previo, así que vienen de los datos y no del combinador. Las probabilidades están bien calibradas (ECE 0.0065, frente a 0.0064 de XGBoost). Los conjuntos de predicción conformes de Mondrian \cite{bib_angelopoulos_2023} con $\alpha = 0.1$ cubren al 89.0\% de todos los encuentros, pero solo al 86.9\% de los readmitidos, por debajo del 90\% nominal, y el 61.7\% de los conjuntos contiene ambas clases: para la mayoría de los pacientes el modelo no puede descartar ninguna de las dos.
+
+\subsection{Discusión, limitaciones y amenazas a la validez}\label{subsec:discusion}
+
+El resultado central es negativo: DES-CPL empata con los mejores benchmarks y no los supera. El diagnóstico de la Sección~\ref{subsec:interpretabilidad} explica por qué: la calidad relativa de los modelos no es predecible a partir del paciente, y la búsqueda lo confirma al llevar el encogimiento a $\lambda\approx1$. Coincide con la observación de que la ventaja de la selección dinámica frente a ensambles estáticos fuertes no es sistemática \cite{bib_cruz_2018}. El AUC-ROC de 0.666 en prueba coincide con el 0.664 reportado con validación anidada en estos datos \cite{bib_salim_2026} y con el rango de 0.60 a 0.70 de la literatura de readmisión \cite{bib_kansagara}: el techo parece estar en la información disponible. En un análisis exploratorio, recuperar los códigos CIE-9 completos y el historial del paciente mejoró el AUC-PR en 0.0055, más que cualquier diferencia entre modelos. Lo que DES-CPL aporta, la estabilidad ante la semilla y ante perturbaciones de los datos, lo comparten los ensambles estáticos.
+
+Las amenazas a la validez son cuatro. \emph{Potencia}: una sola repetición de cinco pliegues da poca resolución a las pruebas pareadas, aunque DeLong sobre 19{,}867 encuentros y la prueba bayesiana (equivalencia 0.72 frente a XGBoost) apuntan al mismo empate. \emph{Pruebas añadidas}: McNemar y la bayesiana no estaban en el protocolo y se reportan como complementarias. \emph{Análisis exploratorios}: la sensibilidad se midió en un pliegue y la robustez no reajustó los modelos base. \emph{Validez externa}: los datos son de 1999 a 2008, con CIE-9, y la partición separa pacientes pero no épocas. Con esa evidencia, lo que puede afirmarse es que DES-CPL \emph{sugiere} un empate con los mejores modelos, no que los supere.
+
+\backmatter
+
+\begin{appendices}
+
+\section{Demostraciones}\label{app:demostraciones}
+
+\textbf{Demostración de la Proposición~\ref{prop:cota}.} Fije $x$ y escriba $f_m=f_m(x)$, $w_m=w_m(x)$ y $\hat{f}=\sum_m w_m f_m$. Sumando y restando $\hat{f}$ dentro del cuadrado,
+\begin{equation*}
+\sum_{m} w_m (f_m - y)^2 = \sum_{m} w_m (f_m - \hat{f})^2 + 2(\hat{f}-y)\sum_{m} w_m (f_m - \hat{f}) + (\hat{f}-y)^2 \sum_m w_m .
+\end{equation*}
+Como $\sum_m w_m = 1$ y $\sum_m w_m f_m = \hat{f}$, el término central se anula y el último es $(\hat{f}-y)^2$. Reordenando se obtiene la Ecuación~\eqref{eq:ambiguedad}. Como el término de dispersión es no negativo, $\ell(\hat{f},y)\leq\sum_m w_m\,\ell(f_m,y)$, con igualdad si y solo si todas las $f_m$ con peso positivo coinciden. \hfill$\square$
+
+\textbf{Demostración de la Proposición~\ref{prop:propia}.} $C_q'(p)=-2q(1-p)+2(1-q)p=2(p-q)$, que se anula en $p=q$, y $C_q''(p)=2>0$. Desarrollando, $C_q(p)=q(1-q)+(p-q)^2$, de modo que el exceso de pérdida es el error cuadrático de calibración. El caso balanceado es el anterior con $q=\tfrac{1}{2}$, cuyo mínimo está en $p=\tfrac{1}{2}$ para cualquier riesgo real. Para el insesgamiento, por linealidad de la esperanza el estimador estratificado vale $q\,B_1+(1-q)\,B_0$, donde $B_c$ es la pérdida esperada en la clase $c$, que por la ley de probabilidad total es el Brier esperado en la zona. \hfill$\square$
+
+\textbf{Demostración de la Proposición~\ref{prop:consistencia} (esquema).} Por la Ecuación~\eqref{eq:competencia}, $C_m(x)=\hat{q}(x)A^{+}(x)+(1-\hat{q}(x))A^{-}(x)$, donde $A^{c}(x)$ es el promedio de $Z_i=(\tilde{f}_m(x_i)-c)^2$ sobre los $k$ vecinos de clase $c$ más cercanos a $\phi(x)$. Cada $A^{c}$ es un estimador de regresión por $k$ vecinos más cercanos de $B_{c,m}(x)=E[Z\mid\phi(X)=\phi(x),\,Y=c]$ construido con los $n_c$ encuentros de esa clase, y $\hat{q}(x)$ es el estimador por $2k$ vecinos de $q(x)=P(Y=1\mid\phi(X)=\phi(x))$; el suavizado con $s$ fijo desaparece cuando $k\to\infty$. Las variables están acotadas en $[0,1]$, y los pesos uniformes sobre los vecinos satisfacen las condiciones de Stone cuando $k\to\infty$ y $k/n_c\to 0$ \cite{bib_stone_1977}, lo que da consistencia para casi todo $x$. La combinación es una función continua de los tres límites, y converge por el teorema de la función continua. Dos supuestos merecen mención explícita. Primero, la independencia se exige entre pacientes y no entre encuentros, y la exclusión del propio paciente del vecindario evita que la consulta aporte información sobre sí misma. Segundo, las predicciones fuera de pliegue $\tilde{f}_m$ se tratan como fijas una vez fijada la partición de los $K$ pliegues, que es el supuesto usual del ajuste cruzado. \hfill$\square$
+
+\textbf{Demostración de la Proposición~\ref{prop:encogimiento}.} $\hat{C}_\lambda-C=(1-\lambda)(\hat{C}^{\text{loc}}-C)+\lambda b$. Al tomar la esperanza del cuadrado, el término cruzado $2\lambda(1-\lambda)\,b\,E[\hat{C}^{\text{loc}}-C]$ se anula por el insesgamiento y queda $(1-\lambda)^2v+\lambda^2b^2$, una parábola convexa en $\lambda$ cuya derivada, $-2(1-\lambda)v+2\lambda b^2$, se anula en $\lambda^\star=v/(v+b^2)\in[0,1]$. \hfill$\square$
+
+\end{appendices}
+
+\bibliography{sn-bibliography}
+
+\end{document}

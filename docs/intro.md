@@ -64,7 +64,7 @@ Este libro predice qué pacientes diabéticos vuelven al hospital antes de 30 d�
 
 ## Mapa del libro
 
-El libro conserva el orden en que se hizo el trabajo: los capítulos 1 a 5 cubren los datos y su exploración; los capítulos 6 a 11, el experimento de comparación de modelos; y los capítulos 12 a 19, la revisión del experimento, el modelo original y el producto.
+El libro conserva el orden en que se hizo el trabajo: los capítulos 1 a 5 cubren los datos y su exploración; los capítulos 6 a 11, el experimento de comparación de modelos; los capítulos 12 a 19, la revisión del experimento, el modelo original y el producto; y los capítulos 20 y 21, las comprobaciones posteriores al protocolo.
 
 | Capítulos | Contenido |
 |---|---|
@@ -79,6 +79,8 @@ El libro conserva el orden en que se hizo el trabajo: los capítulos 1 a 5 cubre
 | [17](17_Conclusiones.ipynb) | Conclusiones, veredicto, limitaciones y declaración de autoría |
 | [18](18_Reproducibilidad.ipynb) | Reproducibilidad, tabla maestra de experimentos y bibliografía |
 | [19](19_Artefactos_Dashboard.ipynb) | Mejores combinaciones, artefactos serializados, dashboard, despliegue y ficha del modelo |
+| [20](20_Verificaciones.ipynb) | Verificaciones posteriores al protocolo: ¿cambia algún resultado si se corrigen las decisiones objetables? |
+| [21](21_Exploracion_Mejoras.ipynb) | Exploración de mejoras de DES-CPL y resumen de todas las comprobaciones posteriores |
 
 **Correspondencia con la estructura de la guía del tercer entregable.**
 
@@ -90,7 +92,7 @@ El libro conserva el orden en que se hizo el trabajo: los capítulos 1 a 5 cubre
 | 3. Modelos benchmark | Capítulos [6](06_Preprocesamiento.ipynb) a [11](11_Comparacion_Estadistica.ipynb); presupuesto de 60 evaluaciones en la sección 12.2; LightGBM y CatBoost en la sección 13.5; mejores combinaciones y artefactos en las secciones 19.1 a 19.5 |
 | 4. Revisión de literatura y novedad | Capítulo [14](14_Revision_Literatura.ipynb) |
 | 5. Modelo original | Capítulos [13](13_Modelo_Original.ipynb) (motivación, diseño y ablación) y [15](15_Formulacion_DES_CPL.ipynb) (formulación, pseudocódigo, sustento teórico y complejidad) |
-| 6. Protocolo y validación estadística | `experiments/protocolo.md` (etiqueta `protocolo-v1`, 9 de noviembre de 2026); secciones 13.5, 13.8 y 16.9 |
+| 6. Protocolo y validación estadística | `experiments/protocolo.md` (etiqueta `protocolo-v1`, 9 de noviembre de 2026); secciones 13.5, 13.8 y 16.9; comprobaciones posteriores en los capítulos [20](20_Verificaciones.ipynb) y [21](21_Exploracion_Mejoras.ipynb) |
 | 7. Evaluación ampliada y robustez | Capítulo [16](16_Evaluacion_Ampliada.ipynb); calibración e incertidumbre en la sección 13.8 |
 | 8. Dashboard y despliegue | Capítulo [19](19_Artefactos_Dashboard.ipynb) (secciones 19.6 a 19.8); [dashboard público](https://readmision-diabetes.onrender.com) |
 | 9. Conclusiones y limitaciones | Capítulo [17](17_Conclusiones.ipynb) |
