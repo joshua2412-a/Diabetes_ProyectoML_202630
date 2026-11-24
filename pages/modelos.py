@@ -477,7 +477,7 @@ def predecir(_, modelo, valores, ids):
                 html.Label("Variable que se mueve", htmlFor="qps-var"),
                 dcc.Dropdown(id="qps-var", options=opciones_qps, value="number_inpatient", clearable=False,
                              className="mb-2"),
-                dcc.Loading(dcc.Graph(id="qps-grafico", figure=G.figura_inicial(), config={"displaylogo": False, "responsive": True}),
+                dcc.Loading(dcc.Graph(id="qps-grafico", figure=G.figura_inicial(), config={"displayModeBar": False, "responsive": True}),
                             type="dot", delay_show=300),
                 html.Div("El resto de los datos del paciente queda fijo. Muestra cómo responde el modelo, no qué "
                          "ocurriría si se interviniera: es asociación, no causalidad.", className="tarjeta-nota"),
@@ -540,7 +540,7 @@ def consenso(_, datos):
                    f"paciente la decisión depende del modelo elegido. Probabilidades de {pct(100 * rango[0])} "
                    f"a {pct(100 * rango[1])}.")
     return html.Div([
-        dcc.Graph(figure=GC.fig_consenso(tabla_c, modelo), config={"displaylogo": False, "responsive": True}),
+        dcc.Graph(figure=GC.fig_consenso(tabla_c, modelo), config={"displayModeBar": False, "responsive": True}),
         lectura([
             f"{priorizan} de {total} modelos priorizarían a este paciente con su propio umbral operativo.",
             acuerdo,

@@ -87,7 +87,7 @@ def _bloque(id_grafico, id_lectura, titulo, nota, controles=None):
     grafico = dbc.Card(dbc.CardBody([
         html.H4(titulo, className="tarjeta-titulo"),
         *(controles or []),
-        dcc.Loading(dcc.Graph(id=id_grafico, figure=G.figura_inicial(), config={"displaylogo": False, "responsive": True}),
+        dcc.Loading(dcc.Graph(id=id_grafico, figure=G.figura_inicial(), config={"displayModeBar": False, "responsive": True}),
                     type="dot", delay_show=400),
         html.Div(nota, className="tarjeta-nota"),
     ]), className="tarjeta")
@@ -182,7 +182,7 @@ def _comparador():
             dbc.Col(grupo("b", "Grupo B", [7, 8, 9], "grupo-perfil-b"), md=6, lg=3),
             dbc.Col(dbc.Card(dbc.CardBody([
                 html.H4("Perfil de los dos grupos", className="tarjeta-titulo"),
-                dcc.Loading(dcc.Graph(id="eda-g-comparador", figure=G.figura_inicial(), config={"displaylogo": False, "responsive": True}),
+                dcc.Loading(dcc.Graph(id="eda-g-comparador", figure=G.figura_inicial(), config={"displayModeBar": False, "responsive": True}),
                             type="dot", delay_show=400),
                 html.Div("Porcentaje de encuentros de cada grupo que cumple cada condición. Los dos grupos "
                          "se toman dentro de los filtros generales de la página.", className="tarjeta-nota"),

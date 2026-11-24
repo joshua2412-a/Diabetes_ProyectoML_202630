@@ -133,7 +133,7 @@ def tarjeta_grafico(figura, titulo: str, nota: str = "", id_: str | None = None,
     extra = {"id": id_} if id_ else {}
     if alto:  # nunca style=None: dcc.Graph lee style.height y fallaría
         extra["style"] = {"height": f"{int(alto)}px"}
-    grafico = dcc.Graph(figure=figura, config={"displaylogo": False, "responsive": True}, **extra)
+    grafico = dcc.Graph(figure=figura, config={"displayModeBar": False, "responsive": True}, **extra)
     cuerpo = [html.H4(titulo, className="tarjeta-titulo"), grafico]
     if nota:
         cuerpo.append(html.Div(con_formulas(nota), className="tarjeta-nota",

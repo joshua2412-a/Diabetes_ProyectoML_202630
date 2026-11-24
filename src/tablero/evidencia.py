@@ -169,12 +169,21 @@ def condiciones_superioridad(matriz: pd.DataFrame | None, pruebas: pd.DataFrame 
         separa = "no separa" not in str(pruebas.iloc[0].get("conclusión", ""))
         c2 = bool((p < 0.05).all()) and separa
         rechazan = int((p.to_numpy() < 0.05).sum()) - (0 if separa else 1)
-        detalle = "; ".join(f"{str(n).split(' (')[0]}: {p_valor(x)}" for n, x in zip(pruebas["prueba"], p))
-        v2 = f"{rechazan} de {len(p)} rechazan frente al mejor ({detalle}"
-        v2 += ")" if separa else "; Nemenyi no separa a DES-CPL del mejor)"
+        # La primera fila es Friedman + Nemenyi: su p es el de la igualdad GLOBAL
+        # (Friedman), que no dice nada de DES-CPL frente al mejor; eso lo decide
+        # Nemenyi. Se separan para que un «p < 0,0001» no se lea como victoria.
+        nombres = [str(n).split(" (")[0] for n in pruebas["prueba"]]
+        partes = [f"Friedman rechaza la igualdad global ({p_valor(p.iloc[0])}), pero Nemenyi "
+                  f"{'separa' if separa else 'no separa'} a DES-CPL del mejor"]
+        partes += [f"{n}: {p_valor(x)}" for n, x in zip(nombres[1:], p.iloc[1:])]
+        frente = f"del mejor benchmark ({C.nombre_modelo(mejor)})" if mejor else "del mejor benchmark"
+        cabeza = (f"Ninguna de las {len(p)} pruebas separa a DES-CPL {frente}" if rechazan == 0
+                  else f"{rechazan} de {len(p)} pruebas separan a DES-CPL {frente}")
+        v2 = f"{cabeza}. " + "; ".join(partes) + "."
     else:
         c2, v2 = None, "sin datos"
-    condiciones.append({"texto": "Las tres pruebas rechazan H0 con p ajustado < 0,05", "cumple": c2, "valor": v2})
+    condiciones.append({"texto": "Las tres pruebas separan a DES-CPL del mejor benchmark (p ajustado < 0,05)",
+                        "cumple": c2, "valor": v2})
     # 3. |δ de Cliff| ≥ 0,147 a favor de DES-CPL frente al mejor benchmark.
     if matriz is not None and mejor is not None:
         cliff = float(delta_cliff(matriz[ORIGINAL], matriz[mejor]))

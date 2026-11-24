@@ -59,20 +59,21 @@ def test_tabla_sin_benchmarks_sota_sigue_funcionando():
     assert "lightgbm" not in set(tabla["clave"]) and len(tabla) == 4
 
 
-def test_lectura_dice_que_empata_cuando_esta_en_la_franja():
+def test_lectura_dice_que_no_se_distinguen_cuando_la_distancia_es_menor_que_la_desviacion():
     tabla = A.tabla_igual_presupuesto(_evaluacion(), _sota())
     lineas = A.lectura_lideres_presupuesto(tabla)
     assert any("XGBoost" in l for l in lineas)
-    assert any("empata" in l for l in lineas)  # 0,001 de diferencia < 0,005
+    assert any("no se distinguen" in l for l in lineas)  # 0,001 de diferencia, menor que la desviación
+    assert not any("empata" in l for l in lineas)        # cerca no es equivalente (paso 3: sin conclusión)
 
 
-def test_lectura_no_dice_que_empata_cuando_queda_lejos():
+def test_lectura_no_dice_que_no_se_distinguen_cuando_queda_lejos():
     evaluacion = _evaluacion()
     evaluacion.loc[evaluacion["método"] == "DES-CPL", "auc_pr"] -= 0.03
     tabla = A.tabla_igual_presupuesto(evaluacion, _sota())
     lineas = A.lectura_lideres_presupuesto(tabla)
-    assert not any("empata" in l for l in lineas)
-    assert any("fuera de la franja" in l for l in lineas)
+    assert not any("no se distinguen" in l for l in lineas)
+    assert any("mayor que la desviación" in l for l in lineas)
 
 
 @pytest.fixture

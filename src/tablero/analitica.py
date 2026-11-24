@@ -608,10 +608,18 @@ def lectura_lideres_presupuesto(tabla: pd.DataFrame) -> list[str]:
     if len(original) and not original.index[0] == 0:
         o = original.iloc[0]
         distancia = mejor["auc_pr_media"] - o["auc_pr_media"]
-        veredicto = ("dentro de la franja de equivalencia: empata con el mejor, pero no lo supera."
-                     if distancia <= EQUIVALENCIA_AUC_PR else "fuera de la franja de equivalencia.")
+        desviacion = min(o["auc_pr_sd"], mejor["auc_pr_sd"])
+        # No se habla de «empate»: estar cerca no demuestra equivalencia. El paso 3
+        # de /modelo-original clasifica el intervalo de esta diferencia como «sin
+        # conclusión» (cruza el 0 y se sale de la franja de ±0,005).
+        if distancia < desviacion:
+            veredicto = (f"una distancia menor que la desviación entre folds ({num(o['auc_pr_sd'], 4)} y "
+                         f"{num(mejor['auc_pr_sd'], 4)}): no se distinguen, sin conclusión en ningún sentido.")
+        else:
+            veredicto = (f"una distancia mayor que la desviación entre folds ({num(o['auc_pr_sd'], 4)} y "
+                         f"{num(mejor['auc_pr_sd'], 4)}).")
         lineas.append(f"{o['modelo']} es el puesto {original.index[0] + 1} de {len(tabla)}, a "
-                      f"{num(distancia, 4)} de {mejor['modelo']}, {veredicto}")
+                      f"{num(distancia, 4)} de {mejor['modelo']}: {veredicto}")
     elif len(original):
         lineas.append(f"{original.iloc[0]['modelo']} encabeza la tabla, pero la diferencia con el resto es menor "
                       "que la desviación entre folds.")
