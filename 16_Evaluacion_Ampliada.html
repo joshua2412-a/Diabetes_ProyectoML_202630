@@ -201,6 +201,8 @@
 <li class="toctree-l1"><a class="reference internal" href="17_Conclusiones.html">17. Conclusiones, limitaciones y declaración de autoría</a></li>
 <li class="toctree-l1"><a class="reference internal" href="18_Reproducibilidad.html">18. Reproducibilidad y bibliografía</a></li>
 <li class="toctree-l1"><a class="reference internal" href="19_Artefactos_Dashboard.html">19. Mejores combinaciones, artefactos y dashboard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Verificaciones.html">20. Verificaciones posteriores al protocolo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Exploracion_Mejoras.html">21. Exploración de mejoras de DES-CPL</a></li>
 </ul>
 
     </div>
@@ -2854,7 +2856,7 @@ Mayor probabilidad posterior de 'equivalente': random_forest, xgboost, lightgbm,
 </thead>
 <tbody>
 <tr class="row-even"><td><p>¿Se generaliza el comportamiento a otros dominios?</p></td>
-<td><p>Sí. En los tres conjuntos adicionales DES-CPL queda en la cabeza, junto a los ensambles estáticos, y por delante de todos los benchmarks individuales en rango medio.</p></td>
+<td><p>Sí. En los tres conjuntos adicionales DES-CPL queda en la cabeza, junto a los ensambles estáticos, y empata con LightGBM en rango medio (3.33). Contando los cuatro conjuntos queda por delante de todos los benchmarks individuales (3.75 frente a 4.00 de LightGBM), una diferencia muy inferior a la diferencia crítica de Nemenyi (9.12).</p></td>
 </tr>
 <tr class="row-odd"><td><p>¿Supera al mejor benchmark de cada conjunto?</p></td>
 <td><p>Solo en CDC, y sin significancia. La condición 4 del protocolo no se cumple.</p></td>
@@ -2863,7 +2865,7 @@ Mayor probabilidad posterior de 'equivalente': random_forest, xgboost, lightgbm,
 <td><p>Más que XGBoost, que pierde entre 1.6 y 1.9 veces lo que DES-CPL con ruido en las etiquetas, menos prevalencia y menos datos. Random Forest y la regresión logística pierden aún menos, desde un punto de partida más bajo.</p></td>
 </tr>
 <tr class="row-odd"><td><p>¿Y ante un cambio de distribución?</p></td>
-<td><p>Los datos no traen fechas ni hospital, así que no se puede apartar un bloque temporal o espacial. Se evalúa con lo disponible: el conjunto de prueba, fuera de toda decisión de diseño (sección 13.8), y el escenario de menor prevalencia (sección 16.3). La mezcla entre épocas queda como limitación (sección 17.3).</p></td>
+<td><p>Los datos no traen fechas ni hospital, así que no se puede apartar un bloque temporal o espacial. Se evalúa con lo disponible: el conjunto de prueba, fuera de toda decisión de diseño de DES-CPL (sección 13.8), y el escenario de menor prevalencia (sección 16.3). La mezcla entre épocas queda como limitación (sección 17.3).</p></td>
 </tr>
 <tr class="row-even"><td><p>¿Es estable frente a la semilla?</p></td>
 <td><p>Sí, como los otros combinadores y más que XGBoost. La comparación confirmatoria cayó en la mejor semilla de XGBoost.</p></td>
