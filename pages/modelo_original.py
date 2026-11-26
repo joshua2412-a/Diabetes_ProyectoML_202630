@@ -37,7 +37,7 @@ from src.tablero import explicador as X
 from src.tablero import graficos as G
 from src.tablero import graficos_relato as R
 from src.tablero.componentes import (aviso, encabezado, fila_kpi, icono, kpi, lectura, tabla, tarjeta,
-                                     tarjeta_grafico)
+                                     tarjeta_grafico, tex)
 from src.tablero.formato import decimales_es, miles, num, p_valor, pct
 from src.tablero.ilustracion import svg_comite
 from src.tablero.tema import color_modelo, papel_modelo
@@ -150,6 +150,55 @@ def _indice_tau(tau: float) -> int:
     return int(np.argmin([abs(np.log10(t) - np.log10(tau)) for t in C.TAUS]))
 
 
+#: Las ecuaciones del método (capítulo 15), con la misma notación del libro.
+#: Van en texto LaTeX para que MathJax las componga: la notación escrita a
+#: mano (subíndices, Σ) se lee mal proyectada.
+_FORMULAS_METODO = r"""
+**1 · Prevalencia local suavizada** (2k vecinos sin estratificar, s = 10 pseudo-observaciones hacia la global $\pi$)
+
+$$\hat q(x) = \frac{n^{+}(x) + s\,\pi}{2k + s}$$
+
+**2 · Competencia local:** Brier de los $k$ vecinos readmitidos ($R^{+}$) y de los $k$ no readmitidos ($R^{-}$), ponderados por esa prevalencia
+
+$$\hat C_m^{\,\mathrm{loc}}(x) = \hat q(x)\,\frac{1}{k}\sum_{i \in R^{+}} (1 - p_{m,i})^2 + \bigl(1 - \hat q(x)\bigr)\,\frac{1}{k}\sum_{i \in R^{-}} p_{m,i}^2$$
+
+**3 · Encogimiento** hacia la competencia global del modelo
+
+$$\hat C_m(x) = (1 - \lambda)\,\hat C_m^{\,\mathrm{loc}}(x) + \lambda\, C_m^{\,\mathrm{glob}}$$
+
+**4 · Pesos y predicción**
+
+$$w_m(x) = \frac{\exp\bigl(-\hat C_m(x)/\tau\bigr)}{\sum_j \exp\bigl(-\hat C_j(x)/\tau\bigr)}, \qquad \hat p(x) = \sum_m w_m(x)\, p_m(x)$$
+"""
+
+_FORMULAS_PROPIEDADES = r"""
+**Regla propia (Proposición 2).** En una zona con riesgo verdadero $q$, un modelo que predice $p$ tiene Brier esperado
+
+$$C_q(p) = q(1 - p)^2 + (1 - q)\,p^2 = q(1 - q) + (p - q)^2$$
+
+Su derivada, $2(p - q)$, se anula en $p = q$ y la segunda derivada es $2 > 0$: gana el modelo calibrado en esa zona. Con $\tfrac12$ por clase el mínimo queda en $p = 0.5$ sea cual sea $q$, y se premia al modelo de probabilidades más altas.
+
+**λ óptimo (Proposición 4).** Con varianza local $v$ y heterogeneidad real $b^2$:
+
+$$\mathrm{ECM}(\lambda) = (1 - \lambda)^2\, v + \lambda^2\, b^2 \;\Rightarrow\; \lambda^{\ast} = \frac{v}{v + b^2}$$
+
+**Casos límite.** $\lambda = 1$: pesos globales. $\tau \to \infty$: promedio simple. $\tau \to 0$: selección dura del mejor modelo local.
+"""
+
+
+def _formulas():
+    """Las cuatro ecuaciones del método y las dos propiedades que lo justifican.
+
+    Van junto al simulador para poder señalar cada término mientras se mueven
+    λ y τ: el criterio de fundamentos teóricos se sustenta desde aquí.
+    """
+    return tarjeta(dbc.Row([
+        dbc.Col(tex(_FORMULAS_METODO, "formulas"), lg=7),
+        dbc.Col(tex(_FORMULAS_PROPIEDADES, "formulas"), lg=5),
+    ], className="g-4"), titulo="Las fórmulas detrás de lo que acabas de ver",
+        nota="Notación del capítulo 15 del libro; las demostraciones completas están ahí.")
+
+
 def paso_decide():
     if not D.modelos_disponibles() or C.MODELO_ORIGINAL not in D.modelos_disponibles():
         return html.Div([_titulo("Cómo decide DES-CPL con un paciente real"),
@@ -187,6 +236,7 @@ def paso_decide():
                                     nota="Brier de cada modelo medido sobre el mejor de la misma medida (menos es "
                                          "mejor). El rombo es la competencia que se usa con el λ elegido."), lg=6),
         ], className="g-4 mt-1"),
+        _formulas(),
         tarjeta([
             dbc.Row([
                 dbc.Col([

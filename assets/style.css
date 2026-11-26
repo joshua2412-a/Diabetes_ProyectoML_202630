@@ -889,3 +889,10 @@ html[data-tema="oscuro"] { --sombra: 0 10px 28px rgba(0, 0, 0, .4); }
 html[data-tema="oscuro"] .kpi-franja[style*="rgb(184, 134, 11)"] { background: #bd8c05 !important; }
 html[data-tema="oscuro"] .kpi-franja[style*="rgb(52, 98, 172)"] { background: #5a8fd8 !important; }
 html[data-tema="oscuro"] .kpi-franja[style*="rgb(168, 50, 106)"] { background: #c04577 !important; }
+
+/* Fórmulas del método (Modelo original › Cómo decide): tamaño legible al
+   proyectar y desplazamiento horizontal en pantallas estrechas, para que
+   una ecuación larga no desborde la tarjeta. */
+.tex.formulas { font-size: 1rem; line-height: 1.55; }
+.tex.formulas p { margin: 0 0 .5rem; }
+.tex.formulas mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; margin: .4rem 0 1rem !important; padding: .2rem 0; }
